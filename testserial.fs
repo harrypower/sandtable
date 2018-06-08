@@ -136,7 +136,7 @@ decimal
   0 >=
   if
     s>string count
-    s" /dev/ttyS"
+    s" /dev/ttyO"
     2swap
     strcat
     strpck
