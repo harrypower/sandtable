@@ -119,10 +119,10 @@ hex
 decimal
 
 : serial_getoptions ( handle -- | read serial port options into termios )
-	TCGETS termios ioctl drop ;
+	TCGETS termios ioctl ( drop )  ;
 
 : serial_setoptions ( handle -- | write termios into serial port options )
-	TCSETS termios ioctl drop ;
+	TCSETS termios ioctl ( drop ) ;
 
 : serial_open ( port -- handle | opens the serial port for communcation )
 	\ port is the serial port to open
