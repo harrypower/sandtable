@@ -13,3 +13,5 @@
   * `sudo config-pin p9.22 uart`
     * this is /dev/ttyo2
   * You can confirm the pins by doing `config-pin -q p9.22` and you should see `P9_22 Mode: uart` as example.
+  * Note you need to tell debian these same commands every time the beaglebone black gets rebooted for the uart pins to be in uart mode!
+  
