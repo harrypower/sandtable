@@ -135,6 +135,7 @@ decimal
   dup
   0 >=
   if
+    s>string count
     s" /dev/ttyS"
     2swap
     strcat
