@@ -142,16 +142,16 @@ decimal
     O_RDWR O_NOCTTY  O_NDELAY or or
     open
     dup
-    dup
-    serial_getoptions swap
+  \  dup
+    serial_getoptions \ swap
 
     \ Disable XON/XOFF flow control and CR to NL mapping
 
-    termios C_IFLAG + @
-    IXON IXOFF or IXANY or ICRNL or ( not) invert and
-    termios C_IFLAG + !
+  \  termios C_IFLAG + @
+  \  IXON IXOFF or IXANY or ICRNL or ( not) invert and
+  \  termios C_IFLAG + !
 
-    serial_setoptions
+  \  serial_setoptions
   then ;
 
 : serial_close ( handle -- | closes the port )
