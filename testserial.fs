@@ -142,9 +142,9 @@ decimal
     strpck
     O_RDWR O_NOCTTY  O_NDELAY or or
     open
-    dup
   \  dup
-    serial_getoptions \ swap
+  \  dup
+  \  serial_getoptions \ swap
 
     \ Disable XON/XOFF flow control and CR to NL mapping
 
