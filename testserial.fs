@@ -132,13 +132,13 @@ decimal
 	\ 3 = ttyS3 (COM4)
 	\ handle is a handle to the open serial port
 	\ if handle < 0 there was an error opening the port
-  dup
-  0 >=
-  if
-    s>string count
-    s" /dev/ttyO"
-    2swap
-    strcat
+\  dup
+\  0 >=
+\  if
+\    s>string count
+    s" /dev/ttyO1"
+\    2swap
+\    strcat
     strpck
     O_RDWR O_NOCTTY  O_NDELAY or or
     open
@@ -153,8 +153,9 @@ decimal
   \  termios C_IFLAG + !
 
   \  serial_setoptions
-  else drop -1
-  then ;
+\  else drop -1
+\  then
+ ;
 
 : serial_close ( handle -- | closes the port )
 	\ handle = serial port handle received from serial_open
