@@ -28,7 +28,7 @@ c-library syscalls386
 c-function sysexit _exit n -- void
 c-function getpid getpid -- n  ( -- u | get process id )
 c-function open open a n -- n  ( ^zaddr  flags -- fd )
-\   file descriptor is returned)
+\   file descriptor is returned
 \   Note zaddr points to a buffer containing the filename
 \   string terminated with a null character.
 c-function close close n -- n ( fd -- flag )
