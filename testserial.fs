@@ -139,7 +139,7 @@ decimal
     s" /dev/ttyO1"
 \    2swap
 \    strcat
-    strpck
+    strpck count drop 
     O_RDWR O_NOCTTY  O_NDELAY or or
     open
   \  dup
