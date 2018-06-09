@@ -153,7 +153,7 @@ decimal
   \  termios C_IFLAG + !
 
   \  serial_setoptions
-  else drop -1
+  else drop -500
   then ;
 
 : serial_close ( handle -- | closes the port )

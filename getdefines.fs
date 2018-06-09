@@ -11,3 +11,5 @@ c-library defines_data
   c-function mydefines mydefines void -- void ( -- )
 
 end-c-library
+
+mydefines 
