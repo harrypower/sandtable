@@ -136,7 +136,7 @@ decimal
   0 >=
   if
     s>string count
-    s" /dev/ttyO"
+    s" /dev/ttyS"
     2swap
     strcat
     strpck
@@ -153,6 +153,7 @@ decimal
   \  termios C_IFLAG + !
 
   \  serial_setoptions
+  else drop -1
   then ;
 
 : serial_close ( handle -- | closes the port )
