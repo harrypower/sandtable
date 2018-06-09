@@ -8,6 +8,6 @@ c-library defines_data
 
   \c void mydefines(void) { printf("O_NDELAY %d, O_NOCTTY %d, O_RDWR %d \n",O_NDELAY , O_NOCTTY , O_RDWR ) ; }
 
-  c-­function mydefines mydefines void -- void ( -- )
+  c-function mydefines mydefines void -- void ( -- )
 
 end-c-library
