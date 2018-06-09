@@ -1,5 +1,5 @@
 c-library defines_data
-
+  \c #include <stdio.h>
   \c #include <sys/types.h>
   \c #include <sys/stat.h>
   \c #include <fcntl.h>
