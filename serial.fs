@@ -143,10 +143,10 @@ decimal
 
 : serial_getoptions ( handle -- | read serial port options into termios )
 	TCGETS termios ioctl drop ;
-	
+
 : serial_setoptions ( handle -- | write termios into serial port options )
 	TCSETS termios ioctl drop ;
-	
+
 : serial_open ( port -- handle | opens the serial port for communcation )
 	\ port is the serial port to open
 	\ 0 = ttyS0 (COM1)
@@ -162,13 +162,13 @@ decimal
 		s" /dev/ttyS"
 		2swap
 		strcat
-		strpck
+		strpck count drop 
 		O_RDWR O_NOCTTY  O_NDELAY or or
 		open
 		dup
 		dup
 		serial_getoptions
-	
+
 		\ Disable XON/XOFF flow control and CR to NL mapping
 
 		termios C_IFLAG + @
@@ -190,10 +190,10 @@ decimal
 		termios C_OFLAG + !
 		serial_setoptions
 	then ;
-	
+
 : serial_close ( handle -- | closes the port )
 	\ handle = serial port handle received from serial_open
-	
+
 	close ;
 
 : serial_write ( handle buf num_to_write -- num_written )
@@ -202,14 +202,14 @@ decimal
 	\ num_to_write = number of chars to write
 	\ num_written = number of chars actually written
 	write ;
-	
+
 : serial_read ( handle buf num_to_read -- num_read )
 	\ handle = serial port handle received from serial_open
 	\ buf = address to buffer to hold chars to being read
 	\ num_to_read = number of chars to read
 	\ num_read = number of chars actually read
 	read ;
-	
+
 : serial_setbaud ( handle baud -- )
 	\ handle = serial port handle received from serial_open
 	\ baud = desired baud rate ( use constants defined above )
@@ -271,12 +271,12 @@ decimal
 	TCFLSH 2 ioctl drop ;
 
 variable inque
-	
+
 : serial_lenrx ( handle -- rx_len)
 	\ handle = serial port handle received from serial_open
 	\ rx_len = number of chars in recieve que
 	FIONREAD inque ioctl drop
-	inque @ ;	 	
+	inque @ ;
 
 : serial_setparams ( handle ^str -- )
 	\ ^str examples are 8N1, 7E1, etc.
@@ -301,12 +301,5 @@ variable inque
 	  [char] 1 of r@ ONESTOPB serial_setstopbits endof
 	  [char] 2 of r@ TWOSTOPB serial_setstopbits endof
 	endcase
-	
+
 	r> drop ;
-	
-
-		
-			
-		
-		
-
