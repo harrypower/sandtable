@@ -1,3 +1,4 @@
+#! /usr/local/bin/gforth-arm
 \ config-uart.fs
 
 \    Copyright (C) 2018  Philip King. Smith
@@ -17,11 +18,13 @@
 \
 \    beaglebone black uart pin configuration via cli
 
+warnings off
+:noname ; is bootmessage
 
-s\" config-pin p9.24 uart/n" system
-s\" config-pin p9.26 uart/n" system
+s\" config-pin p9.24 uart\n" system
+s\" config-pin p9.26 uart\n" system
 \ this is /dev/ttyO1
 
-s\" config-pin p9.21 uart/n" system
-s\" config-pin p9.22 uart/n" system
+s\" config-pin p9.21 uart\n" system
+s\" config-pin p9.22 uart\n" system
 \ this is /dev/ttyO2
