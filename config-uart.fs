@@ -29,4 +29,7 @@ s\" config-pin p9.21 uart\n" system
 s\" config-pin p9.22 uart\n" system
 \ this is /dev/ttyO2
 
-bye 
+." /dev/ttyO1 on P9 pin 24 and 26 now configured for uart! " cr
+." /dev/ttyO2 on P9 pin 21 and 22 now configured for uart! " cr
+
+bye
