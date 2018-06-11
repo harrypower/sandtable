@@ -1,27 +1,40 @@
 \ serial.fs
-\
+\    Copyright (C) 2018  David P. Wallace, Krishna Myneni, Philip K. Smith
+\    This program is free software: you can redistribute it and/or modify
+\    it under the terms of the GNU General Public License as published by
+\    the Free Software Foundation, either version 3 of the License, or
+\    (at your option) any later version.
+
+\    This program is distributed in the hope that it will be useful,
+\    but WITHOUT ANY WARRANTY; without even the implied warranty of
+\    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+\    GNU General Public License for more details.
+
+\    You should have received a copy of the GNU General Public License
+\    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 \ gforth interface words for Linux serial communcations.
-\
-\ Copyright (c) 2000--2004 David P. Wallace, Krishna Myneni
-\ Provided under the terms of the GNU General Public License
 \
 \ Requires:
 \
-\	strings.fs
+\	stringsobj.fs
 \	syscalls386.fs
 \
 \ Revisions:
 \
+
 \	3-13-2000  first working version
 \	6-03-2001  modified serial_open to disable XON/XOFF flow control,
 \			added bit constants for c_iflag, etc.,
 \			modified serial_setparams for readability  KM
 \      12-13-2001  modified serial_open to disable CR to NL translation.  KM
 \       9-17-2004  ported from kForth  KM
-
+\ 11-06-2018 Philip K. Smith removed strings.fs and added stringobj.fs dependancy
+\            also added gpl3 license
 \ termios structure
 
-require strings.fs
+\ require strings.fs
+require ./Gforth-Objects/stringobj.fs
 require syscalls386.fs
 
 create termios 4 4 + 4 + 4 + 2 + 64 + 4 + 4 + allot
@@ -140,6 +153,7 @@ hex
 002 constant O_RDWR
 decimal
 
+string dict-new atemp$
 
 : serial_getoptions ( handle -- | read serial port options into termios )
 	TCGETS termios ioctl drop ;
@@ -158,11 +172,10 @@ decimal
 	dup
 	0 >=
 	if
-		s>string count
-		s" /dev/ttyS"
-		2swap
-		strcat
-		strpck count drop 
+		s" /dev/ttyS" atemp$ !$
+    atemp$ s>$
+    atemp$ null+>$
+    atemp$ @$ drop
 		O_RDWR O_NOCTTY  O_NDELAY or or
 		open
 		dup
