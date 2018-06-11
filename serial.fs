@@ -172,8 +172,8 @@ string dict-new constant atemp$
 	dup
 	0 >=
 	if
-		s" /dev/ttyS" atemp$ !$
     atemp$ s>$
+		s" /dev/ttyS" atemp$ !<+$
     atemp$ null+>$
     atemp$ @$ drop
 		O_RDWR O_NOCTTY  O_NDELAY or or
