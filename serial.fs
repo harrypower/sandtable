@@ -153,7 +153,7 @@ hex
 002 constant O_RDWR
 decimal
 
-string dict-new atemp$
+string dict-new constant atemp$
 
 : serial_getoptions ( handle -- | read serial port options into termios )
 	TCGETS termios ioctl drop ;
