@@ -207,7 +207,7 @@ string dict-new constant atemp$
 : serial_close ( handle -- | closes the port )
 	\ handle = serial port handle received from serial_open
 
-	close ;
+	close throw ;
 
 : serial_write ( handle buf num_to_write -- num_written )
 	\ handle = serial port handle received from serial_open
