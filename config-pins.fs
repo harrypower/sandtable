@@ -22,12 +22,18 @@ warnings off
 :noname ; is bootmessage
 
 s\" config-pin p9.24 uart\n" system
+\ TXD
 s\" config-pin p9.26 uart\n" system
+\ RXD
 \ this is /dev/ttyO1
+\ used for x motor
 
 s\" config-pin p9.21 uart\n" system
+\ TXD
 s\" config-pin p9.22 uart\n" system
+\ RXD
 \ this is /dev/ttyO2
+\ used for y motor
 
 ." /dev/ttyO1 on P9 pin 24 and 26 now configured for uart! " cr
 ." /dev/ttyO2 on P9 pin 21 and 22 now configured for uart! " cr
