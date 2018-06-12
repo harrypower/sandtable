@@ -32,4 +32,15 @@ s\" config-pin p9.22 uart\n" system
 ." /dev/ttyO1 on P9 pin 24 and 26 now configured for uart! " cr
 ." /dev/ttyO2 on P9 pin 21 and 22 now configured for uart! " cr
 
+s\" config-pin p9.23 output\n" system
+\ x stepper dir
+s\" config-pin p9.25 output\n" system
+\ x stepper step
+s\" config-pin p9.27 output\n" system
+\ y stepper dir
+s\" config-pin p9.28 output\n" system
+\ y stepper step 
+
+." x and y stepper motor dir and step pins configured!" cr
+
 bye
