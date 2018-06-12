@@ -34,11 +34,11 @@ s\" config-pin p9.22 uart\n" system
 
 s\" config-pin p8.11 output\n" system
 \ x stepper dir  ( gpio1_13)
-s\" config-pin p9.12 output\n" system
+s\" config-pin p8.12 output\n" system
 \ x stepper step ( gpio1_12)
-s\" config-pin p9.15 output\n" system
+s\" config-pin p8.15 output\n" system
 \ y stepper dir  ( gpio1_15)
-s\" config-pin p9.16 output\n" system
+s\" config-pin p8.16 output\n" system
 \ y stepper step ( gpio1_14)
 
 ." x and y stepper motor dir and step pins configured!" cr
