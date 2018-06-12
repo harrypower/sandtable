@@ -38,8 +38,8 @@ s\" config-pin p9.25 output\n" system
 \ x stepper step
 s\" config-pin p9.27 output\n" system
 \ y stepper dir
-s\" config-pin p9.28 output\n" system
-\ y stepper step 
+s\" config-pin p9.29 output\n" system
+\ y stepper step
 
 ." x and y stepper motor dir and step pins configured!" cr
 
