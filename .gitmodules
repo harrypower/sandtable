@@ -1,6 +1,3 @@
-[submodule "BBB_Gforth_gpio"]
-	path = BBB_Gforth_gpio
-	url = https://github.com/harrypower/BBB_Gforth_gpio.git
 [submodule "Gforth-Objects"]
 	path = Gforth-Objects
 	url = https://github.com/harrypower/Gforth-Objects.git
