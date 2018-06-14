@@ -22,3 +22,7 @@
 \ serial.fs
 \
 \ Revisions:
+
+
+require serial.fs
+require stringobj.fs

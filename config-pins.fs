@@ -52,6 +52,6 @@ s\" config-pin p8.16 output\n" system
 s\" config-pin p9.23 output\n" system
 \ y stepper enable ( gpio1_17)
 
-." x and y stepper motor dir and step pins configured!" cr
+." x and y stepper motor dir,step and enable pins configured!" cr
 
 bye
