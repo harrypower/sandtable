@@ -17,7 +17,7 @@
 \
 \ Requires:
 \
-\	stringsobj.fs
+\	stringobj.fs
 \	syscalls386.fs
 \
 \ Revisions:
