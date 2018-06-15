@@ -33,7 +33,6 @@
 \            also added gpl3 license
 \ termios structure
 
-\ require strings.fs
 require ./Gforth-Objects/stringobj.fs
 require syscalls386.fs
 
