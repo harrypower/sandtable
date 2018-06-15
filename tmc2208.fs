@@ -36,6 +36,7 @@ require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
 [endif]
 
 object class
+  destruction implementation
   protected
   0x0F      constant GCONF
   %10100000 constant sync
@@ -52,7 +53,7 @@ object class
   ;m overrides construct
 
   m: ( -- ) \ destructor
-    \ buffer$ [bind] string destruct
+    buffer$ [bind] string destruct
   ;m overrides destruct
 
   m: ( -- ) \ configure uart
