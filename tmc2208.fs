@@ -48,7 +48,7 @@ object class
   inst-value buffer$
   public
   m: ( umotors -- ) \ constructor
-    dup 1 >= swap 2 <= and if [to-inst] motors else false abort" only 1 or 2 motors at this time" then
+    dup dup 1 >= swap  2 <= and if [to-inst] motors else drop false abort" only 1 or 2 motors at this time" then
     string heap-new [to-inst] buffer$
   ;m overrides construct
 
