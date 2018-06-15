@@ -67,9 +67,9 @@ object class
   m: ( -- uamount-write uaddr uamount-read   ) \ test data recieve
     uart-a-handle serial_flush
     0xa0 pad c! pad 1 buffer$ [bind] string !$
-    0x00 pad c! pad 1 buffer$ [bind] string !+x
-    0x0F pad c! pad 1 buffer$ [bind] string !+x
-    0xb6 pad c! pad 1 buffer$ [bind] string !+x
+    0x00 pad c! pad 1 buffer$ [bind] string !+$
+    0x0F pad c! pad 1 buffer$ [bind] string !+$
+    0xb6 pad c! pad 1 buffer$ [bind] string !+$
     uart-a-handle buffer$ [bind] string @$ 4 serial_write
     uart-a-handle pad 8 serial_read pad swap
   ;m method readdata
