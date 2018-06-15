@@ -76,3 +76,5 @@ object class
 end-class tmc2208
 
 2 tmc2208 heap-new constant mymotors
+mymotors conf-uart
+mymotors readdata
