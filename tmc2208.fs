@@ -26,3 +26,14 @@
 
 require serial.fs
 require stringobj.fs
+require objects.fs
+
+object class
+  protected
+    22      constant EEprom_size      \ the size of calibration data eeprom on bmp180 device in bytes
+    0x77    constant BMP180ADDR       \ I2C address of BMP180 device
+    0xF6    constant CMD_READ_VALUE
+
+end-class tmc2208
+
+tmc2208 heap-new constant stepper
