@@ -22,18 +22,39 @@
 \ serial.fs
 \
 \ Revisions:
+\ 6/15/2018 started coding
 
+[ifundef] destruction
+  interface
+     selector destruct ( -- ) \ to free allocated memory in objects that use this
+  end-interface destruction
+[endif]
 
 require serial.fs
 require ./Gforth-Objects/objects.fs
 require ./Gforth-Objects/stringobj.fs
+require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
+
 
 object class
   protected
-    22      constant EEprom_size      \ the size of calibration data eeprom on bmp180 device in bytes
-    0x77    constant BMP180ADDR       \ I2C address of BMP180 device
-    0xF6    constant CMD_READ_VALUE
+  0x0F      constant GCONF
+  %10100000 constant sync
+  0x00      constant slave-addr
+
+
+  inst-value motors
+
+  public
+  m: ( umotors -- ) \ constructor
+    dup 1 >= swap 2 <= and if [to-inst] motors else false abort" only 1 or 2 motors at this time" then
+  ;m overrides construct
+
+  m: ( -- ) \ destructor
+
+  ;m overrides destruct
+
 
 end-class tmc2208
 
-tmc2208 heap-new constant stepper
+tmc2208 heap-new constant mymotors
