@@ -44,17 +44,35 @@ object class
 
 
   inst-value motors
-
+  inst-value uart-a-handle
+  inst-value buffer$
   public
   m: ( umotors -- ) \ constructor
     dup 1 >= swap 2 <= and if [to-inst] motors else false abort" only 1 or 2 motors at this time" then
+    string heap-new [to-inst] buffer$
   ;m overrides construct
 
   m: ( -- ) \ destructor
-
+    buffer$ [bind] string destruct
   ;m overrides destruct
 
+  m: ( -- ) \ configure uart
+    1 serial_open dup 0> if [to-inst] uart-a-handle else throw then
+    uart-a-handle B115200 serial_setbaud
+    uart-a-handle ONESTOPB serial_setstopbits
+    uart-a-handle PARNONE serial_setparity
+    uart-a-handle serial_flush
+  ;m method conf-uart
 
+  m: ( -- uamount-write uaddr uamount-read   ) \ test data recieve
+    uart-a-handle serial_flush
+    0xa0 pad c! pad 1 buffer$ [bind] string !$
+    0x00 pad c! pad 1 buffer$ [bind] string !+x
+    0x0F pad c! pad 1 buffer$ [bind] string !+x
+    0xb6 pad c! pad 1 buffer$ [bind] string !+x
+    uart-a-handle buffer$ [bind] string @$ 4 serial_write
+    uart-a-handle pad 8 serial_read pad swap  
+  ;m method readdata
 end-class tmc2208
 
 tmc2208 heap-new constant mymotors
