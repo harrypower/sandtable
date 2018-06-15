@@ -25,8 +25,8 @@
 
 
 require serial.fs
-require ./Gforth_Objects/objects.fs
-require ./Gforth_Objects/stringobj.fs
+require ./Gforth-Objects/objects.fs
+require ./Gforth-Objects/stringobj.fs
 
 object class
   protected
