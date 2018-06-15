@@ -24,17 +24,16 @@
 \ Revisions:
 \ 6/15/2018 started coding
 
-[ifundef] destruction
-  interface
-     selector destruct ( -- ) \ to free allocated memory in objects that use this
-  end-interface destruction
-[endif]
-
 require serial.fs
 require ./Gforth-Objects/objects.fs
 require ./Gforth-Objects/stringobj.fs
 require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
 
+[ifundef] destruction
+  interface
+     selector destruct ( -- ) \ to free allocated memory in objects that use this
+  end-interface destruction
+[endif]
 
 object class
   protected
@@ -71,7 +70,7 @@ object class
     0x0F pad c! pad 1 buffer$ [bind] string !+x
     0xb6 pad c! pad 1 buffer$ [bind] string !+x
     uart-a-handle buffer$ [bind] string @$ 4 serial_write
-    uart-a-handle pad 8 serial_read pad swap  
+    uart-a-handle pad 8 serial_read pad swap
   ;m method readdata
 end-class tmc2208
 
