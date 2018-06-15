@@ -75,4 +75,4 @@ object class
   ;m method readdata
 end-class tmc2208
 
-tmc2208 heap-new constant mymotors
+2 tmc2208 heap-new constant mymotors
