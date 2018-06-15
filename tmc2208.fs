@@ -52,7 +52,7 @@ object class
   ;m overrides construct
 
   m: ( -- ) \ destructor
-    buffer$ [bind] string destruct
+    \ buffer$ [bind] string destruct
   ;m overrides destruct
 
   m: ( -- ) \ configure uart
