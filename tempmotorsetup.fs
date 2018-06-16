@@ -7,19 +7,19 @@ require ./Gforth-Objects/stringobj.fs
 1 constant bank1
 %110000000000000000 constant enablexy
 
-: disable-motors ( -- )
-  bank1 enablexy BBBiosetup
+: disable-motors ( --  )
+  bank1 enablexy BBBiosetup throw
   BBBiooutput
   BBBioset
-  BBBiocleanup ;
+  BBBiocleanup throw ;
 
 disable-motors
 
 : enablemotors ( -- )
-  bank1 enablexy BBBiosetup
+  bank1 enablexy BBBiosetup throw
   BBBiooutput
   BBBioclear
-  BBBiocleanup ;
+  BBBiocleanup throw ;
 
 0 value uarthandle
 : setupuart1
