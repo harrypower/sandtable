@@ -35,8 +35,8 @@ disable-motors
 : sendtest ( -- uwriten )
   0xa0 pad c!
   0x00 pad 1 + c!
-  0x0f pad 2 + c!
-  0xb6 pad 3 + c!
+  0x00 pad 2 + c!
+  0x13 pad 3 + c!
   0x00 pad 4 + c!
   sendit ;
 
@@ -44,3 +44,12 @@ disable-motors
   pad 10 0 fill
   uarthandle pad 8 serial_read
   pad 10 dump ;
+
+: sendtest2 ( -- uwritten )
+  0x05 pad c!
+  0x00 pad 1 + c!
+  0x00 pad 2 + c!
+  0xb6 pad 3 + c!
+  0x00 pad 4 + c!
+  sendit ;
+  
