@@ -37,6 +37,6 @@ disable-motors
   0x00 pad 4 + c!
   uarthandle pad 4 serial_write ;
 
-: readit
+: readtest ( -- uread-amount )
+  uarthandle pad 8 serial_read
   pad 10 dump ;
-  
