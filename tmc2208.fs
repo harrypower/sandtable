@@ -70,7 +70,7 @@ object class
     0x00 pad c! pad 1 buffer$ [bind] string !+$
     0x0F pad c! pad 1 buffer$ [bind] string !+$
     0xb6 pad c! pad 1 buffer$ [bind] string !+$
-    uart-a-handle buffer$ [bind] string @$ 4 serial_write
+    uart-a-handle buffer$ [bind] string @$ serial_write
     uart-a-handle pad 8 serial_read pad swap
   ;m method readdata
 end-class tmc2208
