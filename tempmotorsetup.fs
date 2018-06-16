@@ -41,5 +41,6 @@ disable-motors
   sendit ;
 
 : readtest ( -- uread-amount )
+  pad 10 0 fill
   uarthandle pad 8 serial_read
   pad 10 dump ;
