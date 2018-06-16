@@ -52,4 +52,11 @@ disable-motors
   0xb6 pad 3 + c!
   0x00 pad 4 + c!
   sendit ;
-  
+
+: sendtest3 ( -- uwritten )
+  0x05 pad c!
+  0x00 pad 1 + c!
+  0x00 pad 2 + c!
+  0x13 pad 3 + c!
+  0x00 pad 4 + c!
+  sendit ;
