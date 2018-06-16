@@ -29,13 +29,16 @@ disable-motors
   uarthandle PARNONE serial_setparity
   uarthandle serial_flush ;
 
+: sendit ( -- uwriten )
+  uarthandle pad 4 serial_write ;
+
 : sendtest ( -- uwriten )
   0xa0 pad c!
   0x00 pad 1 + c!
   0x0f pad 2 + c!
   0xb6 pad 3 + c!
   0x00 pad 4 + c!
-  uarthandle pad 4 serial_write ;
+  sendit ;
 
 : readtest ( -- uread-amount )
   uarthandle pad 8 serial_read
