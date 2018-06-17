@@ -36,7 +36,7 @@ disable-motors
   0xa0 pad c!
   0x00 pad 1 + c!
   0x00 pad 2 + c!
-  0x13 pad 3 + c!
+  0x48 pad 3 + c!
   0x00 pad 4 + c!
   sendit ;
 
@@ -49,7 +49,7 @@ disable-motors
   0x05 pad c!
   0x00 pad 1 + c!
   0x00 pad 2 + c!
-  0xb6 pad 3 + c!
+  0x48 pad 3 + c!
   0x00 pad 4 + c!
   sendit ;
 
