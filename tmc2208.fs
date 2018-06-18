@@ -26,9 +26,9 @@
 \ 6/15/2018 started coding
 \ 6/18/2018 main structure of object started
 
-\ require serial.fs
+require serial.fs
 require ./Gforth-Objects/objects.fs
-require ./Gforth-Objects/stringobj.fs
+\ require ./Gforth-Objects/stringobj.fs
 require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
 
 [ifundef] destruction
@@ -151,4 +151,4 @@ end-class tmc2208
 
 1 %10000000000000000 1 %10000000000000 1 %100000000000 1
 tmc2208 heap-new constant mymotors . cr
-0 mymotors readreg 
+0 mymotors readreg
