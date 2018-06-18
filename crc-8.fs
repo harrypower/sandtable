@@ -1,17 +1,21 @@
 \ crc-8.fs
-\
-: ACCUMULATE ( oldcrc char -- newcrc)
-256 * \ shift char to hi-order byte
-XOR \ & xor into previous crc
-8 0 DO \ Then for eight repetitions,
-DUP 0< IF \ if hi-order bit is "1"
-16386 XOR \ xor it with mask and
-DUP + \ shift it left one place
-1+ \ set lo-order bit to "1"
-ELSE \ otherwise, i.e. hi-order bit is "0"
-DUP + \ shift it left one place
-THEN
-LOOP ; \ complete the loop
+
+: crc8-ATM ( uaddr u -- ucrc ) \ uaddr u contains string of data to make the crc for
+\ crc calculated and returned note it is only to be 8 bits wide
+  0 0 { uaddr u currentByte crc }
+  u 0 ?do
+    uaddr i + c@ to currentByte
+    8 0 do
+      crc 7 rshift currentByte 0x01 and xor 0 =
+      if
+        crc 1 lshift %11111111 and to crc
+      else
+        crc 1 lshift 0x07 xor %11111111 and to crc
+      then
+      currentByte 1 rshift %11111111 and to currentByte
+    loop
+  loop
+  crc ;
 
 \\\
 \ following code is c++ code that worked..
