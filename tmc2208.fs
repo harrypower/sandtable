@@ -20,11 +20,13 @@
 \	stringobj.fs
 \	syscalls386.fs
 \ serial.fs
+\ BBB_GPIO_lib.fs
 \
 \ Revisions:
 \ 6/15/2018 started coding
+\ 6/18/2018 main structure of object started
 
-require serial.fs
+\ require serial.fs
 require ./Gforth-Objects/objects.fs
 require ./Gforth-Objects/stringobj.fs
 require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
@@ -38,43 +40,115 @@ require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
 object class
   destruction implementation
   protected
-  0x0F      constant GCONF
-  %10100000 constant sync
+  0x00      constant GCONF
+  %00000101 constant sync
   0x00      constant slave-addr
 
+  inst-value uarthandle
+  inst-value buffer
+  inst-value enablebank
+  inst-value enablebit
+  inst-value dirbank
+  inst-value dirbit
+  inst-value stepbank
+  inst-value stepio
 
-  inst-value motors
-  inst-value uart-a-handle
-  inst-value buffer$
+  m: ( uaddr u -- ucrc ) \ uaddr u contains string of data to make the crc for
+  \ crc calculated and returned note it is only to be 8 bits wide
+    0 0 { uaddr u currentByte crc }
+    u 0 ?do
+      uaddr i + c@ to currentByte
+      8 0 do
+        crc 7 rshift currentByte 0x01 and xor 0 =
+        if
+          crc 1 lshift %11111111 and to crc
+        else
+          crc 1 lshift 0x07 xor %11111111 and to crc
+        then
+        currentByte 1 rshift %11111111 and to currentByte
+      loop
+    loop crc ;m method crc8-ATM
+  m: ( ugpiobank ugpiobitmask -- nflag )
+    bbbiosetup false = if
+      BBBiooutput
+      bbbioset
+      bbbiocleanup
+    else
+      true
+    then
+  ;m method out-set
+  m: ( ugpiobank ugpiobitmask -- nflag )
+    bbbiosetup false = if
+      BBBiooutput
+      bbbioclear
+      bbbiocleanup
+    else
+      true
+    then
+  ;m method out-clear
+
+  m: ( uuart -- ) \ configure uart
+    serial_open dup 0> if [to-inst] uarthandle else throw then
+    uarthandle B115200 serial_setbaud
+    uarthandle ONESTOPB serial_setstopbits
+    uarthandle PARNONE serial_setparity
+    uarthandle serial_flush
+  ;m method conf-uart
+
   public
-  m: ( umotors -- ) \ constructor
-    dup dup 1 >= swap  2 <= and if [to-inst] motors else drop false abort" only 1 or 2 motors at this time" then
-    string heap-new [to-inst] buffer$
+  m: { ugb0 uenableio ugb1 udirio ugb2 ustepio uuart -- nflag } \ constructor
+  \ note these banks and pin declarations are done with BBB_GPIO_lib.fs and deal with the BBB hardware from programmers reference manual and such linux is not informed of what you do at that level
+  \ ugb0 ugb1 ugb2 are the gpio banks used for the paired gpio pins that follow there declarations.  They can be 0 to 3 only and are parsed accordingly
+  \ uenableio is the bit mask for where tmc2208 enable pin is connected to BBB
+  \ udirio is the bit mask for where the tmc2208 direction pin is connected to BBB
+  \ usetpio is the bit mask for where the tmc2208 step pin is connected to BBB
+  \ uuart is for ttyo1 or ttyo2 so values of 1 or 2 are only allowed at this moment
+  \ nflag is 0 or false if the tmc2208 driver is present and could be talked to
+  \ nflag is -1 if an error happened during gpio port setup
+  \ nflag is any other number if uart does not work ( the number should refere to the failure of the uart setup ).. note the uart needs to be turned on in the BBB image and present at linux level used.
+  \ nflag is 1 if uuart is not 1 or 2 !
+    try
+      ugb0 uenableio out-set throw \ this should turn off power to motor
+      ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
+      ugb1 udirio out-clear throw \ this should setup tmc2208 direction pin to output and low for now!
+      ugb1 [to-inst] dirbank udirio [to-inst] dirbit
+      ugb2 ustepio out-clear throw \ this should setup tmc2208 step pin to output and low for now!
+      ugb2 [to-inst] stepbank ustepio [to-inst] stepio
+      uuart case
+        1 of 1 conf-uart endof
+        2 of 2 conf-uart endof
+        1 throw \ only ttyo1 or ttyo2 at this moment
+      endcase
+      12 allocate throw [to-inst] buffer
+      false
+    restore
+    endtry
   ;m overrides construct
 
   m: ( -- ) \ destructor
-    buffer$ [bind] string destruct
+    enablebank enablebit out-set drop
+    uarthandle serial_close drop
+    buffer free drop
   ;m overrides destruct
 
-  m: ( -- ) \ configure uart
-    1 serial_open dup 0> if [to-inst] uart-a-handle else throw then
-    uart-a-handle B115200 serial_setbaud
-    uart-a-handle ONESTOPB serial_setstopbits
-    uart-a-handle PARNONE serial_setparity
-    uart-a-handle serial_flush
-  ;m method conf-uart
-
-  m: ( -- uamount-write uaddr uamount-read   ) \ test data recieve
-    uart-a-handle serial_flush
-    0xa0 pad c! pad 1 buffer$ [bind] string !$
-    0x00 pad c! pad 1 buffer$ [bind] string !+$
-    0x0F pad c! pad 1 buffer$ [bind] string !+$
-    0xb6 pad c! pad 1 buffer$ [bind] string !+$
-    uart-a-handle buffer$ [bind] string @$ serial_write
-    uart-a-handle pad 8 serial_read pad swap
-  ;m method readdata
+  m: ( ureg -- uaddr u nflag )
+    uarthandle serial_flush
+    sync buffer c!
+    0 buffer 1 + c!
+    %1111111 and buffer 2 + c! \ place ureg in buffer and set transfer to read register
+    buffer 3 crc8-ATM buffer 3 + c! \ calculate crc and store in buffer
+    uarthandle buffer 4 serial_write 4 = if
+      uarthandle buffer 12 serial_read 12 = if
+        buffer 4 + 8 0
+      else
+        0 0 1 \ did not get all the data from read
+      then
+    else
+      0 0 2 \ write failed
+    then
+  ;m method readreg
 end-class tmc2208
 
-2 tmc2208 heap-new constant mymotors
-mymotors conf-uart
-mymotors readdata
+1 %10000000000000000 1 %10000000000000 1 %100000000000 1
+tmc2208 heap-new constant mymotors . cr
+0 mymotors readreg 
