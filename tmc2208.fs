@@ -151,4 +151,4 @@ end-class tmc2208
 
 1 %10000000000000000 1 %10000000000000 1 %100000000000 1
 tmc2208 heap-new constant mymotors . cr
-0 mymotors readreg
+\ 0 mymotors readreg
