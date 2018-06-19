@@ -131,7 +131,9 @@ object class
   ;m overrides destruct
 
   m: ( ureg tmc2208 -- uaddr n nflag )
-    \ uaddr u is the buffer address with u filled content of bytes returned from tmc2208 if nflag is zero of false
+    \ uaddr n is the buffer address with n filled content of bytes returned from tmc2208 if nflag is zero of false
+    \ normaly 8 bytes is returned where the 8th byte is the crc and this crc should match crc generated of the first 7 bytes
+    \ if crc is a match then nflag is zero and the real register data is byte 4 to byte 7 or index 3 to index 6
     \ nflag is 2 for a write failed error
     \ nflag is 1 for a reading data from tmc2208 error ... not all data recived
     \ nflag is 3 meaning the crc did not compair with calcuated crc ... note the uaddr and u contains what was returned including the send 4 bytes and the crc byte at end
@@ -144,7 +146,7 @@ object class
       buffer 12 0 fill 2 ms
       uarthandle buffer 12 serial_read 12 = if
         buffer 4 + 7 this [current] crc8-ATM buffer 11 + c@ = if
-          buffer 4 + 7 0 \ skip the echoed read command and crc and return the response
+          buffer 4 + 8 0 \ skip the echoed read command and crc and return the response
         else
           buffer 12 3 \ crc did not match calcuated one
         then
@@ -155,6 +157,14 @@ object class
       0 0 2 \ write failed
    then
   ;m method readreg
+
+  m: ( uaddr tmc2208 -- ndata ) \ takes string of 4 bytes and puts into 32 bit n
+  \ uaddr is the buffer location for the string
+  \ the string is always 4 bytes long
+    0 { uadd data }
+    3 0 do uaddr i + c@ data or 8 lshift to data loop
+    uaddr 3 + c@ data or 8 lshift
+  ;m method $-data
 
 end-class tmc2208
 
