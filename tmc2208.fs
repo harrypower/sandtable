@@ -161,7 +161,7 @@ object class
   m: ( uaddr tmc2208 -- ndata ) \ takes string of 4 bytes and puts into 32 bit n
   \ uaddr is the buffer location for the string
   \ the string is always 4 bytes long
-    0 { uadd data }
+    0 { uaddr data }
     3 0 do uaddr i + c@ data or 8 lshift to data loop
     uaddr 3 + c@ data or 8 lshift
   ;m method $-data
