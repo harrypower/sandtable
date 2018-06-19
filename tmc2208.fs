@@ -108,7 +108,7 @@ object class
   \ nflag is any other number if uart does not work ( the number should refere to the failure of the uart setup ).. note the uart needs to be turned on in the BBB image and present at linux level used.
   \ nflag is 1 if uuart is not 1 or 2 !
     try
-      ugb0 uenableio out-set throw \ this should turn off power to motor
+    \  ugb0 uenableio out-set throw \ this should turn off power to motor
   \    ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
   \    ugb1 udirio out-clear throw \ this should setup tmc2208 direction pin to output and low for now!
   \    ugb1 [to-inst] dirbank udirio [to-inst] dirbit
