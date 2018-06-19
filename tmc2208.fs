@@ -119,7 +119,7 @@ object class
         2 of 2 this [current] conf-uart endof
         1 throw \ only ttyo1 or ttyo2 at this moment
       endcase
-      20 allocate throw [to-inst] buffer
+      12 allocate throw [to-inst] buffer
       false
     restore
     endtry
@@ -131,14 +131,18 @@ object class
     buffer free drop
   ;m overrides destruct
 
-  m: ( ureg -- uaddr u nflag )
+  m: ( ureg -- uaddr n nflag )
+    \ uaddr u is the buffer address with u filled content of bytes returned from tmc2208 if nflag is zero of false
+    \ nflag is 2 for a write failed error
+    \ nflag is 1 for a reading data from tmc2208 error ... not all data recived
+    \ nflag is 3 meaning the crc did not compair with calcuated crc ... note the uaddr and u contains what was returned including the send 4 bytes and the crc byte at end
     uarthandle serial_flush
     sync buffer c!
     0 buffer 1 + c!
     %1111111 and buffer 2 + c! \ place ureg in buffer and set transfer to read register
     buffer 3 this [current] crc8-ATM buffer 3 + c! \ calculate crc and store in buffer
     uarthandle buffer 4 serial_write 4 = if
-      buffer 20 0 fill 2 ms
+      buffer 12 0 fill 2 ms
       uarthandle buffer 12 serial_read 12 = if
         buffer 4 + 7 this [current] crc8-ATM buffer 11 + c@ = if
           buffer 4 + 7 0 \ skip the echoed read command and crc and return the response
