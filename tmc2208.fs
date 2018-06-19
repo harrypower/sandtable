@@ -160,4 +160,8 @@ end-class tmc2208
 
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
 tmc2208 heap-new constant mymotorA . cr
-0 mymotor readreg throw dump
+0 mymotor readreg . cr dump
+
+1 %100000000000000000 1 %1000000000000000 1 %100000000000000 2
+tmc2208 heap-new constant mymotorB . cr
+0 mymotorB read reg . cr dump
