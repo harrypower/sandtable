@@ -53,7 +53,7 @@ object class
   inst-value stepbank
   inst-value stepio
 
-  m: ( uaddr u -- ucrc ) \ uaddr u contains string of data to make the crc for
+  m: ( uaddr u tmc2208 -- ucrc ) \ uaddr u contains string of data to make the crc for
   \ crc calculated and returned note it is only to be 8 bits wide
     0 0 { uaddr u currentByte crc }
     u 0 ?do
@@ -68,26 +68,34 @@ object class
         currentByte 1 rshift %11111111 and to currentByte
       loop
     loop crc ;m method crc8-ATM
-  m: ( ugpiobank ugpiobitmask -- nflag )
-    bbbiosetup false = if
-      BBBiooutput
-      bbbioset
-      bbbiocleanup
-    else
-      true
-    then
-  ;m method out-set
-  m: ( ugpiobank ugpiobitmask -- nflag )
-    bbbiosetup false = if
-      BBBiooutput
-      bbbioclear
-      bbbiocleanup
-    else
-      true
-    then
-  ;m method out-clear
+\  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+\    bbbiosetup false = if
+\      BBBiooutput
+\      bbbioset
+\      bbbiocleanup
+\    else
+\      true
+\    then
+\  ;m method out-set
+\  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+\    bbbiosetup false = if
+\      BBBiooutput
+\      bbbioclear
+\      bbbiocleanup
+\    else
+\      true
+\    then
+\  ;m method out-clear
+  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+    bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
 
-  m: ( uuart -- ) \ configure uart
+  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+    bbbiosetup false = if bbbioset bbbiocleanup else true then ;m method gpio-high
+
+  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+  bbbiosetup false = if bbbioclear bbbiocleanup else true then ;m method gpio-low
+
+  m: ( uuart tmc2208 -- ) \ configure uart
     serial_open dup 0> if [to-inst] uarthandle else throw then
     uarthandle B115200 serial_setbaud
     uarthandle ONESTOPB serial_setstopbits
@@ -96,7 +104,7 @@ object class
   ;m method conf-uart
 
   public
-  m: { ugb0 uenableio ugb1 udirio ugb2 ustepio uuart -- nflag } \ constructor
+  m: ( ugb0 uenableio ugb1 udirio ugb2 ustepio uuart tmc2208 -- nflag ) \ constructor
   \ note these banks and pin declarations are done with BBB_GPIO_lib.fs and deal with the BBB hardware from programmers reference manual and such linux is not informed of what you do at that level
   \ ugb0 ugb1 ugb2 are the gpio banks used for the paired gpio pins that follow there declarations.  They can be 0 to 3 only and are parsed accordingly
   \ uenableio is the bit mask for where tmc2208 enable pin is connected to BBB
@@ -107,12 +115,16 @@ object class
   \ nflag is -1 if an error happened during gpio port setup
   \ nflag is any other number if uart does not work ( the number should refere to the failure of the uart setup ).. note the uart needs to be turned on in the BBB image and present at linux level used.
   \ nflag is 1 if uuart is not 1 or 2 !
+    { ugb0 uenableio ugb1 udirio ugb2 ustepio uuart }
     try
-      ugb0 uenableio this [current] out-set throw \ this should turn off power to motor
+      ugb0 uenableio this [current] gpio-output throw
+      ugb0 uenableio this [current] gpio-high throw \ this should turn off power to motor
       ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
-      ugb1 udirio this [current] out-clear throw \ this should setup tmc2208 direction pin to output and low for now!
+      ugb1 udirio this [current] gpio-output throw
+      ugb1 udirio this [current] gpio-low throw \ this should setup tmc2208 direction pin to output and low for now!
       ugb1 [to-inst] dirbank udirio [to-inst] dirbit
-      ugb2 ustepio this [current] out-clear throw \ this should setup tmc2208 step pin to output and low for now!
+      ugb2 ustepio this [current] gpio-output throw
+      ugb2 ustepio this [current] gpio-low throw \ this should setup tmc2208 step pin to output and low for now!
       ugb2 [to-inst] stepbank ustepio [to-inst] stepio
       uuart case
         1 of 1 this [current] conf-uart endof
@@ -125,13 +137,13 @@ object class
     endtry
   ;m overrides construct
 
-  m: ( -- ) \ destructor
+  m: ( tmc2208 -- ) \ destructor
     enablebank enablebit out-set drop
     uarthandle serial_close drop
     buffer free drop
   ;m overrides destruct
 
-  m: ( ureg -- uaddr n nflag )
+  m: ( ureg tmc2208 -- uaddr n nflag )
     \ uaddr u is the buffer address with u filled content of bytes returned from tmc2208 if nflag is zero of false
     \ nflag is 2 for a write failed error
     \ nflag is 1 for a reading data from tmc2208 error ... not all data recived
