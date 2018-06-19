@@ -104,6 +104,11 @@ object class
   ;m method conf-uart
 
   public
+  m: ( tmc2208 -- )
+    enablebank enablebit gpio-high ;m method disable-driver
+  m: ( tmc2208 -- )
+    enablebank enablebit gpio-low ;m method endable-driver
+
   m: ( ugb0 uenableio ugb1 udirio ugb2 ustepio uuart tmc2208 -- nflag ) \ constructor
   \ note these banks and pin declarations are done with BBB_GPIO_lib.fs and deal with the BBB hardware from programmers reference manual and such linux is not informed of what you do at that level
   \ ugb0 ugb1 ugb2 are the gpio banks used for the paired gpio pins that follow there declarations.  They can be 0 to 3 only and are parsed accordingly
@@ -168,6 +173,7 @@ object class
       0 0 2 \ write failed
    then
   ;m method readreg
+
 end-class tmc2208
 
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
