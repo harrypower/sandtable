@@ -106,7 +106,7 @@ object class
     try
       ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
       enablebank enablebit this [current] gpio-output throw
-      enablebank enablebit this [current] disable-driver \ this should turn off power to motor
+      this [current] disable-driver \ this should turn off power to motor
       ugb1 udirio this [current] gpio-output throw
       ugb1 udirio this [current] gpio-low throw \ this should setup tmc2208 direction pin to output and low for now!
       ugb1 [to-inst] dirbank udirio [to-inst] dirbit
