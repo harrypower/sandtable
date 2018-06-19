@@ -109,11 +109,11 @@ object class
   \ nflag is 1 if uuart is not 1 or 2 !
     try
       ugb0 uenableio out-set throw \ this should turn off power to motor
-      ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
-      ugb1 udirio out-clear throw \ this should setup tmc2208 direction pin to output and low for now!
-      ugb1 [to-inst] dirbank udirio [to-inst] dirbit
-      ugb2 ustepio out-clear throw \ this should setup tmc2208 step pin to output and low for now!
-      ugb2 [to-inst] stepbank ustepio [to-inst] stepio
+  \    ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
+  \    ugb1 udirio out-clear throw \ this should setup tmc2208 direction pin to output and low for now!
+  \    ugb1 [to-inst] dirbank udirio [to-inst] dirbit
+  \    ugb2 ustepio out-clear throw \ this should setup tmc2208 step pin to output and low for now!
+  \    ugb2 [to-inst] stepbank ustepio [to-inst] stepio
     \  uuart case
     \    1 of 1 conf-uart endof
     \    2 of 2 conf-uart endof
