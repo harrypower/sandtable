@@ -105,9 +105,9 @@ object class
 
   public
   m: ( tmc2208 -- )
-    enablebank enablebit gpio-high ;m method disable-driver
+    enablebank enablebit this [current] gpio-high throw ;m method disable-driver
   m: ( tmc2208 -- )
-    enablebank enablebit gpio-low ;m method endable-driver
+    enablebank enablebit this [current] gpio-low throw ;m method enable-driver
 
   m: ( ugb0 uenableio ugb1 udirio ugb2 ustepio uuart tmc2208 -- nflag ) \ constructor
   \ note these banks and pin declarations are done with BBB_GPIO_lib.fs and deal with the BBB hardware from programmers reference manual and such linux is not informed of what you do at that level
