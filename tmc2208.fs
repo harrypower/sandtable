@@ -93,7 +93,7 @@ object class
     bbbiosetup false = if bbbioset bbbiocleanup else true then ;m method gpio-high
 
   m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
-  bbbiosetup false = if bbbioclear bbbiocleanup else true then ;m method gpio-low
+    bbbiosetup false = if bbbioclear bbbiocleanup else true then ;m method gpio-low
 
   m: ( uuart tmc2208 -- ) \ configure uart
     serial_open dup 0> if [to-inst] uarthandle else throw then
@@ -138,7 +138,7 @@ object class
   ;m overrides construct
 
   m: ( tmc2208 -- ) \ destructor
-    enablebank enablebit out-set drop
+    enablebank enablebit this [current] gpio-high drop
     uarthandle serial_close drop
     buffer free drop
   ;m overrides destruct
