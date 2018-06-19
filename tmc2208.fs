@@ -138,7 +138,7 @@ object class
     %1111111 and buffer 2 + c! \ place ureg in buffer and set transfer to read register
     buffer 3 this [current] crc8-ATM buffer 3 + c! \ calculate crc and store in buffer
     uarthandle buffer 4 serial_write 4 = if
-      buffer 20 0 fill
+      buffer 20 0 fill 1 ms
       uarthandle serial_lenrx uarthandle buffer rot serial_read
     \  uarthandle buffer 12 serial_read \ 12 = if
 \        buffer 4 + 8 0
