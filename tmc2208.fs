@@ -108,17 +108,17 @@ object class
   \ nflag is any other number if uart does not work ( the number should refere to the failure of the uart setup ).. note the uart needs to be turned on in the BBB image and present at linux level used.
   \ nflag is 1 if uuart is not 1 or 2 !
     try
-    \  ugb0 uenableio out-set throw \ this should turn off power to motor
-  \    ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
-  \    ugb1 udirio out-clear throw \ this should setup tmc2208 direction pin to output and low for now!
-  \    ugb1 [to-inst] dirbank udirio [to-inst] dirbit
-  \    ugb2 ustepio out-clear throw \ this should setup tmc2208 step pin to output and low for now!
-  \    ugb2 [to-inst] stepbank ustepio [to-inst] stepio
-    \  uuart case
-    \    1 of 1 conf-uart endof
-    \    2 of 2 conf-uart endof
-    \    1 throw \ only ttyo1 or ttyo2 at this moment
-    \  endcase
+      ugb0 uenableio this [current] out-set throw \ this should turn off power to motor
+      ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
+      ugb1 udirio this [current] out-clear throw \ this should setup tmc2208 direction pin to output and low for now!
+      ugb1 [to-inst] dirbank udirio [to-inst] dirbit
+      ugb2 ustepio this [current] out-clear throw \ this should setup tmc2208 step pin to output and low for now!
+      ugb2 [to-inst] stepbank ustepio [to-inst] stepio
+      uuart case
+        1 of 1 this [current] conf-uart endof
+        2 of 2 this [current] conf-uart endof
+        1 throw \ only ttyo1 or ttyo2 at this moment
+      endcase
       12 allocate throw [to-inst] buffer
       false
     restore
