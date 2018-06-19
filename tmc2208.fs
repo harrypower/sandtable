@@ -119,7 +119,7 @@ object class
         2 of 2 this [current] conf-uart endof
         1 throw \ only ttyo1 or ttyo2 at this moment
       endcase
-      12 allocate throw [to-inst] buffer
+      20 allocate throw [to-inst] buffer
       false
     restore
     endtry
