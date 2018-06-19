@@ -140,7 +140,11 @@ object class
     uarthandle buffer 4 serial_write 4 = if
       buffer 20 0 fill 2 ms
       uarthandle buffer 12 serial_read 12 = if
-        buffer 4 + 8 0 \ skip the echoed read command and return the response
+        buffer 4 + 7 this [current] crc8-ATM buffer 12 + c@ = if
+          buffer 4 + 7 0 \ skip the echoed read command and crc and return the response
+        else
+          buffer 12 3 \ crc did not match calcuated one 
+        then
       else
         buffer 12 1 \ did not get all the data from read
       then
