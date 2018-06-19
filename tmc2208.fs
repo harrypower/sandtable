@@ -68,24 +68,6 @@ object class
         currentByte 1 rshift %11111111 and to currentByte
       loop
     loop crc ;m method crc8-ATM
-\  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
-\    bbbiosetup false = if
-\      BBBiooutput
-\      bbbioset
-\      bbbiocleanup
-\    else
-\      true
-\    then
-\  ;m method out-set
-\  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
-\    bbbiosetup false = if
-\      BBBiooutput
-\      bbbioclear
-\      bbbiocleanup
-\    else
-\      true
-\    then
-\  ;m method out-clear
   m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
     bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
 
@@ -104,13 +86,13 @@ object class
   ;m method conf-uart
 
   public
-  m: ( tmc2208 -- )
+  m: ( tmc2208 -- ) \ simply make enable pin high on tmc2208 driver board
     enablebank enablebit this [current] gpio-high throw ;m method disable-driver
-  m: ( tmc2208 -- )
+  m: ( tmc2208 -- ) \ simply make enable pin low on tmc2208 driver board
     enablebank enablebit this [current] gpio-low throw ;m method enable-driver
 
   m: ( ugb0 uenableio ugb1 udirio ugb2 ustepio uuart tmc2208 -- nflag ) \ constructor
-  \ note these banks and pin declarations are done with BBB_GPIO_lib.fs and deal with the BBB hardware from programmers reference manual and such linux is not informed of what you do at that level
+  \ note these banks and pin declarations are done as per BBB_GPIO_lib.fs and deal with the BBB hardware from programmers reference manual and such linux is not informed of what you do at that level
   \ ugb0 ugb1 ugb2 are the gpio banks used for the paired gpio pins that follow there declarations.  They can be 0 to 3 only and are parsed accordingly
   \ uenableio is the bit mask for where tmc2208 enable pin is connected to BBB
   \ udirio is the bit mask for where the tmc2208 direction pin is connected to BBB
@@ -122,9 +104,9 @@ object class
   \ nflag is 1 if uuart is not 1 or 2 !
     { ugb0 uenableio ugb1 udirio ugb2 ustepio uuart }
     try
-      ugb0 uenableio this [current] gpio-output throw
-      ugb0 uenableio this [current] gpio-high throw \ this should turn off power to motor
       ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
+      enablebank enablebit this [current] gpio-output throw
+      enablebank enablebit this [current] disable-driver \ this should turn off power to motor
       ugb1 udirio this [current] gpio-output throw
       ugb1 udirio this [current] gpio-low throw \ this should setup tmc2208 direction pin to output and low for now!
       ugb1 [to-inst] dirbank udirio [to-inst] dirbit
