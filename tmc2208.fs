@@ -139,14 +139,13 @@ object class
     buffer 3 this [current] crc8-ATM buffer 3 + c! \ calculate crc and store in buffer
     uarthandle buffer 4 serial_write 4 = if
       buffer 20 0 fill 2 ms
-    \  uarthandle serial_lenrx uarthandle buffer rot serial_read
-      uarthandle buffer 12 serial_read buffer swap \ 12 = if
-\        buffer 4 + 8 0
-\      else
-\        0 0 1 \ did not get all the data from read
-\      then
-\    else
-\      0 0 2 \ write failed
+      uarthandle buffer 12 serial_read 12 = if
+        buffer 4 + 8 0 \ skip the echoed read command and return the response
+      else
+        buffer 12 1 \ did not get all the data from read
+      then
+    else
+      0 0 2 \ write failed
    then
   ;m method readreg
 end-class tmc2208
