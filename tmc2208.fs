@@ -159,5 +159,5 @@ object class
 end-class tmc2208
 
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
-tmc2208 heap-new constant mymotor . cr
-\ 0 mymotor readreg
+tmc2208 heap-new constant mymotorA . cr
+0 mymotor readreg throw dump
