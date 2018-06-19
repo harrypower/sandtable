@@ -114,11 +114,11 @@ object class
       ugb1 [to-inst] dirbank udirio [to-inst] dirbit
       ugb2 ustepio out-clear throw \ this should setup tmc2208 step pin to output and low for now!
       ugb2 [to-inst] stepbank ustepio [to-inst] stepio
-      uuart case
-        1 of 1 conf-uart endof
-        2 of 2 conf-uart endof
-        1 throw \ only ttyo1 or ttyo2 at this moment
-      endcase
+    \  uuart case
+    \    1 of 1 conf-uart endof
+    \    2 of 2 conf-uart endof
+    \    1 throw \ only ttyo1 or ttyo2 at this moment
+    \  endcase
       12 allocate throw [to-inst] buffer
       false
     restore
