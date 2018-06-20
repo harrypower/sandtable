@@ -186,15 +186,15 @@ object class
   this [current] getreg dup  0= if
     drop drop \ loose the flag and string count
     3 + this [current] $-data 0 \ udata and nflag returned
-  else 
-    dup [to-inst] lasterror
-    rot rot lasterror$ 12 0 fill lasterror$ swap cmove
+  else
+    dup [to-inst] lasterror#
+    rot rot lasterror$ 12 0 fill lasterror$ swap cmove 0 swap 
   then
   ;m method readreg
   m: ( -- ) \ put some info to console about this object
     this [parent] print
     lasterror$ 12 dump cr
-    ." last error # " lasterror . cr
+    ." last error # " lasterror# . cr
   ;m overrides print
 end-class tmc2208
 
