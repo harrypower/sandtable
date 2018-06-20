@@ -163,7 +163,7 @@ object class
   \ the string is always 4 bytes long
     0 { uaddr data }
     3 0 do uaddr i + c@ data or 8 lshift to data loop
-    uaddr 3 + c@ data or 8 lshift
+    uaddr 3 + c@ data or
   ;m method $-data
 
 end-class tmc2208
