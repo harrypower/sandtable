@@ -193,7 +193,7 @@ object class
   ;m method readreg
   m: ( -- ) \ put some info to console about this object
     this [parent] print
-    lasterror$ 12 postpone dump cr
+    lasterror$ 12 ['] dump execute cr
     ." last error # " lasterror# . cr
   ;m overrides print
 end-class tmc2208
