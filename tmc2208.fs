@@ -193,17 +193,18 @@ object class
   ;m method readreg
   m: ( -- ) \ put some info to console about this object
     this [parent] print
-    lasterror$ 12 dump cr
-    ." last error # " lasterror# . cr
+    ." last error # " lasterror# dup . cr
+    0<> if lasterror$ 12 dump cr then
   ;m overrides print
 end-class tmc2208
 
+cr
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
-tmc2208 heap-new constant mymotorA . cr
-0 mymotorA readreg . . cr
+tmc2208 heap-new constant mymotorA throw
+0 mymotorA readreg hex . . cr decimal
 mymotorA bind tmc2208 print
 
 1 %100000000000000000 1 %1000000000000000 1 %100000000000000 2
-tmc2208 heap-new constant mymotorB . cr
-0 mymotorB readreg . . cr
-mymotorb bind tmc2208 print 
+tmc2208 heap-new constant mymotorB throw
+0 mymotorB readreg hex . . cr decimal
+mymotorb bind tmc2208 print
