@@ -192,7 +192,7 @@ object class
   then
   ;m method readreg
   m: ( -- ) \ put some info to console about this object
-    this [parent] print
+    this [parent] print cr
     ." last error # " lasterror# dup . cr
     0<> if lasterror$ 12 dump cr then
   ;m overrides print
