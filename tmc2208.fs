@@ -53,6 +53,8 @@ object class
   inst-value stepbank
   inst-value stepio
   inst-value buffer$
+  inst-value lasterror#
+  inst-value lasterror$
 
   m: ( uaddr u tmc2208 -- ucrc ) \ uaddr u contains string of data to make the crc for
   \ crc calculated and returned note it is only to be 8 bits wide
@@ -121,6 +123,8 @@ object class
       endcase
       12 allocate throw [to-inst] buffer
       4 allocate throw [to-inst] buffer$
+      12 allocate throw [to-inst] lasterror$
+      0 [to-inst] lasterror
       false
     restore
     endtry
@@ -131,6 +135,7 @@ object class
     uarthandle serial_close drop
     buffer free drop
     buffer$ free drop
+    lasterror$ free drop
   ;m overrides destruct
 
   m: ( ureg tmc2208 -- uaddr n nflag )
@@ -159,7 +164,7 @@ object class
     else
       0 0 2 \ write failed
    then
-  ;m method readreg
+  ;m method getreg
 
   m: ( uaddr tmc2208 -- ndata ) \ takes string of 4 bytes and puts into 32 bit n
   \ uaddr is the buffer location for the string
@@ -171,8 +176,26 @@ object class
   m: ( ndata tmc2208 -- uaddr ) \ takes ndata a 32 bit number and makes a string  and returns that string with uaddr
   \ note the string returned is always 4 bytes long
     { ndata }
-    4 0 do ndata 0xff000000 and 24 rshift buffer$ i + c! ndata 8 lshift to ndata loop  buffer$ 
+    4 0 do ndata 0xff000000 and 24 rshift buffer$ i + c! ndata 8 lshift to ndata loop  buffer$
   ;m method data-$
+  m: ( ureg tmc2208 -- udata nflag ) \ read the ureg of tmc2208 device and return the 32 bit udata
+  \ nflag is zero for successfull read
+  \ nflag 1 meaning reading error where not all the data was recived
+  \ nflag 2 meaning the write request to read the register did not happen correclty
+  \ nflag 3 meaning the crc from tmc2208 did not match the data also read from tmc2208
+  this [current] getreg dup  0= if
+    drop drop \ loose the flag and string count
+    3 + this [current] $-data 0 \ udata and nflag returned
+  else 
+    dup [to-inst] lasterror
+    rot rot lasterror$ 12 0 fill lasterror$ swap cmove
+  then
+  ;m method readreg
+  m: ( -- ) \ put some info to console about this object
+    this [parent] print
+    lasterror$ 12 dump cr
+    ." last error # " lasterror . cr
+  ;m overrides print
 end-class tmc2208
 
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
