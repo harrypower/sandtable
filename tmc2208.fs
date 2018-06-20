@@ -52,6 +52,7 @@ object class
   inst-value dirbit
   inst-value stepbank
   inst-value stepio
+  inst-value buffer$
 
   m: ( uaddr u tmc2208 -- ucrc ) \ uaddr u contains string of data to make the crc for
   \ crc calculated and returned note it is only to be 8 bits wide
@@ -119,6 +120,7 @@ object class
         1 throw \ only ttyo1 or ttyo2 at this moment
       endcase
       12 allocate throw [to-inst] buffer
+      4 allocate throw [to-inst] buffer$
       false
     restore
     endtry
@@ -128,6 +130,7 @@ object class
     enablebank enablebit this [current] gpio-high drop
     uarthandle serial_close drop
     buffer free drop
+    buffer$ free drop
   ;m overrides destruct
 
   m: ( ureg tmc2208 -- uaddr n nflag )
@@ -165,7 +168,11 @@ object class
     3 0 do uaddr i + c@ data or 8 lshift to data loop
     uaddr 3 + c@ data or
   ;m method $-data
-
+  m: ( ndata tmc2208 -- uaddr ) \ takes ndata a 32 bit number and makes a string  and returns that string with uaddr
+  \ note the string returned is always 4 bytes long
+    { ndata }
+    4 0 do ndata 0xff000000 and 24 rshift buffer$ i + c! ndata 8 lshift to ndata loop  buffer$ 
+  ;m method data-$
 end-class tmc2208
 
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
