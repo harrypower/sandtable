@@ -124,7 +124,7 @@ object class
       12 allocate throw [to-inst] buffer
       4 allocate throw [to-inst] buffer$
       12 allocate throw [to-inst] lasterror$
-      0 [to-inst] lasterror
+      0 [to-inst] lasterror#
       false
     restore
     endtry
