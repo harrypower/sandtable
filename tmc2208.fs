@@ -184,7 +184,7 @@ object class
   m: ( ureg udata tmc2208 -- nflag ) \ write udata 32 bits to ureg of tmc2208 device
   \ nflag is false if ifcnt register gets incrimented indicating udata was writen to ureg
     0 { ureg udata ucounter }
-    ifcnt this [current] readreg false = if
+    ifcnt this readreg false = if
       to ucounter
       uarthandle serial_flush
       SYNC buffer c!
@@ -193,7 +193,7 @@ object class
       udata this [current] data-$ buffer 3 + 4 cmove
       buffer 7 this [current] crc8-ATM buffer 7 + c!
       uarthandle buffer 8 serial_write 8 = if
-        ifcnt this [current] readreg false = if
+        ifcnt this readreg false = if
           ucounter = if 4 else 0 then \ return 4 meaning counter did not change so write not accepted ... return 0 meaning write is confirmed and accepted
         else
           3 \ meaning after write command sent the  ifcnt register could not be read to confirm if the write was accepted or not !
