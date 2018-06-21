@@ -193,6 +193,7 @@ object class
       udata this [current] data-$ buffer 3 + 4 cmove
       buffer 7 this [current] crc8-ATM buffer 7 + c!
       uarthandle buffer 8 serial_write 8 dup . ." writen amount " cr = if
+        1 ms
         uarthandle serial_flush uarthandle serial_lenrx . ." uart after second flush " cr
         ifcnt this readreg false = if
           ucounter = if 4 else 0 then \ return 4 meaning counter did not change so write not accepted ... return 0 meaning write is confirmed and accepted
