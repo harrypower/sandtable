@@ -41,8 +41,9 @@ object class
   destruction implementation
   protected
   0x00      constant GCONF
-  %00000101 constant sync
+  %00000101 constant SYNC
   0x00      constant slave-addr
+  %1000000  constant PDN_DISABLE
 
   inst-value uarthandle
   inst-value buffer
