@@ -17,7 +17,6 @@
 \
 \ Requires:
 \
-\	stringobj.fs
 \	syscalls386.fs
 \ serial.fs
 \ BBB_GPIO_lib.fs
@@ -29,7 +28,6 @@
 
 require serial.fs
 require ./Gforth-Objects/objects.fs
-\ require ./Gforth-Objects/stringobj.fs
 require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
 
 [ifundef] destruction
