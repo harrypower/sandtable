@@ -204,7 +204,7 @@ object class
     else
       1 \ meaning the write failed because the pre counter data can not be procured
     then
-  ;m method putreg
+  ;m method putregs
   m: ( ureg tmc2208 -- udata nflag ) \ read the ureg of tmc2208 device and return the 32 bit udata
   \ nflag is zero for successfull read
   \ nflag 1 meaning reading error where not all the data was recived
