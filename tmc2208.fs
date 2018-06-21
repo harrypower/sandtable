@@ -198,7 +198,7 @@ object class
         ifcnt this readreg false = if
           ucounter = if 4 else 0 then \ return 4 meaning counter did not change so write not accepted ... return 0 meaning write is confirmed and accepted
         else
-          drop 3 ." why here?" cr \ meaning after write command sent the  ifcnt register could not be read to confirm if the write was accepted or not !
+          drop 3 \ meaning after write command sent the  ifcnt register could not be read to confirm if the write was accepted or not !
         then
       else
         2 \ meaning the uart communication did not send the 8 write register request bytes
