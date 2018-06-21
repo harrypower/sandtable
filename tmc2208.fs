@@ -25,6 +25,7 @@
 \ Revisions:
 \ 6/15/2018 started coding
 \ 6/18/2018 main structure of object started
+\ 6/21/2018 putreg and readreg working but more testing needed !
 
 require serial.fs
 require ./Gforth-Objects/objects.fs
