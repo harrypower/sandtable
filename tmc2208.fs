@@ -38,12 +38,14 @@ require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
 [endif]
 
 object class
-  destruction implementation
+  destruction implementation  ( tmc2208 -- )
+  selector readreg            ( ureg tmc2208 -- udata nflag )
   protected
   0x00      constant GCONF
   %00000101 constant SYNC
   0x00      constant slave-addr
   %1000000  constant PDN_DISABLE
+  0x02      constant IFCNT
 
   inst-value uarthandle
   inst-value buffer
@@ -140,7 +142,7 @@ object class
   ;m overrides destruct
 
   m: ( ureg tmc2208 -- uaddr n nflag )
-    \ uaddr n is the buffer address with n filled content of bytes returned from tmc2208 if nflag is zero of false
+    \ uaddr n is the buffer address with n filled content of bytes returned from tmc2208 if nflag is zero or false
     \ normaly 8 bytes is returned where the 8th byte is the crc and this crc should match crc generated of the first 7 bytes
     \ if crc is a match then nflag is zero and the real register data is byte 4 to byte 7 or index 3 to index 6
     \ nflag is 2 for a write failed error
@@ -179,6 +181,30 @@ object class
     { ndata }
     4 0 do ndata 0xff000000 and 24 rshift buffer$ i + c! ndata 8 lshift to ndata loop  buffer$
   ;m method data-$
+  m: ( ureg udata tmc2208 -- nflag ) \ write udata 32 bits to ureg of tmc2208 device
+  \ nflag is false if ifcnt register gets incrimented indicating udata was writen to ureg
+    0 { ureg udata ucounter }
+    ifcnt this [current] readreg false = if
+      to ucounter
+      uarthandle serial_flush
+      SYNC buffer c!
+      0 buffer 1 + c!
+      %1111111 ureg and %10000000 or buffer 2 + c!
+      udata this [current] data-$ buffer 3 + 4 cmove
+      buffer 7 this [current] crc8-ATM buffer 7 + c!
+      uarthandle buffer 8 serial_write 8 = if
+        ifcnt this [current] readreg false = if
+          ucounter = if 4 else 0 then \ return 4 meaning counter did not change so write not accepted ... return 0 meaning write is confirmed and accepted
+        else
+          3 \ meaning after write command sent the  ifcnt register could not be read to confirm if the write was accepted or not !
+        then
+      else
+        2 \ meaning the uart communication did not send the 8 write register request bytes
+      then
+    else
+      1 \ meaning the write failed because the pre counter data can not be procured
+    then
+  ;m method putreg
   m: ( ureg tmc2208 -- udata nflag ) \ read the ureg of tmc2208 device and return the 32 bit udata
   \ nflag is zero for successfull read
   \ nflag 1 meaning reading error where not all the data was recived
@@ -191,7 +217,7 @@ object class
     dup [to-inst] lasterror#
     rot rot lasterror$ 12 0 fill lasterror$ swap cmove 0 swap
   then
-  ;m method readreg
+  ;m overrides readreg
   m: ( -- ) \ put some info to console about this object
     this [parent] print cr
     ." last error # " lasterror# dup . cr
