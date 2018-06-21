@@ -186,15 +186,15 @@ object class
     0 { ureg udata ucounter }
     ifcnt this readreg false = if
       to ucounter
-      uarthandle serial_flush uarthandle serial_lenrx . ." serial uart after flush " cr
+      uarthandle serial_flush \ uarthandle serial_lenrx . ." serial uart after flush " cr
       SYNC buffer c!
       0 buffer 1 + c!
       %1111111 ureg and %10000000 or buffer 2 + c!
       udata this [current] data-$ buffer 3 + 4 cmove
       buffer 7 this [current] crc8-ATM buffer 7 + c!
-      uarthandle buffer 8 serial_write 8 dup . ." writen amount " cr = if
-        1 ms
-        uarthandle serial_flush uarthandle serial_lenrx . ." uart after second flush " cr
+      uarthandle buffer 8 serial_write 8 ( dup . ." writen amount " cr ) = if
+        1 ms \ seems the tmc2208 needs some time after writing to it...
+        uarthandle serial_flush \ uarthandle serial_lenrx . ." uart after second flush " cr
         ifcnt this readreg false = if
           ucounter = if 4 else 0 then \ return 4 meaning counter did not change so write not accepted ... return 0 meaning write is confirmed and accepted
         else
