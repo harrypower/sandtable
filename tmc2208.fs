@@ -36,16 +36,20 @@ require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
   end-interface destruction
 [endif]
 
+0x00      constant GCONF
+%1000000  constant PDN_DISABLE
+0x02      constant IFCNT
+
 object class
   destruction implementation  ( tmc2208 -- )
   selector readreg            ( ureg-addr tmc2208 -- udata nflag )
   selector writereg           ( ureg-addr ureg-mask udata tmc2208 -- nflag )
   protected
-  0x00      constant GCONF
+  \ 0x00      constant GCONF
   %00000101 constant SYNC
   0x00      constant slave-addr
-  %1000000  constant PDN_DISABLE
-  0x02      constant IFCNT
+  \ %1000000  constant PDN_DISABLE
+  \ 0x02      constant IFCNT
 
   inst-value uarthandle
   inst-value buffer
