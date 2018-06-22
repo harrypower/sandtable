@@ -38,7 +38,8 @@ require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
 
 object class
   destruction implementation  ( tmc2208 -- )
-  selector readreg            ( ureg tmc2208 -- udata nflag )
+  selector readreg            ( ureg-addr tmc2208 -- udata nflag )
+  selector writereg           ( ureg-addr ureg-mask udata tmc2208 -- nflag )
   protected
   0x00      constant GCONF
   %00000101 constant SYNC
@@ -180,7 +181,7 @@ object class
     { ndata }
     4 0 do ndata 0xff000000 and 24 rshift buffer$ i + c! ndata 8 lshift to ndata loop  buffer$
   ;m method data-$
-  m: ( ureg udata tmc2208 -- nflag ) \ write udata 32 bits to ureg of tmc2208 device
+  m: ( ureg-addr udata tmc2208 -- nflag ) \ write udata 32 bits to ureg of tmc2208 device
   \ nflag is false if ifcnt register gets incrimented indicating udata was writen to ureg
     0 { ureg udata ucounter }
     ifcnt this readreg false = if
@@ -206,7 +207,7 @@ object class
       1 \ meaning the write failed because the pre counter data can not be procured
     then
   ;m method putreg
-  m: ( ureg tmc2208 -- udata nflag ) \ read the ureg of tmc2208 device and return the 32 bit udata
+  m: ( ureg-addr tmc2208 -- udata nflag ) \ read the ureg of tmc2208 device and return the 32 bit udata
   \ nflag is zero for successfull read
   \ nflag 1 meaning reading error where not all the data was recived
   \ nflag 2 meaning the write request to read the register did not happen correclty
@@ -219,6 +220,17 @@ object class
     rot rot lasterror$ 12 0 fill lasterror$ swap cmove 0 swap
   then
   ;m overrides readreg
+  m: ( ureg-addr ureg-mask udata tmc2208 -- nflag ) \ write udata to ureg-addr but only the ureg-mask bits are altered
+    { ureg-addr ureg-mask udata }
+    ureg-mask udata and to udata \ remove bits in udata that are not in mask
+    ureg-addr this readreg 0 = if
+      ureg-mask invert and \ the data in the register currently - the masked stuff
+      udata or
+      ureg-addr swap this putreg
+    else
+      5 \ meaning could not read current ureg-addr data for some unknown reason
+    then
+  ;m overrides writereg
   m: ( -- ) \ put some info to console about this object
     this [parent] print cr
     ." last error # " lasterror# dup . cr
@@ -231,6 +243,7 @@ cr
 tmc2208 heap-new constant mymotorA throw
 0 mymotorA readreg hex . . cr decimal
 mymotorA bind tmc2208 print
+
 
 1 %100000000000000000 1 %1000000000000000 1 %100000000000000 2
 tmc2208 heap-new constant mymotorB throw
