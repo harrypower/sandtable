@@ -236,9 +236,9 @@ object class
     then
   ;m overrides writereg
   m: ( ucount tmc2208 -- ) \ output step pulse ucount times
-    enablebank enablebit this gpio-low
-    0 ?do stepbank stepio this gpio-high 1 ms stepbank stepio this gpio-low 1 ms loop
-    enablebank enablebit this gpio-high
+    enablebank enablebit this gpio-low throw
+    0 ?do stepbank stepio this gpio-high throw 1 ms stepbank stepio this gpio-low throw 1 ms loop
+    enablebank enablebit this gpio-high throw 
   ;m method nsteps
   m: ( -- ) \ put some info to console about this object
     this [parent] print cr
