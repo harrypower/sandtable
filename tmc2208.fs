@@ -235,6 +235,11 @@ object class
       5 \ meaning could not read current ureg-addr data for some unknown reason
     then
   ;m overrides writereg
+  m: ( ucount tmc2208 -- ) \ output step pulse ucount times
+    enablebank enablebit this gpio-low
+    0 ?do stepbank stepio this gpio-high 1 ms stepbank stepio this gpio-low 1 ms loop
+    enablebank enablebit this gpio-high
+  ;m method nsteps
   m: ( -- ) \ put some info to console about this object
     this [parent] print cr
     ." last error # " lasterror# dup . cr
