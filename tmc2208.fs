@@ -41,6 +41,7 @@ require ./BBB_Gforth_gpio/BBB_GPIO_lib.fs
 0x02      constant IFCNT
 0x6C      constant CHOPCONF
 0xf000000 constant MRES
+%10000000 constant mstep_reg_select
 
 object class
   destruction implementation  ( tmc2208 -- )
