@@ -48,11 +48,8 @@ object class
   selector readreg            ( ureg-addr tmc2208 -- udata nflag )
   selector writereg           ( ureg-addr ureg-mask udata tmc2208 -- nflag )
   protected
-  \ 0x00      constant GCONF
   %00000101 constant SYNC
   0x00      constant slave-addr
-  \ %1000000  constant PDN_DISABLE
-  \ 0x02      constant IFCNT
 
   inst-value uarthandle
   inst-value buffer
@@ -238,11 +235,14 @@ object class
       5 \ meaning could not read current ureg-addr data for some unknown reason
     then
   ;m overrides writereg
-  m: ( ucount tmc2208 -- ) \ output step pulse ucount times
-    enablebank enablebit this gpio-low throw
+  m: ( tmc2208 -- )
+    enablebank enablebit this gpio-low throw ;m method enablemotor
+  m: ( tmc2208 -- )
+    enablebank enablebit this gpio-high throw ;m method disablemotor
+  m: ( ucount tmc2208 -- ) \ output step pulse ucount times note enables motor drive then disables it after steps done!
+    this enablemotor
     0 ?do stepbank stepio this gpio-high throw 1 ms stepbank stepio this gpio-low throw 1 ms loop
-    enablebank enablebit this gpio-high throw
-  ;m method nsteps
+    this disablemotor ;m method nsteps
   m: ( -- ) \ put some info to console about this object
     this [parent] print cr
     ." last error # " lasterror# dup . cr
