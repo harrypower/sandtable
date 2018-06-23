@@ -25,6 +25,42 @@
 \ 6/15/2018 started coding
 \ 6/18/2018 main structure of object started
 \ 6/21/2018 putreg and readreg working but more testing needed !
+\ 6/23/2018 added writereg and nsteps methods
+\   added example config-pin code to show how to do this at linux level for BBB
+
+\ *******************************************************************************************
+\ this is example code to show how to configure pins on BBB for use with uart and gpio in and out
+\ s\" config-pin p9.24 uart\n" system
+\ TXD
+\ s\" config-pin p9.26 uart\n" system
+\ RXD
+\ this is /dev/ttyO1
+\ used for x motor
+
+\ s\" config-pin p9.21 uart\n" system
+\ TXD
+\ s\" config-pin p9.22 uart\n" system
+\ RXD
+\ this is /dev/ttyO2
+\ used for y motor
+
+\ ." /dev/ttyO1 on P9 pin 24 and 26 now configured for uart! " cr
+\ ." /dev/ttyO2 on P9 pin 21 and 22 now configured for uart! " cr
+
+\ s\" config-pin p8.11 output\n" system
+\ x stepper dir  ( gpio1_13)
+\ s\" config-pin p8.12 output\n" system
+\ x stepper step ( gpio1_12)
+\ s\" config-pin p9.15 output\n" system
+\ x stepper enable ( gpio1_16)
+
+\ s\" config-pin p8.15 output\n" system
+\ y stepper dir  ( gpio1_15)
+\ s\" config-pin p8.16 output\n" system
+\ y stepper step ( gpio1_14)
+\ s\" config-pin p9.23 output\n" system
+\ y stepper enable ( gpio1_17)
+\ ********************************************************************************************
 
 require serial.fs
 require ./Gforth-Objects/objects.fs
@@ -47,6 +83,8 @@ object class
   destruction implementation  ( tmc2208 -- )
   selector readreg            ( ureg-addr tmc2208 -- udata nflag )
   selector writereg           ( ureg-addr ureg-mask udata tmc2208 -- nflag )
+  selector enable-driver      ( tmc2208 -- )
+  selector disable-driver     ( tmc2208 -- )
   protected
   %00000101 constant SYNC
   0x00      constant slave-addr
@@ -94,56 +132,6 @@ object class
     uarthandle PARNONE serial_setparity
     uarthandle serial_flush
   ;m method conf-uart
-
-  public
-  m: ( tmc2208 -- ) \ simply make enable pin high on tmc2208 driver board
-    enablebank enablebit this [current] gpio-high throw ;m method disable-driver
-  m: ( tmc2208 -- ) \ simply make enable pin low on tmc2208 driver board
-    enablebank enablebit this [current] gpio-low throw ;m method enable-driver
-
-  m: ( ugb0 uenableio ugb1 udirio ugb2 ustepio uuart tmc2208 -- nflag ) \ constructor
-  \ note these banks and pin declarations are done as per BBB_GPIO_lib.fs and deal with the BBB hardware from programmers reference manual and such linux is not informed of what you do at that level
-  \ ugb0 ugb1 ugb2 are the gpio banks used for the paired gpio pins that follow there declarations.  They can be 0 to 3 only and are parsed accordingly
-  \ uenableio is the bit mask for where tmc2208 enable pin is connected to BBB
-  \ udirio is the bit mask for where the tmc2208 direction pin is connected to BBB
-  \ usetpio is the bit mask for where the tmc2208 step pin is connected to BBB
-  \ uuart is for ttyo1 or ttyo2 so values of 1 or 2 are only allowed at this moment
-  \ nflag is 0 or false if the tmc2208 driver is present and could be talked to
-  \ nflag is -1 if an error happened during gpio port setup
-  \ nflag is any other number if uart does not work ( the number should refere to the failure of the uart setup ).. note the uart needs to be turned on in the BBB image and present at linux level used.
-  \ nflag is 1 if uuart is not 1 or 2 !
-    { ugb0 uenableio ugb1 udirio ugb2 ustepio uuart }
-    try
-      ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
-      enablebank enablebit this [current] gpio-output throw
-      this [current] disable-driver \ this should turn off power to motor
-      ugb1 udirio this [current] gpio-output throw
-      ugb1 udirio this [current] gpio-low throw \ this should setup tmc2208 direction pin to output and low for now!
-      ugb1 [to-inst] dirbank udirio [to-inst] dirbit
-      ugb2 ustepio this [current] gpio-output throw
-      ugb2 ustepio this [current] gpio-low throw \ this should setup tmc2208 step pin to output and low for now!
-      ugb2 [to-inst] stepbank ustepio [to-inst] stepio
-      uuart case
-        1 of 1 this [current] conf-uart endof
-        2 of 2 this [current] conf-uart endof
-        1 throw \ only ttyo1 or ttyo2 at this moment
-      endcase
-      12 allocate throw [to-inst] buffer
-      4 allocate throw [to-inst] buffer$
-      12 allocate throw [to-inst] lasterror$
-      0 [to-inst] lasterror#
-      false
-    restore
-    endtry
-  ;m overrides construct
-
-  m: ( tmc2208 -- ) \ destructor
-    enablebank enablebit this [current] gpio-high drop
-    uarthandle serial_close drop
-    buffer free drop
-    buffer$ free drop
-    lasterror$ free drop
-  ;m overrides destruct
 
   m: ( ureg tmc2208 -- uaddr n nflag )
     \ uaddr n is the buffer address with n filled content of bytes returned from tmc2208 if nflag is zero or false
@@ -211,6 +199,57 @@ object class
       1 \ meaning the write failed because the pre counter data can not be procured
     then
   ;m method putreg
+
+  public
+  m: ( tmc2208 -- ) \ simply make enable pin high on tmc2208 driver board
+    enablebank enablebit this [current] gpio-high throw ;m method disable-driver
+  m: ( tmc2208 -- ) \ simply make enable pin low on tmc2208 driver board
+    enablebank enablebit this [current] gpio-low throw ;m method enable-driver
+
+  m: ( ugb0 uenableio ugb1 udirio ugb2 ustepio uuart tmc2208 -- nflag ) \ constructor
+  \ note these banks and pin declarations are done as per BBB_GPIO_lib.fs and deal with the BBB hardware from programmers reference manual and such linux is not informed of what you do at that level
+  \ ugb0 ugb1 ugb2 are the gpio banks used for the paired gpio pins that follow there declarations.  They can be 0 to 3 only and are parsed accordingly
+  \ uenableio is the bit mask for where tmc2208 enable pin is connected to BBB
+  \ udirio is the bit mask for where the tmc2208 direction pin is connected to BBB
+  \ usetpio is the bit mask for where the tmc2208 step pin is connected to BBB
+  \ uuart is for ttyo1 or ttyo2 so values of 1 or 2 are only allowed at this moment
+  \ nflag is 0 or false if the tmc2208 driver is present and could be talked to
+  \ nflag is -1 if an error happened during gpio port setup
+  \ nflag is any other number if uart does not work ( the number should refere to the failure of the uart setup ).. note the uart needs to be turned on in the BBB image and present at linux level used.
+  \ nflag is 1 if uuart is not 1 or 2 !
+    { ugb0 uenableio ugb1 udirio ugb2 ustepio uuart }
+    try
+      ugb0 [to-inst] enablebank uenableio [to-inst] enablebit
+      enablebank enablebit this [current] gpio-output throw
+      this [current] disable-driver \ this should turn off power to motor
+      ugb1 udirio this [current] gpio-output throw
+      ugb1 udirio this [current] gpio-low throw \ this should setup tmc2208 direction pin to output and low for now!
+      ugb1 [to-inst] dirbank udirio [to-inst] dirbit
+      ugb2 ustepio this [current] gpio-output throw
+      ugb2 ustepio this [current] gpio-low throw \ this should setup tmc2208 step pin to output and low for now!
+      ugb2 [to-inst] stepbank ustepio [to-inst] stepio
+      uuart case
+        1 of 1 this [current] conf-uart endof
+        2 of 2 this [current] conf-uart endof
+        1 throw \ only ttyo1 or ttyo2 at this moment
+      endcase
+      12 allocate throw [to-inst] buffer
+      4 allocate throw [to-inst] buffer$
+      12 allocate throw [to-inst] lasterror$
+      0 [to-inst] lasterror#
+      false
+    restore
+    endtry
+  ;m overrides construct
+
+  m: ( tmc2208 -- ) \ destructor
+    enablebank enablebit this [current] gpio-high drop
+    uarthandle serial_close drop
+    buffer free drop
+    buffer$ free drop
+    lasterror$ free drop
+  ;m overrides destruct
+
   m: ( ureg-addr tmc2208 -- udata nflag ) \ read the ureg of tmc2208 device and return the 32 bit udata
   \ nflag is zero for successfull read
   \ nflag 1 meaning reading error where not all the data was recived
@@ -235,14 +274,10 @@ object class
       5 \ meaning could not read current ureg-addr data for some unknown reason
     then
   ;m overrides writereg
-  m: ( tmc2208 -- )
-    enablebank enablebit this gpio-low throw ;m method enablemotor
-  m: ( tmc2208 -- )
-    enablebank enablebit this gpio-high throw ;m method disablemotor
   m: ( ucount tmc2208 -- ) \ output step pulse ucount times note enables motor drive then disables it after steps done!
-    this enablemotor
+    this enable-driver
     0 ?do stepbank stepio this gpio-high throw 1 ms stepbank stepio this gpio-low throw 1 ms loop
-    this disablemotor ;m method nsteps
+    this disable-driver ;m method nsteps
   m: ( -- ) \ put some info to console about this object
     this [parent] print cr
     ." last error # " lasterror# dup . cr
