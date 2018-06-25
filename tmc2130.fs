@@ -26,6 +26,16 @@
 require BBB_Gforth_gpio/syscalls386.fs
 
 0x40046B04        constant SPI_IOC_WR_MAX_SPEED_HZ
+0x00              constant SPI_IOC_WR_BITS_PER_WORD  \ need to get this data
+\ this is simply a number passed as an address to ioctl as in the above max speed
+0x00              constant SPI_IOC_WR_MODE
+\ this is a number from 0 to 3 as below that is passed as an address to ioctl
+\ 0   \ !< Low at idle, capture on rising clock edge
+\ 1   \ !< Low at idle, capture on falling clock edge
+\ 2   \ !< High at idle, capture on falling clock edge
+\ 3    \ !< High at idle, capture on rising clock edge
+
+\ not sure if these are all needed or if they even do what they do in the uart on this spi but they work to open the channel 
 0x800             constant O_NDELAY
 0x100             constant O_NOCTTY
 0x002             constant O_RDWR
