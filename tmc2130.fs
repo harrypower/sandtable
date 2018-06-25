@@ -19,11 +19,14 @@
 \
 \	syscalls386.fs
 \ BBB_GPIO_lib.fs
-\
+\ objects.fs
+
 \ Revisions:
 \ 6/24/2018 started coding
 
 require BBB_Gforth_gpio/syscalls386.fs
+require BBB_Gforth_gpio/BBB_GPIO_lib.fs
+require Gforth-Objects/objects.fs
 
 0x40046B04        constant SPI_IOC_WR_MAX_SPEED_HZ
 0x00              constant SPI_IOC_WR_BITS_PER_WORD  \ need to get this data
@@ -35,7 +38,7 @@ require BBB_Gforth_gpio/syscalls386.fs
 \ 2   \ !< High at idle, capture on falling clock edge
 \ 3    \ !< High at idle, capture on rising clock edge
 
-\ not sure if these are all needed or if they even do what they do in the uart on this spi but they work to open the channel 
+\ not sure if these are all needed or if they even do what they do in the uart on this spi but they work to open the channel
 0x800             constant O_NDELAY
 0x100             constant O_NOCTTY
 0x002             constant O_RDWR
@@ -53,3 +56,82 @@ require BBB_Gforth_gpio/syscalls386.fs
 \ test with the following
 \ openspi
 \ spihandle s\" \x23\xf6\x55\x02" write . ." total bytes writen" cr
+
+
+\ *****************************************************************
+\ to configure spi pins use the following at command line
+\ config-pin p9.28 spi_cs
+\ config-pin p9.29 spi
+\ config-pin p9.30 spi
+\ config-pin p9.31 spi_clock
+
+\ this is example code to configure pins on BBB for gpio output
+\ s\" config-pin p8.11 output\n" system
+\ x stepper dir  ( gpio1_13)
+\ s\" config-pin p8.12 output\n" system
+\ x stepper step ( gpio1_12)
+\ s\" config-pin p9.15 output\n" system
+\ x stepper enable ( gpio1_16)
+
+\ s\" config-pin p8.15 output\n" system
+\ y stepper dir  ( gpio1_15)
+\ s\" config-pin p8.16 output\n" system
+\ y stepper step ( gpio1_14)
+\ s\" config-pin p9.23 output\n" system
+\ y stepper enable ( gpio1_17)
+\ *****************************************************************
+
+[ifundef] destruction
+  interface
+     selector destruct ( -- ) \ to free allocated memory in objects that use this
+  end-interface destruction
+[endif]
+
+object class
+  destruction implementation  ( tmc2130 -- )
+  selector enable-motor       ( tmc2130 -- )
+  selector disable-motor      ( tmc2130 -- )
+
+  protected
+  inst-value spihandle
+  inst-value enablebank
+  inst-value enablebit
+  inst-value dirbank
+  inst-value dirbit
+  inst-value stepbank
+  inst-value stepio
+
+  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+    bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
+
+  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+    bbbiosetup false = if bbbioset bbbiocleanup else true then ;m method gpio-high
+
+  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+    bbbiosetup false = if bbbioclear bbbiocleanup else true then ;m method gpio-low
+
+  public
+  m: ( tmc2208 -- ) \ simply make enable pin high on tmc2208 driver board
+    enablebank enablebit this [current] gpio-high throw ;m method disable-motor
+  m: ( tmc2208 -- ) \ simply make enable pin low on tmc2208 driver board
+    enablebank enablebit this [current] gpio-low throw ;m method enable-motor
+  m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- ) \ constructor
+    { ubankenable uenableio ubankdir udirio ubankstep ustepio uspi }
+    try
+      ubankenable [to-inst] enablebank uenableio [to-inst] enablebit
+      enablebank enablebit this gpio-output throw
+      this [current] disable-driver \ this should turn off power to motor
+      ubankdir [to-inst] dirbank udirio [to-inst] dirbit
+      dirbank dirbit this gpio-output throw
+      dirbank dirbit this gpio-low throw
+      ubankstep [to-inst] stepbank ustepio [to-inst] stepio
+      setpbank stepio this gpio-output throw
+      setpbank stepio this gpio-low throw
+      false
+    endtry
+    restore
+  ;m overrides construct
+  m: ( tmc2130 -- ) \ destructor
+  ;m overrides destruct
+
+end-class tmc2130
