@@ -60,10 +60,17 @@ require Gforth-Objects/objects.fs
 
 \ *****************************************************************
 \ to configure spi pins use the following at command line
-\ config-pin p9.28 spi_cs
-\ config-pin p9.29 spi
-\ config-pin p9.30 spi
-\ config-pin p9.31 spi_clock
+\ config-pin p9.28 spi_cs     ( cs )
+\ config-pin p9.29 spi        ( D0 )
+\ config-pin p9.30 spi        ( D1 )
+\ config-pin p9.31 spi_clock  ( clock )
+\ this is spi1 used for x motor
+
+\ config-pin p9.17 spi_cs     ( cs )
+\ config-pin p9.18 spi        ( D1 )
+\ config-pin p9.21 spi        ( D0 )
+\ config-pin p9.22 spi_clock  ( clock )
+\ this is spi0 used for y motor
 
 \ this is example code to configure pins on BBB for gpio output
 \ s\" config-pin p8.11 output\n" system
@@ -100,6 +107,7 @@ object class
   inst-value dirbit
   inst-value stepbank
   inst-value stepio
+  cell% inst-var spispeed
 
   m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
     bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
@@ -127,6 +135,19 @@ object class
       ubankstep [to-inst] stepbank ustepio [to-inst] stepio
       setpbank stepio this gpio-output throw
       setpbank stepio this gpio-low throw
+      true [to-inst] spihandle
+      100000 spispeed !
+      uspi case
+        \ this is spi1 on the BBB schematic and mode chart. Linux enumerates the spi starting at 1!
+        1 of s\" /dev/spidev2.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open [to-inst] spihandle endof
+        \ this is spi0 on the BBB schematic and mode chart. Linux enumerates the spi starting at 1!
+        0 of s\" /dev/spidev1.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open [to-inst] spihandle endof
+      endcase
+      spihandle 0> if
+        spihandle SPI_IOC_WR_MAX_SPEED_HZ spispeed ioctl throw \ set spi speed to 100000 hz
+      else
+        spihandle throw
+      then
       false
     endtry
     restore
@@ -135,3 +156,10 @@ object class
   ;m overrides destruct
 
 end-class tmc2130
+
+
+1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
+tmc2130 heap-new constant mymotorX throw
+
+\ 1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
+\ tmc2130 heap-new constant mymotory throw
