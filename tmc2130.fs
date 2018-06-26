@@ -192,6 +192,7 @@ object class
     this data-$
     bufferA 1 + 4 cmove
     bufferA 6 dump cr ." testing data " cr
+    spihandle bufferA 5 write
     spihandle bufferA 5 write 
   ;m method getreg
   m: ( tmc2130 -- ) \ print some stuff
