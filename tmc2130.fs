@@ -129,7 +129,7 @@ object class
       1 of dirbank dirbit gpio-high throw endof
     endcase ;m method setdirection
   m: ( usteps tmc2130 -- ) \ step the motor usteps times
-    0 ?do stepbank stepio gpio-high throw 1 ms stepbank ustepio gpio-low throw 1 ms loop ;m method steps
+    0 ?do stepbank stepio gpio-high throw 1 ms stepbank stepio gpio-low throw 1 ms loop ;m method steps
   m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- ) \ constructor
     { ubankenable uenableio ubankdir udirio ubankstep ustepio uspi }
     try
