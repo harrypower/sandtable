@@ -29,29 +29,29 @@ require BBB_Gforth_gpio/BBB_GPIO_lib.fs
 require Gforth-Objects/objects.fs
 
 0x40046B04        constant SPI_IOC_WR_MAX_SPEED_HZ
-0x00              constant SPI_IOC_WR_BITS_PER_WORD  \ need to get this data
+0x40016B04        constant SPI_IOC_WR_BITS_PER_WORD  \ need to get this data
 \ this is simply a number passed as an address to ioctl as in the above max speed
-0x00              constant SPI_IOC_WR_MODE
+0x40016B01        constant SPI_IOC_WR_MODE
 \ this is a number from 0 to 3 as below that is passed as an address to ioctl
-\ 0   \ !< Low at idle, capture on rising clock edge
-\ 1   \ !< Low at idle, capture on falling clock edge
-\ 2   \ !< High at idle, capture on falling clock edge
-\ 3    \ !< High at idle, capture on rising clock edge
+\ 0  Low at idle, capture on rising clock edge
+\ 1  Low at idle, capture on falling clock edge
+\ 2  High at idle, capture on falling clock edge
+\ 3  High at idle, capture on rising clock edge
 
 \ not sure if these are all needed or if they even do what they do in the uart on this spi but they work to open the channel
 0x800             constant O_NDELAY
 0x100             constant O_NOCTTY
 0x002             constant O_RDWR
 
-100000 variable spispeed spispeed !
-0 value spihandle
-: openspi ( -- ) \ open spi 2 channel and set to read write with a max speed of 100000 hz
-  s\" /dev/spidev2.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open to spihandle
-  spihandle 0> if
-    spihandle SPI_IOC_WR_MAX_SPEED_HZ spispeed ioctl throw \ this should set the speed to 100000 hz as max speed
-  else
-    spihandle throw
-  then ;
+\ 100000 variable spispeed spispeed !
+\ 0 value spihandle
+\ : openspi ( -- ) \ open spi 2 channel and set to read write with a max speed of 100000 hz
+\  s\" /dev/spidev2.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open to spihandle
+\  spihandle 0> if
+\    spihandle SPI_IOC_WR_MAX_SPEED_HZ spispeed ioctl throw \ this should set the speed to 100000 hz as max speed
+\  else
+\    spihandle throw
+\  then ;
 
 \ test with the following
 \ openspi
@@ -87,6 +87,8 @@ require Gforth-Objects/objects.fs
 \ s\" config-pin p9.23 output\n" system
 \ y stepper enable ( gpio1_17)
 \ *****************************************************************
+0x00 constant GCONF
+0x00 constant GSTAT
 
 [ifundef] destruction
   interface
@@ -108,6 +110,8 @@ object class
   inst-value stepbank
   inst-value stepio
   cell% inst-var spispeed
+  inst-value bufferA
+  inst-value bufferB
 
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
     bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
@@ -119,6 +123,18 @@ object class
     bbbiosetup false = if bbbioclear bbbiocleanup else true then ;m method gpio-low
 
   public
+  m: ( uaddr tmc2130 -- ndata ) \ takes string of 4 bytes and puts into 32 bit ndata
+  \ uaddr is the buffer location for the string
+  \ the string is always 4 bytes long
+    0 { uaddr data }
+    3 0 do uaddr i + c@ data or 8 lshift to data loop
+    uaddr 3 + c@ data or
+  ;m method $-data
+  m: ( ndata tmc2130 -- uaddr ) \ takes ndata a 32 bit number and makes a string  and returns that string with uaddr
+  \ note the string returned is always 4 bytes long
+    { ndata }
+    4 0 do ndata 0xff000000 and 24 rshift bufferB i + c! ndata 8 lshift to ndata loop  bufferB
+  ;m method data-$
   m: ( tmc2130 -- ) \ simply make enable pin high on tmc2208 driver board
     enablebank enablebit this gpio-high throw ;m overrides disable-motor
   m: ( tmc2130 -- ) \ simply make enable pin low on tmc2208 driver board
@@ -155,12 +171,28 @@ object class
       else
         spihandle throw
       then
+      6 allocate throw [to-inst] bufferA
+      6 allocate throw [to-inst] bufferB
       false
     endtry
     restore
   ;m overrides construct
   m: ( tmc2130 -- ) \ destructor
-  ;m overrides destruct
+    spihandle 0> if
+      this disable-motor
+      spihandle close throw
+      bufferA free throw
+      bufferB free throw
+    then ;m overrides destruct
+
+  m: ( ureg udata tmc2130 -- nflag ) \ read a register from tmc2130
+    swap %1111111 and
+    bufferA 6 0 fill
+    bufferA c!
+    this data-$
+    bufferA 1 + 4 cmove
+    spihandle bufferA 5 write 
+  ;m method getreg
   m: ( tmc2130 -- ) \ print some stuff
     this [parent] print
     ." spihandle " spihandle . cr
