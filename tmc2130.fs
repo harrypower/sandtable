@@ -120,16 +120,16 @@ object class
 
   public
   m: ( tmc2130 -- ) \ simply make enable pin high on tmc2208 driver board
-    enablebank enablebit this [current] gpio-high throw ;m overrides disable-motor
+    enablebank enablebit this gpio-high throw ;m overrides disable-motor
   m: ( tmc2130 -- ) \ simply make enable pin low on tmc2208 driver board
-    enablebank enablebit this [current] gpio-low throw ;m overrides enable-motor
+    enablebank enablebit this gpio-low throw ;m overrides enable-motor
   m: ( udirection tmc2130 -- ) \ udirection is 0 for left and 1 for right
     case
-      0 of dirbank dirbit gpio-low throw endof
-      1 of dirbank dirbit gpio-high throw endof
+      0 of dirbank dirbit this gpio-low throw endof
+      1 of dirbank dirbit this gpio-high throw endof
     endcase ;m method setdirection
   m: ( usteps tmc2130 -- ) \ step the motor usteps times
-    0 ?do stepbank stepio gpio-high throw 1 ms stepbank stepio gpio-low throw 1 ms loop ;m method steps
+    0 ?do stepbank stepio this gpio-high throw 1 ms stepbank stepio this gpio-low throw 1 ms loop ;m method steps
   m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- ) \ constructor
     { ubankenable uenableio ubankdir udirio ubankstep ustepio uspi }
     try
