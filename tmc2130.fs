@@ -120,9 +120,9 @@ object class
 
   public
   m: ( tmc2208 -- ) \ simply make enable pin high on tmc2208 driver board
-    enablebank enablebit this [current] gpio-high throw ;m method disable-motor
+    enablebank enablebit this [current] gpio-high throw ;m overrides disable-motor
   m: ( tmc2208 -- ) \ simply make enable pin low on tmc2208 driver board
-    enablebank enablebit this [current] gpio-low throw ;m method enable-motor
+    enablebank enablebit this [current] gpio-low throw ;m overrides enable-motor
   m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- ) \ constructor
     { ubankenable uenableio ubankdir udirio ubankstep ustepio uspi }
     try
