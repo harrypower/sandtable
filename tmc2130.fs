@@ -88,7 +88,7 @@ require Gforth-Objects/objects.fs
 \ y stepper enable ( gpio1_17)
 \ *****************************************************************
 0x00 constant GCONF
-0x00 constant GSTAT
+0x01 constant GSTAT
 
 [ifundef] destruction
   interface
@@ -192,9 +192,9 @@ object class
     this data-$
     bufferA 1 + 4 cmove
     bufferA 6 dump cr ." testing data " cr
-    spihandle bufferA 5 write  ." first write-" . cr
-    spihandle bufferA 5 write  ." second-write-" . cr
-    spihandle pad 20 read
+    spihandle bufferA 5 write  ." the write-" . cr
+    spihandle bufferB 5 read  ." the read-" . cr
+    buffer
   ;m method getreg
   m: ( tmc2130 -- ) \ print some stuff
     this [parent] print
