@@ -128,7 +128,7 @@ object class
     try
       ubankenable [to-inst] enablebank uenableio [to-inst] enablebit
       enablebank enablebit this gpio-output throw
-      this [current] disable-driver \ this should turn off power to motor
+      this disable-motor \ this should turn off power to motor
       ubankdir [to-inst] dirbank udirio [to-inst] dirbit
       dirbank dirbit this gpio-output throw
       dirbank dirbit this gpio-low throw
@@ -154,7 +154,7 @@ object class
   ;m overrides construct
   m: ( tmc2130 -- ) \ destructor
   ;m overrides destruct
-
+  
 end-class tmc2130
 
 
