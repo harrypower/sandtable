@@ -159,7 +159,7 @@ object class
       stepbank stepio this gpio-output throw
       stepbank stepio this gpio-low throw
       true [to-inst] spihandle
-      100000 spispeed !
+      50000 spispeed !
       uspi case
         \ this is spi1 on the BBB schematic and mode chart. Linux enumerates the spi starting at 1!
         1 of s\" /dev/spidev2.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open [to-inst] spihandle endof
