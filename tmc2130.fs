@@ -133,8 +133,8 @@ object class
       dirbank dirbit this gpio-output throw
       dirbank dirbit this gpio-low throw
       ubankstep [to-inst] stepbank ustepio [to-inst] stepio
-      setpbank stepio this gpio-output throw
-      setpbank stepio this gpio-low throw
+      stepbank stepio this gpio-output throw
+      stepbank stepio this gpio-low throw
       true [to-inst] spihandle
       100000 spispeed !
       uspi case
@@ -154,7 +154,7 @@ object class
   ;m overrides construct
   m: ( tmc2130 -- ) \ destructor
   ;m overrides destruct
-  
+
 end-class tmc2130
 
 
