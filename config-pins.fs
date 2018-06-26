@@ -20,23 +20,34 @@
 
 warnings off
 :noname ; is bootmessage
-
-s\" config-pin p9.24 uart\n" system
+\ this is for uart use on tmc2208 devices
+\ s\" config-pin p9.24 uart\n" system
 \ TXD
-s\" config-pin p9.26 uart\n" system
+\ s\" config-pin p9.26 uart\n" system
 \ RXD
 \ this is /dev/ttyO1
 \ used for x motor
 
-s\" config-pin p9.21 uart\n" system
+\ s\" config-pin p9.21 uart\n" system
 \ TXD
-s\" config-pin p9.22 uart\n" system
+\ s\" config-pin p9.22 uart\n" system
 \ RXD
 \ this is /dev/ttyO2
 \ used for y motor
+\ ." /dev/ttyO1 on P9 pin 24 and 26 now configured for uart! " cr
+\ ." /dev/ttyO2 on P9 pin 21 and 22 now configured for uart! " cr
 
-." /dev/ttyO1 on P9 pin 24 and 26 now configured for uart! " cr
-." /dev/ttyO2 on P9 pin 21 and 22 now configured for uart! " cr
+\ this is for spi use ontmc2130 devices
+s\" config-pin p9.28 spi_cs\n"  system \ ( cs )
+s\" config-pin p9.29 spi\n"     system \ ( D0 )
+s\" config-pin p9.30 spi\n"     system \ ( D1 )
+s\" config-pin p9.31 spi_sclk\n" system \ ( clock )
+\ this is spi1 used for x motor
+s\" config-pin p9.17 spi_cs\n"  system \ ( cs )
+s\" config-pin p9.18 spi\n"     system \ ( D1 )
+s\" config-pin p9.21 spi\n"     system \ ( D0 )
+s\" config-pin p9.22 spi_sclk\n" system \ ( clock )
+\ this is spi0 used for y motor
 
 s\" config-pin p8.11 output\n" system
 \ x stepper dir  ( gpio1_13)
