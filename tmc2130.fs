@@ -125,11 +125,11 @@ object class
     enablebank enablebit this [current] gpio-low throw ;m overrides enable-motor
   m: ( udirection tmc2130 -- ) \ udirection is 0 for left and 1 for right
     case
-      0 of dirbank dirbit gpio-low throw
-      1 of dirbank dirbit gpio-high throw
+      0 of dirbank dirbit gpio-low throw endof
+      1 of dirbank dirbit gpio-high throw endof
     endcase ;m method setdirection
   m: ( usteps tmc2130 -- ) \ step the motor usteps times
-    0 ?do stepbank stepio gpio-high 1 ms stepbank ustepio gpio-low 1 ms loop ;m method steps 
+    0 ?do stepbank stepio gpio-high throw 1 ms stepbank ustepio gpio-low throw 1 ms loop ;m method steps
   m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- ) \ constructor
     { ubankenable uenableio ubankdir udirio ubankstep ustepio uspi }
     try
