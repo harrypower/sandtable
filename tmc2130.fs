@@ -109,20 +109,27 @@ object class
   inst-value stepio
   cell% inst-var spispeed
 
-  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+  m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
     bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
 
-  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+  m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
     bbbiosetup false = if bbbioset bbbiocleanup else true then ;m method gpio-high
 
-  m: ( ugpiobank ugpiobitmask tmc2208 -- nflag )
+  m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
     bbbiosetup false = if bbbioclear bbbiocleanup else true then ;m method gpio-low
 
   public
-  m: ( tmc2208 -- ) \ simply make enable pin high on tmc2208 driver board
+  m: ( tmc2130 -- ) \ simply make enable pin high on tmc2208 driver board
     enablebank enablebit this [current] gpio-high throw ;m overrides disable-motor
-  m: ( tmc2208 -- ) \ simply make enable pin low on tmc2208 driver board
+  m: ( tmc2130 -- ) \ simply make enable pin low on tmc2208 driver board
     enablebank enablebit this [current] gpio-low throw ;m overrides enable-motor
+  m: ( udirection tmc2130 -- ) \ udirection is 0 for left and 1 for right
+    case
+      0 of dirbank dirbit gpio-low throw
+      1 of dirbank dirbit gpio-high throw
+    endcase ;m method setdirection
+  m: ( usteps tmc2130 -- ) \ step the motor usteps times
+    0 ?do stepbank stepio gpio-high 1 ms stepbank ustepio gpio-low 1 ms loop ;m method steps 
   m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- ) \ constructor
     { ubankenable uenableio ubankdir udirio ubankstep ustepio uspi }
     try
@@ -154,12 +161,15 @@ object class
   ;m overrides construct
   m: ( tmc2130 -- ) \ destructor
   ;m overrides destruct
-
+  m: ( tmc2130 -- ) \ print some stuff
+    this [parent] print
+    ." spihandle " spihandle . cr
+  ;m overrides print
 end-class tmc2130
 
 
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
-tmc2130 heap-new constant mymotorX throw
+tmc2130 heap-new constant mymotorX \ throw
 
-\ 1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
-\ tmc2130 heap-new constant mymotory throw
+1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
+tmc2130 heap-new constant mymotory \ throw
