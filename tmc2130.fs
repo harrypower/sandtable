@@ -194,7 +194,7 @@ object class
     bufferA 6 dump cr ." testing data " cr
     spihandle bufferA 5 write  ." the write-" . cr
     spihandle bufferB 5 read  ." the read-" . cr
-    bufferA
+    bufferB
   ;m method getreg
   m: ( tmc2130 -- ) \ print some stuff
     this [parent] print
