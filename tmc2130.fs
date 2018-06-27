@@ -169,7 +169,7 @@ object class
       spihandle 0> if
         100000 configdata !
         spihandle SPI_IOC_WR_MAX_SPEED_HZ configdata ioctl throw \ set spi speed to 100000 hz
-        0 configdata c!
+        8 configdata c!
         spihandle SPI_IOC_WR_BITS_PER_WORD configdata ioctl throw \ set bits per word to 8
         \ 0 configdata c!
         \ spihandle SPI_IOC_WR_MODE configdata ioctl throw \ set to low on idle and capture on rising of clock
