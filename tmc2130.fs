@@ -131,9 +131,22 @@ object class
       0 of dirbank dirbit this gpio-low throw endof
       1 of dirbank dirbit this gpio-high throw endof
     endcase ;m method setdirection
-  m: ( usteps tmc2130 -- ) \ step the motor usteps times
-    0 ?do stepbank stepio this gpio-high throw 3000 0 ns stepbank stepio this gpio-low throw 3000 0 ns loop ;m method steps
-  m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- ) \ constructor
+  m: ( usteps tmc2130 -- ) \ step the motor usteps times ... this steps around 3 khz on the BBB
+    0 ?do stepbank stepio this gpio-high throw 30000 0 ns stepbank stepio this gpio-low throw 30000 0 ns loop ;m method steps
+  m: ( usteps tmc2130 -- ) \ fast step the motor usteps times
+    spihandle 0> if
+    stepbank stepio bbbiosetup throw
+    0 ?do
+      bbbioset
+      30000 0 ns
+      bbbioclear 
+      30000 0 ns
+    loop
+    BBBiocleanup throw
+    then ;m method faststeps
+  m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- nflag ) \ constructor
+  \ nflag is false for configuration ok
+  \ nflag is any other number meaning something did not work to configure this motor driver
     { ubankenable uenableio ubankdir udirio ubankstep ustepio uspi }
     try
       ubankenable [to-inst] enablebank uenableio [to-inst] enablebit
