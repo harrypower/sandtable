@@ -138,9 +138,9 @@ object class
     stepbank stepio bbbiosetup throw
     0 ?do
       bbbioset
-      30000 0 ns
-      bbbioclear 
-      30000 0 ns
+      3000 0 ns
+      bbbioclear
+      3000 0 ns
     loop
     BBBiocleanup throw
     then ;m method faststeps
