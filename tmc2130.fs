@@ -29,7 +29,7 @@ require BBB_Gforth_gpio/BBB_GPIO_lib.fs
 require Gforth-Objects/objects.fs
 
 0x40046B04        constant SPI_IOC_WR_MAX_SPEED_HZ
-0x40016B04        constant SPI_IOC_WR_BITS_PER_WORD  \ need to get this data
+0x40016B04        constant SPI_IOC_WR_BITS_PER_WORD
 \ this is simply a number passed as an address to ioctl as in the above max speed
 0x40016B01        constant SPI_IOC_WR_MODE
 \ this is a number from 0 to 3 as below that is passed as an address to ioctl
@@ -109,7 +109,7 @@ object class
   inst-value dirbit
   inst-value stepbank
   inst-value stepio
-  cell% inst-var spispeed
+  cell% inst-var configdata
   inst-value bufferA
   inst-value bufferB
   inst-value lasterror
@@ -160,7 +160,6 @@ object class
       stepbank stepio this gpio-output throw
       stepbank stepio this gpio-low throw
       true [to-inst] spihandle
-      50000 spispeed !
       uspi case
         \ this is spi1 on the BBB schematic and mode chart. Linux enumerates the spi starting at 1!
         1 of s\" /dev/spidev2.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open [to-inst] spihandle endof
@@ -168,7 +167,12 @@ object class
         0 of s\" /dev/spidev1.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open [to-inst] spihandle endof
       endcase
       spihandle 0> if
-        spihandle SPI_IOC_WR_MAX_SPEED_HZ spispeed ioctl throw \ set spi speed to 100000 hz
+        100000 configdata !
+        spihandle SPI_IOC_WR_MAX_SPEED_HZ configdata ioctl throw \ set spi speed to 100000 hz
+        8 configdata !
+        spihandle SPI_IOC_WR_BITS_PER_WORD configdata ioctl throw \ set bits per word to 8
+        0 configdata !
+        spihandle SPI_IOC_WR_MODE configdata ioctl throw \ set to low on idle and capture on rising of clock
       else
         spihandle throw
       then
