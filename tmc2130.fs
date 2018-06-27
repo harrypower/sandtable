@@ -43,21 +43,6 @@ require Gforth-Objects/objects.fs
 0x100             constant O_NOCTTY
 0x002             constant O_RDWR
 
-\ 100000 variable spispeed spispeed !
-\ 0 value spihandle
-\ : openspi ( -- ) \ open spi 2 channel and set to read write with a max speed of 100000 hz
-\  s\" /dev/spidev2.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open to spihandle
-\  spihandle 0> if
-\    spihandle SPI_IOC_WR_MAX_SPEED_HZ spispeed ioctl throw \ this should set the speed to 100000 hz as max speed
-\  else
-\    spihandle throw
-\  then ;
-
-\ test with the following
-\ openspi
-\ spihandle s\" \x23\xf6\x55\x02" write . ." total bytes writen" cr
-
-
 \ *****************************************************************
 \ to configure spi pins use the following at command line
 \ config-pin p9.28 spi_cs     ( cs )
