@@ -168,7 +168,7 @@ object class
         0 of s\" /dev/spidev1.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open [to-inst] spihandle endof
       endcase
       spihandle 0> if
-        100000 u32data !
+        200000 u32data !
         spihandle SPI_IOC_WR_MAX_SPEED_HZ u32data ioctl throw \ set spi speed to 100000 hz
         8 bytedata c!
         spihandle SPI_IOC_WR_BITS_PER_WORD bytedata ioctl throw \ set bits per word to 8
