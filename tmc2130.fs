@@ -112,6 +112,7 @@ object class
   cell% inst-var spispeed
   inst-value bufferA
   inst-value bufferB
+  inst-value lasterror
 
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
     bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
@@ -185,16 +186,28 @@ object class
       bufferB free throw
     then ;m overrides destruct
 
-  m: ( ureg udata tmc2130 -- nflag ) \ read a register from tmc2130
+  m: ( ureg tmc2130 -- uspi_status udata nflag ) \ read a register from tmc2130
+    \ nflag is false if no apparent errors in spi communication aka the correct bytes sent and recieved
+    \ nflag is true if the incorrect amount of bytes were sent or recieved and uspi_status and udata are returned as 0
+    \ uspi_status is the spi_staus data returned from tmc2130 data transfer and only the lower 4 bits are valid
+    \ udata is the data returned from tmc2130 for the ureg requested and is potenaly 32 bits of data
     bufferA 6 0 fill
-    swap %1111111 and
+    %1111111 and
     bufferA c!
-    this data-$
-    bufferA 1 + 4 cmove
+\    0 this data-$
+\    bufferA 1 + 4 cmove
     bufferA 6 dump cr ." testing data " cr
-    spihandle bufferA 5 write  ." the write-" . cr
-    spihandle bufferB 5 read  ." the read-" . cr
-    bufferB
+    spihandle bufferA 5 write 5 = if
+      spihandle bufferB 5 read 5 = if
+        bufferB c@
+        bufferB 1 + this $-data
+        0 dup [to-inst] lasterror
+      else
+        0 0 true [to-inst] lasterror
+      then
+    else
+      0 0 true [to-inst] lasterror
+    then
   ;m method getreg
   m: ( tmc2130 -- ) \ print some stuff
     this [parent] print
