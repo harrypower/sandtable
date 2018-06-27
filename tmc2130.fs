@@ -29,7 +29,7 @@ require BBB_Gforth_gpio/BBB_GPIO_lib.fs
 require Gforth-Objects/objects.fs
 
 0x40046B04        constant SPI_IOC_WR_MAX_SPEED_HZ
-0x40016B04        constant SPI_IOC_WR_BITS_PER_WORD
+0x40016B03        constant SPI_IOC_WR_BITS_PER_WORD
 \ this is simply a number passed as an address to ioctl as in the above max speed
 0x40016B01        constant SPI_IOC_WR_MODE
 \ this is a number from 0 to 3 as below that is passed as an address to ioctl
@@ -172,8 +172,8 @@ object class
         spihandle SPI_IOC_WR_MAX_SPEED_HZ u32data ioctl throw \ set spi speed to 100000 hz
         0 bytedata c!  \ this means 8 bits for some reason
         spihandle SPI_IOC_WR_BITS_PER_WORD bytedata ioctl throw \ set bits per word to 8
-        \ 0 bytedata c!
-        \ spihandle SPI_IOC_WR_MODE bytedata ioctl throw \ set to low on idle and capture on rising of clock
+        0 bytedata c!
+        spihandle SPI_IOC_WR_MODE bytedata ioctl throw \ set to low on idle and capture on rising of clock
       else
         spihandle throw
       then
