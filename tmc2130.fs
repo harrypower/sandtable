@@ -226,8 +226,9 @@ object class
     then
   ;m method putreg
   m: ( tmc2130 -- ) \ print some stuff
-    this [parent] print
+    this [parent] print cr
     ." spihandle " spihandle . cr
+    ." last error " lasterror . cr
   ;m overrides print
 end-class tmc2130
 
