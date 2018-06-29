@@ -37,7 +37,7 @@ warnings off
 \ ." /dev/ttyO1 on P9 pin 24 and 26 now configured for uart! " cr
 \ ." /dev/ttyO2 on P9 pin 21 and 22 now configured for uart! " cr
 
-\ this is for spi use ontmc2130 devices
+\ this is for spi use on tmc2130 devices
 s\" config-pin p9.28 spi_cs\n"  system \ ( cs )
 s\" config-pin p9.29 spi\n"     system \ ( D0 )
 s\" config-pin p9.30 spi\n"     system \ ( D1 )
