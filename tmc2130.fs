@@ -218,6 +218,9 @@ object class
     then
   ;m method getreg
   m: ( ureg udata tmc2130 -- uspi_status nflag ) \ write to ureg register udata value in the tmc2130 device
+  \ nflag is false if no apparent errors in spi communication aka the correct bytes sent and recieved
+  \ nflag is true if the incorrect amount of bytes were sent or recieved and uspi_status and udata are returned as 0
+  \ uspi_status is the spi_staus data returned from tmc2130 data transfer and only the lower 4 bits are valid
     bufferA 6 0 fill bufferB 6 0 fill
     this data-$ bufferA 1 + 4 cmove
     %1111111 and %10000000 or bufferA c!
