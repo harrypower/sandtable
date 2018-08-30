@@ -67,4 +67,4 @@ s\" config-pin p9.23 output\n" system
 \ *****************************************************************
 ." x and y stepper motor dir,step and enable pins configured!" cr
 
-bye
+\ bye
