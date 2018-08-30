@@ -30,13 +30,21 @@ require config-pins.fs
 require tmc2130.fs
 require Gforth-Objects/objects.fs
 
-.s ." stack now" cr
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
 tmc2130 heap-new constant mymotorX throw
 mymotorX disable-motor
-.s ." stack after x" cr
+
 1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
 tmc2130 heap-new constant mymotorY throw
 mymotorY disable-motor
 
-.s ." stack after y" cr
+0xec 0x000100c3 mymotorx putreg . .
+0x90 0x00061f0a mymotorX putreg . .
+0x91 0x0000000a mymotorX putreg . .
+0x80 0x00000004 mymotorX putreg . .
+0x93 0x000001f4 mymotorX putreg . .
+0xf0 0x000401c8 mymotorX putreg . .
+
+mymotorX enable-motor
+
+1000 mymotorX faststeps
