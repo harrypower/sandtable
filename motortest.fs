@@ -1,4 +1,4 @@
-#! /usr/local/bin/gforth-arm
+\ #! /usr/local/bin/gforth-arm
 \ motortest.fs
 
 \    Copyright (C) 2018  Philip King. Smith
