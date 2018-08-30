@@ -20,6 +20,7 @@
 
 warnings off
 :noname ; is bootmessage
+\ *****************************************************************
 \ this is for uart use on tmc2208 devices
 \ s\" config-pin p9.24 uart\n" system
 \ TXD
@@ -36,7 +37,7 @@ warnings off
 \ used for y motor
 \ ." /dev/ttyO1 on P9 pin 24 and 26 now configured for uart! " cr
 \ ." /dev/ttyO2 on P9 pin 21 and 22 now configured for uart! " cr
-
+\ *****************************************************************
 \ this is for spi use on tmc2130 devices
 s\" config-pin p9.28 spi_cs\n"  system \ ( cs )
 s\" config-pin p9.29 spi\n"     system \ ( D0 )
@@ -63,7 +64,7 @@ s\" config-pin p8.16 output\n" system
 \ y stepper step ( gpio1_14)
 s\" config-pin p9.23 output\n" system
 \ y stepper enable ( gpio1_17)
-
+\ *****************************************************************
 ." x and y stepper motor dir,step and enable pins configured!" cr
 
 bye

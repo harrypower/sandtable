@@ -71,6 +71,13 @@ require Gforth-Objects/objects.fs
 \ y stepper step ( gpio1_14)
 \ s\" config-pin p9.23 output\n" system
 \ y stepper enable ( gpio1_17)
+
+\ the following are the settings to then make the objects mymotorx and mymotory based on above system pin config's used
+\ 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
+\ tmc2130 heap-new constant mymotorX \ throw
+
+\ 1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
+\ tmc2130 heap-new constant mymotory \ throw
 \ *****************************************************************
 0x00 constant GCONF
 0x01 constant GSTAT
@@ -122,9 +129,9 @@ object class
     { ndata }
     4 0 do ndata 0xff000000 and 24 rshift bufferB i + c! ndata 8 lshift to ndata loop  bufferB
   ;m method data-$
-  m: ( tmc2130 -- ) \ simply make enable pin high on tmc2208 driver board
+  m: ( tmc2130 -- ) \ simply make enable pin high on tmc2130 driver board
     enablebank enablebit this gpio-high throw ;m overrides disable-motor
-  m: ( tmc2130 -- ) \ simply make enable pin low on tmc2208 driver board
+  m: ( tmc2130 -- ) \ simply make enable pin low on tmc2130 driver board
     enablebank enablebit this gpio-low throw ;m overrides enable-motor
   m: ( udirection tmc2130 -- ) \ udirection is 0 for left and 1 for right
     case
@@ -232,7 +239,8 @@ object class
   ;m overrides print
 end-class tmc2130
 
-
+\ *****************************************************************
+\\\
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
 tmc2130 heap-new constant mymotorX \ throw
 
