@@ -208,7 +208,7 @@ object class
     bufferA c!
     spihandle bufferA 5 write 5 = if
       spihandle bufferB 5 read 5 = if
-        bufferB c@
+        bufferB c@ %00001111 and \ note only the lower 4 bits are used
         bufferB 1 + this $-data
         0 dup [to-inst] lasterror
       else
@@ -227,7 +227,8 @@ object class
     %1111111 and %10000000 or bufferA c!
     spihandle bufferA 5 write 5 = if
       spihandle bufferB 5 read 5 = if
-        bufferB c@ false
+        bufferB c@ %00001111 and \ note only the lower 4 bits are used  
+        false
       else
         0 true dup [to-inst] lasterror
       then
