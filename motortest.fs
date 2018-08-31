@@ -40,6 +40,7 @@ mymotorY disable-motor
 
 \ this is from tmc2130 datasheet pdf.  page 84 section 23.1 initialization example
 \ 0x6c 0x000100c3 mymotorx putreg . .
+   ( %00000000000000010000000011000011)
 \ 0x10 0x00061f0a mymotorX putreg . .
 \ 0x11 0x0000000a mymotorX putreg . .
 \ 0x00 0x00000004 mymotorX putreg . .
@@ -47,7 +48,8 @@ mymotorY disable-motor
 \ 0x70 0x000401c8 mymotorX putreg . .
 
 \ my attempt at settings i need for x axis motor
-0x6c %00000001000000010110000010010000  mymotorx putreg . .
+\0x6c %00000001000000010110000010010000  mymotorx putreg . .
+0x6c %00000000000000010110000010010000  mymotorx putreg . .
 0x10 %00100001000000000000              mymotorx putreg . .
 0x10 %00001000                          mymotorx putreg . .
 0x00 0x00000004                         mymotorx putreg . .
