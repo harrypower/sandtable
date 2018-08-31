@@ -116,7 +116,7 @@ object class
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
     bbbiosetup false = if bbbioclear bbbiocleanup else true then ;m method gpio-low
 
-  public
+\  public
   m: ( uaddr tmc2130 -- ndata ) \ takes string of 4 bytes and puts into 32 bit ndata
   \ uaddr is the buffer location for the string
   \ the string is always 4 bytes long
@@ -129,6 +129,7 @@ object class
     { ndata }
     4 0 do ndata 0xff000000 and 24 rshift bufferB i + c! ndata 8 lshift to ndata loop  bufferB
   ;m method data-$
+  public
   m: ( tmc2130 -- ) \ simply make enable pin high on tmc2130 driver board
     enablebank enablebit this gpio-high throw ;m overrides disable-motor
   m: ( tmc2130 -- ) \ simply make enable pin low on tmc2130 driver board
@@ -225,9 +226,8 @@ object class
     this data-$ bufferA 1 + 4 cmove
     %1111111 and %10000000 or bufferA c!
     spihandle bufferA 5 write 5 = if
-      bufferA 6 0 fill
-      spihandle bufferA 5 read 5 = if
-        bufferA c@ false
+      spihandle bufferB 5 read 5 = if
+        bufferB c@ false
       else
         0 true dup [to-inst] lasterror
       then
