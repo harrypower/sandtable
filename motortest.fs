@@ -48,7 +48,7 @@ mymotorY disable-motor
 \ 0x70 0x000401c8 mymotorX putreg . .
 
 \ my attempt at settings i need for x axis motor
-\0x6c %00000001000000010110000010010000  mymotorx putreg . .
+\ 0x6c %00000001000000010110000010010000  mymotorx putreg . .
 0x6c %00000000000000010110000010010000  mymotorx putreg . .
 0x10 %00100001000000000000              mymotorx putreg . .
 0x10 %00001000                          mymotorx putreg . .
