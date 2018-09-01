@@ -153,7 +153,8 @@ object class
     BBBiocleanup throw
     \ then
   ;m method faststeps
-  m: { utime usteps tmc2130 -- } \ step the motor ustep times with utime between each step... utime of 1000 is around 30 khz on BBB
+  m: ( utime usteps tmc2130 -- ) \ step the motor ustep times with utime between each step... utime of 1000 is around 30 khz on BBB
+    { utime usteps }
     stepbank stepio bbbiosetup throw
     usteps 0 ?do
       bbbioset
