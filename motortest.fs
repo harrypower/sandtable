@@ -26,7 +26,34 @@
 \ Revisions:
 \ 8/30/2018 started coding
 
-require config-pins.fs
+\ require config-pins.fs
+\ this is for spi use on tmc2130 devices
+s\" config-pin p9.28 spi_cs\n"  system \ ( cs )
+s\" config-pin p9.29 spi\n"     system \ ( D0 )
+s\" config-pin p9.30 spi\n"     system \ ( D1 )
+s\" config-pin p9.31 spi_sclk\n" system \ ( clock )
+\ this is spi1 used for x motor
+s\" config-pin p9.17 spi_cs\n"  system \ ( cs )
+s\" config-pin p9.18 spi\n"     system \ ( D1 )
+s\" config-pin p9.21 spi\n"     system \ ( D0 )
+s\" config-pin p9.22 spi_sclk\n" system \ ( clock )
+\ this is spi0 used for y motor
+." x and y motor spi data pins configured!" cr
+
+s\" config-pin p8.11 output\n" system
+\ x stepper dir  ( gpio1_13)
+s\" config-pin p8.12 output\n" system
+\ x stepper step ( gpio1_12)
+s\" config-pin p9.15 output\n" system
+\ x stepper enable ( gpio1_16)
+
+s\" config-pin p8.15 output\n" system
+\ y stepper dir  ( gpio1_15)
+s\" config-pin p8.16 output\n" system
+\ y stepper step ( gpio1_14)
+s\" config-pin p9.23 output\n" system
+\ y stepper enable ( gpio1_17)
+
 require tmc2130.fs
 require Gforth-Objects/objects.fs
 
@@ -69,6 +96,3 @@ mymotorX disable-motor
   mymotorX enable-motor
   mymotorX faststeps
   mymotorX disable-motor ;
-
-
-\ 1000 mymotorX faststeps
