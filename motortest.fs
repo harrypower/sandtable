@@ -100,3 +100,12 @@ mymotorX disable-motor
   mymotorX enable-motor
   mymotorX faststeps
   mymotorX disable-motor ;
+
+: dataset { nreg nnewdata nstartbit nwipebits -- uspi_status nflag } 
+  1 nwipebits 0 ?do 1 i lshift or loop
+  nstartbit lshift invert to nwipebits
+  nnewdata nstartbit lshift to nnewdata
+  nreg mymotorX getreg throw swap drop
+  nwipebits and nnewdata or
+  nreg swap mymotorX putreg
+;

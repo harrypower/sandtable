@@ -198,7 +198,7 @@ object class
       bufferB free throw
     then ;m overrides destruct
 
-  m: ( ureg tmc2130 -- uspi_status udata nflag ) \ read a register from tmc2130 device
+  m: ( ureg tmc2130 -- utmc2130_status udata nflag ) \ read a register from tmc2130 device
     \ nflag is false if no apparent errors in spi communication aka the correct bytes sent and recieved
     \ nflag is true if the incorrect amount of bytes were sent or recieved and uspi_status and udata are returned as 0
     \ uspi_status is the spi_staus data returned from tmc2130 data transfer and only the lower 4 bits are valid
@@ -218,7 +218,7 @@ object class
       0 0 true dup [to-inst] lasterror
     then
   ;m method getreg
-  m: ( ureg udata tmc2130 -- uspi_status nflag ) \ write to ureg register udata value in the tmc2130 device
+  m: ( ureg udata tmc2130 -- utmc2130_status nflag ) \ write to ureg register udata value in the tmc2130 device
   \ nflag is false if no apparent errors in spi communication aka the correct bytes sent and recieved
   \ nflag is true if the incorrect amount of bytes were sent or recieved and uspi_status and udata are returned as 0
   \ uspi_status is the spi_staus data returned from tmc2130 data transfer and only the lower 4 bits are valid
@@ -227,7 +227,7 @@ object class
     %1111111 and %10000000 or bufferA c!
     spihandle bufferA 5 write 5 = if
       spihandle bufferB 5 read 5 = if
-        bufferB c@ %00001111 and \ note only the lower 4 bits are used  
+        bufferB c@ %00001111 and \ note only the lower 4 bits are used
         false
       else
         0 true dup [to-inst] lasterror
