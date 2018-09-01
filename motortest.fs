@@ -82,7 +82,7 @@ mymotorY disable-motor
 0x11 %00000100                          mymotorx putreg . .
 0x00 %100                               mymotorx putreg . .
 0x13 %100000                            mymotorx putreg . .
-0x70 %0101010000100010000000            mymotorx putreg . .
+0x70 %0101000000100010000000            mymotorx putreg . .
 ( PWM_AMPL )
 mymotorX disable-motor
 1 mymotorx setdirection
