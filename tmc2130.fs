@@ -153,6 +153,16 @@ object class
     BBBiocleanup throw
     \ then
   ;m method faststeps
+  m: { utime usteps tmc2130 -- } \ step the motor ustep times with utime between each step... utime of 1000 is around 30 khz on BBB
+    stepbank stepio bbbiosetup throw
+    usteps 0 ?do
+      bbbioset
+      utime 0 do loop
+      bbbioclear
+      utime 0 do loop
+    loop
+    BBBiocleanup throw
+  ;m method timedsteps
   m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- nflag ) \ constructor
   \ nflag is false for configuration ok
   \ nflag is any other number meaning something did not work to configure this motor driver

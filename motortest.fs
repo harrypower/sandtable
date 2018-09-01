@@ -90,22 +90,26 @@ mymotorY disable-motor
 mymotorX disable-motor
 1 mymotorx setdirection
 
-: test
+: test ( -- )
   mymotorx enable-motor
   1 mymotorX setdirection
   50 mymotorX faststeps
   mymotorX disable-motor ;
 
-: xsteps
+: xsteps ( usteps -- )
   mymotorX enable-motor
   mymotorX faststeps
   mymotorX disable-motor ;
 
-: dataset { nreg nnewdata nstartbit nwipebits -- uspi_status nflag } 
+: dataset { nreg nnewdata nstartbit nwipebits -- uspi_status nflag } \ note this only works on r/w registers... aka GCONF and CHOPCONF
   1 nwipebits 0 ?do 1 i lshift or loop
   nstartbit lshift invert to nwipebits
   nnewdata nstartbit lshift to nnewdata
   nreg mymotorX getreg throw swap drop
   nwipebits and nnewdata or
-  nreg swap mymotorX putreg
-;
+  nreg swap mymotorX putreg ;
+
+: varxsteps ( utime usteps -- )
+  mymotorx enable-motor
+  mymotorX timedsteps
+  mymotorX disable-motor ;
