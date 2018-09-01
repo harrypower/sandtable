@@ -52,8 +52,8 @@ mymotorY disable-motor
 0x10 %00010001000000000000              mymotorx putreg . .
 0x11 %00010000                          mymotorx putreg . .
 0x00 %100                               mymotorx putreg . .
-0x12 %100                               mymotorx putreg . .
-0x13 %10                                mymotorx putreg . .
+0x12 %10                                mymotorx putreg . .
+0x13 %1                                 mymotorx putreg . .
 0x70 %0101000000000100000010            mymotorx putreg . .
 
 mymotorX disable-motor
