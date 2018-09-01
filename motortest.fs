@@ -76,14 +76,17 @@ mymotorY disable-motor
 
 \ my attempt at settings i need for x axis motor
 0x6c %00010010000011001000000000000010  mymotorx putreg . .
-( diss2g 0, dedge 0, intpol 1,  , vsense 0, TBL 01, chm 0,    ,TOFF 2)
+( diss2g 0, dedge 0, intpol 1, mres %0010, sync 0, vhighchm 1, vhighfs 1, vsense 0, TBL 01, chm 0, rndtf 0, disfdcc 0, TFD 0, HEND 0, HSTRT 0,TOFF %10)
 0x10 %00010001000000000000              mymotorx putreg . .
-( IHOLD 0, IRUN 16, IHOLDELAY 1)
+( IHOLD 0, IRUN %10000, IHOLDELAY 1)
 0x11 %00000100                          mymotorx putreg . .
+( TPOWER DOWN )
 0x00 %100                               mymotorx putreg . .
+( GCONF with en_pwm-mode 1 )
 0x13 %100000                            mymotorx putreg . .
+( TPWMTHRS )
 0x70 %0101000000100010000000            mymotorx putreg . .
-( PWM_AMPL )
+( freewheel %01 ,pwm_symmetric %0 ,pwm_autoscale %1 ,PWM freq %00 ,PWM_GRAD %00001000 ,PWM_AMPL %10000000 )
 mymotorX disable-motor
 1 mymotorx setdirection
 
