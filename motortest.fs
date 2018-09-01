@@ -59,4 +59,12 @@ mymotorY disable-motor
 mymotorX enable-motor
 1 mymotorx setdirection
 
+: test
+  mymotorx enable-motor
+  1 mymotorX setdirection
+  50 mymotorX faststeps
+  mymotorX disable-motor
+  ;
+
+
 \ 1000 mymotorX faststeps
