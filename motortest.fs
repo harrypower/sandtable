@@ -85,8 +85,8 @@ mymotorY disable-motor
 ( GCONF with en_pwm-mode 1 )
 0x13 %100                               mymotorx putreg . .
 ( TPWMTHRS )
-0x70 %0101010000100010000000            mymotorx putreg . .
-( freewheel %01 ,pwm_symmetric %0 ,pwm_autoscale %1 ,PWM freq %01 ,PWM_GRAD %00001000 ,PWM_AMPL %10000000 )
+0x70 %0101100000010010000000            mymotorx putreg . .
+( freewheel %01 ,pwm_symmetric %0 ,pwm_autoscale %1 ,PWM freq %10 ,PWM_GRAD %00000100 ,PWM_AMPL %10000000 )
 mymotorX disable-motor
 1 mymotorx setdirection
 
