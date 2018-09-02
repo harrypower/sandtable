@@ -115,3 +115,14 @@ mymotorX disable-motor
   mymotorx enable-motor
   mymotorX timedsteps
   mymotorX disable-motor ;
+
+: sgt ( utime usteps -- )
+  mymotorX enable-motor
+  mymotorX timedsteps
+  0x6f mymotorX getreg . dup %111111111 and . %1000000000000000000000000 and . . cr
+  0x71 mymotorX getreg . . cr
+  1000 ms
+  0x6f mymotorX getreg . dup %111111111 and . %1000000000000000000000000 and . . cr
+  0x71 mymotorX getreg . . cr ;
+
+  
