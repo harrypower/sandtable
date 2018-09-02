@@ -158,9 +158,9 @@ object class
     stepbank stepio bbbiosetup throw
     usteps 0 ?do
       bbbioset
-      utime 0 do loop
+      utime 0 ?do loop
       bbbioclear
-      utime 0 do loop
+      utime 0 ?do loop
     loop
     BBBiocleanup throw
   ;m method timedsteps
