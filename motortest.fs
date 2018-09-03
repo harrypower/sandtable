@@ -86,7 +86,7 @@ mymotorY disable-motor
 0x13 150                                mymotorx putreg . .
 ( TPWMTHRS )
 0x70 %0111100000010000111000            mymotorx putreg . .
-( freewheel %01 ,pwm_symmetric %1 ,pwm_autoscale %1 ,PWM freq %10 ,PWM_GRAD %1 ,PWM_AMPL %00111000 )
+( freewheel %01 ,pwm_symmetric %1 ,pwm_autoscale %1 ,PWM freq %10 ,PWM_GRAD %100 ,PWM_AMPL %00111000 )
 0x6d %1000000000000000100100000         mymotorX putreg . .
 ( sfilt 0,sgt %0 , seimin 0, sedn 00, semax 10, seup 01, semin 0)
 0x14 300                               mymotorX putreg . .
@@ -124,7 +124,7 @@ mymotorX disable-motor
 : sgt ( utime usteps -- )
   mymotorX enable-motor
   mymotorX timedsteps
-  0x12 mymotorX getreg . . . cr
+  cr 0x12 mymotorX getreg . . . cr
   0x6f mymotorX getreg . dup %111111111 and . %1000000000000000000000000 and 0 = if false else true then . . cr
   0x71 mymotorX getreg . . . cr
   1000 ms
