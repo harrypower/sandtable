@@ -89,9 +89,9 @@ mymotorY disable-motor
 ( freewheel %01 ,pwm_symmetric %1 ,pwm_autoscale %1 ,PWM freq %10 ,PWM_GRAD %1010 ,PWM_AMPL %11000000 )
 0x6d %1000000000000000100100000         mymotorX putreg . .
 ( sfilt 0,sgt %0 , seimin 0, sedn 00, semax 10, seup 01, semin 0)
-0x14 300                               mymotorX putreg . .
+0x14 0                                  mymotorX putreg . .
 ( TCOOLTHRS )
-0x15 1                                mymotorX putreg . .
+0x15 1                                  mymotorX putreg . .
 ( THIGH )
 
 mymotorX disable-motor
