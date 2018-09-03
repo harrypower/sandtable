@@ -83,15 +83,15 @@ mymotorY disable-motor
 ( TPOWER DOWN )
 0x00 %100                               mymotorx putreg . .
 ( GCONF with en_pwm-mode 1 )
-0x13 %100000                            mymotorx putreg . .
+0x13 100                                mymotorx putreg . .
 ( TPWMTHRS )
 0x70 %0110100000010010000000            mymotorx putreg . .
 ( freewheel %01 ,pwm_symmetric %1 ,pwm_autoscale %0 ,PWM freq %10 ,PWM_GRAD %00000100 ,PWM_AMPL %10000000 )
 0x6d %1011011000000000100100000         mymotorX putreg . .
 ( sfilt 0,sgt %1101100 -20 , seimin 0, sedn 00, semax 10, seup 01, semin 0)
-0x14 %10000                             mymotorX putreg . .
+0x14 200                                mymotorX putreg . .
 ( TCOOLTHRS )
-0x15 %100000                            mymotorX putreg . .
+0x15 200                                mymotorX putreg . .
 ( THIGH )
 
 mymotorX disable-motor
