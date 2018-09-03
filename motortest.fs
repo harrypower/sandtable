@@ -75,8 +75,8 @@ mymotorY disable-motor
 \ 0x70 0x000401c8 mymotorX putreg . .
 
 \ my attempt at settings i need for x axis motor
-0x6c %00010000000000101000000000000010  mymotorx putreg . .
-( diss2g 0, dedge 0, intpol 1, mres %0000, sync 0, vhighchm 0, vhighfs 0, vsense 1, TBL %01, chm 0, rndtf 0, disfdcc 0, TFD 0, HEND 0, HSTRT 0,TOFF %10)
+0x6c %00010000000000101000000010010110  mymotorx putreg . .
+( diss2g 0, dedge 0, intpol 1, mres %0000, sync 0, vhighchm 0, vhighfs 0, vsense 1, TBL %01, chm 0, rndtf 0, disfdcc 0, TFD 0, HEND 0, HSTRT 0,TOFF %110)
 0x10 %00010001110000000000              mymotorx putreg . .
 ( IHOLD 0, IRUN %11100, IHOLDELAY 1)
 0x11 %00000100                          mymotorx putreg . .
@@ -85,8 +85,8 @@ mymotorY disable-motor
 ( GCONF with en_pwm-mode 1 )
 0x13 100                                mymotorx putreg . .
 ( TPWMTHRS )
-0x70 %0110100000010010000000            mymotorx putreg . .
-( freewheel %01 ,pwm_symmetric %1 ,pwm_autoscale %0 ,PWM freq %10 ,PWM_GRAD %00000100 ,PWM_AMPL %10000000 )
+0x70 %0110100000000100010000            mymotorx putreg . .
+( freewheel %01 ,pwm_symmetric %1 ,pwm_autoscale %0 ,PWM freq %10 ,PWM_GRAD %1 ,PWM_AMPL %00010000 )
 0x6d %1000000000000000100100000         mymotorX putreg . .
 ( sfilt 0,sgt %0 , seimin 0, sedn 00, semax 10, seup 01, semin 0)
 0x14 150                               mymotorX putreg . .
