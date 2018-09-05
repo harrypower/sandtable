@@ -79,8 +79,20 @@ require Gforth-Objects/objects.fs
 \ 1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
 \ tmc2130 heap-new constant mymotory \ throw
 \ *****************************************************************
+\ some of the tmc2130 registers
 0x00 constant GCONF
 0x01 constant GSTAT
+0x10 constant IHOLD_IRUN
+0x11 constant TPOWERDOWN
+0x12 constant TSTEPS
+0x13 constant TPWMTHRS
+0x14 constant TCOOLTHRS
+0x15 constant THIGH
+0x6c constant CHOPCONF
+0x6d constant COOLCONF
+0x6F constant DRV_STATUS
+0x70 constant PWMCONF
+0x71 constant PWM_SCALE
 
 [ifundef] destruction
   interface
@@ -92,7 +104,8 @@ object class
   destruction implementation  ( tmc2130 -- )
   selector enable-motor       ( tmc2130 -- )
   selector disable-motor      ( tmc2130 -- )
-
+  selector putreg             ( ureg udata tmc2130 -- utmc2130_status nflag )
+  selector getreg             ( ureg tmc2130 -- utmc2130_status udata nflag )
   protected
   inst-value spihandle
   inst-value enablebank
@@ -115,8 +128,6 @@ object class
 
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
     bbbiosetup false = if bbbioclear bbbiocleanup else true then ;m method gpio-low
-
-\  public
   m: ( uaddr tmc2130 -- ndata ) \ takes string of 4 bytes and puts into 32 bit ndata
   \ uaddr is the buffer location for the string
   \ the string is always 4 bytes long
@@ -226,7 +237,7 @@ object class
     else
       0 0 true dup [to-inst] lasterror
     then
-  ;m method getreg
+  ;m overrides getreg
   m: ( ureg udata tmc2130 -- utmc2130_status nflag ) \ write to ureg register udata value in the tmc2130 device
   \ nflag is false if no apparent errors in spi communication aka the correct bytes sent and recieved
   \ nflag is true if the incorrect amount of bytes were sent or recieved and uspi_status and udata are returned as 0
@@ -244,7 +255,7 @@ object class
     else
       0 true dup [to-inst] lasterror
     then
-  ;m method putreg
+  ;m overrides putreg
   m: ( tmc2130 -- ) \ print some stuff
     this [parent] print cr
     ." spihandle " spihandle . cr
