@@ -118,7 +118,7 @@ object class
   char% inst-var bytedata
   inst-value bufferA
   inst-value bufferB
-  inst-value lasterror
+\  inst-value lasterror
 
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
     bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
@@ -230,12 +230,12 @@ object class
       spihandle bufferB 5 read 5 = if
         bufferB c@ %00001111 and \ note only the lower 4 bits are used
         bufferB 1 + this $-data
-        0 dup [to-inst] lasterror
+        0 \ dup [to-inst] lasterror
       else
-        0 0 true dup [to-inst] lasterror
+        0 0 true \ dup [to-inst] lasterror
       then
     else
-      0 0 true dup [to-inst] lasterror
+      0 0 true \ dup [to-inst] lasterror
     then
   ;m overrides getreg
   m: ( ureg udata tmc2130 -- utmc2130_status nflag ) \ write to ureg register udata value in the tmc2130 device
@@ -250,16 +250,16 @@ object class
         bufferB c@ %00001111 and \ note only the lower 4 bits are used
         false
       else
-        0 true dup [to-inst] lasterror
+        0 true \ dup [to-inst] lasterror
       then
     else
-      0 true dup [to-inst] lasterror
+      0 true \ dup [to-inst] lasterror
     then
   ;m overrides putreg
   m: ( tmc2130 -- ) \ print some stuff
     this [parent] print cr
     ." spihandle " spihandle . cr
-    ." last error " lasterror . cr
+    \ ." last error " lasterror . cr
   ;m overrides print
 end-class tmc2130
 
