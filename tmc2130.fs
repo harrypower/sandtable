@@ -27,6 +27,7 @@
 require BBB_Gforth_gpio/syscalls386.fs
 require BBB_Gforth_gpio/BBB_GPIO_lib.fs
 require Gforth-Objects/objects.fs
+require Gforth-Objects/mdca-obj.fs
 
 0x40046B04        constant SPI_IOC_WR_MAX_SPEED_HZ
 0x40016B03        constant SPI_IOC_WR_BITS_PER_WORD
@@ -107,6 +108,17 @@ object class
   selector putreg             ( ureg udata tmc2130 -- utmc2130_status nflag )
   selector getreg             ( ureg tmc2130 -- utmc2130_status udata nflag )
   protected
+\  struct                \ this struct will be used as a fast tmc2130 setting array
+\    cell% GCONF%
+\    cell% IHOLD_IRUN%
+\    cell% TPOWERDOWN%
+\    cell% TPWMTHRS%
+\    cell% TCOOLTHRS%
+\    cell% THIGH%
+\    cell% CHOPCONF%
+\    cell% COOLCONF%
+\    cell% PWMCONF%
+\  end-struct tmc2130reg%
   inst-value spihandle
   inst-value enablebank
   inst-value enablebit
@@ -118,6 +130,7 @@ object class
   char% inst-var bytedata
   inst-value bufferA
   inst-value bufferB
+  inst-value quicksettings
 \  inst-value lasterror
 
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
@@ -206,6 +219,7 @@ object class
       then
       6 allocate throw [to-inst] bufferA
       6 allocate throw [to-inst] bufferB
+      9 5 2 multi-cell-array heap-new [to-inst] quicksettings
       false
     endtry
     restore
@@ -216,6 +230,8 @@ object class
       spihandle close throw
       bufferA free throw
       bufferB free throw
+      quicksettings [bind] multi-cell-array destruct
+      quicksettings free throw
     then ;m overrides destruct
 
   m: ( ureg tmc2130 -- utmc2130_status udata nflag ) \ read a register from tmc2130 device
