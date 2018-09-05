@@ -139,8 +139,6 @@ object class
       0 of dirbank dirbit this gpio-low throw endof
       1 of dirbank dirbit this gpio-high throw endof
     endcase ;m method setdirection
-  m: ( usteps tmc2130 -- ) \ step the motor usteps times ... this steps around 1 khz on the BBB
-    0 ?do stepbank stepio this gpio-high throw 1 ms stepbank stepio this gpio-low throw 1 ms loop ;m method steps
   m: ( usteps tmc2130 -- ) \ fast step the motor usteps times ... this steps around 30 khz on BBB
     \ spihandle 0> if
     stepbank stepio bbbiosetup throw
