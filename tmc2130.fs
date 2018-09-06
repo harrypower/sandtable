@@ -275,15 +275,15 @@ object class
   m: ( uqrindex tmc2130 -- ) \ the previous values stored in uqrindex quickreg will be transfered to the tmc2130 device via spi interface
     { uqrindex }
     uqrindex 0>= uqrindex 5 < and if
-      GCONF      0 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
-      IHOLD_IRUN 1 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
-      TPOWERDOWN 2 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
-      TPWMTHRS   3 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
-      TCOOLTHRS  4 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
-      THIGH      5 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
-      CHOPCONF   6 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
-      COOLCONF   7 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
-      PWMCONF    8 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      GCONF      0 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
+      IHOLD_IRUN 1 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
+      TPOWERDOWN 2 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
+      TPWMTHRS   3 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
+      TCOOLTHRS  4 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
+      THIGH      5 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
+      CHOPCONF   6 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
+      COOLCONF   7 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
+      PWMCONF    8 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
       uqrindex [to-inst] currentqr
     then
   ;m method usequickreg
