@@ -284,6 +284,7 @@ object class
       CHOPCONF   6 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
       COOLCONF   7 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
       PWMCONF    8 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      uqrindex [to-inst] currentqr
     then
   ;m method usequickreg
   m: ( tmc2130 -- ) \ print some stuff
@@ -301,6 +302,7 @@ object class
     ." fsactive " dup %1000000000000000 and 0= if ." microstep" else ." fullstep" then cr
     ." CS ACTUAL " dup %111110000000000000000 and . cr
     %10000000000000000000000000 and 0= if ." normal temperature!" else ." over temperature!" then cr
+    ." current quickreg that is being used " currentqr . cr
  ;m overrides print
 end-class tmc2130
 
