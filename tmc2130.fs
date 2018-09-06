@@ -300,7 +300,7 @@ object class
     ." PWM_SCALE " PWM_SCALE this getreg throw . drop cr
     ." SG_RESULT " dup %1111111111 and . cr
     ." fsactive " dup %1000000000000000 and 0= if ." microstep" else ." fullstep" then cr
-    ." CS ACTUAL " dup %111110000000000000000 and . cr
+    ." CS ACTUAL " dup %111110000000000000000 and 16 rshift . cr
     %10000000000000000000000000 and 0= if ." normal temperature!" else ." over temperature!" then cr
     ." current quickreg that is being used " currentqr . cr
  ;m overrides print
