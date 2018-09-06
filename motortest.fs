@@ -125,12 +125,6 @@ mymotorX disable-motor
   mymotorX enable-motor
   mymotorX timedsteps
   mymotorX [bind] tmc2130 print
-\  cr 0x12 mymotorX getreg . . . cr
-\  0x6f mymotorX getreg . dup dup %111111111 and . %1000000000000000 and 0 = if ." R" else ." F" then %111110000000000000000 and 15 rshift . . cr
-\  0x71 mymotorX getreg . . . cr
-  1000 ms
+  1000 ms cr
   mymotorX [bind] tmc2130 print
-  \ 0x12 mymotorX getreg . . . cr
-  \ 0x6f mymotorX getreg . dup dup %111111111 and . %1000000000000000 and 0 = if ." R" else ." F" then %111110000000000000000 and 15 rshift . . cr
-  \ 0x71 mymotorX getreg . . . cr
 ;
