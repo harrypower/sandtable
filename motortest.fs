@@ -75,28 +75,32 @@ mymotorY disable-motor
 \ 0x70 0x000401c8 mymotorX putreg . .
 
 \ my attempt at settings i need for x axis motor
-\ 0x6c %00010000000000101000000010010011  mymotorx putreg . .
-( diss2g 0, dedge 0, intpol 1, mres %0000, sync 0, vhighchm 0, vhighfs 0, vsense 1, TBL %01, chm 0, rndtf 0, disfdcc 0, TFD 0, HEND 1, HSTRT 1,TOFF %11 )
+\ 0x00 %100                               mymotorx putreg . .
+( GCONF with en_pwm-mode 1 )
 \ 0x10 %01110001111100000000              mymotorx putreg . .
 ( IHOLD 0, IRUN %11110, IHOLDELAY %111)
 \ 0x11 0                                  mymotorx putreg . .
 ( TPOWER DOWN )
-\ 0x00 %100                               mymotorx putreg . .
-( GCONF with en_pwm-mode 1 )
 \ 0x13 0                                  mymotorx putreg . .
 ( TPWMTHRS )
-\ 0x70 %0111000000101011111111            mymotorx putreg . .
-( freewheel %01 ,pwm_symmetric %1 ,pwm_autoscale %1 ,PWM freq %00 ,PWM_GRAD %1010 ,PWM_AMPL %11111111 )
-\ 0x6d %1000000000000000000000000         mymotorX putreg . .
-( sfilt 0,sgt %1101100 , seimin 0, sedn 00, semax 0, seup 00, semin 0)
 \ 0x14 0                                  mymotorX putreg . .
 ( TCOOLTHRS )
 \ 0x15 0                                  mymotorX putreg . .
 ( THIGH )
+\ 0x6c %00010000000000101000000010010011  mymotorx putreg . .
+( diss2g 0, dedge 0, intpol 1, mres %0000, sync 0, vhighchm 0, vhighfs 0, vsense 1, TBL %01, chm 0, rndtf 0, disfdcc 0, TFD 0, HEND 1, HSTRT 1,TOFF %11 )
+\ 0x6d %1000000000000000000000000         mymotorX putreg . .
+( sfilt 0,sgt %0 , seimin 0, sedn 00, semax 0, seup 00, semin 0)
+\ 0x70 %0111000000101011111111            mymotorx putreg . .
+( freewheel %01 ,pwm_symmetric %1 ,pwm_autoscale %1 ,PWM freq %00 ,PWM_GRAD %1010 ,PWM_AMPL %11111111 )
 
-%100 %01110001111100000000 0 0 0 0 %00010000000000101000000010010011 %1000000000000000000000000 %0111000000101011111111
+%100 %01110001111100000000 1 0 0 0 %00010000000000101000000010010011 0 %0111000000101011111111
 0 mymotorX quickreg!
 0 mymotorX usequickreg
+
+%100 %01110001111100000000 1 1000 0 0 %00010001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
+1 mymotorX quickreg!
+
 mymotorX disable-motor
 1 mymotorx setdirection
 
