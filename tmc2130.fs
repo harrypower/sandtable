@@ -289,7 +289,7 @@ object class
   m: ( tmc2130 -- ) \ print some stuff
     this [parent] print cr
     ." spihandle " spihandle . cr
-    ." TSTEP " TSTEP this getreg throw . cr
+    ." TSTEPS " TSTEPS this getreg throw . cr
     ." standstill " dup %1000 and 0= if ." off" else ." on" then cr
     ." stallguard flag " dup %100 and 0= if ." off" else ." on" then cr
     ." driver error " dup %10 and 0= if ." off" else ." on" then cr
