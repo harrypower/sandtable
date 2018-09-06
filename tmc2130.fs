@@ -108,17 +108,7 @@ object class
   selector putreg             ( ureg udata tmc2130 -- utmc2130_status nflag )
   selector getreg             ( ureg tmc2130 -- utmc2130_status udata nflag )
   protected
-\  struct                \ this struct will be used as a fast tmc2130 setting array
-\    cell% GCONF%
-\    cell% IHOLD_IRUN%
-\    cell% TPOWERDOWN%
-\    cell% TPWMTHRS%
-\    cell% TCOOLTHRS%
-\    cell% THIGH%
-\    cell% CHOPCONF%
-\    cell% COOLCONF%
-\    cell% PWMCONF%
-\  end-struct tmc2130reg%
+
   inst-value spihandle
   inst-value enablebank
   inst-value enablebit
@@ -130,8 +120,8 @@ object class
   char% inst-var bytedata
   inst-value bufferA
   inst-value bufferB
-  inst-value quicksettings
-\  inst-value lasterror
+  inst-value quickreg
+  inst-value currentqr
 
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
     bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
@@ -219,7 +209,9 @@ object class
       then
       6 allocate throw [to-inst] bufferA
       6 allocate throw [to-inst] bufferB
-      9 5 2 multi-cell-array heap-new [to-inst] quicksettings
+      9 5 2 multi-cell-array heap-new [to-inst] quickreg
+      5 0 do 9 0 do 0 i j quickreg [bind] multi-cell-array cell-array! loop \ set quickreg's to 0
+      0 [to-inst] currentqr
       false
     endtry
     restore
@@ -230,8 +222,8 @@ object class
       spihandle close throw
       bufferA free throw
       bufferB free throw
-      quicksettings [bind] multi-cell-array destruct
-      quicksettings free throw
+      quickreg [bind] multi-cell-array destruct
+      quickreg free throw
     then ;m overrides destruct
 
   m: ( ureg tmc2130 -- utmc2130_status udata nflag ) \ read a register from tmc2130 device
@@ -246,12 +238,12 @@ object class
       spihandle bufferB 5 read 5 = if
         bufferB c@ %00001111 and \ note only the lower 4 bits are used
         bufferB 1 + this $-data
-        0 \ dup [to-inst] lasterror
+        0
       else
-        0 0 true \ dup [to-inst] lasterror
+        0 0 true
       then
     else
-      0 0 true \ dup [to-inst] lasterror
+      0 0 true
     then
   ;m overrides getreg
   m: ( ureg udata tmc2130 -- utmc2130_status nflag ) \ write to ureg register udata value in the tmc2130 device
@@ -266,17 +258,50 @@ object class
         bufferB c@ %00001111 and \ note only the lower 4 bits are used
         false
       else
-        0 true \ dup [to-inst] lasterror
+        0 true
       then
     else
-      0 true \ dup [to-inst] lasterror
+      0 true
     then
   ;m overrides putreg
+  m: ( uGCONF uIHOLD_IRUN uTPOWERDOWN uTPWMTHRS uTCOOLTHRS uTHIGH uCHOPCONF uCOOLCONF uPWMCONF uqrindex tmc2130 -- )
+  \ set values for quickreg at uqrindex ... note there are only 0 to 4 uqrindex settings
+  \ uqrindex is the quickreg that is being set and the other stack items are the values that are put in this quickreg
+    { uqrindex }
+    uqrindex 0> uqrindex 5 < and if
+      9 0 do i uqrindex quickreg [bind] multi-cell-array cell-array! loop
+    then
+  ;m method quickreg!
+  m: ( uqrindex tmc2130 -- ) \ the previous values stored in uqrindex quickreg will be transfered to the tmc2130 device via spi interface
+    { uqrindex }
+    uqrindex 0> uqrindex 5 < and if
+      GCONF      0 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      IHOLD_IRUN 1 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      TPOWERDOWN 2 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      TPWMTHRS   3 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      TCOOLTHRS  4 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      THIGH      5 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      CHOPCONF   6 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      COOLCONF   7 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+      PWMCONF    8 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
+    then
+  ;m method usequickreg
   m: ( tmc2130 -- ) \ print some stuff
     this [parent] print cr
     ." spihandle " spihandle . cr
-    \ ." last error " lasterror . cr
-  ;m overrides print
+    ." TSTEP " TSTEP this getreg throw . cr
+    ." standstill " dup %1000 and 0= if ." off" else ." on" then cr
+    ." stallguard flag " dup %100 and 0= if ." off" else ." on" then cr
+    ." driver error " dup %10 and 0= if ." off" else ." on" then cr
+    ." tmp2130 reset " %1 and 0= if ." yes" else ." no" then cr
+    ." GSTAT " GSTAT this getreg throw . drop cr
+    ." DRV_STATUS " DRV_STATUS this getreg throw dup . swap drop cr
+    ." PWM_SCALE " PWM_SCALE this getreg throw . drop cr
+    ." SG_RESULT " dup %1111111111 and . cr
+    ." fsactive " dup %1000000000000000 and 0= if ." non fullstep" else ." fullstep" then cr
+    ." CS ACTUAL " dup %111110000000000000000 and . cr
+    ." ot " %10000000000000000000000000 and . cr
+ ;m overrides print
 end-class tmc2130
 
 \ *****************************************************************
