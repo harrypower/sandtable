@@ -291,7 +291,7 @@ object class
     this [parent] print cr
     ." spihandle " spihandle . cr
     ." TSTEPS " TSTEPS this getreg throw . cr
-    ." standstill " dup %1000 and 0= if ." off" else ." on" then cr
+    ." standstill " dup %1000 and 0= if ." no" else ." yes" then cr
     ." stallguard flag " dup %100 and 0= if ." off" else ." on" then cr
     ." driver error " dup %10 and 0= if ." no" else ." yes" then cr
     ." tmp2130 reset " %1 and 0= if ." no" else ." yes" then cr
@@ -302,7 +302,7 @@ object class
     ." fsactive " dup %1000000000000000 and 0= if ." microstep" else ." fullstep" then cr
     ." CS ACTUAL " dup %111110000000000000000 and 16 rshift . cr
     %10000000000000000000000000 and 0= if ." normal temperature!" else ." over temperature!" then cr
-    ." current quickreg that is being used " currentqr . cr
+    ." quickreg that is being used " currentqr . cr
  ;m overrides print
 end-class tmc2130
 
