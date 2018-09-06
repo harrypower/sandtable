@@ -210,7 +210,7 @@ object class
       6 allocate throw [to-inst] bufferA
       6 allocate throw [to-inst] bufferB
       9 5 2 multi-cell-array heap-new [to-inst] quickreg
-      5 0 do 9 0 do 0 i j quickreg [bind] multi-cell-array cell-array! loop \ set quickreg's to 0
+      5 0 do 9 0 do 0 i j quickreg [bind] multi-cell-array cell-array! loop loop \ set quickreg's to 0
       0 [to-inst] currentqr
       false
     endtry
