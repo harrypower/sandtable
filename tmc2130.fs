@@ -268,13 +268,13 @@ object class
   \ set values for quickreg at uqrindex ... note there are only 0 to 4 uqrindex settings
   \ uqrindex is the quickreg that is being set and the other stack items are the values that are put in this quickreg
     { uqrindex }
-    uqrindex 0> uqrindex 5 < and if
+    uqrindex 0>= uqrindex 5 < and if
       9 0 do i uqrindex quickreg [bind] multi-cell-array cell-array! loop
     then
   ;m method quickreg!
   m: ( uqrindex tmc2130 -- ) \ the previous values stored in uqrindex quickreg will be transfered to the tmc2130 device via spi interface
     { uqrindex }
-    uqrindex 0> uqrindex 5 < and if
+    uqrindex 0>= uqrindex 5 < and if
       GCONF      0 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
       IHOLD_IRUN 1 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
       TPOWERDOWN 2 uqrindex [bind] multi-cell-array cell-array@ this putreg throw drop
