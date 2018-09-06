@@ -292,15 +292,15 @@ object class
     ." TSTEPS " TSTEPS this getreg throw . cr
     ." standstill " dup %1000 and 0= if ." off" else ." on" then cr
     ." stallguard flag " dup %100 and 0= if ." off" else ." on" then cr
-    ." driver error " dup %10 and 0= if ." off" else ." on" then cr
+    ." driver error " dup %10 and 0= if ." no" else ." yes" then cr
     ." tmp2130 reset " %1 and 0= if ." yes" else ." no" then cr
     ." GSTAT " GSTAT this getreg throw . drop cr
-    ." DRV_STATUS " DRV_STATUS this getreg throw dup . swap drop cr
+    ." DRV_STATUS " DRV_STATUS this getreg throw dup u. swap drop cr
     ." PWM_SCALE " PWM_SCALE this getreg throw . drop cr
     ." SG_RESULT " dup %1111111111 and . cr
-    ." fsactive " dup %1000000000000000 and 0= if ." non fullstep" else ." fullstep" then cr
+    ." fsactive " dup %1000000000000000 and 0= if ." microstep" else ." fullstep" then cr
     ." CS ACTUAL " dup %111110000000000000000 and . cr
-    ." ot " %10000000000000000000000000 and . cr
+    ." ot " %10000000000000000000000000 and 0= if ." normal temperature!" else ." over temperature!" then cr
  ;m overrides print
 end-class tmc2130
 
