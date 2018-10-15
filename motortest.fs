@@ -108,7 +108,7 @@ mymotorY disable-motor
 3 mymotorX quickreg!
 
 %100 %01110000100000000000 1 1000 0 0 %00010001000000101000000010010011 0 %0111100000101011111111
-3 mymotorX quickreg!
+4 mymotorX quickreg!
 
 mymotorX disable-motor
 1 mymotorx setdirection
