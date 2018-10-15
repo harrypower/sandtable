@@ -104,6 +104,16 @@ mymotorY disable-motor
 mymotorX disable-motor
 1 mymotorx setdirection
 
+%100 %01110001111100000000 1 0 0 0 %00010000000000101000000010010011 0 %0111000000101011111111
+0 mymotory quickreg!
+0 mymotory usequickreg
+
+%100 %01110001111100000000 1 1000 0 0 %00010001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
+1 mymotory quickreg!
+
+mymotory disable-motor
+1 mymotory setdirection
+
 : test ( -- )
   mymotorx enable-motor
   1 mymotorX setdirection
@@ -135,3 +145,33 @@ mymotorX disable-motor
   1000 ms cr
   mymotorX [bind] tmc2130 print
 ;
+
+0 constant xm
+1 constant ym
+
+: varxysteps ( utime usteps uxy -- )
+  case
+    xm of
+      mymotorx enable-motor
+      mymotorX timedsteps
+      mymotorX disable-motor
+    endof
+    ym of
+      mymotory enable-motor
+      mymotory timedsteps
+      mymotory disable-motor
+    endof
+    endcase ;
+
+: xysgt ( utime usteps uxy -- )
+  case
+    xm of
+      mymotorX enable-motor
+      mymotorX timedsteps
+      mymotorX [bind] tmc2130 print
+    endof
+    ym of
+      mymotory enable-motor
+      mymotory timedsteps
+      mymotory [bind] tmc2130 print
+    endof ;
