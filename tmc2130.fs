@@ -209,8 +209,8 @@ object class
       then
       6 allocate throw [to-inst] bufferA
       6 allocate throw [to-inst] bufferB
-      9 5 2 multi-cell-array heap-new [to-inst] quickreg
-      5 0 do 9 0 do 0 i j quickreg [bind] multi-cell-array cell-array! loop loop \ set quickreg's to 0
+      9 10 2 multi-cell-array heap-new [to-inst] quickreg
+      10 0 do 9 0 do 0 i j quickreg [bind] multi-cell-array cell-array! loop loop \ set quickreg's to 0
       0 [to-inst] currentqr
       false
     endtry
@@ -265,16 +265,16 @@ object class
     then
   ;m overrides putreg
   m: ( uGCONF uIHOLD_IRUN uTPOWERDOWN uTPWMTHRS uTCOOLTHRS uTHIGH uCHOPCONF uCOOLCONF uPWMCONF uqrindex tmc2130 -- )
-  \ set values for quickreg at uqrindex ... note there are only 0 to 4 uqrindex settings
+  \ set values for quickreg at uqrindex ... note there are only 0 to 9 uqrindex settings ( 10 total quickreg )
   \ uqrindex is the quickreg that is being set and the other stack items are the values that are put in this quickreg
     { uqrindex }
-    uqrindex 0>= uqrindex 5 < and if
+    uqrindex 0>= uqrindex 10 < and if
       9 0 do 8 i - uqrindex quickreg [bind] multi-cell-array cell-array! loop
     then
   ;m method quickreg!
   m: ( uqrindex tmc2130 -- ) \ the previous values stored in uqrindex quickreg will be transfered to the tmc2130 device via spi interface
     { uqrindex }
-    uqrindex 0>= uqrindex 5 < and if
+    uqrindex 0>= uqrindex 10 < and if
       GCONF      0 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
       IHOLD_IRUN 1 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
       TPOWERDOWN 2 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
