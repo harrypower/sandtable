@@ -108,7 +108,7 @@ mymotorY disable-motor
 %100 %01110000100000000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
 3 mymotorX quickreg!
 
-%100 %01110000100000000000 1 1000 0 0 %00110001000000101000000010010011 0 %0111100000101011111111
+%100 %01110000100000000000 1 1000 0 0 %00110001000000101000000010010011 0                          %0111100000101011111111
 4 mymotorX quickreg!
 
 %100 %01110000010100000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
@@ -196,26 +196,26 @@ mymotory disable-motor
     endof
   endcase ;
 
-: xysgtdata ( uxy -- usg_result )
+: xysgtdata ( utime usteps uxy -- usg_result )
   case
     xm of
       mymotorx enable-motor
-      1000 500 mymotorX timedsteps
+      mymotorX timedsteps
       DRV_STATUS mymotorX getreg throw swap drop
       %1111111111 and
     endof
     ym of
       mymotory enable-motor
-      1000 500 mymotorY timedsteps
+      mymotorY timedsteps
       DRV_STATUS mymotorY getreg throw swap drop
       %1111111111 and
     endof
   endcase ;
 
-: xydata ( uxy -- )
-  1000 0 0 { uxy umin umax uavg }
-  10 0 do uxy xysgtdata dup umin min to umin
+: xydata ( utime usteps uxy -- )
+  1000 0 0 { utime usteps uxy umin umax uavg }
+  10 0 do utime usteps uxy xysgtdata dup umin min to umin
     dup umax max to umax
     uavg + 2 / to uavg
     ." min " umin . ."  max " umax . ."  avg " uavg . cr
-  loop ; 
+  loop ;
