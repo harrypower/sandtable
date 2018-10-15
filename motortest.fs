@@ -174,4 +174,5 @@ mymotory disable-motor
       mymotory enable-motor
       mymotory timedsteps
       mymotory [bind] tmc2130 print
-    endof ;
+    endof
+  endcase ;
