@@ -227,17 +227,18 @@ mymotory disable-motor
 : findhome ( -- )
   2 mymotorX usequickreg
   1 mymotorX setdirection
-  900 1000 varxsteps
-  900 1000 varxsteps
+  mymotorX enable-motor
+  900 1000 timedsteps
+  900 1000 timedsteps
   get-sg_result 0 0 { forward backward uset }
-  900 1000 varxsteps
+  900 1000 timedsteps
   get-sg_result
   forward + 2 / to forward \ just to get one average of forward direction
   0 mymotorX setdirection
-  900 1000 varxsteps
-  900 1000 varxsteps
+  900 1000 timedsteps
+  900 1000 timedsteps
   get-sg_result to backward
-  900 1000 varxsteps
+  900 1000 timedsteps
   get-sg_result
   backward + 2 / to backward \ just to get one average of backward direction
   forward backward + 2 / \ average forward and backward
@@ -247,10 +248,11 @@ mymotory disable-motor
   true =
   if \ if true now find home
     begin
-      900 1000 varxsteps
+      900 1000 timedsteps
       uset 100 + get-sg_result >
     until
   else
     10 throw \ throw because forward and backward do not seem to work so might be at an edge already
   then
+  mymotorX disable-motor
   ;
