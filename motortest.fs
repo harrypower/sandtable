@@ -249,7 +249,7 @@ mymotory disable-motor
   if \ if true now find home
     begin
       900 1000 mymotorX timedsteps
-      uset 100 + get-sg_result >
+      uset 100 dup . ." uset " + get-sg_result dup . ." reading " cr >
     until
   else
     10 throw \ throw because forward and backward do not seem to work so might be at an edge already
