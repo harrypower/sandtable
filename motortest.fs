@@ -278,7 +278,8 @@ mymotory disable-motor
         xm xyget-sg_result to uf
         uf ub - xylimit > \ bad testing results possible
         ub uf - xylimit >
-        or if 0 false then \ return bad test results
+        or if 0 false \ return bad test results
+        else uf ub + 2 / true then
     else \ good results return
       uf ub + 2 / true \ return address with good test results
     then
@@ -301,7 +302,8 @@ mymotory disable-motor
         ym xyget-sg_result to uf
         uf ub - xylimit > \ bad testing results possible
         ub uf - xylimit >
-        or if 0 false then \ return bad test results
+        or if 0 false \ return bad test results
+        else  uf ub + 2 / true then
     else \ good results return
       uf ub + 2 / true \ return address with good test results
     then
