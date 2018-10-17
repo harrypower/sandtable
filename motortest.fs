@@ -258,12 +258,13 @@ mymotory disable-motor
 
 100 constant xylimit
 : xybase ( uxy -- uavg nflag ) \ uxy is motor to test with .. uavg is base average to use to find end with nflag is true for good test false for bad test
+  0 0 { uf ub }
   case
   xm of
     1 mymotorX usequickreg
     1 mymotorX setdirection
     950 900 xm xysteps
-    xm xyget-sg_result 0 { uf ub }
+    xm xyget-sg_result to uf 
     0 mymotorX setdirection
     950 900 xm xysteps
     xm xyget-sg_result to ub
