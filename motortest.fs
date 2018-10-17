@@ -338,9 +338,11 @@ mymotory disable-motor
   else
     false \ test not stable
   then
-  mymotorY disable-motor
-;
+  mymotorY disable-motor ;
+
 : xyhome ( -- nflag )
   xhome
+  if true else mymotorX enable-motor 1 mymotorX setdirection 950 10000 xm xysteps mymotorX disable-motor xhome then
   yhome
-  or ;
+  if true else mymotorY enable-motor 1 mymotorX setdirection 950 10000 xm xysteps mymotory disable-motor yhome then 
+  and ;
