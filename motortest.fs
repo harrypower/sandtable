@@ -314,6 +314,7 @@ mymotory disable-motor
   mymotorX enable-motor
   xm xybase swap xylimit + { ubase }
   if \ now find home
+    0 mymotorX setdirection
     begin
       950 1000 xm xysteps
       xm xyget-sg_result dup . ." reading " ubase dup . ." ubase " cr >
@@ -328,6 +329,7 @@ mymotory disable-motor
   mymotorY enable-motor
   ym xybase swap xylimit + { ubase }
   if \ now find home
+    0 mymotorY setdirection
     begin
       950 1000 ym xysteps
       ym xyget-sg_result dup . ." reading " ubase dup . ." ubase " cr >
