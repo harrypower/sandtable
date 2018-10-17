@@ -317,7 +317,7 @@ mymotory disable-motor
     0 mymotorX setdirection
     begin
       950 1000 xm xysteps
-      xm xyget-sg_result dup . ." reading " ubase dup . ." ubase " cr >
+      xm xyget-sg_result dup . ." x reading " ubase dup . ." x ubase " cr >
     until
     true \ now at start edge
   else
@@ -332,7 +332,7 @@ mymotory disable-motor
     0 mymotorY setdirection
     begin
       950 1000 ym xysteps
-      ym xyget-sg_result dup . ." reading " ubase dup . ." ubase " cr >
+      ym xyget-sg_result dup . ." y reading " ubase dup . ." y ubase " cr >
     until
     true \ now at start edge
   else
@@ -344,5 +344,5 @@ mymotory disable-motor
   xhome
   if true else mymotorX enable-motor 1 mymotorX setdirection 950 10000 xm xysteps mymotorX disable-motor xhome then
   yhome
-  if true else mymotorY enable-motor 1 mymotorX setdirection 950 10000 xm xysteps mymotory disable-motor yhome then 
+  if true else mymotorY enable-motor 1 mymotorX setdirection 950 10000 xm xysteps mymotory disable-motor yhome then
   and ;
