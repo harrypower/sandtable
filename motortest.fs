@@ -263,18 +263,18 @@ mymotory disable-motor
   xm of
     1 mymotorX usequickreg
     1 mymotorX setdirection
-    950 900 xm xysteps
-    xm xyget-sg_result to uf 
+    950 1000 xm xysteps
+    xm xyget-sg_result to uf
     0 mymotorX setdirection
-    950 900 xm xysteps
+    950 1000 xm xysteps
     xm xyget-sg_result to ub
     uf ub - xylimit >  \ forward end ?
     ub uf - xylimit >  \ backward end ?
     or if \ repeat in other order
-        950 900 xm xysteps
+        950 1000 xm xysteps
         xm xyget-sg_result to ub
         1 mymotorx setdirection
-        950 900 xm xysteps
+        950 1000 xm xysteps
         xm xyget-sg_result to uf
         uf ub - xylimit > \ bad testing results possible
         ub uf - xylimit >
@@ -286,18 +286,18 @@ mymotory disable-motor
   ym of
     1 mymotorY usequickreg
     1 mymotorY setdirection
-    950 900 ym xysteps
+    950 1000 ym xysteps
     ym xyget-sg_result to uf
     0 mymotorY setdirection
-    950 900 ym xysteps
+    950 1000 ym xysteps
     ym xyget-sg_result to ub
     uf ub - xylimit >  \ forward end ?
     ub uf - xylimit >  \ backward end ?
     or if \ repeat in other order
-        950 900 ym xysteps
+        950 1000 ym xysteps
         ym xyget-sg_result to ub
         1 mymotory setdirection
-        950 900 ym xysteps
+        950 1000 ym xysteps
         ym xyget-sg_result to uf
         uf ub - xylimit > \ bad testing results possible
         ub uf - xylimit >
@@ -313,7 +313,7 @@ mymotory disable-motor
   xm xybase swap xylimit + { ubase }
   if \ now find home
     begin
-      950 900 xm xysteps
+      950 1000 xm xysteps
       xm xyget-sg_result dup . ." reading " ubase dup . ." ubase " cr >
     until
     true \ now at start edge
@@ -327,14 +327,14 @@ mymotory disable-motor
   ym xybase swap xylimit + { ubase }
   if \ now find home
     begin
-      950 900 ym xysteps
+      950 1000 ym xysteps
       ym xyget-sg_result dup . ." reading " ubase dup . ." ubase " cr >
     until
     true \ now at start edge
   else
     false \ test not stable
   then
-  mymotorX disable-motor
+  mymotorY disable-motor
 ;
 : xyhome ( -- nflag )
   xhome
