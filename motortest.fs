@@ -202,8 +202,14 @@ mymotory disable-motor
     ." min " umin . ."  max " umax . ."  avg " uavg . cr
   loop ;
 
-: get-sg_result ( -- usgr )
+: xyget-sg_result ( uxm -- usgr )
+  case
+  xm of
   DRV_STATUS mymotorX getreg throw swap drop
+  endof
+  ym of
+  DRV_STATUS mymotory getreg throw swap drop
+  endof
   %1111111111 and ;
 
 : findhome ( -- )
@@ -212,16 +218,16 @@ mymotory disable-motor
   mymotorX enable-motor
   900 2000 mymotorX timedsteps
   900 2000 mymotorX timedsteps
-  get-sg_result 0 0 { forward backward uset }
+  xm xyget-sg_result 0 0 { forward backward uset }
   900 2000 mymotorX timedsteps
-  get-sg_result
+  xm xyget-sg_result
   forward + 2 / to forward \ just to get one average of forward direction
   0 mymotorX setdirection
   900 2000 mymotorX timedsteps
   900 2000 mymotorX timedsteps
-  get-sg_result to backward
+  xm xyget-sg_result to backward
   900 2000 mymotorX timedsteps
-  get-sg_result
+  xm xyget-sg_result
   backward + 2 / to backward \ just to get one average of backward direction
   forward backward + 2 / \ average forward and backward
   to uset
@@ -231,7 +237,7 @@ mymotory disable-motor
   if \ if true now find home
     begin
       900 2000 mymotorX timedsteps
-      get-sg_result dup . ." readin " uset 100 + dup . ." uset " cr >
+      xm xyget-sg_result dup . ." reading " uset 100 + dup . ." uset " cr >
     until
   else
     10 throw \ throw because forward and backward do not seem to work so might be at an edge already
@@ -239,14 +245,96 @@ mymotory disable-motor
   mymotorX disable-motor
   ;
 
-: xhome ( -- )
-  1 mymotorX usequickreg
-  1 mymotorX setdirection
-  mymotorX enable-motor
-  
-;
-: yhome ( -- )
-;
-: xyhome ( -- )
+: xysteps ( utime usteps uxy -- )
+  case
+    xm of
+      mymotorX timedsteps
+    endof
+    ym of
+      mymotory timedsteps
+    endof
+    endcase ;
 
+100 constant xylimit
+: xybase ( uxy -- uavg nflag ) \ uxy is motor to test with .. uavg is base average to use to find end with nflag is true for good test false for bad test
+  case
+  xm of
+    1 mymotorX usequickreg
+    1 mymotorX setdirection
+    950 900 xm xysteps
+    xm xyget-sg_result 0 { uf ub }
+    0 mymotorX setdirection
+    950 900 xm xysteps
+    xm xyget-sg_result to ub
+    uf ub - xylimit >  \ forward end ?
+    ub uf - xylimit >  \ backward end ?
+    or if \ repeat in other order
+        950 900 xm xysteps
+        xm xyget-sg_result to ub
+        1 mymotorx setdirection
+        950 900 xm xysteps
+        xm xyget-sg_result to uf
+        uf ub - xylimit > \ bad testing results possible
+        ub uf - xylimit >
+        or if 0 false then \ return bad test results
+    else \ good results return
+      uf ub + 2 / true \ return address with good test results
+    then
+  endof
+  ym of
+    1 mymotorY usequickreg
+    1 mymotorY setdirection
+    950 900 ym xysteps
+    ym xyget-sg_result to uf
+    0 mymotorY setdirection
+    950 900 ym xysteps
+    ym xyget-sg_result to ub
+    uf ub - xylimit >  \ forward end ?
+    ub uf - xylimit >  \ backward end ?
+    or if \ repeat in other order
+        950 900 ym xysteps
+        ym xyget-sg_result to ub
+        1 mymotory setdirection
+        950 900 ym xysteps
+        ym xyget-sg_result to uf
+        uf ub - xylimit > \ bad testing results possible
+        ub uf - xylimit >
+        or if 0 false then \ return bad test results
+    else \ good results return
+      uf ub + 2 / true \ return address with good test results
+    then
+  endof
+  endcase ;
+
+: xhome ( -- nflag )
+  mymotorX enable-motor
+  xm xybase swap xylimit + { ubase }
+  if \ now find home
+    begin
+      950 900 xm xysteps
+      xm xyget-sg_result dup . ." reading " ubase dup . ." ubase " cr >
+    until
+    true \ now at start edge
+  else
+    false \ test not stable
+  then
+  mymotorX disable-motor
 ;
+: yhome ( -- nflag )
+  mymotorY enable-motor
+  ym xybase swap xylimit + { ubase }
+  if \ now find home
+    begin
+      950 900 ym xysteps
+      ym xyget-sg_result dup . ." reading " ubase dup . ." ubase " cr >
+    until
+    true \ now at start edge
+  else
+    false \ test not stable
+  then
+  mymotorX disable-motor
+;
+: xyhome ( -- nflag )
+  xhome
+  yhome
+  or ;
