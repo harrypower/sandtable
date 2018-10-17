@@ -205,11 +205,12 @@ mymotory disable-motor
 : xyget-sg_result ( uxm -- usgr )
   case
   xm of
-  DRV_STATUS mymotorX getreg throw swap drop
+    DRV_STATUS mymotorX getreg throw swap drop
   endof
   ym of
-  DRV_STATUS mymotory getreg throw swap drop
+    DRV_STATUS mymotory getreg throw swap drop
   endof
+  endcase
   %1111111111 and ;
 
 : findhome ( -- )
