@@ -49,3 +49,10 @@
     ```
     systemctl disable wifi-reset.service
     ```
+4. ## Remove some services on BBB
+  ```
+  sudo systemctl disable cloud9.service
+  sudo systemctl disable bonescript.service
+  sudo systemctl disable bonescript.socket
+  sudo systemctl disable bonescript-autorun.service
+  ```
