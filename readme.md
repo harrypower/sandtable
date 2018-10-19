@@ -1,18 +1,19 @@
 # Steps to use UART on Beaglebone black
-1. ## Edit /boot/uEnv.txt
+## 1. Edit /boot/uEnv.txt
   * `sudo nano /boot/uEnv.txt `
   * add `cape_enable=bone_capemgr.enable_partno=BB-UART1,BB-UART2`
     * note this is turning on /dev/ttyo1 and /dev/ttyo2
     * note this now will turn the uart back on at reboot
   * after you reboot you can test uart with `ls -l /dev/ttyo*` and you should get a list of the devices present.
-2. ## Update beaglebone black debian image  
+
+## 2. Update beaglebone black debian image  
     ```
         cd /opt/scripts/tools/
         sudo ./update_kernel.sh
         sudo apt-get update
         sudo reboot
     ```
-3. ## Wifi setup using connmanctl
+## 3. Wifi setup using connmanctl
   * configure connmanctl
     ```
       sudo connmanctl
@@ -49,10 +50,30 @@
     ```
     systemctl disable wifi-reset.service
     ```
-4. ## Remove some services on BBB
+    
+## 4. Remove some services on BBB
   ```
   sudo systemctl disable cloud9.service
   sudo systemctl disable bonescript.service
   sudo systemctl disable bonescript.socket
   sudo systemctl disable bonescript-autorun.service
+  sudo apt-get remove npm
+  sudo apt-get remove node*
+  sudo apt-get autoremove
+  sudo apt-get autoclean
+  ```
+## 5. Reconfigure Apache for port 80
+  * Edit `/etc/apache2/sites-enabled/000-default.conf` as follows:
+  ```
+  <VirtualHost*:80>
+  ```
+    * but only change the `8080` to `80`
+  * Edit `/etc/apache2/ports.conf` as follows:
+  ```
+  Listen 80
+  ```
+    * but only change the `8080` to `80`
+  * Now restart service
+  ```
+    sudo service apache2 restart
   ```
