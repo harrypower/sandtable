@@ -49,7 +49,7 @@ s\" config-pin p9.18 spi\n"     system \ ( D1 )
 s\" config-pin p9.21 spi\n"     system \ ( D0 )
 s\" config-pin p9.22 spi_sclk\n" system \ ( clock )
 \ this is spi0 used for y motor
-." x and y motor spi data pins configured!" cr
+\ ." x and y motor spi data pins configured!" cr
 
 s\" config-pin p8.11 output\n" system
 \ x stepper dir  ( gpio1_13)
@@ -65,6 +65,6 @@ s\" config-pin p8.16 output\n" system
 s\" config-pin p9.23 output\n" system
 \ y stepper enable ( gpio1_17)
 \ *****************************************************************
-." x and y stepper motor dir,step and enable pins configured!" cr
+\ ." x and y stepper motor dir,step and enable pins configured!" cr
 
 bye

@@ -1,6 +1,6 @@
 #! /usr/local/bin/gforth-arm
 
-\ warnings off
+warnings off
 :noname ; is bootmessage
 variable query$
 variable apache$s
