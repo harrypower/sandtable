@@ -50,7 +50,7 @@
     ```
     systemctl disable wifi-reset.service
     ```
-    
+
 ## 4. Remove some services on BBB
   ```
   sudo systemctl disable cloud9.service
@@ -59,6 +59,8 @@
   sudo systemctl disable bonescript-autorun.service
   sudo apt-get remove npm
   sudo apt-get remove node*
+  sudo apt-get remove --auto-remove avahi-daemon
+  sudo apt-get purge --auto-remove avahi-daemon
   sudo apt-get autoremove
   sudo apt-get autoclean
   ```
@@ -77,3 +79,41 @@
   ```
     sudo service apache2 restart
   ```
+
+## 6. Configure Apache cgi stuff
+
+[CHIP Apache setup information](http://www.chip-community.org/index.php/CGI_program_on_CHIP)
+I have summarized the information here from the link with some changes. Note the information is for the CHIP machine but it works for BBB also!  
+
+```
+cd /etc/apache2/mods-enabled
+sudo ln -s ../mods-available/cgi.load
+sudo apachectl -k graceful
+```
+
+At this moment Apache is running and the _*index.html*_ file can be placed in this directory `/var/www/html/`.
+The cgi code should be placed at `/usr/lib/cgi-bin/` and given the correct privileges.
+So basically these two directory's are the places to put stuff to be accessed remotely on the network.
+
+Gforth script can be in a simple file that has or does not have an extension.  The file needs the following in its first line:
+
+```
+#! /usr/local/bin/gforth-arm
+```
+
+This first line simply tells the system where the gforth engine is located in the system that is to be used with the script.  
+Once you make the gforth script and save it you need to change its permissions to be executable as follows:
+
+```
+sudo chmod +x name-of-cgi-code
+```
+
+You can test and access the files served locally by using any of the commands below.
+
+```
+ping localhost
+wget localhost/cgi-bin/name-of-cgi-code
+wget localhost
+```
+
+Each of the above lines will give different information but they should all show the system working!
