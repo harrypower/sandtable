@@ -67,17 +67,19 @@
 ## 5. Reconfigure Apache for port 80
   * Edit `/etc/apache2/sites-enabled/000-default.conf` as follows:
   ```
+  <VirtualHost*:8080>
+  ```
+  change to
+  ```
   <VirtualHost*:80>
   ```
-    * but only change the `8080` to `80`
   * Edit `/etc/apache2/ports.conf` as follows:
   ```
+  Listen 8080
+  ```
+  change to
+  ```
   Listen 80
-  ```
-    * but only change the `8080` to `80`
-  * Now restart service
-  ```
-    sudo service apache2 restart
   ```
 
 ## 6. Configure Apache cgi stuff
@@ -90,12 +92,26 @@ cd /etc/apache2/mods-enabled
 sudo ln -s ../mods-available/cgi.load
 sudo apachectl -k graceful
 ```
+* Edit `/etc/apache2/etc/apache2/sites-enabled/000-default.conf` as follows :
+   * place this after `DocumentRoot` command and before `ErrorLog` command.
+```
+ScriptAlias "/cgi-bin/" "/usr/lib/cgi-bin/"
+AddHandler cgi-script .cgi
+<Directory "/usr/lib/cgi-bin/">
+  Options +ExecCGI
+</Directory>
+```
 
-At this moment Apache is running and the _*index.html*_ file can be placed in this directory `/var/www/html/`.
-The cgi code should be placed at `/usr/lib/cgi-bin/` and given the correct privileges.
+This makes the `/usr/lib/cgi-bin/` directory the place to put cgi code and this code should have an extention of .cgi and the privileges on these codes should be changed to 755 or higher!
+Now the `.html` files and the `index.html` file can be placed in this directory `/var/www/html/`.
 So basically these two directory's are the places to put stuff to be accessed remotely on the network.
 
-Gforth script can be in a simple file that has or does not have an extension.  The file needs the following in its first line:
+* Restart Apache to make settings current!
+```
+sudo service apache2 restart
+```
+
+Gforth script can be in a simple file that has .cgi extension with a privilage of 755.  The file needs the following in its first line:
 
 ```
 #! /usr/local/bin/gforth-arm
