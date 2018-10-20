@@ -43,20 +43,7 @@ true value configured
   then
   configured ;
 
-variable query$
-variable apache$s
-\ variable output$
 0 value fid
-
-: lineending ( -- caddr u )
-  s\" <br>\n\n" ;
-
-: return-message ( -- )
-  s\" Content-type: text/html; charset=utf-8\n\n" type
-  s\" All Ok\n\n" type ;
-
-: get-message@ ( -- )
-  s" QUERY_STRING" getenv query$ $! ;
 
 : running? ( -- nflag ) \ nflag is false if this process is already running any other value if it is not running.
   s" /run/hometest.pid" file-status swap drop ;
@@ -191,7 +178,7 @@ variable apache$s
   running? false <> if
     setrunning
     configure-stuff
-    false = if xyhome drop then
+    false = if xyhome . ." < xyhome message " cr then
   then  ;
 
 : closedown ( -- )
@@ -205,11 +192,8 @@ variable apache$s
   try
     startup
     closedown
-    return-message
-    get-message@
-    query$ $@ type ." < this is the message sent!" lineending type
     false
-  endtry . ." < this is the error " lineending type
+  endtry . ." < this is the error " cr
   restore ;
 
 doall
