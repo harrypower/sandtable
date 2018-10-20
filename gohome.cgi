@@ -8,7 +8,8 @@ warnings off
   s\" hometest.fs starting\n\n" type ;
 
 : rungohome ( -- )
-  s"  /home/debian/sandtable/hometest.fs" system  ;
+
+  s" sudo  /home/debian/sandtable/hometest.fs" system  ;
 
 return-message
 rungohome
