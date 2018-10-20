@@ -5,7 +5,7 @@ warnings off
 
 require /home/debian/sandtable/Gforth-Objects/objects.fs
 require /home/debian/sandtable/Gforth-Objects/stringobj.fs
-require /home/debian/sandtable/BBB_Gforth_gpio/syscalls386.fs
+\ require /home/debian/sandtable/BBB_Gforth_gpio/syscalls386.fs
 require /home/debian/sandtable/tmc2130.fs
 
 string heap-new constant mytemppad$
@@ -61,14 +61,14 @@ variable apache$s
 : running? ( -- nflag ) \ nflag is false if this process is already running any other value if it is not running.
   s" /run/hometest.pid" file-status swap drop ;
 
-: setrunning ( -- )
-   s" /run/hometest.pid" r/w create-file throw to fid
-   false fid = if
-      getpid #to$
-      fid write-file throw
-      fid flush-file throw
-      fid close-file throw
-   then ;
+\ : setrunning ( -- )
+\   s" /run/hometest.pid" r/w create-file throw to fid
+\   false fid = if
+\      getpid #to$
+\      fid write-file throw
+\      fid flush-file throw
+\      fid close-file throw
+\   then ;
 
 0 constant xm
 1 constant ym
@@ -189,7 +189,7 @@ variable apache$s
 
 : startup ( -- )
   running? false <> if
-    setrunning
+    \ setrunning
     configure-stuff
     false = if xyhome drop then
   then  ;
