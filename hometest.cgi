@@ -3,10 +3,10 @@
 warnings off
 :noname ; is bootmessage
 
-require /home/debian/sandtable/Gforth-Objects/objects.fs
-require /home/debian/sandtable/Gforth-Objects/stringobj.fs
-require /home/debian/sandtable/BBB_Gforth_gpio/syscalls386.fs
-require /home/debian/sandtable/tmc2130.fs
+require Gforth-Objects/objects.fs
+require Gforth-Objects/stringobj.fs
+require BBB_Gforth_gpio/syscalls386.fs
+require tmc2130.fs
 
 string heap-new constant mytemppad$
 
@@ -17,7 +17,7 @@ string heap-new constant mytemppad$
 0 value ymotor
 true value configured
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
-  s" /home/debian/sandtable/config-pins.fs" system $? to configured
+  s" config-pins.fs" system $? to configured
   configured 0 = if
     1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
     tmc2130 heap-new to xmotor throw
@@ -203,13 +203,13 @@ variable apache$s
 
 : doall ( -- )
   try
-    \ startup
-    \ closedown
+    startup
+    closedown
     return-message
     get-message@
     query$ $@ type ." < this is the message sent!" lineending type
     false
-  endtry drop
+  endtry . ." < this is the error " lineending type 
   restore ;
 
 doall
