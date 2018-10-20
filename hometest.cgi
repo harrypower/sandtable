@@ -1,6 +1,6 @@
 #! /usr/local/bin/gforth-arm
 
-\ warnings off
+warnings off
 :noname ; is bootmessage
 
 require BBB_Gforth_gpio/syscalls386.fs
@@ -213,4 +213,4 @@ variable output$
   restore ;
 
 doall
-bye 
+bye
