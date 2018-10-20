@@ -3,10 +3,10 @@
 warnings off
 :noname ; is bootmessage
 
-require /home/debian/sandtable/BBB_Gforth_gpio/syscalls386.fs
-require /home/debian/sandtable/tmc2130.fs
 require /home/debian/sandtable/Gforth-Objects/objects.fs
 require /home/debian/sandtable/Gforth-Objects/stringobj.fs
+require /home/debian/sandtable/BBB_Gforth_gpio/syscalls386.fs
+require /home/debian/sandtable/tmc2130.fs
 
 string heap-new constant mytemppad$
 
@@ -45,7 +45,7 @@ true value configured
 
 variable query$
 variable apache$s
-variable output$
+\ variable output$
 0 value fid
 
 : lineending ( -- caddr u )
@@ -203,8 +203,8 @@ variable output$
 
 : doall ( -- )
   try
-    startup
-    closedown
+    \ startup
+    \ closedown
     return-message
     get-message@
     query$ $@ type ." < this is the message sent!" lineending type
