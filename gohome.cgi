@@ -11,10 +11,10 @@ warnings off
   s\" hometest.fs starting\n\n" type ;
 
 : rungohome ( -- )
-  s" sudo ./home/debian/sandtable/hometest.fs" system ;
+  s" ./home/debian/sandtable/hometest.fs" system ;
 
 return-message
 rungohome
-lineending type 
+lineending type
 
 bye
