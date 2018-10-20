@@ -24,10 +24,10 @@
 \ Revisions:
 \ 6/24/2018 started coding
 
-require BBB_Gforth_gpio/syscalls386.fs
-require BBB_Gforth_gpio/BBB_GPIO_lib.fs
-require Gforth-Objects/objects.fs
-require Gforth-Objects/mdca-obj.fs
+require /home/debian/sandtable/BBB_Gforth_gpio/syscalls386.fs
+require /home/debian/sandtable/Gforth-Objects/objects.fs
+require /home/debian/sandtable/BBB_Gforth_gpio/BBB_GPIO_lib.fs
+require /home/debian/sandtable/Gforth-Objects/mdca-obj.fs
 
 0x40046B04        constant SPI_IOC_WR_MAX_SPEED_HZ
 0x40016B03        constant SPI_IOC_WR_BITS_PER_WORD
