@@ -3,10 +3,10 @@
 warnings off
 :noname ; is bootmessage
 
-require BBB_Gforth_gpio/syscalls386.fs
-require tmc2130.fs
-require Gforth-Objects/objects.fs
-require Gforth-Objects/stringobj.fs
+require /home/debian/sandtable/BBB_Gforth_gpio/syscalls386.fs
+require /home/debian/sandtable/tmc2130.fs
+require /home/debian/sandtable/Gforth-Objects/objects.fs
+require /home/debian/sandtable/Gforth-Objects/stringobj.fs
 
 string heap-new constant mytemppad$
 
