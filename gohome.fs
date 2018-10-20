@@ -4,14 +4,7 @@ warnings off
 :noname ; is bootmessage
 
 require Gforth-Objects/objects.fs
-require Gforth-Objects/stringobj.fs
-require BBB_Gforth_gpio/syscalls386.fs
 require tmc2130.fs
-
-string heap-new constant mytemppad$
-
-: #to$ ( n -- c-addr u1 ) \ convert n to string
-    s>d swap over dabs <<# #s rot sign #> #>> mytemppad$ !$ mytemppad$ @$ ;
 
 0 value xmotor
 0 value ymotor
@@ -42,20 +35,6 @@ true value configured
     1 ymotor setdirection
   then
   configured ;
-
-0 value fid
-
-: running? ( -- nflag ) \ nflag is false if this process is already running any other value if it is not running.
-  s" /run/hometest.pid" file-status swap drop ;
-
-: setrunning ( -- )
-   s" /run/hometest.pid" r/w create-file throw to fid
-   false fid = if
-      getpid #to$
-      fid write-file throw
-      fid flush-file throw
-      fid close-file throw
-   then ;
 
 0 constant xm
 1 constant ym
@@ -175,26 +154,16 @@ true value configured
  and ;
 
 : startup ( -- )
-  running? false <> if
-    setrunning
     configure-stuff
-    false = if xyhome drop ( . ." < xyhome message " cr ) then
-  then  ;
+    false = if xyhome drop then ;
 
 : closedown ( -- )
   mytemppad$ [bind] string destruct
   xmotor [bind] tmc2130 destruct
   ymotor [bind] tmc2130 destruct
-  s" /run/hometest.pid" delete-file throw
- ;
+;
 
-: doall ( -- )
-  try
-    startup
-    closedown
-    false
-  endtry drop ( . ." < this is the error " cr ) 
-  restore ;
+startup
+closedown
 
-doall
 bye

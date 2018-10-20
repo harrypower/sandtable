@@ -7,12 +7,8 @@ warnings off
   s\" Content-type: text/html; charset=utf-8\n\n" type
   s\" hometest.fs starting\n\n" type ;
 
-: rungohome ( -- )
-
-  s" sudo  /home/debian/sandtable/hometest.fs" system  ;
+\ send message to server here to start the home procedure 
 
 return-message
-rungohome
-
 
 bye
