@@ -8,10 +8,10 @@ warnings off
   s\" hometest.fs starting\n\n" type ;
 
 : rungohome ( -- )
-  sh /home/debian/sandtable/hometest.fs ;
+  s"  /home/debian/sandtable/hometest.fs" system  ;
 
 return-message
 rungohome
-lineending type
+
 
 bye
