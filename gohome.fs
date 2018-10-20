@@ -3,7 +3,6 @@
 warnings off
 :noname ; is bootmessage
 
-require Gforth-Objects/objects.fs
 require tmc2130.fs
 
 0 value xmotor
@@ -158,7 +157,6 @@ true value configured
     false = if xyhome drop then ;
 
 : closedown ( -- )
-  mytemppad$ [bind] string destruct
   xmotor [bind] tmc2130 destruct
   ymotor [bind] tmc2130 destruct
 ;
