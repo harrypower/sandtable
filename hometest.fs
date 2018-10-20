@@ -178,7 +178,7 @@ true value configured
   running? false <> if
     setrunning
     configure-stuff
-    false = if xyhome . ." < xyhome message " cr then
+    false = if xyhome drop ( . ." < xyhome message " cr ) then
   then  ;
 
 : closedown ( -- )
@@ -193,7 +193,7 @@ true value configured
     startup
     closedown
     false
-  endtry . ." < this is the error " cr
+  endtry drop ( . ." < this is the error " cr ) 
   restore ;
 
 doall
