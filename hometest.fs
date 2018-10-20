@@ -17,7 +17,7 @@ string heap-new constant mytemppad$
 0 value ymotor
 true value configured
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
-  s" config-pins.fs" system $? to configured
+  s" /home/debian/sandtable/config-pins.fs" system $? to configured
   configured 0 = if
     1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
     tmc2130 heap-new to xmotor throw
