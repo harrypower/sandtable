@@ -77,10 +77,10 @@ variable apache$s
 : xyget-sg_result ( uxm -- usgr )
   case
   xm of
-    DRV_STATUS mymotorX getreg throw swap drop
+    DRV_STATUS xmotor getreg throw swap drop
   endof
   ym of
-    DRV_STATUS mymotory getreg throw swap drop
+    DRV_STATUS ymotor getreg throw swap drop
   endof
   endcase
   %1111111111 and ;
@@ -209,7 +209,7 @@ variable apache$s
     get-message@
     query$ $@ type ." < this is the message sent!" lineending type
     false
-  endtry . ." < this is the error " lineending type 
+  endtry . ." < this is the error " lineending type
   restore ;
 
 doall
