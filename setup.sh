@@ -2,8 +2,8 @@
 
 sudo rm /var/www/html/index.html
 sudo rm /usr/lib/cgi-bin/cgi-get-test.cgi
-sudo rm /run/cgitest.tmp
 sudo rm /usr/lib/cgi-bin/gohome.cgi
+sudo rm /run/cgitest.tmp
 
 sudo cp index.html /var/www/html/index.html
 sudo cp cgi-get-test.cgi /usr/lib/cgi-bin/cgi-get-test.cgi
