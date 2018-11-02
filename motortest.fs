@@ -346,3 +346,12 @@ mymotory disable-motor
   yhome
   if true else mymotorY enable-motor 1 mymotorX setdirection 950 10000 xm xysteps mymotory disable-motor yhome then
   and ;
+
+: xycenter
+  0 mymotorX usequickreg
+  0 mymotorY usequickreg
+  1 mymotorX setdirection
+  1 mymotorY setdirection
+  1000 139000 xm varxysteps
+  1000 139000 ym varxysteps
+  ;
