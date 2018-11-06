@@ -12,6 +12,8 @@ variable output$
 
 : return-message ( -- )
   s\" Content-type: text/html; charset=utf-8\n\n" type
+  query$ $@ type
+  apache$s $@ type 
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
@@ -33,6 +35,7 @@ variable output$
 prep-message
 
 : save-message ( -- )
+  s" /run/cgitest.tmp" file-status swap drop false <> if s" touch /run/cgitest.tmp" system then
   s" /run/cgitest.tmp" w/o open-file swap to fid
   false = if
     output$ $@ fid write-file drop
