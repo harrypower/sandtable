@@ -1,0 +1,26 @@
+<html>
+
+<head>
+
+<title>Direct Sandtable Testing /title>
+
+</head>
+
+<body>
+<h1>Sandtable Direct Testing</h1>
+
+<form action="/cgi-bin/directtesting.cgi">
+  Issue a command to SandTable <br>
+  <input type="text" name="Command" value="gohome"><br>
+  <input type="submit" value="Send Command">
+</form>
+
+<form action="/cgi-bin/directtesting.cgi">
+  Move to absolute XY address (0 to 270000)<br>
+  <input type="number" name="x" min="0" max="270000">
+  <input type="number" name="y" min="0" max="270000">
+  <input type="submit" value="goto xy">
+</form>
+</body>
+
+</html>
