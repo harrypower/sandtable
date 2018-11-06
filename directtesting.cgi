@@ -32,7 +32,7 @@ variable output$
   get-apache-stuff
   query$ $@ output$ $! apache$s $@ output$ $+! ;
 
-\ prep-message
+prep-message
 
 : save-message ( -- )
   s" /run/cgitest.tmp" file-status swap drop false <> if s" touch /run/cgitest.tmp" system then
