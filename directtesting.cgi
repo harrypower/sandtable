@@ -12,12 +12,12 @@ variable output$
 0 value outfid
 
 : getmessage ( -- ucaddr u )
-  s" /run/sandtablein" r/o open-file throw to infid
+  s" /run/sandtableout" r/o open-file throw to outfid
   infid slurp-fid
   infid close-file throw ;
 
 : putmessage ( ucaddr u -- )
-  s" /run/sandtableout" w/o open-file throw to outfid
+  s" /run/sandtablein" w/o open-file throw to infid
   outfid write-file throw
   outfid flush-file throw
   outfid close-file ;
@@ -31,7 +31,7 @@ variable output$
   apache$s $@ type
   test$ $@ type lineending type
   test$ $@ putmessage
-  getmessage s" The message recieved is: " type type lineending type 
+  getmessage s" The message recieved is: " type type lineending type
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
