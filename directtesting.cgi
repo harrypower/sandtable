@@ -8,6 +8,19 @@ variable test$
 variable apache$s
 variable output$
 0 value fid
+0 value infid
+0 value outfid
+
+: getmessage ( -- ucaddr u )
+  s" /run/sandtablein" r/o open-file throw to infid
+  infid slurp-fid
+  infid close-file throw ;
+
+: putmessage ( ucaddr u -- )
+  s" /run/sandtableout" w/o open-file throw to outfid
+  outfid write-file throw
+  outfid flush-file throw
+  outfid close-file ;
 
 : lineending ( -- caddr u )
   s\" <br>\n\n" ;
@@ -17,6 +30,8 @@ variable output$
   query$ $@ type
   apache$s $@ type
   test$ $@ type lineending type
+  test$ $@ putmessage
+  getmessage s" The message recieved is: " type type lineending type 
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
