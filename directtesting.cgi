@@ -4,7 +4,6 @@ warnings off
 :noname ; is bootmessage
 
 require script.fs
-require /usr/lib/cgi-bin/syscalls386.fs
 
 variable query$
 variable test$
