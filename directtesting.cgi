@@ -21,7 +21,6 @@ variable output$
   apache$s $@ type
   test$ $@ type lineending type
   s" pidof gforth" sh-get type s" the pids " type lineending type
-  get-pid . s" the get-pid answer " type lineending type
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
