@@ -15,7 +15,8 @@ variable output$
   s\" Content-type: text/html; charset=utf-8\n\n" type
   query$ $@ type
   apache$s $@ type
-  test$ $@ type lineending type 
+  test$ $@ type lineending type
+  s" pidof cgi-get-test.cgi" system lineending
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
