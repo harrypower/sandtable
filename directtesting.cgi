@@ -3,7 +3,7 @@
 warnings off
 :noname ; is bootmessage
 
-c-library syscalls386
+c-library testgetpid
 \c #include <sys/types.h>
 \c #include <sys/stat.h>
 \c #include <fcntl.h>
@@ -27,7 +27,7 @@ variable output$
   query$ $@ type
   apache$s $@ type
   test$ $@ type lineending type
-  getpid . lineending type 
+  getpid . lineending type
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
