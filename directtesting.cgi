@@ -19,7 +19,7 @@ variable output$
   query$ $@ type
   apache$s $@ type
   test$ $@ type lineending type
-  s" pidof gforth" sh-get type s" the pids " type lineending type
+  s" pidof gforth-arm" sh-get type s" the pids " type lineending type
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
