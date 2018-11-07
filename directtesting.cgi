@@ -3,16 +3,6 @@
 warnings off
 :noname ; is bootmessage
 
-c-library testgetpid
-\c #include <sys/types.h>
-\c #include <sys/stat.h>
-\c #include <fcntl.h>
-\c #include <unistd.h>
-\c #include <sys/ioctl.h>
-c-function getpid getpid -- n  ( -- u | get process id )
-end-c-library
-
-
 variable query$
 variable test$
 variable apache$s
