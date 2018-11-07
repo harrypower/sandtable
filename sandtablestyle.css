@@ -7,7 +7,7 @@ div.form-a {
 }
 
 label, input {
-    display: none;
+    display: table-cell;
     margin-bottom: 10px;
 }
 
