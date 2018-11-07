@@ -15,6 +15,5 @@ sudo cp directtesting.cgi /usr/lib/cgi-bin/directtesting.cgi
 sudo touch /run/cgitest.tmp
 
 sudo chmod 755 /usr/lib/cgi-bin/cgi-get-test.cgi
-sudo chmod 755 /usr/lib/cgi-bin/gohome.cgi
 sudo chmod 755 /usr/lib/cgi-bin/directtesting.cgi
 sudo chmod 666 /run/cgitest.tmp
