@@ -12,15 +12,15 @@ variable output$
 0 value outfid
 
 : getmessage ( -- ucaddr u )
-  s" /run/sandtableout" r/o open-file throw to outfid
-  infid slurp-fid
+  s" /run/sandtableout" r/o open-file throw to infid
+  pad pad 80 infid read-file throw
   infid close-file throw ;
 
 : putmessage ( ucaddr u -- )
-  s" /run/sandtablein" w/o open-file throw to infid
+  s" /run/sandtablein" w/o open-file throw to outfid
   outfid write-file throw
   outfid flush-file throw
-  outfid close-file ;
+  outfid close-file throw ;
 
 : lineending ( -- caddr u )
   s\" <br>\n\n" ;

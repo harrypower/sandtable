@@ -28,9 +28,9 @@
 0 value logfid
 variable buffer$
 
-: dto$ ( ud -- caddr u )  \ convert double to a string
+: udto$ ( ud -- caddr u )  \ convert double to a string
     swap over dabs <<# #s rot #> #>> buffer$ $! buffer$ $@ ;
-: dsignto$ ( d -- caddr u )  \ convert double signed to a string
+: dto$ ( d -- caddr u )  \ convert double signed to a string
     swap over dabs <<# #s rot sign #> #>> buffer$ $! buffer$ $@ ;
 
 : openlog ( -- )
@@ -46,7 +46,7 @@ variable buffer$
   openlog
   logfid file-size throw
   logfid reposition-file throw
-  utime dto$ logfid write-line throw
+  utime udto$ logfid write-line throw
   logfid write-line throw
   logfid flush-file throw
   logfid close-file throw
@@ -58,14 +58,14 @@ variable buffer$
 
 : getmessage ( -- ucaddr u )
   s" /run/sandtablein" r/o open-file throw to infid
-  infid slurp-fid
+  pad pad 80 infid read-file throw
   infid close-file throw ;
 
 : putmessage ( ucaddr u -- )
   s" /run/sandtableout" w/o open-file throw to outfid
   outfid write-file throw
   outfid flush-file throw
-  outfid close-file ;
+  outfid close-file throw ;
 
 : mainloop ( -- )
   begin
@@ -75,13 +75,13 @@ variable buffer$
 
 : repeatmain ( -- )
   startfifos
-  begin
+\  begin
     try
       mainloop
       false
-    restore dsignto$ addtolog
+    restore udto$ addtolog
     endtry
-  again
+\  again
 ;
 
 repeatmain
