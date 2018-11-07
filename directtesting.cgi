@@ -3,6 +3,16 @@
 warnings off
 :noname ; is bootmessage
 
+c-library syscalls386
+\c #include <sys/types.h>
+\c #include <sys/stat.h>
+\c #include <fcntl.h>
+\c #include <unistd.h>
+\c #include <sys/ioctl.h>
+c-function getpid getpid -- n  ( -- u | get process id )
+end-c-library
+
+
 variable query$
 variable test$
 variable apache$s
@@ -17,6 +27,7 @@ variable output$
   query$ $@ type
   apache$s $@ type
   test$ $@ type lineending type
+  getpid . lineending type 
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
