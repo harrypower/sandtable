@@ -3,8 +3,6 @@
 warnings off
 :noname ; is bootmessage
 
-require script.fs
-
 variable query$
 variable test$
 variable apache$s
@@ -19,7 +17,6 @@ variable output$
   query$ $@ type
   apache$s $@ type
   test$ $@ type lineending type
-  s" pidof gforth-arm" sh-get type s" the pids " type lineending type
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
