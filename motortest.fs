@@ -1,7 +1,7 @@
 \ #! /usr/local/bin/gforth-arm
 \ motortest.fs
 
-\    Copyright (C) 2018  Philip King. Smith
+\    Copyright (C) 2018  Philip King Smith
 
 \    This program is free software: you can redistribute it and/or modify
 \    it under the terms of the GNU General Public License as published by
@@ -19,14 +19,12 @@
 \ working on getting motors configured and working
 
 \ Requires:
-\ config-pins.fs
 \ tmc2130.fs
 \ objects.fs
 
 \ Revisions:
 \ 8/30/2018 started coding
 
-\ require config-pins.fs
 \ this is for spi use on tmc2130 devices
 s\" config-pin p9.28 spi_cs\n"  system \ ( cs )
 s\" config-pin p9.29 spi\n"     system \ ( D0 )

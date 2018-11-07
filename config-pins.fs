@@ -1,7 +1,7 @@
 #! /usr/local/bin/gforth-arm
 \ config-uart.fs
 
-\    Copyright (C) 2018  Philip King. Smith
+\    Copyright (C) 2018  Philip King Smith
 
 \    This program is free software: you can redistribute it and/or modify
 \    it under the terms of the GNU General Public License as published by
