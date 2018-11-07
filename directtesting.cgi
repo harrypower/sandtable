@@ -2,6 +2,9 @@
 
 warnings off
 :noname ; is bootmessage
+
+require script.fs
+
 variable query$
 variable test$
 variable apache$s
@@ -16,7 +19,7 @@ variable output$
   query$ $@ type
   apache$s $@ type
   test$ $@ type lineending type
-  s" pidof cgi-get-test.cgi" system lineending
+  s" pidof cgi-get-test.cgi" sh-get type lineending
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )

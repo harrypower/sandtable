@@ -3,8 +3,6 @@
 warnings off
 :noname ; is bootmessage
 
-require script.fs
-
 variable query$
 variable apache$s
 variable output$
