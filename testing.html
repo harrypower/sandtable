@@ -1,31 +1,41 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<title>Direct Sandtable Testing </title>
-
+<title>Sandtable Testing </title>
+<link rel="stylesheet" href="sandtablestyle.css">
 </head>
-
 <body>
-<h1>Sandtable Direct Testing</h1>
+<h1>Sandtable Testing</h1>
 
-<form action="/cgi-bin/directtesting.cgi">
+<form action="/cgi-bin/directtesting.cgi" method="get" class="forma">
   Issue a command to SandTable <br>
-  <input type="text" name="command" value="gohome" required><br>
-  <input type="submit" value="Submit Command">
+  <div class="form-a">
+    <label for="name">Command: </lable>
+    <input type="text" name="command" value="gohome" required>
+  </div>
+  <div class="form-a">
+    <input type="submit" value="Submit Command">
+  </div>
 </form>
-<br>
+
+
 <form action="/cgi-bin/directtesting.cgi">
   Move to absolute XY address (0 to 270000)<br>
-  command
-  <input type="text" name="command" value="gotoxy" readonly>
-  absolute X
-  <input type="number" name="x" min="0" max="270000" required><br>
-  absolule Y
-  <input type="number" name="y" min="0" max="270000" required=><br>
-  <input type="submit" value="Submit Command">
+  <div class="form-a">
+    <lable for="name">Command: </lable>
+    <input type="text" name="command" value="gotoxy" readonly display: none >
+  </div>
+  <div class="form-a">
+    <lable for="name">absolute X: </lable>
+    <input type="number" name="x" min="0" max="270000" required>
+  </div>
+  <div class="form-a">absolule Y: </lable>
+    <input type="number" name="y" min="0" max="270000" required=><br>
+  </div>
+  <div class="form-a">
+    <input type="submit" value="Submit Command">
+  </div>
 </form>
-</body>
 
+</body>
 </html>

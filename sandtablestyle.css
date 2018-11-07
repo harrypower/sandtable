@@ -1,0 +1,16 @@
+form.form-a {
+    display: table;
+}
+
+div.form-a {
+    display: table-row;
+}
+
+label, input {
+    display: table-cell;
+    margin-bottom: 10px;
+}
+
+label {
+    padding-right: 10px;
+}
