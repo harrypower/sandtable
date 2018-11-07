@@ -75,13 +75,13 @@ variable buffer$
 
 : repeatmain ( -- )
   startfifos
-\  begin
+  begin
     try
       mainloop
       false
     restore dsignto$ addtolog
     endtry
-\  again
+  again
 ;
 
 repeatmain
