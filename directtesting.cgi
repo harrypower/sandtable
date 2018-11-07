@@ -17,7 +17,6 @@ variable output$
   query$ $@ type
   apache$s $@ type
   test$ $@ type lineending type
-  getpid . lineending type
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
