@@ -78,8 +78,8 @@ true value yposition
 
 \ ************************ These following words are for normal speed movement only and as such are silent
 : movetox { ux -- nflag } \ move to x position on table nflag is true if the move is executed and false if the move was not possible for some reason
-  configured? false = homedone? true = xposition true <> and  if \ only do steps if all configured and home is know
-    xm-max ux <= xm-min ux >= if
+  configured? false = homedone? true = xposition true <> and and if \ only do steps if all configured and home is know
+    xm-max ux <= xm-min ux >= and if
       xmotor enable-motor
       0 xmotor usequickreg
       xposition ux > if
@@ -98,8 +98,8 @@ true value yposition
   then ;
 
 : movetoy { uy -- nflag } \ move to y position on table nflag is true if the move is executed and false if the move was not possible for some reason
-  configured? false = homedone? true = yposition true <> and  if \ only do steps if all configured and home is know
-    ym-max uy <= ym-min uy >= if
+  configured? false = homedone? true = yposition true <> and and if \ only do steps if all configured and home is know
+    ym-max uy <= ym-min uy >= and if
       ymotor enable-motor
       0 ymotor usequickreg
       yposition uy > if
