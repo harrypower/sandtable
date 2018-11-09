@@ -1,4 +1,4 @@
-\ gohomeprocess.fs
+\ sandmotorapi.fs
 
 \    Copyright (C) 2018  Philip King Smith
 
@@ -15,7 +15,7 @@
 \    You should have received a copy of the GNU General Public License
 \    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-\ configures x and y motors and can control motors 
+\ configures x and y motors and can control motors
 
 \ Requires:
 \ config-pins.fs
@@ -28,17 +28,30 @@
 \ Revisions:
 \ 11/09/2018 started coding
 
-warnings off
-:noname ; is bootmessage
+\ warnings off
+\ :noname ; is bootmessage
 
 require tmc2130.fs
 
 0 value xmotor
 0 value ymotor
-true value configured
+true value configured?  \ true means not configured false means configured
+false value homedone?   \ false means table has not been homed true means table was homed succesfully
+0 constant xm
+1 constant ym
+100 constant xylimit
+3000 constant stopbuffer
+0 constant xm-min
+0 constant ym-min
+270000 constant xm-max
+270000 constant ym-max
+true value xposition
+true value yposition
+1000 constant silentspeed
+
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
-  s" /home/debian/sandtable/config-pins.fs" system $? to configured
-  configured 0 = if
+  s" /home/debian/sandtable/config-pins.fs" system $? to configured?
+  configured? 0 = if
     1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
     tmc2130 heap-new to xmotor throw
     xmotor disable-motor
@@ -61,11 +74,44 @@ true value configured
     1 ymotor usequickreg
     1 ymotor setdirection
   then
-  configured ;
+  configured? ;
 
-0 constant xm
-1 constant ym
-100 constant xylimit
+\ ************************ These following words are for normal speed movement only and as such are silent
+: movetox { ux -- nflag } \ move to x position on table nflag is true if the move is executed and false if the move was not possible for some reason
+  configured? false = homedone? true = xposition true <> and  if \ only do steps if all configured and home is know
+    xm-max ux <= xm-min ux >= if
+      0 xmotor usequickreg
+      xposition ux > if
+        1 xmotor setdirection
+        silentspeed ux xposition - xmotor timedsteps
+      else
+        0 xmotor setdirection
+        silentspeed xposition ux - xmotor timedsteps
+      then
+      ux to xposition
+    then
+    true
+  else
+    false
+  then ;
+
+: movetoy { uy -- nflag } \ move to y position on table nflag is true if the move is executed and false if the move was not possible for some reason
+  configured? false = homedone? true = yposition true <> and  if \ only do steps if all configured and home is know
+    ym-max uy <= ym-min uy >= if
+      0 ymotor usequickreg
+      yposition uy > if
+        1 ymotor setdirection
+        silentspeed uy yposition - ymotor timedsteps
+      else
+        0 ymotor setdirection
+        silentspeed yposition uy - ymotor timedsteps
+      then
+      uy to yposition
+    then
+    true
+  else
+    false
+  then ;
 
 : xyget-sg_result ( uxm -- usgr )
   case
@@ -78,7 +124,8 @@ true value configured
   endcase
   %1111111111 and ;
 
-: xysteps ( utime usteps uxy -- )
+\ ************************   these following words are for home position use only not for normal movement use above words for that
+: xysteps ( utime usteps uxy -- )  \ this is to be used by home position code below use movetox or movetoy for normal motion
  case
    xm of
      xmotor timedsteps
@@ -152,8 +199,11 @@ true value configured
      xm xyget-sg_result ubase >
    until
    true \ now at start edge
+   1 xmotor setdirection 950 stopbuffer xm xysteps \ moves a small distance from home stop position
+   0 to xposition
  else
    false \ test not stable
+   true to xposition \ this means xposition is not know because of home failure
  then
  xmotor disable-motor ;
 
@@ -168,23 +218,27 @@ true value configured
      ym xyget-sg_result ubase >
    until
    true \ now at start edge
+   1 ymotor setdirection 950 stopbuffer ym xysteps \ moves a small distance from home stop position
+   0 to yposition
  else
    false \ test not stable
+   true to yposition \ this means yposition is not know because of home failure
  then
  ymotor disable-motor ;
 
-: xyhome ( -- nflag )
+: xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
  xhome
  if true else xmotor enable-motor 1 xmotor setdirection 950 10000 xm xysteps xmotor disable-motor xhome then
  yhome
- if true else ymotor enable-motor 1 xmotor setdirection 950 10000 xm xysteps ymotor disable-motor yhome then
- and ;
+ if true else ymotor enable-motor 1 ymotor setdirection 950 10000 ym xysteps ymotor disable-motor yhome then
+ and dup to homedone? ;
 
-: dogohome ( -- nflag ) \ if nflag is false x and y motors are configured sent home if nflag is true something failed here
-    configure-stuff
-    false = if xyhome else true then ;
+: dogohome ( -- nflag ) \ if nflag is true x and y motors are configured sent home if nflag is false something failed here
+    configured? false = if xyhome else false then ;
+\ ************************
 
 : closedown ( -- )
+  xmotor disable-motor
+  ymotor disable-motor
   xmotor [bind] tmc2130 destruct
-  ymotor [bind] tmc2130 destruct
-;
+  ymotor [bind] tmc2130 destruct ;

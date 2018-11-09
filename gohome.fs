@@ -149,7 +149,7 @@ true value configured
  xhome
  if true else xmotor enable-motor 1 xmotor setdirection 950 10000 xm xysteps xmotor disable-motor xhome then
  yhome
- if true else ymotor enable-motor 1 xmotor setdirection 950 10000 xm xysteps ymotor disable-motor yhome then
+ if true else ymotor enable-motor 1 ymotor setdirection 950 10000 ym xysteps ymotor disable-motor yhome then
  and ;
 
 : startup ( -- )
