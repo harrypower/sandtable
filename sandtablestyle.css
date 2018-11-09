@@ -24,3 +24,8 @@ input.form-b {
   background-color: red;
   padding: 20px ;
 }
+
+div {
+  padding-top: 10px ;
+  padding-bottom: 10px ;
+}
