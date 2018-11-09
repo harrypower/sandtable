@@ -19,7 +19,7 @@ label {
     padding-right: 10px;
 }
 
-div.form-b {
+input.form-b {
   border: 1px solid blue;
   background-color: red;
   padding: 20px ;
