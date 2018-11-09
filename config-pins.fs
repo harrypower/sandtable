@@ -1,5 +1,5 @@
 #! /usr/local/bin/gforth-arm
-\ config-uart.fs
+\ config-pins.fs
 
 \    Copyright (C) 2018  Philip King Smith
 
@@ -16,7 +16,7 @@
 \    You should have received a copy of the GNU General Public License
 \    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 \
-\    beaglebone black uart pin configuration via cli
+\    beaglebone black uart pin configuration via cli for tmc2130.fs driver communication and motor use 
 
 warnings off
 :noname ; is bootmessage

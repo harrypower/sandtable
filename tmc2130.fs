@@ -20,6 +20,7 @@
 \	syscalls386.fs
 \ BBB_GPIO_lib.fs
 \ objects.fs
+\ mdca-obj.fs
 
 \ Revisions:
 \ 6/24/2018 started coding
