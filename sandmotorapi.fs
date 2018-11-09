@@ -80,6 +80,7 @@ true value yposition
 : movetox { ux -- nflag } \ move to x position on table nflag is true if the move is executed and false if the move was not possible for some reason
   configured? false = homedone? true = xposition true <> and  if \ only do steps if all configured and home is know
     xm-max ux <= xm-min ux >= if
+      xmotor enable-motor
       0 xmotor usequickreg
       xposition ux > if
         1 xmotor setdirection
@@ -89,6 +90,7 @@ true value yposition
         silentspeed xposition ux - xmotor timedsteps
       then
       ux to xposition
+      xmotor disable-motor
     then
     true
   else
@@ -98,6 +100,7 @@ true value yposition
 : movetoy { uy -- nflag } \ move to y position on table nflag is true if the move is executed and false if the move was not possible for some reason
   configured? false = homedone? true = yposition true <> and  if \ only do steps if all configured and home is know
     ym-max uy <= ym-min uy >= if
+      ymotor enable-motor
       0 ymotor usequickreg
       yposition uy > if
         1 ymotor setdirection
@@ -107,6 +110,7 @@ true value yposition
         silentspeed yposition uy - ymotor timedsteps
       then
       uy to yposition
+      ymotor disable-motor
     then
     true
   else
