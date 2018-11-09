@@ -83,10 +83,10 @@ true value yposition
       xmotor enable-motor
       0 xmotor usequickreg
       xposition ux > if
-        1 xmotor setdirection
+        0 xmotor setdirection
         silentspeed xposition ux - xmotor timedsteps
       else
-        0 xmotor setdirection
+        1 xmotor setdirection
         silentspeed ux xposition - xmotor timedsteps
       then
       ux to xposition
@@ -104,10 +104,10 @@ true value yposition
       ymotor enable-motor
       0 ymotor usequickreg
       yposition uy > if
-        1 ymotor setdirection
+        0 ymotor setdirection
         silentspeed yposition uy - ymotor timedsteps
       else
-        0 ymotor setdirection
+        1 ymotor setdirection
         silentspeed uy yposition - ymotor timedsteps
       then
       uy to yposition
