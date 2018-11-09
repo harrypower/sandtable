@@ -199,7 +199,9 @@ true value yposition
      xm xyget-sg_result ubase >
    until
    true \ now at start edge
-   1 xmotor setdirection 950 stopbuffer xm xysteps \ moves a small distance from home stop position
+   0 xmotor usequickreg
+   1 xmotor setdirection
+   silentspeed stopbuffer xm xysteps \ moves a small distance from home stop position
    0 to xposition
  else
    false \ test not stable
@@ -218,7 +220,9 @@ true value yposition
      ym xyget-sg_result ubase >
    until
    true \ now at start edge
-   1 ymotor setdirection 950 stopbuffer ym xysteps \ moves a small distance from home stop position
+   0 ymotor usequickreg
+   1 ymotor setdirection
+   silentspeed stopbuffer ym xysteps \ moves a small distance from home stop position
    0 to yposition
  else
    false \ test not stable
