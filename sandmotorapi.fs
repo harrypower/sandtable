@@ -28,9 +28,6 @@
 \ Revisions:
 \ 11/09/2018 started coding
 
-\ warnings off
-\ :noname ; is bootmessage
-
 require tmc2130.fs
 
 0 value xmotor
@@ -40,14 +37,14 @@ false value homedone?   \ false means table has not been homed true means table 
 0 constant xm
 1 constant ym
 100 constant xylimit
-3000 constant stopbuffer
+2000 constant stopbuffer
 0 constant xm-min
 0 constant ym-min
-270000 constant xm-max
-270000 constant ym-max
+275000 constant xm-max
+275000 constant ym-max
 true value xposition
 true value yposition
-1000 constant silentspeed
+900 constant silentspeed
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
