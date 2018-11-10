@@ -36,15 +36,16 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-100 constant xylimit
+100 value xylimit \ used to find home
 1500 constant stopbuffer
 0 constant xm-min
 0 constant ym-min
 277000 constant xm-max
 277000 constant ym-max
-true value xposition
-true value yposition
-1600 constant silentspeed
+true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
+true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
+1600 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
+\ 50 value xystepamount \ when doing x and y movement together they are broken into steps of this size
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -122,6 +123,38 @@ true value yposition
     then
   else
     false
+  then ;
+
+: movetoxy ( ux uy -- nflag ) \ move to the x and y location at the same time ... nflag is true if the move is executed and false if the move was not possible
+  0 0 0 0 0 0 { ux uy uxf uyf uxr uyr uxs uys }
+  configured? false = homedone? true = yposition true <> and and
+  if \ only do steps if all configured and home is know
+    ym-max uy >= ym-min uy <= and xm-max ux >= xm-min ux <= and and
+    if
+      ymotor enable-motor xmotor enable-motor
+      0 ymotor usequickreg 0 xmotor usequickreg
+      xposition ux > if 0 else 1 then xmotor setdirection
+      yposition uy > if 0 else 1 then ymotor setdirection
+      xposition ux - abs to uxf
+      yposition uy - abs to uyf
+      uxf uyf >
+      if
+        uxf uyf /mod to uxs to uxr 1 to uys
+        uyf 0 ?do silentspeed uys ymotor timedsteps silentspeed uxs xmotor timedsteps loop
+        silentspeed uxr xmotor timedsteps \ now remander
+      else
+        uyf uxf /mod to uys to uyr 1 to uxs
+        uxf 0 ?do silentspeed uxs xmotor timedsteps silentspeed uys ymotor timedsteps loop
+        silentspeed uyr ymotor timedsteps \ now remander
+      then
+      
+      ux to xposition
+      uy to yposition
+      ymotor disable-motor xmotor disable-motor
+      true \ move done
+    else false \ not in bounds
+    then
+  else false \ not configured or home yet
   then ;
 
 : xyget-sg_result ( uxm -- usgr )
