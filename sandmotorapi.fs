@@ -44,7 +44,7 @@ false value homedone?   \ false means table has not been homed true means table 
 277000 constant ym-max
 true value xposition
 true value yposition
-900 constant silentspeed
+1600 constant silentspeed
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
