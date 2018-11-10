@@ -9,6 +9,6 @@
   ux movetox . uy movetoy .
   usize ux + movetox .
   usize uy + movetoy .
-  ux usize - movetox .
-  uy usize - movetoy . ;
-  
+  ux movetox .
+  uy movetoy .
+  ux movetox . ;
