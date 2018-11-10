@@ -125,13 +125,13 @@ object class
   inst-value currentqr
 
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
-    bbbiosetup false = if bbbiooutput bbbiocleanup else true then ;m method gpio-output
+    bbbiosetup false = if bbbiooutput bbbiocleanup else bbbiocleanup drop true then ;m method gpio-output
 
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
-    bbbiosetup false = if bbbioset bbbiocleanup else true then ;m method gpio-high
+    bbbiosetup false = if bbbioset bbbiocleanup else bbbiocleanup drop true then ;m method gpio-high
 
   m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
-    bbbiosetup false = if bbbioclear bbbiocleanup else true then ;m method gpio-low
+    bbbiosetup false = if bbbioclear bbbiocleanup else bbbiocleanup drop true then ;m method gpio-low
   m: ( uaddr tmc2130 -- ndata ) \ takes string of 4 bytes and puts into 32 bit ndata
   \ uaddr is the buffer location for the string
   \ the string is always 4 bytes long
