@@ -27,6 +27,7 @@
 0 value outfid
 0 value logfid
 variable buffer$
+variable message$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     swap over dabs <<# #s rot #> #>> buffer$ $! buffer$ $@ ;
