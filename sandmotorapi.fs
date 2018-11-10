@@ -37,11 +37,11 @@ false value homedone?   \ false means table has not been homed true means table 
 0 constant xm
 1 constant ym
 100 constant xylimit
-2000 constant stopbuffer
+1500 constant stopbuffer
 0 constant xm-min
 0 constant ym-min
-275000 constant xm-max
-275000 constant ym-max
+277000 constant xm-max
+277000 constant ym-max
 true value xposition
 true value yposition
 900 constant silentspeed
@@ -75,11 +75,14 @@ true value yposition
 
 \ ************************ These following words are for normal speed movement only and as such are silent
 : movetox { ux -- nflag } \ move to x position on table nflag is true if the move is executed and false if the move was not possible for some reason
-  configured? false = homedone? true = xposition true <> and and if \ only do steps if all configured and home is know
-    xm-max ux >= xm-min ux <= and if
+  configured? false = homedone? true = xposition true <> and and
+  if \ only do steps if all configured and home is know
+    xm-max ux >= xm-min ux <= and
+    if
       xmotor enable-motor
       0 xmotor usequickreg
-      xposition ux > if
+      xposition ux >
+      if
         0 xmotor setdirection
         silentspeed xposition ux - xmotor timedsteps
       else
@@ -89,18 +92,22 @@ true value yposition
       ux to xposition
       xmotor disable-motor
       true
+    else
+      false
     then
-    false
   else
     false
   then ;
 
 : movetoy { uy -- nflag } \ move to y position on table nflag is true if the move is executed and false if the move was not possible for some reason
-  configured? false = homedone? true = yposition true <> and and if \ only do steps if all configured and home is know
-    ym-max uy >= ym-min uy <= and if
+  configured? false = homedone? true = yposition true <> and and
+  if \ only do steps if all configured and home is know
+    ym-max uy >= ym-min uy <= and
+    if
       ymotor enable-motor
       0 ymotor usequickreg
-      yposition uy > if
+      yposition uy >
+      if
         0 ymotor setdirection
         silentspeed yposition uy - ymotor timedsteps
       else
@@ -110,8 +117,9 @@ true value yposition
       uy to yposition
       ymotor disable-motor
       true
+    else
+      false
     then
-    false
   else
     false
   then ;
