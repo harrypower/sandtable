@@ -138,11 +138,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
       yposition uy - abs to uyf
       uxf uyf >
       if
-        uxf uyf 1 + /mod to uxs to uxr 1 to uys
+        uxf uyf /mod to uxs to uxr 1 to uys  
         uyf 0 ?do silentspeed uys ymotor timedsteps silentspeed uxs xmotor timedsteps loop
         silentspeed uxr xmotor timedsteps \ now remander
       else
-        uyf uxf 1 + /mod to uys to uyr 1 to uxs
+        uyf uxf /mod to uys to uyr 1 to uxs
         uxf 0 ?do silentspeed uxs xmotor timedsteps silentspeed uys ymotor timedsteps loop
         silentspeed uyr ymotor timedsteps \ now remander
       then
