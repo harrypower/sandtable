@@ -125,7 +125,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 : movetoxy ( ux uy -- nflag ) \ move to the x and y location at the same time ... nflag is true if the move is executed and false if the move was not possible
-  0 0 0 0 0 0 { ux uy uxf uyf uxr uyr uxs uys }
+  0 0 0e 0e 0e { ux uy uxspread uyspread F: rfraction F: rstep F: rsums }
   configured? false = homedone? true = yposition true <> and and
   if \ only do steps if all configured and home is know
     ym-max uy >= ym-min uy <= and xm-max ux >= xm-min ux <= and and
@@ -134,21 +134,27 @@ true value yposition  \ is the real location of y motor .. note if value is true
       0 ymotor usequickreg 0 xmotor usequickreg
       xposition ux > if 0 else 1 then xmotor setdirection
       yposition uy > if 0 else 1 then ymotor setdirection
-      xposition ux - abs to uxf
-      yposition uy - abs to uyf
-      uxf uyf >
+      xposition ux - abs to uxspread
+      yposition uy - abs to uyspread
+      \ uyspread s>f uxspread s>f f/ to rxyco
+      uxspread uyspread >
       if
-        uxf uyf /mod to uxs to uxr 1 to uys  
-        uyf 0 ?do silentspeed uys ymotor timedsteps silentspeed uxs xmotor timedsteps loop
-        silentspeed uxr xmotor timedsteps \ now remander
+        uxspread s>f uyspread s>f f/ to rstep
+        rstep rstep f>s s>f f- to rfraction
+        0e to rsums
+        uyspread 0 ?do silentspeed rstep f>s xmotor timedsteps silentspeed 1 ymotor timedsteps
+            rstep f>s xposition + to xposition 1 yposition + to yposition
+            rfraction rsums f+ to rsums rsums f>s 1 = if rsums 1e f- to rsums silentspeed 1 xmotor timedsteps 1 xposition + to xposition then
+          loop
       else
-        uyf uxf /mod to uys to uyr 1 to uxs
-        uxf 0 ?do silentspeed uxs xmotor timedsteps silentspeed uys ymotor timedsteps loop
-        silentspeed uyr ymotor timedsteps \ now remander
+        uyspread s>f uxspread s>f f/ to rstep
+        rstep rstep f>s s>f f- to rfraction
+        0e to rsums
+        uxspread 0 ?do silentspeed rstep f>s ymotor timedsteps silentspeed 1 xmotor timedsteps
+            rstep f>s yposition + to yposition 1 xposition + to xposition
+            rfraction rsums f+ to rsums rsums f>s 1 = if rsums 1e f- to rsums silentspeed 1 ymotor timedsteps 1 yposition + to yposition then
+          loop
       then
-
-      ux to xposition
-      uy to yposition
       ymotor disable-motor xmotor disable-motor
       true \ move done
     else false \ not in bounds
