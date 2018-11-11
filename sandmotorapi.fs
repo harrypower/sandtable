@@ -45,7 +45,6 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1600 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-\ 50 value xystepamount \ when doing x and y movement together they are broken into steps of this size
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -139,15 +138,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
       yposition uy - abs to uyf
       uxf uyf >
       if
-        uxf uyf /mod to uxs to uxr 1 to uys
+        uxf uyf 1 + /mod to uxs to uxr 1 to uys
         uyf 0 ?do silentspeed uys ymotor timedsteps silentspeed uxs xmotor timedsteps loop
         silentspeed uxr xmotor timedsteps \ now remander
       else
-        uyf uxf /mod to uys to uyr 1 to uxs
+        uyf uxf 1 + /mod to uys to uyr 1 to uxs
         uxf 0 ?do silentspeed uxs xmotor timedsteps silentspeed uys ymotor timedsteps loop
         silentspeed uyr ymotor timedsteps \ now remander
       then
-      
+
       ux to xposition
       uy to yposition
       ymotor disable-motor xmotor disable-motor
@@ -286,6 +285,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 \ ************************
 
 : closedown ( -- )
+  true to configured?  \ true means not configured false means configured
+  false to homedone?   \ false means table has not been homed true means table was homed succesfully
+  true to xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
+  true to yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
   xmotor disable-motor
   ymotor disable-motor
   xmotor [bind] tmc2130 destruct
