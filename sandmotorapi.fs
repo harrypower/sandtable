@@ -45,6 +45,8 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1600 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
+1000 value calspeed
+2000 value calsteps
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -187,18 +189,18 @@ true value yposition  \ is the real location of y motor .. note if value is true
  xm of
    1 xmotor usequickreg
    1 xmotor setdirection
-   950 1000 xm xysteps
+   calspeed calsteps xm xysteps
    xm xyget-sg_result to uf
    0 xmotor setdirection
-   950 1000 xm xysteps
+   calspeed calsteps xm xysteps
    xm xyget-sg_result to ub
    uf ub - xylimit >  \ forward end ?
    ub uf - xylimit >  \ backward end ?
    or if \ repeat in other order
-       950 1000 xm xysteps
+       calspeed calsteps xm xysteps
        xm xyget-sg_result to ub
        1 xmotor setdirection
-       950 1000 xm xysteps
+       calspeed calsteps xm xysteps
        xm xyget-sg_result to uf
        uf ub - xylimit > \ bad testing results possible
        ub uf - xylimit >
@@ -211,18 +213,18 @@ true value yposition  \ is the real location of y motor .. note if value is true
  ym of
    1 ymotor usequickreg
    1 ymotor setdirection
-   950 1000 ym xysteps
+   calspeed calsteps ym xysteps
    ym xyget-sg_result to uf
    0 ymotor setdirection
-   950 1000 ym xysteps
+   calspeed calsteps ym xysteps
    ym xyget-sg_result to ub
    uf ub - xylimit >  \ forward end ?
    ub uf - xylimit >  \ backward end ?
    or if \ repeat in other order
-       950 1000 ym xysteps
+       calspeed calsteps ym xysteps
        ym xyget-sg_result to ub
        1 ymotor setdirection
-       950 1000 ym xysteps
+       calspeed calsteps ym xysteps
        ym xyget-sg_result to uf
        uf ub - xylimit > \ bad testing results possible
        ub uf - xylimit >
@@ -240,7 +242,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
  if \ now find home
    0 xmotor setdirection
    begin
-     950 1000 xm xysteps
+     calspeed calsteps  xm xysteps
      \ xm xyget-sg_result dup . ." x reading " ubase dup . ." x ubase " cr >
      xm xyget-sg_result ubase >
    until
@@ -261,7 +263,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
  if \ now find home
    0 ymotor setdirection
    begin
-     950 1000 ym xysteps
+     calspeed calsteps  ym xysteps
      \ ym xyget-sg_result dup . ." y reading " ubase dup . ." y ubase " cr >
      ym xyget-sg_result ubase >
    until
@@ -278,9 +280,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
  xhome
- if true else xmotor enable-motor 1 xmotor setdirection 950 10000 xm xysteps xmotor disable-motor xhome then
+ if true else xmotor enable-motor 1 xmotor setdirection calspeed 10000 xm xysteps xmotor disable-motor xhome then
  yhome
- if true else ymotor enable-motor 1 ymotor setdirection 950 10000 ym xysteps ymotor disable-motor yhome then
+ if true else ymotor enable-motor 1 ymotor setdirection calspeed 10000 ym xysteps ymotor disable-motor yhome then
  and dup to homedone? ;
 
 : dogohome ( -- nflag ) \ if nflag is true x and y motors are configured sent home if nflag is false something failed here
