@@ -173,7 +173,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   %1111111111 and ;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
-: xysteps ( utime usteps uxy -- )  \ this is to be used by home position code below use movetox or movetoy for normal motion
+: calxysteps ( utime usteps uxy -- )  \ this is to be used by home position code below use movetox or movetoy for normal motion
  case
    xm of
      xmotor timedsteps
@@ -183,24 +183,24 @@ true value yposition  \ is the real location of y motor .. note if value is true
    endof
    endcase ;
 
-: xybase ( uxy -- uavg nflag ) \ uxy is motor to test with .. uavg is base average to use to find end with nflag is true for good test false for bad test
+: calxybase ( uxy -- uavg nflag ) \ uxy is motor to test with .. uavg is base average to use to find end with nflag is true for good test false for bad test
  0 0 { uf ub }
  case
  xm of
    1 xmotor usequickreg
    1 xmotor setdirection
-   calspeed calsteps xm xysteps
+   calspeed calsteps xm calxysteps
    xm xyget-sg_result to uf
    0 xmotor setdirection
-   calspeed calsteps xm xysteps
+   calspeed calsteps xm calxysteps
    xm xyget-sg_result to ub
    uf ub - xylimit >  \ forward end ?
    ub uf - xylimit >  \ backward end ?
    or if \ repeat in other order
-       calspeed calsteps xm xysteps
+       calspeed calsteps xm calxysteps
        xm xyget-sg_result to ub
        1 xmotor setdirection
-       calspeed calsteps xm xysteps
+       calspeed calsteps xm calxysteps
        xm xyget-sg_result to uf
        uf ub - xylimit > \ bad testing results possible
        ub uf - xylimit >
@@ -213,18 +213,18 @@ true value yposition  \ is the real location of y motor .. note if value is true
  ym of
    1 ymotor usequickreg
    1 ymotor setdirection
-   calspeed calsteps ym xysteps
+   calspeed calsteps ym calxysteps
    ym xyget-sg_result to uf
    0 ymotor setdirection
-   calspeed calsteps ym xysteps
+   calspeed calsteps ym calxysteps
    ym xyget-sg_result to ub
    uf ub - xylimit >  \ forward end ?
    ub uf - xylimit >  \ backward end ?
    or if \ repeat in other order
-       calspeed calsteps ym xysteps
+       calspeed calsteps ym calxysteps
        ym xyget-sg_result to ub
        1 ymotor setdirection
-       calspeed calsteps ym xysteps
+       calspeed calsteps ym calxysteps
        ym xyget-sg_result to uf
        uf ub - xylimit > \ bad testing results possible
        ub uf - xylimit >
@@ -236,20 +236,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
  endof
  endcase ;
 
-: xhome ( -- nflag )
+: calxhome ( -- nflag )
  xmotor enable-motor
- xm xybase swap xylimit + { ubase }
+ xm calxybase swap xylimit + { ubase }
  if \ now find home
    0 xmotor setdirection
    begin
-     calspeed calsteps  xm xysteps
+     calspeed calsteps  xm calxysteps
      \ xm xyget-sg_result dup . ." x reading " ubase dup . ." x ubase " cr >
      xm xyget-sg_result ubase >
    until
    true \ now at start edge
    0 xmotor usequickreg
    1 xmotor setdirection
-   silentspeed stopbuffer xm xysteps \ moves a small distance from home stop position
+   silentspeed stopbuffer xm calxysteps \ moves a small distance from home stop position
    0 to xposition
  else
    false \ test not stable
@@ -257,20 +257,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
  then
  xmotor disable-motor ;
 
-: yhome ( -- nflag )
+: calyhome ( -- nflag )
  ymotor enable-motor
- ym xybase swap xylimit + { ubase }
+ ym calxybase swap xylimit + { ubase }
  if \ now find home
    0 ymotor setdirection
    begin
-     calspeed calsteps  ym xysteps
+     calspeed calsteps  ym calxysteps
      \ ym xyget-sg_result dup . ." y reading " ubase dup . ." y ubase " cr >
      ym xyget-sg_result ubase >
    until
    true \ now at start edge
    0 ymotor usequickreg
    1 ymotor setdirection
-   silentspeed stopbuffer ym xysteps \ moves a small distance from home stop position
+   silentspeed stopbuffer ym calxysteps \ moves a small distance from home stop position
    0 to yposition
  else
    false \ test not stable
@@ -280,9 +280,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
  xhome
- if true else xmotor enable-motor 1 xmotor setdirection calspeed 10000 xm xysteps xmotor disable-motor xhome then
+ if true else xmotor enable-motor 1 xmotor setdirection calspeed 10000 xm calxysteps xmotor disable-motor calxhome then
  yhome
- if true else ymotor enable-motor 1 ymotor setdirection calspeed 10000 ym xysteps ymotor disable-motor yhome then
+ if true else ymotor enable-motor 1 ymotor setdirection calspeed 10000 ym calxysteps ymotor disable-motor calyhome then
  and dup to homedone? ;
 
 : dogohome ( -- nflag ) \ if nflag is true x and y motors are configured sent home if nflag is false something failed here
