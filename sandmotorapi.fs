@@ -141,18 +141,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
       f/ to mslope
       yposition s>f mslope xposition s>f f* f- to bintercept
       ux xposition >
-      if \ this code only works for positive slopes at this moment... need to finish it
-        ux 1 + xposition ?do silentspeed 1 xmotor timedsteps i to xposition
-        mslope i s>f f* bintercept f+ f>s dup dup yposition <> if yposition - silentspeed swap ymotor timedsteps to yposition else drop drop then
-      loop
-    \  else
-    \    uyspread uxspread / to uysteps
-    \    uyspread s>f uxspread s>f f/ uysteps s>f f- to uremander
-    \    uxspread 0 ?do
-    \      silentspeed 1 xmotor timedsteps xposition 1 xposition ux > if - else + then to xposition
-    \      silentspeed uysteps ymotor timedsteps yposition uysteps yposition uy > if - else + then to yposition
-    \      usum uremander f+ to usum usum 1e f> usum 1e f= or if usum 1e f- to usum silentspeed uysteps ymotor timedsteps yposition 1 yposition uy > if - else + then to yposition then
-    \    loop
+      if
+        ux 1 + xposition do
+          silentspeed 1 xmotor timedsteps i to xposition
+          mslope i s>f f* bintercept f+ f>s dup dup yposition <> if yposition - abs silentspeed swap ymotor timedsteps to yposition else drop drop then
+        loop
+      else
+        ux 1 - xposition -do
+          silentspeed 1 xmotor timedsteps i to xposition
+          mslope i s>f f* bintercept f+ f>s dup dup yposition <> if yposition - abs silentspeed swap ymotor timedsteps to yposition else drop drop then
+        1 -loop
       then
       ymotor disable-motor xmotor disable-motor
       true \ move done
