@@ -279,9 +279,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
  ymotor disable-motor ;
 
 : xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
- xhome
+ calxhome
  if true else xmotor enable-motor 1 xmotor setdirection calspeed 10000 xm calxysteps xmotor disable-motor calxhome then
- yhome
+ calyhome
  if true else ymotor enable-motor 1 ymotor setdirection calspeed 10000 ym calxysteps ymotor disable-motor calyhome then
  and dup to homedone? ;
 
