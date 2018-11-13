@@ -125,7 +125,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 : movetoxy ( ux uy -- nflag ) \ move to the x and y location at the same time ... nflag is true if the move is executed and false if the move was not possible
-  0 0 0 0 0e 0e { ux uy uxspread uyspread uxsteps uysteps F: uremander F: usum }
+  0e 0e { ux uy F: mslope F: bintercept }
+  ux xposition = if uy movetoy exit then
+  uy yposition = if ux movetox exit then
   configured? false = homedone? true = yposition true <> and and
   if \ only do steps if all configured and home is know
     ym-max uy >= ym-min uy <= and xm-max ux >= xm-min ux <= and and
@@ -134,26 +136,23 @@ true value yposition  \ is the real location of y motor .. note if value is true
       0 ymotor usequickreg 0 xmotor usequickreg
       xposition ux > if 0 else 1 then xmotor setdirection
       yposition uy > if 0 else 1 then ymotor setdirection
-      xposition ux - abs to uxspread
-      yposition uy - abs to uyspread
-      \ uyspread s>f uxspread s>f f/ to rxyco
-      uxspread uyspread >
-      if
-        uxspread uyspread / to uxsteps
-        uxspread s>f uyspread s>f f/ uxsteps s>f f- to uremander
-        uyspread 0 ?do
-          silentspeed 1 ymotor timedsteps yposition 1 yposition uy > if - else + then to yposition
-          silentspeed uxsteps xmotor timedsteps xposition uxsteps xposition ux > if - else + then to xposition
-          usum uremander f+ to usum usum 1e f> usum 1e f= or if usum 1e f- to usum silentspeed uxsteps xmotor timedsteps xposition 1 xposition ux > if - else + then to xposition then
-        loop
-      else
-        uyspread uxspread / to uysteps
-        uyspread s>f uxspread s>f f/ uysteps s>f f- to uremander
-        uxspread 0 ?do
-          silentspeed 1 xmotor timedsteps xposition 1 xposition ux > if - else + then to xposition
-          silentspeed uysteps ymotor timedsteps yposition uysteps yposition uy > if - else + then to yposition
-          usum uremander f+ to usum usum 1e f> usum 1e f= or if usum 1e f- to usum silentspeed uysteps ymotor timedsteps yposition 1 yposition uy > if - else + then to yposition then
-        loop
+      yposition uy - s>f
+      xposition ux - s>f
+      f/ to mslope
+      yposition s>f mslope xposition s>f f* f- to bintercept
+      xposition ux >
+      if \ this code only works for positive slopes at this moment... need to finish it
+        ux 1 + xposition ?do silentspeed 1 xmotor timedsteps i to xposition
+        mslope i s>f f* bintercept f+ f>s dup dup yposition <> if yposition - silentspeed swap ymotor timedsteps to yposition else drop drop then
+      loop
+    \  else
+    \    uyspread uxspread / to uysteps
+    \    uyspread s>f uxspread s>f f/ uysteps s>f f- to uremander
+    \    uxspread 0 ?do
+    \      silentspeed 1 xmotor timedsteps xposition 1 xposition ux > if - else + then to xposition
+    \      silentspeed uysteps ymotor timedsteps yposition uysteps yposition uy > if - else + then to yposition
+    \      usum uremander f+ to usum usum 1e f> usum 1e f= or if usum 1e f- to usum silentspeed uysteps ymotor timedsteps yposition 1 yposition uy > if - else + then to yposition then
+    \    loop
       then
       ymotor disable-motor xmotor disable-motor
       true \ move done
