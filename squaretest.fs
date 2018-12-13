@@ -7,7 +7,7 @@
 
 : nsquare { usize ux uy }
   ux uy movetoxy .
-  usize ux uy movetoxy .
+  usize ux + uy movetoxy .
   usize ux + usize uy + movetoxy .
   ux usize uy + movetoxy .
   ux uy movetoxy . ;
