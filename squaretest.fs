@@ -6,9 +6,8 @@
 140000 movetox 120000 movetoy drop drop ;
 
 : nsquare { usize ux uy }
-  ux movetox . uy movetoy .
-  usize ux + movetox .
-  usize uy + movetoy .
-  ux movetox .
-  uy movetoy .
-  ux movetox . ;
+  ux uy movetoxy .
+  usize ux uy movetoxy .
+  usize ux + usize uy + movetoxy .
+  ux usize uy + movetoxy .
+  ux uy movetoxy . ;
