@@ -49,9 +49,9 @@ variable message$
   logfid reposition-file throw
   utime udto$ logfid write-line throw
   logfid write-line throw
+  utime dto$ logfid write-line throw
   logfid flush-file throw
-  logfid close-file throw
-;
+  logfid close-file throw ;
 
 : startfifos ( -- )
   s" mkfifo /run/sandtablein -m666" system
@@ -82,8 +82,7 @@ variable message$
       false
     restore dto$ addtolog
     endtry
-  again
-;
+  again ;
 
 repeatmain
 
