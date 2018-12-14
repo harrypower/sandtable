@@ -181,7 +181,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
    ym of
      ymotor timedsteps
    endof
-   endcase ;
+ endcase ;
 
 : calxybase ( uxy -- uavg nflag ) \ uxy is motor to test with .. uavg is base average to use to find end with nflag is true for good test false for bad test
  0 0 { uf ub }

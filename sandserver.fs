@@ -21,9 +21,12 @@
 
 \ Requires:
 \ sandmotorapi.fs
+\ config-pins.fs
 
 \ Revisions:
 \ 12/13/2018 started coding
+
+require sandmotorapi.fs
 
 0 value infid
 0 value outfid
