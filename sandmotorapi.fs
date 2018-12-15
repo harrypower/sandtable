@@ -48,6 +48,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 1100 value slopecorrection \ time change for slope correction
 1000 value calspeed
 2000 value calsteps
+200 value baseteststeps
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -207,15 +208,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
    calspeed calsteps xm calxysteps
    xm xyget-sg_result to uf
    0 xmotor setdirection
-   calspeed calsteps xm calxysteps
+   calspeed baseteststeps xm calxysteps
    xm xyget-sg_result to ub
    uf ub - xylimit >  \ forward end ?
    ub uf - xylimit >  \ backward end ?
    or if \ repeat in other order
-       calspeed calsteps xm calxysteps
+       calspeed baseteststeps xm calxysteps
        xm xyget-sg_result to ub
        1 xmotor setdirection
-       calspeed calsteps xm calxysteps
+       calspeed baseteststeps xm calxysteps
        xm xyget-sg_result to uf
        uf ub - xylimit > \ bad testing results possible
        ub uf - xylimit >
@@ -228,18 +229,18 @@ true value yposition  \ is the real location of y motor .. note if value is true
  ym of
    1 ymotor usequickreg
    1 ymotor setdirection
-   calspeed calsteps ym calxysteps
+   calspeed baseteststeps ym calxysteps
    ym xyget-sg_result to uf
    0 ymotor setdirection
-   calspeed calsteps ym calxysteps
+   calspeed baseteststeps ym calxysteps
    ym xyget-sg_result to ub
    uf ub - xylimit >  \ forward end ?
    ub uf - xylimit >  \ backward end ?
    or if \ repeat in other order
-       calspeed calsteps ym calxysteps
+       calspeed baseteststeps ym calxysteps
        ym xyget-sg_result to ub
        1 ymotor setdirection
-       calspeed calsteps ym calxysteps
+       calspeed baseteststeps ym calxysteps
        ym xyget-sg_result to uf
        uf ub - xylimit > \ bad testing results possible
        ub uf - xylimit >
@@ -268,8 +269,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
    0 xmotor setdirection
    begin
      calspeed calsteps  xm calxysteps
-     \ xm xyget-sg_result dup . ." x reading " ubase dup . ." x ubase " cr >
-     xm xyget-sg_result ubase >
+     xm xyget-sg_result dup . ." x reading " ubase dup . ." x ubase " cr >
+     \ xm xyget-sg_result ubase >
    until
    true \ now at start edge
    0 xmotor usequickreg
@@ -290,8 +291,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
    0 ymotor setdirection
    begin
      calspeed calsteps  ym calxysteps
-     \ ym xyget-sg_result dup . ." y reading " ubase dup . ." y ubase " cr >
-     ym xyget-sg_result ubase >
+     ym xyget-sg_result dup . ." y reading " ubase dup . ." y ubase " cr >
+     \ ym xyget-sg_result ubase >
    until
    true \ now at start edge
    0 ymotor usequickreg
