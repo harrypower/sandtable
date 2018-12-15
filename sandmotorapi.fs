@@ -45,6 +45,7 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1600 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
+1100 value slopecorrection \ time change for slope correction
 1000 value calspeed
 2000 value calsteps
 
@@ -145,12 +146,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
       ux xposition >
       if
         ux 1 + xposition do
-          silentspeed 1 xmotor timedsteps i to xposition
+          silentspeed  slopecorrection s>f mslope f* f>s abs -
+          1 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <> if yposition - abs silentspeed swap ymotor timedsteps to yposition else drop drop then
         loop
       else
         ux 1 - xposition -do
-          silentspeed 1 xmotor timedsteps i to xposition
+          silentspeed slopecorrection s>f mslope f* f>s abs - 
+          1 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <> if yposition - abs silentspeed swap ymotor timedsteps to yposition else drop drop then
         1 -loop
       then
