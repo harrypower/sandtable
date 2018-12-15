@@ -252,14 +252,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
  endof
  endcase ;
 
-: calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the staullGuard average .. nflag is true if problems and false if uavg data is good
+: calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the stallGuard average .. nflag is true if success false is bad base readings
   0 0 0 { uxy usuccess ufails uavg }
   begin
-    uxy docalxybase if usuccess 1 + to usuccess uavg + 2 / to uavg else ufails 1 + to usuccess drop then
+    uxy docalxybase if usuccess 1 + to usuccess uavg + 2 / to uavg else ufails 1 + to ufails drop then
     usuccess 5 >
     ufails 5 >  or
   until
-  uavg ufails 5 > ;
+  uavg usuccess 5 > ;
 
 : calxhome ( -- nflag )
  xmotor enable-motor
