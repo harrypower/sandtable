@@ -40,8 +40,8 @@ false value homedone?   \ false means table has not been homed true means table 
 1500 constant stopbuffer
 0 constant xm-min
 0 constant ym-min
-275000 constant xm-max
-275000 constant ym-max
+276000 constant xm-max
+276000 constant ym-max
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1600 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
