@@ -176,6 +176,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   else false \ not configured or home yet
   then ;
 
+\ ************************   these following words are for home position use only not for normal movement use above words for that
 : xyget-sg_result ( uxm -- usgr )
   case
   xm of
@@ -187,7 +188,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
   endcase
   %1111111111 and ;
 
-\ ************************   these following words are for home position use only not for normal movement use above words for that
 : calxysteps ( utime usteps uxy -- )  \ this is to be used by home position code below use movetox or movetoy for normal motion
  case
    xm of
@@ -198,7 +198,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
    endof
  endcase ;
 
-: calxybase ( uxy -- uavg nflag ) \ uxy is motor to test with .. uavg is base average to use to find end with nflag is true for good test false for bad test
+: docalxybase ( uxy -- uavg nflag ) \ uxy is motor to test with .. uavg is base average to use to find end with nflag is true for good test false for bad test
  0 0 { uf ub }
  case
  xm of
@@ -251,8 +251,18 @@ true value yposition  \ is the real location of y motor .. note if value is true
  endof
  endcase ;
 
+: calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the staullGuard average .. nflag is true if problems and false if uavg data is good
+  0 0 0 { uxy usuccess ufails uavg }
+  begin
+    uxy docalxybase if usuccess 1 + to usuccess uavg + 2 / to uavg else ufails 1 + to usuccess drop then
+    usuccess 5 >
+    ufails 5 >  or
+  until
+  uavg ufails 5 > ;
+
 : calxhome ( -- nflag )
  xmotor enable-motor
+ xm calxybase drop drop \ warm up motor first
  xm calxybase swap xylimit + { ubase }
  if \ now find home
    0 xmotor setdirection
@@ -274,6 +284,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : calyhome ( -- nflag )
  ymotor enable-motor
+ ym calxybase drop drop \ warm up motor first
  ym calxybase swap xylimit + { ubase }
  if \ now find home
    0 ymotor setdirection
