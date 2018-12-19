@@ -45,10 +45,11 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1600 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-1100 value slopecorrection \ time change for slope correction
+\ 1100 value slopecorrection \ time change for slope correction
 1000 value calspeed
 2000 value calsteps
-200 value baseteststeps
+\ 200 value baseteststeps
+4 value xysteps       \ how many x or y steps are used per y or x increments
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -148,7 +149,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       if
         ux 1 + xposition do
           silentspeed  \ slopecorrection s>f mslope f* f>s abs - abs
-          3 xmotor timedsteps i to xposition
+          xysteps xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
             yposition - abs silentspeed  \ slopecorrection s>f mslope f* f>s abs - abs
@@ -156,11 +157,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
           else
             drop drop
           then
-        3 +loop
+        xysteps +loop
       else
         ux 1 - xposition -do
           silentspeed \ slopecorrection s>f mslope f* f>s abs - abs
-          3 xmotor timedsteps i to xposition
+          xysteps xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
             yposition - abs silentspeed  \ slopecorrection s>f mslope f* f>s abs - abs
@@ -168,7 +169,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
           else
             drop drop
           then
-        3 -loop
+        xysteps -loop
       then
       ymotor disable-motor xmotor disable-motor
       true \ move done
