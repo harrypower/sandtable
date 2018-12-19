@@ -199,67 +199,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
    endof
  endcase ;
 
-: docalxybase ( uxy -- uavg nflag ) \ uxy is motor to test with .. uavg is base average to use to find end with nflag is true for good test false for bad test
- 0 0 { uf ub }
- case
- xm of
-   1 xmotor usequickreg
-   1 xmotor setdirection
-   calspeed calsteps xm calxysteps
-   xm xyget-sg_result to uf
-   0 xmotor setdirection
-   calspeed baseteststeps xm calxysteps
-   xm xyget-sg_result to ub
-   uf ub - xylimit >  \ forward end ?
-   ub uf - xylimit >  \ backward end ?
-   or if \ repeat in other order
-       calspeed baseteststeps xm calxysteps
-       xm xyget-sg_result to ub
-       1 xmotor setdirection
-       calspeed baseteststeps xm calxysteps
-       xm xyget-sg_result to uf
-       uf ub - xylimit > \ bad testing results possible
-       ub uf - xylimit >
-       or if 0 false \ return bad test results
-       else uf ub + 2 / true then
-   else \ good results return
-     uf ub + 2 / true \ return address with good test results
-   then
- endof
- ym of
-   1 ymotor usequickreg
-   1 ymotor setdirection
-   calspeed baseteststeps ym calxysteps
-   ym xyget-sg_result to uf
-   0 ymotor setdirection
-   calspeed baseteststeps ym calxysteps
-   ym xyget-sg_result to ub
-   uf ub - xylimit >  \ forward end ?
-   ub uf - xylimit >  \ backward end ?
-   or if \ repeat in other order
-       calspeed baseteststeps ym calxysteps
-       ym xyget-sg_result to ub
-       1 ymotor setdirection
-       calspeed baseteststeps ym calxysteps
-       ym xyget-sg_result to uf
-       uf ub - xylimit > \ bad testing results possible
-       ub uf - xylimit >
-       or if 0 false \ return bad test results
-       else  uf ub + 2 / true then
-   else \ good results return
-     uf ub + 2 / true \ return address with good test results
-   then
- endof
- endcase ;
-
-\ : calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the stallGuard average .. nflag is true if success false is bad base readings
-\  0 0 0 { uxy usuccess ufails uavg }
-\  begin
-\    uxy docalxybase if usuccess 1 + to usuccess uavg + 2 / to uavg else ufails 1 + to ufails drop then
-\    usuccess 5 >
-\    ufails 5 >  or
-\  until
-\  uavg usuccess 5 > ;
+: docalxybase { uxy -- uresult } \ uxy is the motor x or y ... uresult is stallguard value after moving motor
+  calspeed calsteps uxy calxysteps
+  uxy xyget-sg_result ;
 
 : calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the stallGuard average .. nflag is true if success false is bad base readings
   0 0 { uavg usd } \ uavg is average .. usd is standard deviation
@@ -269,12 +211,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1 xmotor setdirection
     5 0 do calspeed calsteps xm calxysteps loop
     0 xmotor setdirection
-    calspeed calsteps xm calxysteps
-    xm xyget-sg_result to uavg
+    xm docalxybase to uavg
     uavg . ."  0 base test" cr
     4 0 do
-      calspeed calsteps xm calxysteps
-      xm xyget-sg_result dup uavg + 2 / to uavg
+    xm docalxybase dup uavg + 2 / to uavg
       . space i 1 + . ."  base test" cr
     loop
   endof
@@ -283,18 +223,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1 ymotor setdirection
     5 0 do calspeed calsteps ym calxysteps loop
     0 ymotor setdirection
-    calspeed calsteps ym calxysteps
-    ym xyget-sg_result to uavg
+    ym docalxybase to uavg
     uavg . ."  0 base test" cr
     4 0 do
-      calspeed calsteps ym calxysteps
-      ym xyget-sg_result dup uavg + 2 / to uavg
+      ym docalxybase dup uavg + 2 / to uavg
       . space i 1 + . ."  base test" cr
     loop
   endof
   endcase
   uavg true
-  uavg . ."  base avg!" cr 
+  uavg . ."  base avg!" cr
   ;
 
 : calxhome ( -- nflag )
