@@ -151,7 +151,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
           1 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
-            yposition - abs silentspeed  slopecorrection s>f mslope f* f>s abs -
+            yposition - abs silentspeed  slopecorrection s>f mslope f* f>s abs - abs
             swap ymotor timedsteps to yposition
           else
             drop drop
@@ -159,11 +159,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
         1 +loop
       else
         ux 1 - xposition -do
-          silentspeed slopecorrection s>f mslope f* f>s abs - abs 
+          silentspeed slopecorrection s>f mslope f* f>s abs - abs
           1 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
-            yposition - abs silentspeed  slopecorrection s>f mslope f* f>s abs -
+            yposition - abs silentspeed  slopecorrection s>f mslope f* f>s abs - abs
             swap ymotor timedsteps to yposition
           else
             drop drop
