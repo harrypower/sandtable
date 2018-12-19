@@ -132,7 +132,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   0e 0e { ux uy F: mslope F: bintercept }
   ux xposition = if uy movetoy exit then
   uy yposition = if ux movetox exit then
-  configured? false = homedone? true = yposition true <> and and
+  configured? false = homedone? true = yposition true <> xposition true <> and and and
   if \ only do steps if all configured and home is know
     ym-max uy >= ym-min uy <= and xm-max ux >= xm-min ux <= and and
     if
@@ -147,7 +147,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       ux xposition >
       if
         ux 1 + xposition do
-          silentspeed  slopecorrection s>f mslope f* f>s abs -
+          silentspeed  slopecorrection s>f mslope f* f>s abs - abs
           1 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
@@ -159,7 +159,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         1 +loop
       else
         ux 1 - xposition -do
-          silentspeed slopecorrection s>f mslope f* f>s abs -
+          silentspeed slopecorrection s>f mslope f* f>s abs - abs 
           1 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
