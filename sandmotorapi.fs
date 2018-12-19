@@ -178,7 +178,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
-: xyget-sg_result ( uxm -- usgr )
+: xyget-sg_result ( uxym -- usgr )
   case
   xm of
     DRV_STATUS xmotor getreg throw swap drop
@@ -252,14 +252,48 @@ true value yposition  \ is the real location of y motor .. note if value is true
  endof
  endcase ;
 
+\ : calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the stallGuard average .. nflag is true if success false is bad base readings
+\  0 0 0 { uxy usuccess ufails uavg }
+\  begin
+\    uxy docalxybase if usuccess 1 + to usuccess uavg + 2 / to uavg else ufails 1 + to ufails drop then
+\    usuccess 5 >
+\    ufails 5 >  or
+\  until
+\  uavg usuccess 5 > ;
+
 : calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the stallGuard average .. nflag is true if success false is bad base readings
-  0 0 0 { uxy usuccess ufails uavg }
-  begin
-    uxy docalxybase if usuccess 1 + to usuccess uavg + 2 / to uavg else ufails 1 + to ufails drop then
-    usuccess 5 >
-    ufails 5 >  or
-  until
-  uavg usuccess 5 > ;
+  0 0 { uavg usd } \ uavg is average .. usd is standard deviation
+  case
+  xm of
+    1 xmotor usequickreg
+    1 xmotor setdirection
+    5 0 do calspeed calsteps xm calxysteps loop
+    0 xmotor setdirection
+    calspeed calsteps xm calxysteps
+    xm xyget-sg_result to uavg
+    uavg . ."  1 base test" cr
+    4 0 do
+      calspeed calsteps xm calxysteps
+      xm xyget-sg_result dup uavg + 2 / to uavg
+      . space i . ."  base test" cr
+    loop
+  endof
+  ym of
+    1 ymotor usequickreg
+    1 ymotor setdirection
+    5 0 do calspeed calsteps ym calxysteps loop
+    0 ymotor setdirection
+    calspeed calsteps ym calxysteps
+    ym xyget-sg_result to uavg
+    uavg . ."  1 base test" cr
+    4 0 do
+      calspeed calsteps ym calxysteps
+      ym xyget-sg_result dup uavg + 2 / to uavg
+      . space i . ."  base test" cr
+    loop 
+  endof
+  endcase
+  uavg true ;
 
 : calxhome ( -- nflag )
  xmotor enable-motor
@@ -304,6 +338,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
    true to yposition \ this means yposition is not know because of home failure
  then
  ymotor disable-motor ;
+
+
+\ : calxhome ( -- nflag )
+\ ;
+\ : calyhome ( -- nflag )
+\ ;
 
 : xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
  calxhome
