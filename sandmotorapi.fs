@@ -27,6 +27,8 @@
 
 \ Revisions:
 \ 11/09/2018 started coding
+\ 19/12/2018 calibration simplified but needs to have realtime standard deviation impimented to detect bad calibration
+\ - movetoxy has issues yet with speed and calculation errors... need to come up with better idea here 
 
 require tmc2130.fs
 
@@ -45,11 +47,9 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1600 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-\ 1100 value slopecorrection \ time change for slope correction
 1000 value calspeed
 2000 value calsteps
-\ 200 value baseteststeps
-4 value xysteps       \ how many x or y steps are used per y or x increments
+
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -149,7 +149,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       if
         ux 1 + xposition do
           silentspeed  \ slopecorrection s>f mslope f* f>s abs - abs
-          xysteps xmotor timedsteps i to xposition
+          1 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
             yposition - abs silentspeed  \ slopecorrection s>f mslope f* f>s abs - abs
@@ -157,11 +157,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
           else
             drop drop
           then
-        xysteps +loop
+        1 +loop
       else
         ux 1 - xposition -do
           silentspeed \ slopecorrection s>f mslope f* f>s abs - abs
-          xysteps xmotor timedsteps i to xposition
+          1 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
             yposition - abs silentspeed  \ slopecorrection s>f mslope f* f>s abs - abs
@@ -169,7 +169,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
           else
             drop drop
           then
-        xysteps -loop
+        1 -loop
       then
       ymotor disable-motor xmotor disable-motor
       true \ move done
