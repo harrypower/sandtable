@@ -271,11 +271,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 xmotor setdirection
     calspeed calsteps xm calxysteps
     xm xyget-sg_result to uavg
-    uavg . ."  1 base test" cr
+    uavg . ."  0 base test" cr
     4 0 do
       calspeed calsteps xm calxysteps
       xm xyget-sg_result dup uavg + 2 / to uavg
-      . space i . ."  base test" cr
+      . space i 1 + . ."  base test" cr
     loop
   endof
   ym of
@@ -285,21 +285,23 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 ymotor setdirection
     calspeed calsteps ym calxysteps
     ym xyget-sg_result to uavg
-    uavg . ."  1 base test" cr
+    uavg . ."  0 base test" cr
     4 0 do
       calspeed calsteps ym calxysteps
       ym xyget-sg_result dup uavg + 2 / to uavg
-      . space i . ."  base test" cr
-    loop 
+      . space i 1 + . ."  base test" cr
+    loop
   endof
   endcase
-  uavg true ;
+  uavg true
+  uavg . ."  base avg!" cr 
+  ;
 
 : calxhome ( -- nflag )
- xmotor enable-motor
- xm calxybase drop drop \ warm up motor first
- xm calxybase swap xylimit + { ubase }
- if \ now find home
+  xmotor enable-motor
+  xm calxybase drop drop \ warm up motor first
+  xm calxybase swap xylimit + { ubase }
+  if \ now find home
    0 xmotor setdirection
    begin
      calspeed calsteps  xm calxysteps
@@ -311,17 +313,17 @@ true value yposition  \ is the real location of y motor .. note if value is true
    1 xmotor setdirection
    silentspeed stopbuffer xm calxysteps \ moves a small distance from home stop position
    0 to xposition
- else
+  else
    false \ test not stable
    true to xposition \ this means xposition is not know because of home failure
- then
- xmotor disable-motor ;
+  then
+  xmotor disable-motor ;
 
 : calyhome ( -- nflag )
- ymotor enable-motor
- ym calxybase drop drop \ warm up motor first
- ym calxybase swap xylimit + { ubase }
- if \ now find home
+  ymotor enable-motor
+  ym calxybase drop drop \ warm up motor first
+  ym calxybase swap xylimit + { ubase }
+  if \ now find home
    0 ymotor setdirection
    begin
      calspeed calsteps  ym calxysteps
@@ -333,11 +335,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
    1 ymotor setdirection
    silentspeed stopbuffer ym calxysteps \ moves a small distance from home stop position
    0 to yposition
- else
+  else
    false \ test not stable
    true to yposition \ this means yposition is not know because of home failure
- then
- ymotor disable-motor ;
+  then
+  ymotor disable-motor ;
 
 
 \ : calxhome ( -- nflag )
