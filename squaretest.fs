@@ -14,5 +14,13 @@
 
 
 : nrotsquare ( usize ux uy uangle -- )
-  { usize ux uy uangle }
+  0 { usize ux uy uangle ua }
+  xy uy movetoxy .
+  uangle s>f fsin usize s>f f*
+  90e fsin f/
+  ux f>s dup to ua - to ux
+  90 uangle - s>f fsin ua s>f f*
+  uangle s>f fsin f/
+  uy f>s + to uy
+  ux uy movetoxy . 
   ;
