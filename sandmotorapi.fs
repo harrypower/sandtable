@@ -28,7 +28,7 @@
 \ Revisions:
 \ 11/09/2018 started coding
 \ 19/12/2018 calibration simplified but needs to have realtime standard deviation impimented to detect bad calibration
-\ - movetoxy has issues yet with speed and calculation errors... need to come up with better idea here 
+\ - movetoxy has issues yet with speed and calculation errors... need to come up with better idea here
 
 require tmc2130.fs
 
@@ -148,28 +148,28 @@ true value yposition  \ is the real location of y motor .. note if value is true
       ux xposition >
       if
         ux 1 + xposition do
-          silentspeed  \ slopecorrection s>f mslope f* f>s abs - abs
-          1 xmotor timedsteps i to xposition
+          silentspeed
+          10 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
-            yposition - abs silentspeed  \ slopecorrection s>f mslope f* f>s abs - abs
+            yposition - abs silentspeed
             swap ymotor timedsteps to yposition
           else
             drop drop
           then
-        1 +loop
+        10 +loop
       else
         ux 1 - xposition -do
-          silentspeed \ slopecorrection s>f mslope f* f>s abs - abs
-          1 xmotor timedsteps i to xposition
+          silentspeed
+          10 xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
-            yposition - abs silentspeed  \ slopecorrection s>f mslope f* f>s abs - abs
+            yposition - abs silentspeed
             swap ymotor timedsteps to yposition
           else
             drop drop
           then
-        1 -loop
+        10 -loop
       then
       ymotor disable-motor xmotor disable-motor
       true \ move done
