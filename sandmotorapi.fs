@@ -49,7 +49,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 1600 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
 1000 value calspeed
 2000 value calsteps
-
+20 value steps
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -149,7 +149,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       if
         ux 1 + xposition do
           silentspeed
-          10 xmotor timedsteps i to xposition
+          steps xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
             yposition - abs silentspeed
@@ -157,11 +157,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
           else
             drop drop
           then
-        10 +loop
+        steps +loop
       else
         ux 1 - xposition -do
           silentspeed
-          10 xmotor timedsteps i to xposition
+          steps xmotor timedsteps i to xposition
           mslope i s>f f* bintercept f+ f>s dup dup yposition <>
           if
             yposition - abs silentspeed
@@ -169,7 +169,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
           else
             drop drop
           then
-        10 -loop
+        steps -loop
       then
       ymotor disable-motor xmotor disable-motor
       true \ move done
