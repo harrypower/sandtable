@@ -46,10 +46,10 @@ false value homedone?   \ false means table has not been homed true means table 
 276000 constant ym-max
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
-1600 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-1000 value calspeed
+1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
+1500 value calspeed
 2000 value calsteps
-20 value steps
+10 value steps
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
