@@ -23,4 +23,28 @@
   uangle s>f fsin f/
   uy f>s - to uy
   ux uy movetoxy .
+
+  uangle s>f fsin usize s>f f*
+  90e fsin f/
+  ux f>s dup to ua - to ux
+  90 uangle - s>f fsin ua s>f f*
+  uangle s>f fsin f/
+  uy f>s - to uy
+  ux uy movetoxy .
+
+  uangle s>f fsin usize s>f f*
+  90e fsin f/
+  uy f>s dup to ua + to uy
+  90 uangle - s>f fsin ua s>f f*
+  uangle s>f fsin f/
+  ux f>s - to ux
+  ux uy movetoxy .
+
+  uangle s>f fsin usize s>f f*
+  90e fsin f/
+  ux f>s dup to ua + to ux
+  90 uangle - s>f fsin ua s>f f*
+  uangle s>f fsin f/
+  uy f>s + to uy
+  ux uy movetoxy .  
   ;
