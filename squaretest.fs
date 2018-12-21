@@ -11,3 +11,8 @@
   usize ux + usize uy + movetoxy .
   ux usize uy + movetoxy .
   ux uy movetoxy . ;
+
+
+: nrotsquare ( usize ux uy uangle -- )
+  { usize ux uy uangle }
+  ;
