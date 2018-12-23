@@ -18,8 +18,7 @@
   ux uy movetoxy .
 
   uangle s>f fsin usize s>f f*
-  90e fsin f/
-  uy f>s dup to ua
+  90e fsin f/ f>s to ua
   90 uangle - s>f fsin ua s>f f*
   uangle s>f fsin f/ f>s to ub
 
@@ -27,14 +26,12 @@
   uy ua -
   movetoxy .
 
-  ux ua -
-  uy ub -
+  ux ub + ua -
+  uy ua - ub -
   movetoxy .
 
-  ux ub -
-  uy ua +
+  ux ub + ua - ub -
+  uy ua - ub - ua +
   movetoxy .
 
-  ux ua +
-  uy ub +
-  movetoxy . ;
+  ux uy  movetoxy . ;
