@@ -13,38 +13,28 @@
   ux uy movetoxy . ;
 
 
-: nrotsquare ( usize ux uy uangle -- )
-  0 { usize ux uy uangle ua }
-  ux uy movetoxy .
-  uangle s>f fsin usize s>f f*
-  90e fsin f/
-  uy f>s dup to ua - to uy
-  90 uangle - s>f fsin ua s>f f*
-  uangle s>f fsin f/
-  ux f>s + to ux
+: nrotsquare ( usize ux uy unagle )
+  0 0 { usize ux uy uangle ua ub }
   ux uy movetoxy .
 
   uangle s>f fsin usize s>f f*
   90e fsin f/
-  ux f>s dup to ua - to ux
+  uy f>s dup to ua
   90 uangle - s>f fsin ua s>f f*
-  uangle s>f fsin f/
-  uy f>s - to uy
-  ux uy movetoxy .
+  uangle s>f fsin f/ f>s to ub
 
-  uangle s>f fsin usize s>f f*
-  90e fsin f/
-  uy f>s dup to ua + to uy
-  90 uangle - s>f fsin ua s>f f*
-  uangle s>f fsin f/
-  ux f>s - to ux
-  ux uy movetoxy .
+  ux ub +
+  uy ua -
+  movetoxy .
 
-  uangle s>f fsin usize s>f f*
-  90e fsin f/
-  ux f>s dup to ua + to ux
-  90 uangle - s>f fsin ua s>f f*
-  uangle s>f fsin f/
-  uy f>s + to uy
-  ux uy movetoxy .
-  ;
+  ux ua -
+  uy ub -
+  movetoxy .
+
+  ux ub -
+  uy ua +
+  movetoxy .
+
+  ux ua +
+  uy ub +
+  movetoxy . ;
