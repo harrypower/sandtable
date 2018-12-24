@@ -30,8 +30,8 @@
   uy ua - ub -
   movetoxy .
 
-  ux ub + ua - ub -
-  uy ua - ub - ua +
+  ux ua -
+  uy ub - 
   movetoxy .
 
   ux uy  movetoxy . ;
