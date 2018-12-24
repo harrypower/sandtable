@@ -17,12 +17,10 @@
   0 0 { usize ux uy uangle ua ub }
   ux uy movetoxy .
 
-  uangle s>f 360 s>f f/
-  2e pi f* f*
+  uangle s>f pi 180e f/ f*
   fsin usize s>f f*
   90e fsin f/ f>s to ua
-  90 uangle - s>f 360 s>f f/
-  2e pi f* f*
+  90 uangle - s>f pi 180e f/ f*
   fsin ua s>f f*
   uangle s>f fsin f/ f>s to ub
 
