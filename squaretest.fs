@@ -13,7 +13,7 @@
   ux uy movetoxy . ;
 
 
-: nrotsquare ( usize ux uy uangle ) \ uangle is degrees
+: nanglesquare ( usize ux uy uangle ) \ uangle is degrees
   0 0 { usize ux uy uangle ua ub }
   ux uy movetoxy .
 
@@ -39,3 +39,7 @@
   movetoxy .
 
   ux uy  movetoxy . ;
+
+: nrotsquare { usize ux uy uangle usteps } \ will make an angle square but then rotate it usteps around 360 degrees for a full circle
+  usteps 0 ?do usize ux uy uangle 360 usteps / i * + nanglesquare loop ;
+  
