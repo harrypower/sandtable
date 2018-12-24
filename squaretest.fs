@@ -19,10 +19,12 @@
 
   uangle s>f pi 180e f/ f*
   fsin usize s>f f*
-  90e fsin f/ f>s to ua
+  90e pi 180e f/ f*
+  fsin f/ f>s to ua
   90 uangle - s>f pi 180e f/ f*
   fsin ua s>f f*
-  uangle s>f fsin f/ f>s to ub
+  uangle s>f pi 180e f/ f*
+  fsin f/ f>s to ub
 
   ux ub +
   uy ua -
