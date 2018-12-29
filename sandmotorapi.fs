@@ -238,7 +238,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : calbasetest ( utimes uxy -- )
   0e 0e 0e 0e 0 { uxy F: um F: us F: usd F: upm usample }
-  0 ?do
+  1 + 1 ?do
     uxy calxybase drop to usample
     um to upm
     usample s>f um f- i s>f f/ um f+ to um
