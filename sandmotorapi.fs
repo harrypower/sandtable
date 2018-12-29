@@ -238,6 +238,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : calbasetest ( utimes uxy -- )
   0e 0e 0e 0e 0 { uxy F: um F: us F: usd F: upm usample }
+  uxy xm = if xmotor enable-motor then
+  uxy ym = if ymotor enable-motor then
   1 + 1 ?do
     uxy calxybase drop to usample
     um to upm
@@ -245,7 +247,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
     usample s>f um f- usample s>f upm f- f* us f+ to us
     us i s>f f/ fsqrt to usd
   ." calpass #" i . ." mean " um f. ." standard deviation " usd f. cr
-  loop ;
+  loop
+  uxy xm = if xmotor disable-motor then
+  uxy ym = if ymotor disable-motor then
+;
 
 
 : calxhome ( -- nflag )
