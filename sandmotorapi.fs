@@ -237,17 +237,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
   ;
 
 : calbasetest ( utimes uxy -- )
-  0e 0e 0 0e 0e 0 { uxy F: um F: us un F: usd F: upm usample }
-  \ begin
-  0 ?do 
+  0e 0e 0e 0e 0 { uxy F: um F: us F: usd F: upm usample }
+  0 ?do
     uxy calxybase drop to usample
     um to upm
-    un 1 + to un
-    usample s>f um f- un s>f f/ um f+ to um
+    usample s>f um f- i s>f f/ um f+ to um
     usample s>f um f- usample s>f upm f- f* us f+ to us
-    us un s>f f/ fsqrt to usd
-  \ until
-  ." calpass " un . ." mean " um f. ." standard deviation " usd f. cr
+    us i s>f f/ fsqrt to usd
+  ." calpass #" i . ." mean " um f. ." standard deviation " usd f. cr
   loop ;
 
 
