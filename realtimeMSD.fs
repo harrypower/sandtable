@@ -93,4 +93,14 @@ object class
     standard-deviation-sample f@ f>s
     variance-sample f@ f>s
   ;m method nmean-nsds-nvs@
+
+  m: ( realtimeMSD -- nmean )
+    mean f@ f>s ;m method nmean@
+
+  m: ( realtimeMSD -- nsdp )
+    standard-deviation-pop f@ f>s ;m method nsdp@
+
+  m: ( realtimeMSD -- nvp )
+    variance-pop f@ f>s ;m method nvp@ 
+
 end-class realtimeMSD
