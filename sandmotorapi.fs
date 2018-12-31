@@ -31,7 +31,10 @@
 \ - movetoxy has issues yet with speed and calculation errors... need to come up with better idea here
 
 require tmc2130.fs
+require realtimeMSD.fs
 
+realtimeMSD dict-new constant xdata
+realtimeMSD dict-new constant ydata
 0 value xmotor
 0 value ymotor
 true value configured?  \ true means not configured false means configured
