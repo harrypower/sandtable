@@ -47,7 +47,7 @@ object class
   m: ( realtimeMSD -- )
     mean f@ previous-mean f!
     amount f@ 1e f+ amount f!
-    data f@ mean f@ f- amount f@ f/ mean f@ f+ mean f@
+    data f@ mean f@ f- amount f@ f/ mean f@ f+ mean f!
     data f@ mean f@ f- data f@ previous-mean f@ f- f* sdata f@ f+ sdata f!
     sdata f@ amount f@ f/ variance-pop f!
     variance-pop f@ fsqrt standard-deviation-pop f@
