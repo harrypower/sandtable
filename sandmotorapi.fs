@@ -42,7 +42,7 @@ false value homedone?   \ false means table has not been homed true means table 
 0 constant xm
 1 constant ym
 100 value xylimit \ used to find home
-1.1e fvariable xythreshold \ used to find home when divided by 10
+1.1e fvariable xythreshold xythreshold f! \ used to find home when divided by 10
 1500 constant stopbuffer
 0 constant xm-min
 0 constant ym-min
