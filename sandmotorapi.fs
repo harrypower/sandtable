@@ -277,25 +277,25 @@ true value yposition  \ is the real location of y motor .. note if value is true
   ;
 
 : calxhome ( -- nflag )
-  xmotor enable-motor
   xm 30 newcalxybase { umean usdp nflag }
   nflag
   if \ now find home
-   0 xmotor setdirection
-   begin
-    xm docalxybase
-    dup . ." x reading " umean usdp 2 * + dup . ." threshold " >
-   until
-   true \ now at start edge
-   0 xmotor usequickreg
-   1 xmotor setdirection
-   silentspeed stopbuffer xm calxysteps \ moves a small distance from home stop position
-   0 to xposition
+    xmotor enable-motor
+    0 xmotor setdirection
+    begin
+      xm docalxybase
+      dup . ." x reading " umean usdp 2 * + dup . ." threshold " >
+    until
+    true \ now at start edge
+    0 xmotor usequickreg
+    1 xmotor setdirection
+    silentspeed stopbuffer xm calxysteps \ moves a small distance from home stop position
+    0 to xposition
+    xmotor disable-motor
   else
-   false \ test not stable
-   true to xposition \ this means xposition is not know because of home failure
-  then
-  ;
+    false \ test not stable
+    true to xposition \ this means xposition is not know because of home failure
+  then ;
 
 : calyhome ( -- nflag )
   ymotor enable-motor
