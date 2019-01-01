@@ -207,8 +207,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
   calspeed calsteps uxy calxysteps
   uxy xyget-sg_result ;
 
-: newcalxybase ( uxy utimes -- umean nflag )
-  0 { utimes umean }
+: newcalxybase ( uxy utimes -- umean usdp nflag )
+  0 0 { utimes umean usdp }
   case
     xm of
       xmotor enable-motor
@@ -222,7 +222,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         xdata nmean-nsdp-nvp@
         . ." variance " . ." standard deviation " . ." mean for x!" cr
       loop
-      xdata nmean-nsdp-nvp@ drop drop to umean
+      xdata nmean-nsdp-nvp@ drop to usdp to umean
       xmotor disable-motor
     endof
     ym of
@@ -237,12 +237,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
         ydata nmean-nsdp-nvp@
         . ." variance " . ." standard deviation " . ." mean for x!" cr
       loop
-      ydata nmean-nsdp-nvp@ drop drop to umean
+      ydata nmean-nsdp-nvp@ drop to usdp to umean
       ymotor disable-motor
     endof
   endcase
-  umean true
-  umean . ." base mean!" cr ;
+  umean usdp true
+  umean . ." base mean!" usdp . ." base usdb!" cr ;
 
 : calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the stallGuard average .. nflag is true if success false is bad base readings
   0 0 { uavg usd } \ uavg is average .. usd is standard deviation
@@ -276,33 +276,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
   uavg . ."  base avg!" cr
   ;
 
-: calbasetest ( utimes uxy -- )
-  0e 0e 0e 0e 0 { uxy F: um F: us F: usd F: upm usample }
-  uxy xm = if xmotor enable-motor then
-  uxy ym = if ymotor enable-motor then
-  1 + 1 ?do
-    uxy calxybase drop to usample
-    um to upm
-    usample s>f um f- i s>f f/ um f+ to um
-    usample s>f um f- usample s>f upm f- f* us f+ to us
-    us i s>f f/ fsqrt to usd
-  ." calpass #" i . ." mean " um f. ." standard deviation " usd f. cr
-  loop
-  uxy xm = if xmotor disable-motor then
-  uxy ym = if ymotor disable-motor then
-;
-
-
 : calxhome ( -- nflag )
   xmotor enable-motor
-  xm calxybase drop drop \ warm up motor first
-  xm calxybase swap xylimit + { ubase }
+  xm 30 newcalxybase { umean usdp nflag }
+  nflag
   if \ now find home
    0 xmotor setdirection
    begin
-     calspeed calsteps  xm calxysteps
-     xm xyget-sg_result dup . ." x reading " ubase dup . ." x ubase " cr >
-     \ xm xyget-sg_result ubase >
+    xm docalxybase
+    dup . ." x reading " umean usdp 2 * + dup . ." threshold " >
    until
    true \ now at start edge
    0 xmotor usequickreg
@@ -313,7 +295,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
    false \ test not stable
    true to xposition \ this means xposition is not know because of home failure
   then
-  xmotor disable-motor ;
+  ;
 
 : calyhome ( -- nflag )
   ymotor enable-motor
@@ -336,12 +318,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
    true to yposition \ this means yposition is not know because of home failure
   then
   ymotor disable-motor ;
-
-
-\ : calxhome ( -- nflag )
-\ ;
-\ : calyhome ( -- nflag )
-\ ;
 
 : xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
  calxhome
