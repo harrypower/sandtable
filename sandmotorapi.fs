@@ -41,8 +41,7 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-100 value xylimit \ used to find home
-1.1e fvariable xythreshold xythreshold f! \ used to find home when divided by 10
+1.1e fvariable xythreshold xythreshold f! \ used to find home
 1500 constant stopbuffer
 0 constant xm-min
 0 constant ym-min
@@ -208,8 +207,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
   calspeed calsteps uxy calxysteps
   uxy xyget-sg_result ;
 
-: newcalxybase ( uxy utimes -- umean usdp nflag )
-  0 0 { utimes umean usdp }
+: newcalxybase ( uxy utimes -- nmean usdp nflag )
+  0 0 { utimes nmean usdp }
   case
     xm of
       xmotor enable-motor
@@ -220,10 +219,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
         5 0 do xm docalxybase drop loop
         0 xmotor setdirection
         5 0 do xm docalxybase xdata n>data loop
-        xdata nmean-nsdp-nvp@
-        . ." variance " . ." standard deviation " . ." mean for x!" cr
+        xdata nsdp@ . ." standard deviation "
+        xdata nmean@ . ." mean for x!" cr
       loop
-      xdata nmean-nsdp-nvp@ drop to usdp to umean
+      xdata nsdp@ to usdp
+      xdata nmean@ to nmean
       xmotor disable-motor
     endof
     ym of
@@ -235,26 +235,27 @@ true value yposition  \ is the real location of y motor .. note if value is true
         5 0 do ym docalxybase drop loop
         0 ymotor setdirection
         5 0 do ym docalxybase ydata n>data loop
-        ydata nmean-nsdp-nvp@
-        . ." variance " . ." standard deviation " . ." mean for x!" cr
+        ydata nsdp@ . ." standard deviation "
+        ydata nmean@ . ." mean for x!" cr
       loop
-      ydata nmean-nsdp-nvp@ drop to usdp to umean
+      ydata nsdp@ to usdp
+      ydata nmean@ to nmean
       ymotor disable-motor
     endof
   endcase
-  umean usdp true
-  umean . ." base mean!" usdp . ." base usdb!" cr ;
+  nmean usdp true
+  nmean . ." base mean!" usdp . ." base usdb!" cr ;
 
 
 : calxhome ( -- nflag )
-  xm 30 newcalxybase { umean usdp nflag }
+  xm 30 newcalxybase { nmean usdp nflag }
   nflag
   if \ now find home
     xmotor enable-motor
     0 xmotor setdirection
     begin
       xm docalxybase
-      dup . ." x reading " umean usdp s>f xythreshold f@ f* f>s + dup . ." threshold " cr >
+      dup . ." x reading " nmean usdp s>f xythreshold f@ f* f>s + dup . ." threshold " cr >
     until
     true \ now at start edge
     0 xmotor usequickreg
@@ -268,14 +269,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 : calyhome ( -- nflag )
-  ym 30 newcalxybase { umean usdp nflag }
+  ym 30 newcalxybase { nmean usdp nflag }
   nflag
   if \ now find home
     ymotor enable-motor
     0 ymotor setdirection
     begin
       ym docalxybase
-      dup . ." y reading " umean usdp s>f xythreshold f@ f* f>s + dup . ." threshold " cr >
+      dup . ." y reading " nmean usdp s>f xythreshold f@ f* f>s + dup . ." threshold " cr >
     until
     true \ now at start edge
     0 ymotor usequickreg
