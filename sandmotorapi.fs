@@ -42,6 +42,7 @@ false value homedone?   \ false means table has not been homed true means table 
 0 constant xm
 1 constant ym
 100 value xylimit \ used to find home
+1.1 fvariable xythreshold \ used to find home when divided by 10
 1500 constant stopbuffer
 0 constant xm-min
 0 constant ym-min
@@ -284,7 +285,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 xmotor setdirection
     begin
       xm docalxybase
-      dup . ." x reading " umean usdp 2 * + dup . ." threshold " >
+      dup . ." x reading " umean usdp s>f xythreshold f@ f* f>s + dup . ." threshold " cr >
     until
     true \ now at start edge
     0 xmotor usequickreg
@@ -293,7 +294,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 to xposition
     xmotor disable-motor
   else
-    false \ test not stable
+    false \ xmotor not stable
     true to xposition \ this means xposition is not know because of home failure
   then ;
 
