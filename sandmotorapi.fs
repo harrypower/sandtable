@@ -43,6 +43,9 @@ false value homedone?   \ false means table has not been homed true means table 
 1 constant ym
 1.1e fvariable xythreshold xythreshold f! \ used to find home
 1500 constant stopbuffer
+30 constant calloop \ how many times the calibration will repeat for warm up and stable operation
+80 constant cal-std-dev-max \ calibration standard deviation needs to be lower then this value
+300 constant cal-mean-min \ calibartion mean needs to be above this value
 0 constant xm-min
 0 constant ym-min
 276000 constant xm-max
@@ -207,14 +210,17 @@ true value yposition  \ is the real location of y motor .. note if value is true
   calspeed calsteps uxy calxysteps
   uxy xyget-sg_result ;
 
-: newcalxybase ( uxy utimes -- nmean usdp nflag )
-  0 0 { utimes nmean usdp }
+: newcalxybase ( uxy -- nmean usdp nflag ) \ simply run motor x or y then take readings and get standard deiviation and mean
+\ nmean is the mean of stall guard value for uxy motor
+\ uspd is the standard deviation of the readings
+\ nflag is true when readings are believed to be valid false if readings do not meet basic value checks
+  0 0 { nmean nsdp }
   case
     xm of
       xmotor enable-motor
       xdata [bind] realtimeMSD construct
       1 xmotor usequickreg
-      utimes 0 ?do
+      calloop 0 ?do
         1 xmotor setdirection
         5 0 do xm docalxybase drop loop
         0 xmotor setdirection
@@ -222,7 +228,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         xdata nsdp@ . ." standard deviation "
         xdata nmean@ . ." mean for x!" cr
       loop
-      xdata nsdp@ to usdp
+      xdata nsdp@ to nsdp
       xdata nmean@ to nmean
       xmotor disable-motor
     endof
@@ -230,7 +236,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       ymotor enable-motor
       ydata [bind] realtimeMSD construct
       1 ymotor usequickreg
-      utimes 0 ?do
+      calloop 0 ?do
         1 ymotor setdirection
         5 0 do ym docalxybase drop loop
         0 ymotor setdirection
@@ -238,17 +244,19 @@ true value yposition  \ is the real location of y motor .. note if value is true
         ydata nsdp@ . ." standard deviation "
         ydata nmean@ . ." mean for x!" cr
       loop
-      ydata nsdp@ to usdp
+      ydata nsdp@ to nsdp
       ydata nmean@ to nmean
       ymotor disable-motor
     endof
   endcase
-  nmean usdp true
+  nmean nsdp
+  nmean cal-mean-min > \ mean needs to be above cal-mean-min
+  nsdp cal-std-dev-max < and \ standard deviation needs to be below cal-std-dev-max
   nmean . ." base mean!" usdp . ." base usdb!" cr ;
 
 
 : calxhome ( -- nflag )
-  xm 30 newcalxybase { nmean usdp nflag }
+  xm newcalxybase { nmean usdp nflag }
   nflag
   if \ now find home
     xmotor enable-motor
@@ -269,7 +277,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 : calyhome ( -- nflag )
-  ym 30 newcalxybase { nmean usdp nflag }
+  ym newcalxybase { nmean usdp nflag }
   nflag
   if \ now find home
     ymotor enable-motor
