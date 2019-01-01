@@ -186,7 +186,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
-: xyget-sg_result ( uxym -- usgr )
+\ also note that these home position words are do not check if sandtable is configured so only use the main word to calibrate the sandtable
+
+: xyget-sg_result ( uxym -- usgr )  \ get result of stall guard readings
   case
   xm of
     DRV_STATUS xmotor getreg throw swap drop
@@ -236,7 +238,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       nmean nsdp
       nmean cal-mean-min > \ mean needs to be above cal-mean-min
       nsdp xcal-std-dev-max < \ standard deviation needs to be below cal-std-dev-max
-      and 
+      and
     endof
     ym of
       ymotor enable-motor
@@ -262,7 +264,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nmean . ." base mean!" nsdp . ." base sdp!" cr ;
 
 
-: calxhome ( -- nflag )
+: calxhome ( -- nflag ) \ nflag is true if calibration seems to be done false if some issues were found
   xm newcalxybase { nmean usdp nflag }
   nflag
   if \ now find home
@@ -283,7 +285,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     true to xposition \ this means xposition is not know because of home failure
   then ;
 
-: calyhome ( -- nflag )
+: calyhome ( -- nflag ) \ nflag is true if calibration seems to be done false if some issues were found
   ym newcalxybase { nmean usdp nflag }
   nflag
   if \ now find home
@@ -305,6 +307,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 : xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
+\ note calibration will be attempted a second time if the first time fails to be inside basic calibration limits
  calxhome
  if true else xmotor enable-motor 1 xmotor setdirection calspeed 10000 xm calxysteps xmotor disable-motor calxhome then
  calyhome
@@ -312,7 +315,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
  and dup to homedone? ;
 
 : dogohome ( -- nflag ) \ if nflag is true x and y motors are configured sent home if nflag is false something failed here
-    configured? false = if xyhome else false then ;
+  try
+    configured? false = if xyhome invert else true throw then
+  endtry if false else true then
+  restore ;
 \ ************************
 
 : closedown ( -- )
