@@ -55,7 +55,8 @@ true value xposition  \ is the real location of x motor .. note if value is true
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
 1100 value calspeed
-2000 value calsteps
+200 value calsteps
+50 value calstep-amounts
 10 value steps
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
@@ -226,9 +227,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
       1 xmotor usequickreg
       calloop 0 ?do
         1 xmotor setdirection
-        5 0 do xm docalxybase drop loop
+        calstep-amounts 0 do xm docalxybase drop loop
         0 xmotor setdirection
-        5 0 do xm docalxybase xdata n>data loop
+        calstep-amounts 0 do xm docalxybase xdata n>data loop
         xdata nsdp@ . ." standard deviation "
         xdata nmean@ . ." mean for x!" cr
       loop
@@ -246,11 +247,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
       1 ymotor usequickreg
       calloop 0 ?do
         1 ymotor setdirection
-        5 0 do ym docalxybase drop loop
+        calstep-amounts 0 do ym docalxybase drop loop
         0 ymotor setdirection
-        5 0 do ym docalxybase ydata n>data loop
+        calstep-amounts 0 do ym docalxybase ydata n>data loop
         ydata nsdp@ . ." standard deviation "
-        ydata nmean@ . ." mean for x!" cr
+        ydata nmean@ . ." mean for y!" cr
       loop
       ydata nsdp@ to nsdp
       ydata nmean@ to nmean
