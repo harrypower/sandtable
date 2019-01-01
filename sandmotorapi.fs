@@ -252,7 +252,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nmean nsdp
   nmean cal-mean-min > \ mean needs to be above cal-mean-min
   nsdp cal-std-dev-max < and \ standard deviation needs to be below cal-std-dev-max
-  nmean . ." base mean!" usdp . ." base usdb!" cr ;
+  nmean . ." base mean!" nsdp . ." base sdp!" cr ;
 
 
 : calxhome ( -- nflag )
