@@ -207,6 +207,43 @@ true value yposition  \ is the real location of y motor .. note if value is true
   calspeed calsteps uxy calxysteps
   uxy xyget-sg_result ;
 
+: newcalxybase ( uxy utimes -- umean nflag )
+  0 { utimes umean }
+  case
+    xm of
+      xmotor enable-motor
+      xdata [bind] realtimeMSD construct
+      1 xmotor usequickreg
+      utimes 0 ?do
+        1 xmotor setdirection
+        5 0 do xm docalxybase drop loop
+        0 xmotor setdirection
+        5 0 do xm docalxybase xdata n>data loop
+        xdata nmean-nsdp-nvp@
+        . ." variance " . ." standard deviation " . ." mean for x!" cr
+      loop
+      xdata nmean-nsdp-nvp@ drop drop to umean
+      xmotor disable-motor
+    endof
+    ym of
+      ymotor enable-motor
+      ydata [bind] realtimeMSD construct
+      1 ymotor usequickreg
+      utimes 0 ?do
+        1 ymotor setdirection
+        5 0 do ym docalxybase drop loop
+        0 ymotor setdirection
+        5 0 do ym docalxybase ydata n>data loop
+        ydata nmean-nsdp-nvp@
+        . ." variance " . ." standard deviation " . ." mean for x!" cr
+      loop
+      ydata nmean-nsdp-nvp@ drop drop to umean
+      ymotor disable-motor
+    endof
+  endcase
+  umean true
+  umean . ." base mean!" cr ;
+
 : calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the stallGuard average .. nflag is true if success false is bad base readings
   0 0 { uavg usd } \ uavg is average .. usd is standard deviation
   case
