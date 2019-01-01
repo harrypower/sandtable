@@ -245,37 +245,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
   umean usdp true
   umean . ." base mean!" usdp . ." base usdb!" cr ;
 
-: calxybase ( uxy -- uavg nflag ) \ uxy is the motor to get infor from ... uavg is the stallGuard average .. nflag is true if success false is bad base readings
-  0 0 { uavg usd } \ uavg is average .. usd is standard deviation
-  case
-  xm of
-    1 xmotor usequickreg
-    1 xmotor setdirection
-    5 0 do calspeed calsteps xm calxysteps loop
-    0 xmotor setdirection
-    xm docalxybase to uavg
-    uavg . ."  0 base test" cr
-    4 0 do
-    xm docalxybase dup uavg + 2 / to uavg
-      . space i 1 + . ."  base test" cr
-    loop
-  endof
-  ym of
-    1 ymotor usequickreg
-    1 ymotor setdirection
-    5 0 do calspeed calsteps ym calxysteps loop
-    0 ymotor setdirection
-    ym docalxybase to uavg
-    uavg . ."  0 base test" cr
-    4 0 do
-      ym docalxybase dup uavg + 2 / to uavg
-      . space i 1 + . ."  base test" cr
-    loop
-  endof
-  endcase
-  uavg true
-  uavg . ."  base avg!" cr
-  ;
 
 : calxhome ( -- nflag )
   xm 30 newcalxybase { umean usdp nflag }
@@ -299,26 +268,25 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 : calyhome ( -- nflag )
-  ymotor enable-motor
-  ym calxybase drop drop \ warm up motor first
-  ym calxybase swap xylimit + { ubase }
+  ym 30 newcalxybase { umean usdp nflag }
+  nflag
   if \ now find home
-   0 ymotor setdirection
-   begin
-     calspeed calsteps  ym calxysteps
-     ym xyget-sg_result dup . ." y reading " ubase dup . ." y ubase " cr >
-     \ ym xyget-sg_result ubase >
-   until
-   true \ now at start edge
-   0 ymotor usequickreg
-   1 ymotor setdirection
-   silentspeed stopbuffer ym calxysteps \ moves a small distance from home stop position
-   0 to yposition
+    ymotor enable-motor
+    0 ymotor setdirection
+    begin
+      ym docalxybase
+      dup . ." y reading " umean usdp s>f xythreshold f@ f* f>s + dup . ." threshold " cr >
+    until
+    true \ now at start edge
+    0 ymotor usequickreg
+    1 ymotor setdirection
+    silentspeed stopbuffer ym calxysteps \ moves a small distance from home stop position
+    0 to yposition
+    ymotor disable-motor
   else
-   false \ test not stable
-   true to yposition \ this means yposition is not know because of home failure
-  then
-  ymotor disable-motor ;
+    false \ ymotor not stable
+    true to yposition \ this means xposition is not know because of home failure
+  then ;
 
 : xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
  calxhome
