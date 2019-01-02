@@ -59,6 +59,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 256 value calsteps
 60 value calstep-amounts
 10 value steps
+1 value calreg
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -79,6 +80,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1 xmotor setdirection
     %100 %00000000111100000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
     2 xmotor quickreg!
+    %100 %00000000111100000000 1 1000 0 0 %00110001000000001000000010010011 %1000000000000000000000000 %0111100000101011111111
+    3 xmotor quickreg!
 
     %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
     0 ymotor quickreg!
@@ -88,7 +91,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1 ymotor setdirection
     %100 %00000000111100000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
     2 ymotor quickreg!
-
+    %100 %00000000111100000000 1 1000 0 0 %00110001000000001000000010010011 %1000000000000000000000000 %0111100000101011111111
+    3 ymotor quickreg!
   then
   configured? ;
 
@@ -230,7 +234,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm of
       xmotor enable-motor
       xdata [bind] realtimeMSD construct
-      2 xmotor usequickreg
+      calreg xmotor usequickreg
       calloop 0 ?do
         1 xmotor setdirection
         calstep-amounts 0 do xm docalxybase drop loop
@@ -250,7 +254,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     ym of
       ymotor enable-motor
       ydata [bind] realtimeMSD construct
-      2 ymotor usequickreg
+      calreg ymotor usequickreg
       calloop 0 ?do
         1 ymotor setdirection
         calstep-amounts 0 do ym docalxybase drop loop
