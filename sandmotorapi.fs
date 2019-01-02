@@ -41,12 +41,12 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-4.5e fvariable xythreshold xythreshold f! \ used to find home
+4.2e fvariable xythreshold xythreshold f! \ used to find home
 1500 constant stopbuffer
 30 constant calloop \ how many times the calibration will repeat for warm up and stable operation
-170 value xcal-std-dev-max \ calibration standard deviation needs to be lower then this value for xmotor
-170 value ycal-std-dev-max \ calibration standard deviation needs to be lower then this value for ymotor
-80 value cal-mean-min \ calibartion mean needs to be above this value
+160 value xcal-std-dev-max \ calibration standard deviation needs to be lower then this value for xmotor
+160 value ycal-std-dev-max \ calibration standard deviation needs to be lower then this value for ymotor
+60 value cal-mean-min \ calibartion mean needs to be above this value
 0 constant xm-min
 0 constant ym-min
 276000 constant xm-max
@@ -54,7 +54,7 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-900 value calspeed
+850 value calspeed
 100 value calsteps
 100 value calstep-amounts
 10 value steps
