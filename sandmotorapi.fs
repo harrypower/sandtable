@@ -41,10 +41,10 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-4.2e fvariable xthreshold xthreshold f! \ x threshold for home
+5e fvariable xthreshold xthreshold f! \ x threshold for home
 6e fvariable ythreshold ythreshold f! \ y threshold for home
 1500 value stopbuffer
-8 value calloop \ how many times the calibration will repeat for warm up and stable operation
+5 value calloop \ how many times the calibration will repeat for warm up and stable operation
 160 value xcal-std-dev-max \ calibration standard deviation needs to be lower then this value for xmotor
 160 value ycal-std-dev-max \ calibration standard deviation needs to be lower then this value for ymotor
 60 value cal-mean-min \ calibartion mean needs to be above this value
@@ -77,7 +77,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1 xmotor quickreg!
     1 xmotor usequickreg
     1 xmotor setdirection
-    %100 %00000001111100000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
+    %100 %00000000111100000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
     2 xmotor quickreg!
 
     %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
@@ -86,7 +86,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1 ymotor quickreg!
     1 ymotor usequickreg
     1 ymotor setdirection
-    %100 %00000001111100000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
+    %100 %00000000111100000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
     2 ymotor quickreg!
 
   then
