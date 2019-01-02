@@ -270,7 +270,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
   if \ now find home
     xmotor enable-motor
     0 xmotor setdirection
-    0 to ntest
     begin
       xm docalxybase
       dup . ." x reading " nmean usdp s>f xythreshold f@ f* f>s + dup . ." threshold " cr >
