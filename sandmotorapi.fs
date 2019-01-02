@@ -41,9 +41,10 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-4.2e fvariable xythreshold xythreshold f! \ used to find home
+4.2e fvariable xthreshold xthreshold f! \ x threshold for home
+6e fvariable ythreshold ythreshold f! \ y threshold for home
 1500 value stopbuffer
-10 value calloop \ how many times the calibration will repeat for warm up and stable operation
+8 value calloop \ how many times the calibration will repeat for warm up and stable operation
 160 value xcal-std-dev-max \ calibration standard deviation needs to be lower then this value for xmotor
 160 value ycal-std-dev-max \ calibration standard deviation needs to be lower then this value for ymotor
 60 value cal-mean-min \ calibartion mean needs to be above this value
@@ -272,7 +273,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 xmotor setdirection
     begin
       xm docalxybase
-      dup . ." x reading " nmean usdp s>f xythreshold f@ f* f>s + dup . ." threshold " cr >
+      dup . ." x reading " nmean usdp s>f xthreshold f@ f* f>s + dup . ." threshold " cr >
     until
     true \ now at start edge
     0 xmotor usequickreg
@@ -293,7 +294,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 ymotor setdirection
     begin
       ym docalxybase
-      dup . ." y reading " nmean usdp s>f xythreshold f@ f* f>s + dup . ." threshold " cr >
+      dup . ." y reading " nmean usdp s>f ythreshold f@ f* f>s + dup . ." threshold " cr >
     until
     true \ now at start edge
     0 ymotor usequickreg
