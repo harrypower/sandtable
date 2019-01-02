@@ -77,6 +77,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1 xmotor quickreg!
     1 xmotor usequickreg
     1 xmotor setdirection
+    %100 %01110001111100000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
+    2 xmotor quickreg!
 
     %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
     0 ymotor quickreg!
@@ -84,6 +86,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1 ymotor quickreg!
     1 ymotor usequickreg
     1 ymotor setdirection
+    %100 %01110001111100000000 1 1000 0 0 %00110001000000101000000010010011 %1000000000000000000000000 %0111100000101011111111
+    2 ymotor quickreg!
+
   then
   configured? ;
 
@@ -225,7 +230,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm of
       xmotor enable-motor
       xdata [bind] realtimeMSD construct
-      1 xmotor usequickreg
+      2 xmotor usequickreg
       calloop 0 ?do
         1 xmotor setdirection
         calstep-amounts 0 do xm docalxybase drop loop
@@ -245,7 +250,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     ym of
       ymotor enable-motor
       ydata [bind] realtimeMSD construct
-      1 ymotor usequickreg
+      2 ymotor usequickreg
       calloop 0 ?do
         1 ymotor setdirection
         calstep-amounts 0 do ym docalxybase drop loop
