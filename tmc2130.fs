@@ -183,9 +183,9 @@ object class
     stepbank stepio bbbiosetup throw
     usteps 0 ?do
       bbbioset
-      utime usleep
+      utime usleep drop
       bbbioclear
-      utime usleep
+      utime usleep drop 
     loop
     BBBiocleanup throw
   ;m method steps-usleep
