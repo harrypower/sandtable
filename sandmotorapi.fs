@@ -41,8 +41,8 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-5e fvariable xthreshold xthreshold f! \ x threshold for home
-5e fvariable ythreshold ythreshold f! \ y threshold for home
+3e fvariable xthreshold xthreshold f! \ x threshold for home
+4.8e fvariable ythreshold ythreshold f! \ y threshold for home
 1500 value stopbuffer
 6 value calloop \ how many times the calibration will repeat for warm up and stable operation
 120 value xcal-std-dev-max \ calibration standard deviation needs to be lower then this value for xmotor
@@ -133,10 +133,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
       xposition ux >
       if
         0 xmotor setdirection
-        silentspeed-usleep xposition ux - xmotor timedsteps
+        silentspeed-usleep xposition ux - xmotor steps-usleep
       else
         1 xmotor setdirection
-        silentspeed-usleep ux xposition - xmotor timedsteps
+        silentspeed-usleep ux xposition - xmotor steps-usleep
       then
       ux to xposition
       xmotor disable-motor
