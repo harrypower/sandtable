@@ -29,6 +29,7 @@ require BBB_Gforth_gpio/syscalls386.fs
 require Gforth-Objects/objects.fs
 require BBB_Gforth_gpio/BBB_GPIO_lib.fs
 require Gforth-Objects/mdca-obj.fs
+require pauses.fs
 
 0x40046B04        constant SPI_IOC_WR_MAX_SPEED_HZ
 0x40016B03        constant SPI_IOC_WR_BITS_PER_WORD
@@ -177,6 +178,17 @@ object class
     loop
     BBBiocleanup throw
   ;m method timedsteps
+  m: ( useconds usteps tmc2130 -- ) \ steps with usleep
+    { utime usteps }
+    stepbank stepio bbbiosetup throw
+    usteps 0 ?do
+      bbbioset
+      utime usleep
+      bbbioclear
+      utime usleep
+    loop
+    BBBiocleanup throw
+  ;m method steps-usleep
   m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- nflag ) \ constructor
   \ nflag is false for configuration ok
   \ nflag is any other number meaning something did not work to configure this motor driver
