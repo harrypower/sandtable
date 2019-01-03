@@ -55,6 +55,7 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
+40 value slientspeed-usleep \ wait time in useconds for silent step operation
 950 value calspeed
 256 value calsteps
 60 value calstep-amounts
@@ -111,6 +112,31 @@ true value yposition  \ is the real location of y motor .. note if value is true
       else
         1 xmotor setdirection
         silentspeed ux xposition - xmotor timedsteps
+      then
+      ux to xposition
+      xmotor disable-motor
+      true
+    else
+      false
+    then
+  else
+    false
+  then ;
+
+: test-movetox { ux -- nflag } \ move to x position on table nflag is true if the move is executed and false if the move was not possible for some reason
+  configured? false = homedone? true = xposition true <> and and
+  if \ only do steps if all configured and home is know
+    xm-max ux >= xm-min ux <= and
+    if
+      xmotor enable-motor
+      0 xmotor usequickreg
+      xposition ux >
+      if
+        0 xmotor setdirection
+        silentspeed-usleep xposition ux - xmotor timedsteps
+      else
+        1 xmotor setdirection
+        silentspeed-usleep ux xposition - xmotor timedsteps
       then
       ux to xposition
       xmotor disable-motor
