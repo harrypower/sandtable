@@ -326,7 +326,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : dogohome ( -- nflag ) \ if nflag is true x and y motors are configured sent home if nflag is false something failed here
   try
-    configured? false = if xyhome invert else true throw then
+    configured? false = if xyhome invert throw else true throw then
+    false 
   endtry if false else true then
   restore ;
 \ ************************
