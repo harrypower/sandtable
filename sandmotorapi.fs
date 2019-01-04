@@ -60,7 +60,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 256 value calsteps
 60 value calstep-amounts
 10 value steps
-1 value calreg
+3 value calreg
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -296,7 +296,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     begin
       xm docalxybase to nlvl
       nlvl nlvl . ." x reading " nmean usdp s>f xthreshold f@ f* f>s + dup . ." threshold " cr >
-      nlvl 0 = or
+      \ nlvl 0 = or
     until
     true \ now at start edge
     0 xmotor usequickreg
@@ -318,7 +318,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     begin
       ym docalxybase to nlvl
       nlvl nlvl . ." y reading " nmean usdp s>f ythreshold f@ f* f>s + dup . ." threshold " cr >
-      nlvl 0 = or 
+      \ nlvl 0 = or
     until
     true \ now at start edge
     0 ymotor usequickreg
