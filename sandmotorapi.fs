@@ -42,7 +42,7 @@ false value homedone?   \ false means table has not been homed true means table 
 0 constant xm
 1 constant ym
 5e fvariable xthreshold xthreshold f! \ x threshold for home
-5e fvariable ythreshold ythreshold f! \ y threshold for home
+6e fvariable ythreshold ythreshold f! \ y threshold for home
 1500 value stopbuffer
 6 value calloop \ how many times the calibration will repeat for warm up and stable operation
 120 value xcal-std-dev-max \ calibration standard deviation needs to be lower then this value for xmotor
