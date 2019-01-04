@@ -333,10 +333,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
 \ note calibration will be attempted a second time if the first time fails to be inside basic calibration limits
- calxhome
- if true else xmotor enable-motor 1 xmotor setdirection calspeed 10000 xm calxysteps xmotor disable-motor calxhome then
  calyhome
  if true else ymotor enable-motor 1 ymotor setdirection calspeed 10000 ym calxysteps ymotor disable-motor calyhome then
+ calxhome
+ if true else xmotor enable-motor 1 xmotor setdirection calspeed 10000 xm calxysteps xmotor disable-motor calxhome then
  and dup to homedone? ;
 
 : dogohome ( -- nflag ) \ if nflag is true x and y motors are configured sent home if nflag is false something failed here
