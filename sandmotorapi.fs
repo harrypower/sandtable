@@ -123,31 +123,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
     false
   then ;
 
-: test-movetox { ux -- nflag } \ move to x position on table nflag is true if the move is executed and false if the move was not possible for some reason
-  configured? false = homedone? true = xposition true <> and and
-  if \ only do steps if all configured and home is know
-    xm-max ux >= xm-min ux <= and
-    if
-      xmotor enable-motor
-      0 xmotor usequickreg
-      xposition ux >
-      if
-        0 xmotor setdirection
-        silentspeed-usleep xposition ux - xmotor steps-usleep
-      else
-        1 xmotor setdirection
-        silentspeed-usleep ux xposition - xmotor steps-usleep
-      then
-      ux to xposition
-      xmotor disable-motor
-      true
-    else
-      false
-    then
-  else
-    false
-  then ;
-
 : movetoy { uy -- nflag } \ move to y position on table nflag is true if the move is executed and false if the move was not possible for some reason
   configured? false = homedone? true = yposition true <> and and
   if \ only do steps if all configured and home is know
