@@ -288,14 +288,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nmean . ." base mean!" nsdp . ." base sdp!" cr ;
 
 : calxhome ( -- nflag ) \ nflag is true if calibration seems to be done false if some issues were found
-  xm newcalxybase { nmean usdp nflag }
+  xm newcalxybase 0 { nmean usdp nflag nlvl }
   nflag
   if \ now find home
     xmotor enable-motor
     0 xmotor setdirection
     begin
-      xm docalxybase
-      dup . ." x reading " nmean usdp s>f xthreshold f@ f* f>s + dup . ." threshold " cr >
+      xm docalxybase to nlvl
+      nlvl nlvl . ." x reading " nmean usdp s>f xthreshold f@ f* f>s + dup . ." threshold " cr >
+      nlvl 0 = or
     until
     true \ now at start edge
     0 xmotor usequickreg
@@ -309,14 +310,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 : calyhome ( -- nflag ) \ nflag is true if calibration seems to be done false if some issues were found
-  ym newcalxybase { nmean usdp nflag }
+  ym newcalxybase 0 { nmean usdp nflag nlvl }
   nflag
   if \ now find home
     ymotor enable-motor
     0 ymotor setdirection
     begin
-      ym docalxybase
-      dup . ." y reading " nmean usdp s>f ythreshold f@ f* f>s + dup . ." threshold " cr >
+      ym docalxybase to nlvl
+      nlvl nlvl . ." y reading " nmean usdp s>f ythreshold f@ f* f>s + dup . ." threshold " cr >
+      nlvl 0 = or 
     until
     true \ now at start edge
     0 ymotor usequickreg
