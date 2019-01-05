@@ -59,7 +59,7 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-800 value calspeed
+750 value calspeed
 256 value calsteps
 60 value calstep-amounts
 10 value steps
