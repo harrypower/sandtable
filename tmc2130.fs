@@ -77,10 +77,10 @@ require pauses.fs
 
 \ the following are the settings to then make the objects mymotorx and mymotory based on above system pin config's used
 \ 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
-\ tmc2130 heap-new constant mymotorX \ throw
+\ tmc2130 heap-new constant mymotorX
 
 \ 1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
-\ tmc2130 heap-new constant mymotory \ throw
+\ tmc2130 heap-new constant mymotory
 \ *****************************************************************
 \ some of the tmc2130 registers
 0x00 constant GCONF
@@ -196,14 +196,14 @@ object class
     { ubankenable uenableio ubankdir udirio ubankstep ustepio uspi }
     try
       ubankenable [to-inst] enablebank uenableio [to-inst] enablebit
-      enablebank enablebit this gpio-output throw
+      enablebank enablebit this gpio-output abort" construct of tmc2130 failure a"
       this disable-motor \ this should turn off power to motor
       ubankdir [to-inst] dirbank udirio [to-inst] dirbit
-      dirbank dirbit this gpio-output throw
-      dirbank dirbit this gpio-low throw
+      dirbank dirbit this gpio-output abort" construct of tmc2130 failure b"
+      dirbank dirbit this gpio-low abort" construct of tmc2130 failure c"
       ubankstep [to-inst] stepbank ustepio [to-inst] stepio
-      stepbank stepio this gpio-output throw
-      stepbank stepio this gpio-low throw
+      stepbank stepio this gpio-output abort" construct of tmc2130 failure d"
+      stepbank stepio this gpio-low abort" construct of tmc2130 failure e"
       true [to-inst] spihandle
       uspi case
         \ this is spi1 on the BBB schematic and mode chart. Linux enumerates the spi starting at 1!
@@ -213,16 +213,16 @@ object class
       endcase
       spihandle 0> if
         200000 u32data !
-        spihandle SPI_IOC_WR_MAX_SPEED_HZ u32data ioctl throw \ set spi speed to 100000 hz
+        spihandle SPI_IOC_WR_MAX_SPEED_HZ u32data ioctl abort" construct of tmc2130 failure f" \ set spi speed to 100000 hz
         8 bytedata c!
-        spihandle SPI_IOC_WR_BITS_PER_WORD bytedata ioctl throw \ set bits per word to 8
+        spihandle SPI_IOC_WR_BITS_PER_WORD bytedata ioctl abort" construct of tmc2130 failure g" \ set bits per word to 8
         0 bytedata c!
-        spihandle SPI_IOC_WR_MODE bytedata ioctl throw \ set to low on idle and capture on rising of clock
+        spihandle SPI_IOC_WR_MODE bytedata ioctl abort" construct of tmc2130 failure h" \ set to low on idle and capture on rising of clock
       else
-        spihandle throw
+        spihandle abort" construct of tmc2130 failure i"
       then
-      6 allocate throw [to-inst] bufferA
-      6 allocate throw [to-inst] bufferB
+      6 allocate abort" construct of tmc2130 failure j" [to-inst] bufferA
+      6 allocate abort" construct of tmc2130 failure k" [to-inst] bufferB
       9 10 2 multi-cell-array heap-new [to-inst] quickreg
       10 0 do 9 0 do 0 i j quickreg [bind] multi-cell-array cell-array! loop loop \ set quickreg's to 0
       0 [to-inst] currentqr
@@ -233,11 +233,11 @@ object class
   m: ( tmc2130 -- ) \ destructor
     spihandle 0> if
       this disable-motor
-      spihandle close throw
-      bufferA free throw
-      bufferB free throw
+      spihandle close abort" destruct of tmc2130 failure a"
+      bufferA free abort" destruct of tmc2130 failure b"
+      bufferB free abort" destruct of tmc2130 failure c"
       quickreg [bind] multi-cell-array destruct
-      quickreg free throw
+      quickreg free abort" destruct of tmc2130 failure d"
     then ;m overrides destruct
 
   m: ( ureg tmc2130 -- utmc2130_status udata nflag ) \ read a register from tmc2130 device
@@ -289,29 +289,29 @@ object class
   m: ( uqrindex tmc2130 -- ) \ the previous values stored in uqrindex quickreg will be transfered to the tmc2130 device via spi interface
     { uqrindex }
     uqrindex 0>= uqrindex 10 < and if
-      GCONF      0 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
-      IHOLD_IRUN 1 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
-      TPOWERDOWN 2 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
-      TPWMTHRS   3 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
-      TCOOLTHRS  4 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
-      THIGH      5 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
-      CHOPCONF   6 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
-      COOLCONF   7 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
-      PWMCONF    8 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg throw drop
+      GCONF      0 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg abort" usequickreg failure a" drop
+      IHOLD_IRUN 1 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg abort" usequickreg failure b" drop
+      TPOWERDOWN 2 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg abort" usequickreg failure c" drop
+      TPWMTHRS   3 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg abort" usequickreg failure d" drop
+      TCOOLTHRS  4 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg abort" usequickreg failure e" drop
+      THIGH      5 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg abort" usequickreg failure f" drop
+      CHOPCONF   6 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg abort" usequickreg failure g" drop
+      COOLCONF   7 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg abort" usequickreg failure h" drop
+      PWMCONF    8 uqrindex quickreg [bind] multi-cell-array cell-array@ this putreg abort" usequickreg failure i" drop
       uqrindex [to-inst] currentqr
     then
   ;m method usequickreg
   m: ( tmc2130 -- ) \ print some stuff
     this [parent] print cr
     ." spihandle " spihandle . cr
-    ." TSTEPS " TSTEPS this getreg throw . cr
+    ." TSTEPS " TSTEPS this getreg abort" print failure a" . cr
     ." standstill " dup %1000 and 0= if ." no" else ." yes" then cr
     ." stallguard flag " dup %100 and 0= if ." off" else ." on" then cr
     ." driver error " dup %10 and 0= if ." no" else ." yes" then cr
     ." tmp2130 reset " %1 and 0= if ." no" else ." yes" then cr
-    ." GSTAT " GSTAT this getreg throw . drop cr
-    ." DRV_STATUS " DRV_STATUS this getreg throw dup u. swap drop cr
-    ." PWM_SCALE " PWM_SCALE this getreg throw . drop cr
+    ." GSTAT " GSTAT this getreg abort" print failure b" . drop cr
+    ." DRV_STATUS " DRV_STATUS this getreg abort" print failure c" dup u. swap drop cr
+    ." PWM_SCALE " PWM_SCALE this getreg abort" print failure d" . drop cr
     ." SG_RESULT " dup %1111111111 and . cr
     ." fsactive " dup %1000000000000000 and 0= if ." microstep" else ." fullstep" then cr
     ." CS ACTUAL " dup %111110000000000000000 and 16 rshift . cr
@@ -323,7 +323,7 @@ end-class tmc2130
 \ *****************************************************************
 \\\
 1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
-tmc2130 heap-new constant mymotorX \ throw
+tmc2130 heap-new constant mymotorX
 
 1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
-tmc2130 heap-new constant mymotory \ throw
+tmc2130 heap-new constant mymotory
