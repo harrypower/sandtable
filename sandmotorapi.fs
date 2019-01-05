@@ -60,16 +60,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
 60 value calstep-amounts
 10 value steps
 3 value xcalreg
-2 value ycalreg
+3 value ycalreg
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
   configured? 0 = if
     1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
-    tmc2130 heap-new to xmotor throw
+    tmc2130 heap-new to xmotor abort" xmotor did not construct"
     xmotor disable-motor
     1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
-    tmc2130 heap-new to ymotor throw
+    tmc2130 heap-new to ymotor abort" ymotor did not construct"
     ymotor disable-motor
 
     \ GCONF uIHOLD_IRUN uTPOWERDOWN uTPWMTHRS uTCOOLTHRS uTHIGH uCHOPCONF   uCOOLCONF                  uPWMCONF
@@ -215,10 +215,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 : xyget-sg_result ( uxym -- usgr )  \ get result of stall guard readings
   case
   xm of
-    DRV_STATUS xmotor getreg throw swap drop
+    DRV_STATUS xmotor getreg abort" xmotor getreg failed" swap drop
   endof
   ym of
-    DRV_STATUS ymotor getreg throw swap drop
+    DRV_STATUS ymotor getreg abort" ymotor getreg failed" swap drop
   endof
   endcase
   %1111111111 and ;
@@ -341,7 +341,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : dogohome ( -- nflag ) \ if nflag is true x and y motors are configured sent home if nflag is false something failed here
   try
-    configured? false = if xyhome false = if 1 throw then else 1 throw then
+    configured? false = if xyhome false = if 1 abort" xyhome failed" then else 1 abort" not connfigured yet" then
     false
   restore if false else true then
   endtry ;
