@@ -293,7 +293,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       ymotor enable-motor
       ydata [bind] realtimeMSD construct
       ycura [bind] realtimeMSD construct
-      ycurb [bind] realtimeMSD construct 
+      ycurb [bind] realtimeMSD construct
       ycalreg ymotor usequickreg
       calloop 0 ?do
         1 ymotor setdirection
@@ -350,7 +350,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 ymotor setdirection
     begin
       ym docalxybase to nlvl
-      ym xyget-MSCURACT . ." curB " . ." curA" cr
+      ym xyget-MSCURACT . ." curB " . ." curA"
       nlvl nlvl . ." y reading " nmean usdp s>f ythreshold f@ f* f>s + dup . ." threshold " cr >
       \ nlvl 0 = or
     until
