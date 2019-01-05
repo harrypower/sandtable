@@ -96,6 +96,7 @@ require pauses.fs
 0x6F constant DRV_STATUS
 0x70 constant PWMCONF
 0x71 constant PWM_SCALE
+0x6b constant MSCURACT
 
 [ifundef] destruction
   interface
@@ -185,7 +186,7 @@ object class
       bbbioset
       utime usleep drop
       bbbioclear
-      utime usleep drop 
+      utime usleep drop
     loop
     BBBiocleanup throw
   ;m method steps-usleep
