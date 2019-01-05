@@ -324,8 +324,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 xmotor setdirection
     begin
       xm docalxybase to nlvl
+      xm xyget-MSCURACT . ." curB " . ." curA"
       nlvl nlvl . ." x reading " nmean usdp s>f xthreshold f@ f* f>s + dup . ." threshold " cr >
-      \ nlvl 0 = or
     until
     true \ now at start edge
     0 xmotor usequickreg
@@ -346,6 +346,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 ymotor setdirection
     begin
       ym docalxybase to nlvl
+      ym xyget-MSCURACT . ." curB " . ." curA" cr
       nlvl nlvl . ." y reading " nmean usdp s>f ythreshold f@ f* f>s + dup . ." threshold " cr >
       \ nlvl 0 = or
     until
