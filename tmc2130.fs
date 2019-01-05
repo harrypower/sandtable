@@ -127,15 +127,16 @@ object class
   inst-value quickreg
   inst-value currentqr
 
-  m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
+  m: ( ugpiobank ugpiobitmask tmc2130 -- nflag ) \ will set bitmask of bank to output mode ... nflag is false for all good other value for some failure
     bbbiosetup false = if bbbiooutput bbbiocleanup else bbbiocleanup drop true then ;m method gpio-output
 
-  m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
+  m: ( ugpiobank ugpiobitmask tmc2130 -- nflag ) \ will set bitmask of bank to high output ... nflag is false for all good other value for some failure
     bbbiosetup false = if bbbioset bbbiocleanup else bbbiocleanup drop true then ;m method gpio-high
 
-  m: ( ugpiobank ugpiobitmask tmc2130 -- nflag )
+  m: ( ugpiobank ugpiobitmask tmc2130 -- nflag ) \ will set bitmask of bank to low output ... nflag is false for all good other value for some failure
     bbbiosetup false = if bbbioclear bbbiocleanup else bbbiocleanup drop true then ;m method gpio-low
-  m: ( uaddr tmc2130 -- ndata ) \ takes string of 4 bytes and puts into 32 bit ndata
+
+  m: ( uaddr tmc2130 -- ndata ) \ takes string of 4 bytes and converts to 32 bit ndata
   \ uaddr is the buffer location for the string
   \ the string is always 4 bytes long
     0 { uaddr data }
@@ -149,47 +150,45 @@ object class
   ;m method data-$
   public
   m: ( tmc2130 -- ) \ simply make enable pin high on tmc2130 driver board
-    enablebank enablebit this gpio-high throw ;m overrides disable-motor
+    enablebank enablebit this gpio-high abort" disable-motor failure" ;m overrides disable-motor
   m: ( tmc2130 -- ) \ simply make enable pin low on tmc2130 driver board
-    enablebank enablebit this gpio-low throw ;m overrides enable-motor
+    enablebank enablebit this gpio-low abort" enable-motor failure" ;m overrides enable-motor
   m: ( udirection tmc2130 -- ) \ udirection is 0 for left and 1 for right
     case
-      0 of dirbank dirbit this gpio-low throw endof
-      1 of dirbank dirbit this gpio-high throw endof
+      0 of dirbank dirbit this gpio-low abort" gpio-low of setdirection failure" endof
+      1 of dirbank dirbit this gpio-high abort" gpio-high of setdirection failure" endof
     endcase ;m method setdirection
   m: ( usteps tmc2130 -- ) \ fast step the motor usteps times ... this steps around 30 khz on BBB
-    \ spihandle 0> if
-    stepbank stepio bbbiosetup throw
+    stepbank stepio bbbiosetup abort" bbbiosetup of faststeps failure"
     0 ?do
       bbbioset
       1000 0 do loop
       bbbioclear
       1000 0 do loop
     loop
-    BBBiocleanup throw
-    \ then
+    BBBiocleanup abort" bbbiocleanup of faststeps failure"
   ;m method faststeps
   m: ( utime usteps tmc2130 -- ) \ step the motor ustep times with utime between each step... utime of 1000 is around 30 khz on BBB
     { utime usteps }
-    stepbank stepio bbbiosetup throw
+    stepbank stepio bbbiosetup abort" bbbiosetup of timedsteps failure"
     usteps 0 ?do
       bbbioset
       utime 0 ?do loop
       bbbioclear
       utime 0 ?do loop
     loop
-    BBBiocleanup throw
+    BBBiocleanup abort" bbbiocleanup of timedsteps failure"
   ;m method timedsteps
   m: ( useconds usteps tmc2130 -- ) \ steps with usleep
     { utime usteps }
-    stepbank stepio bbbiosetup throw
+    stepbank stepio bbbiosetup abort" bbbiosetup of steps-usleep failure"
     usteps 0 ?do
       bbbioset
       utime usleep drop
       bbbioclear
       utime usleep drop
     loop
-    BBBiocleanup throw
+    BBBiocleanup abort" bbbiocleanup of steps-usleep failure"
   ;m method steps-usleep
   m: ( ubankenable uenableio ubankdir udirio ubankstep ustepio uspi tmc2130 -- nflag ) \ constructor
   \ nflag is false for configuration ok
