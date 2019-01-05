@@ -264,8 +264,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm of
       xmotor enable-motor
       xdata [bind] realtimeMSD construct
-      xcura [bind] realtimeMSD construct
-      xcurb [bind] realtimeMSD construct
+\      xcura [bind] realtimeMSD construct
+\      xcurb [bind] realtimeMSD construct
       xcalreg xmotor usequickreg
       calloop 0 ?do
         1 xmotor setdirection
@@ -274,10 +274,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
         calstep-amounts 0 do xm docalxybase xdata n>data
           xm xyget-MSCURACT xcurb n>data xcura n>data
         loop
-        xcura nsdp@ . ." sd curA "
-        xcura nmean@ . ." mean curA "
-        xcurb nsdp@ . ." sd curB "
-        xcurb nmean@ . ." mean curB "
+\        xcura nsdp@ . ." sd curA "
+\        xcura nmean@ . ." mean curA "
+\        xcurb nsdp@ . ." sd curB "
+\        xcurb nmean@ . ." mean curB "
         xdata nsdp@ . ." standard deviation "
         xdata nmean@ . ." mean for x!" cr
       loop
@@ -292,8 +292,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     ym of
       ymotor enable-motor
       ydata [bind] realtimeMSD construct
-      ycura [bind] realtimeMSD construct
-      ycurb [bind] realtimeMSD construct
+\      ycura [bind] realtimeMSD construct
+\      ycurb [bind] realtimeMSD construct
       ycalreg ymotor usequickreg
       calloop 0 ?do
         1 ymotor setdirection
@@ -302,10 +302,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
         calstep-amounts 0 do ym docalxybase ydata n>data
           ym xyget-MSCURACT ycurb n>data ycura n>data
         loop
-        ycura nsdp@ . ." sd curA "
-        ycura nmean@ . ." mean curA "
-        ycurb nsdp@ . ." sd curB "
-        ycurb nmean@ . ." mean curB "
+\        ycura nsdp@ . ." sd curA "
+\        ycura nmean@ . ." mean curA "
+\        ycurb nsdp@ . ." sd curB "
+\        ycurb nmean@ . ." mean curB "
         ydata nsdp@ . ." standard deviation "
         ydata nmean@ . ." mean for y!" cr
       loop
@@ -328,7 +328,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 xmotor setdirection
     begin
       xm docalxybase to nlvl
-      xm xyget-MSCURACT . ." curB " . ." curA "
+\      xm xyget-MSCURACT . ." curB " . ." curA "
       nlvl nlvl . ." x reading " nmean usdp s>f xthreshold f@ f* f>s + dup . ." threshold " cr >
     until
     true \ now at start edge
@@ -350,7 +350,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 ymotor setdirection
     begin
       ym docalxybase to nlvl
-      ym xyget-MSCURACT . ." curB " . ." curA "
+\      ym xyget-MSCURACT . ." curB " . ." curA "
       nlvl nlvl . ." y reading " nmean usdp s>f ythreshold f@ f* f>s + dup . ." threshold " cr >
       \ nlvl 0 = or
     until
