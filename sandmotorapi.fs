@@ -264,6 +264,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm of
       xmotor enable-motor
       xdata [bind] realtimeMSD construct
+      xcura [bind] realtimeMSD construct
+      xcurb [bind] realtimeMSD construct
       xcalreg xmotor usequickreg
       calloop 0 ?do
         1 xmotor setdirection
@@ -290,6 +292,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     ym of
       ymotor enable-motor
       ydata [bind] realtimeMSD construct
+      ycura [bind] realtimeMSD construct
+      ycurb [bind] realtimeMSD construct 
       ycalreg ymotor usequickreg
       calloop 0 ?do
         1 ymotor setdirection
