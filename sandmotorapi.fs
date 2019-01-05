@@ -35,6 +35,10 @@ require realtimeMSD.fs
 
 realtimeMSD dict-new constant xdata
 realtimeMSD dict-new constant ydata
+realtimeMSD dict-new constant xcura
+realtimeMSD dict-new constant xcurb
+realtimeMSD dict-new constant ycura
+realtimeMSD dict-new constant ycurb
 0 value xmotor
 0 value ymotor
 true value configured?  \ true means not configured false means configured
@@ -215,13 +219,26 @@ true value yposition  \ is the real location of y motor .. note if value is true
 : xyget-sg_result ( uxym -- usgr )  \ get result of stall guard readings
   case
   xm of
-    DRV_STATUS xmotor getreg abort" xmotor getreg failed" swap drop
+    DRV_STATUS xmotor getreg abort" xmotor DRV_STATUS failed" swap drop
   endof
   ym of
-    DRV_STATUS ymotor getreg abort" ymotor getreg failed" swap drop
+    DRV_STATUS ymotor getreg abort" ymotor DRV_STATUS failed" swap drop
   endof
   endcase
   %1111111111 and ;
+
+: xyget-MSCURACT ( uxym -- nCUR_A nCUR_B ) \ uxym is a motor ym or xm.  this will return the microstep for motor for each phase
+  case
+  xm of
+    MSCURACT xmotor getreg abort" xmotor MSCURACT failed" swap drop
+  endof
+  ym of
+    MSCURACT xmotor getreg abort" xmotor MSCURACT failed" swap drop
+  endof
+  endcase
+  dup %111111111 and swap
+  %1111111110000000000000000 and 16 rshift
+;
 
 : calxysteps ( utime usteps uxy -- )  \ this is to be used by home position code below use movetox or movetoy for normal motion
  case
@@ -252,7 +269,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
         1 xmotor setdirection
         calstep-amounts 0 do xm docalxybase drop loop
         0 xmotor setdirection
-        calstep-amounts 0 do xm docalxybase xdata n>data loop
+        calstep-amounts 0 do xm docalxybase xdata n>data
+          xm xyget-MSCURACT xcurb n>data xcura n>data
+        loop
+        xcura nsdp@ . ." sd curA"
+        xcura nmean@ . ." mean curA"
+        xcurb nsdp@ . ." sd curB"
+        xcurb nmean@ . ." mean curB"
         xdata nsdp@ . ." standard deviation "
         xdata nmean@ . ." mean for x!" cr
       loop
@@ -272,7 +295,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
         1 ymotor setdirection
         calstep-amounts 0 do ym docalxybase drop loop
         0 ymotor setdirection
-        calstep-amounts 0 do ym docalxybase ydata n>data loop
+        calstep-amounts 0 do ym docalxybase ydata n>data
+          ym xyget-MSCURACT ycurb n>data ycura n>data
+        loop
+        ycura nsdp@ . ." sd curA"
+        ycura nmean@ . ." mean curA"
+        ycurb nsdp@ . ." sd curB"
+        ycurb nmean@ . ." mean curB"
         ydata nsdp@ . ." standard deviation "
         ydata nmean@ . ." mean for y!" cr
       loop
