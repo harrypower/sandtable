@@ -233,12 +233,21 @@ true value yposition  \ is the real location of y motor .. note if value is true
     MSCURACT xmotor getreg abort" xmotor MSCURACT failed" swap drop
   endof
   ym of
-    MSCURACT xmotor getreg abort" xmotor MSCURACT failed" swap drop
+    MSCURACT xmotor getreg abort" ymotor MSCURACT failed" swap drop
   endof
   endcase
   dup %111111111 and swap
   %1111111110000000000000000 and 16 rshift
 ;
+: xyget-LOST_STEPS ( uxym -- ulost ) \ uxym is a motor ym or xm.  ulost is the value returned indicating lost steps
+  case
+  xm of
+    LOST_STEPS xmotor getreg abort" xmotor LOST_STEPS failed" swap drop
+  endof
+  ym of
+    LOST_STEPS ymotor getreg abort" ymotor LOST_STEPS failed" swap drop
+  endof
+  endcase ;
 
 : calxysteps ( utime usteps uxy -- )  \ this is to be used by home position code below use movetox or movetoy for normal motion
  case
