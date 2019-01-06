@@ -273,9 +273,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
       calloop 0 ?do
         1 xmotor setdirection
         calstep-amounts 0 do xm docalxybase drop loop
-        0 xmotor setdirection
-        calstep-amounts 0 do xm docalxybase xdata n>data
-          xm xyget-MSCURACT xcurb n>data xcura n>data
+          0 xmotor setdirection
+          calstep-amounts 0 do xm docalxybase xdata n>data
         loop
         xdata nsdp@ . ." standard deviation "
         xdata nmean@ . ." mean for x!" cr
@@ -295,9 +294,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
       calloop 0 ?do
         1 ymotor setdirection
         calstep-amounts 0 do ym docalxybase drop loop
-        0 ymotor setdirection
-        calstep-amounts 0 do ym docalxybase ydata n>data
-          ym xyget-MSCURACT ycurb n>data ycura n>data
+          0 ymotor setdirection
+          calstep-amounts 0 do ym docalxybase ydata n>data
         loop
         ydata nsdp@ . ." standard deviation "
         ydata nmean@ . ." mean for y!" cr
