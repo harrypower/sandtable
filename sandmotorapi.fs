@@ -63,8 +63,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
 256 value calsteps
 60 value calstep-amounts
 10 value steps
-3 value xcalreg
-3 value ycalreg
+4 value xcalreg
+4 value ycalreg
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
