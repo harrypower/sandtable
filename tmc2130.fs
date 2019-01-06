@@ -21,9 +21,12 @@
 \ BBB_GPIO_lib.fs
 \ objects.fs
 \ mdca-obj.fs
+\ pauses.fs
 
 \ Revisions:
 \ 6/24/2018 started coding
+\ 01/05/2019 added some constants and changed throws to abort"
+\ requires pauses.fs but may not use this addition
 
 require BBB_Gforth_gpio/syscalls386.fs
 require Gforth-Objects/objects.fs
