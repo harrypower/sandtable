@@ -47,7 +47,7 @@ false value homedone?   \ false means table has not been homed true means table 
 6 value calloop \ how many times the calibration will repeat for warm up and stable operation
 120 value xcal-std-dev-max \ calibration standard deviation needs to be lower then this value for xmotor
 120 value ycal-std-dev-max \ calibration standard deviation needs to be lower then this value for ymotor
-50 value cal-mean-min \ calibartion mean needs to be above this value
+30 value cal-mean-min \ calibartion mean needs to be above this value
 0 constant xm-min
 0 constant ym-min
 275968 constant xm-max
