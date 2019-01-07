@@ -384,7 +384,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 \ *****************************************************************
 \ testing stuff will remove Later
 : xysteps { uquickreg udirection utime usteps uxy -- uresult } \ simply step motor based on this info then return stall guard result
-  configured? fasle = if
+  configured? false = if
   uxy
   case
     xm of
