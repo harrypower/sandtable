@@ -396,8 +396,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
       xmotor disable-motor
     endof
     ym of
-      uquickreg xmotor usequickreg
-      udirection xmotor setdirection
+      uquickreg ymotor usequickreg
+      udirection ymotor setdirection
       ymotor enable-motor
       utime usteps ymotor timedsteps
       ym xyget-sg_result
