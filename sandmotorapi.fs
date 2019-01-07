@@ -50,8 +50,10 @@ false value homedone?   \ false means table has not been homed true means table 
 50 value cal-mean-min \ calibartion mean needs to be above this value
 0 constant xm-min
 0 constant ym-min
-276000 constant xm-max
-276000 constant ym-max
+275968 constant xm-max
+275968 constant ym-max
+1 constant forward
+0 constant backward
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
@@ -78,7 +80,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     %100 %00000000011000000000 1 1000 0 0 %00110001000000101000000010010011 %0000000000000000000000000 %0101100000101011111111
     1 xmotor quickreg!
     1 xmotor usequickreg
-    1 xmotor setdirection
+    forward xmotor setdirection
     %100 %00000000000100000000 1 1000 0 0 %00110001000000101000000010010011 %0000000000000000000000000 %0111100000101011111111
     2 xmotor quickreg!
     %100 %00000000000100000000 1 1000 0 0 %00110001000000001000000010010011 %0010110000000000000000000 %0111100000101011111111
@@ -95,7 +97,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     %100 %00000000011000000000 1 1000 0 0 %00110001000000101000000010010011 %0000000000000000000000000 %0101100000101011111111
     1 ymotor quickreg!
     1 ymotor usequickreg
-    1 ymotor setdirection
+    forward ymotor setdirection
     %100 %00000000000100000000 1 1000 0 0 %00110001000000101000000010010011 %0000000000000000000000000 %0111100000101011111111
     2 ymotor quickreg!
     %100 %00000000000100000000 1 1000 0 0 %00110001000000001000000010010011 %0010110000000000000000000 %0111100000101011111111
@@ -119,10 +121,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
       0 xmotor usequickreg
       xposition ux >
       if
-        0 xmotor setdirection
+        backward xmotor setdirection
         silentspeed xposition ux - xmotor timedsteps
       else
-        1 xmotor setdirection
+        forward xmotor setdirection
         silentspeed ux xposition - xmotor timedsteps
       then
       ux to xposition
@@ -144,10 +146,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
       0 ymotor usequickreg
       yposition uy >
       if
-        0 ymotor setdirection
+        backward ymotor setdirection
         silentspeed yposition uy - ymotor timedsteps
       else
-        1 ymotor setdirection
+        forward ymotor setdirection
         silentspeed uy yposition - ymotor timedsteps
       then
       uy to yposition
@@ -210,7 +212,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
-\ also note that these home position words are do not check if sandtable is configured so only use the main word to calibrate the sandtable
+\ also note that these home position words do not check if sandtable is configured so only use the main word to calibrate the sandtable
 
 : xyget-sg_result ( uxym -- usgr )  \ get result of stall guard readings
   case
@@ -378,3 +380,28 @@ true value yposition  \ is the real location of y motor .. note if value is true
   ymotor disable-motor
   xmotor [bind] tmc2130 destruct
   ymotor [bind] tmc2130 destruct ;
+
+\ *****************************************************************
+\ testing stuff will remove Later
+: xysteps { uquickreg udirection utime usteps uxy -- uresult } \ simply step motor based on this info then return stall guard result
+  configured? fasle = if
+  uxy
+  case
+    xm of
+      uquickreg xmotor usequickreg
+      udirection xmotor setdirection
+      xmotor enable-motor
+      xmotor timedsteps
+      xm xyget-sg_result
+      xmotor disable-motor
+    endof
+    ym of
+      uquickreg xmotor usequickreg
+      udirection xmotor setdirection
+      ymotor enable-motor
+      ymotor timedsteps
+      ym xyget-sg_result
+      ymotor disable-motor
+    endof
+    endcase then
+    ;
