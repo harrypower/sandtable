@@ -390,18 +390,34 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm of
       uquickreg xmotor usequickreg
       udirection xmotor setdirection
-      xmotor enable-motor
+\      xmotor enable-motor
       utime usteps xmotor timedsteps
       xm xyget-sg_result
-      xmotor disable-motor
+\      xmotor disable-motor
     endof
     ym of
       uquickreg ymotor usequickreg
       udirection ymotor setdirection
-      ymotor enable-motor
+\      ymotor enable-motor
       utime usteps ymotor timedsteps
       ym xyget-sg_result
-      ymotor disable-motor
+\      ymotor disable-motor
     endof
-    endcase then
+    endcase
+    else 0
+    then
     ;
+
+: ndosteps { uquickreg udirection uxy usteps -- umean usd }
+  configured? false = if
+    uxy case xm of xdata endof ym of ydata endof endcase
+    [bind] realtimeMSD construct
+    usteps 0 do
+      uquickreg udirection calspeed calsteps uxy xysteps
+      uxy case xm of xdata endof ym of ydata endof endcase n>data
+    loop
+    uxy case xm of xdata endof ym of ydata endof endcase
+    dup nmean@ swap nsdp@
+  else 0 0
+  then
+;
