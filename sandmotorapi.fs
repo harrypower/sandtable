@@ -436,3 +436,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case xm of x-array-data endof ym of y-array-data endof endcase
   else 0
   then ;
+
+: listmotordata { udatalist -- }
+  udatalist ll-set-start
+  begin udatalist ll-cell@ . udatalist ll> until ;
+
+  
