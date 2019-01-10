@@ -393,18 +393,18 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm of
       uquickreg xmotor usequickreg
       udirection xmotor setdirection
-      xmotor enable-motor
+\      xmotor enable-motor
       utime usteps xmotor timedsteps
       xm xyget-sg_result
-      xmotor disable-motor
+\      xmotor disable-motor
     endof
     ym of
       uquickreg ymotor usequickreg
       udirection ymotor setdirection
-      ymotor enable-motor
+\      ymotor enable-motor
       utime usteps ymotor timedsteps
       ym xyget-sg_result
-      ymotor disable-motor
+\      ymotor disable-motor
     endof
     endcase
     else 0
@@ -413,12 +413,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : ndosteps { uquickreg udirection uxy usteps -- umean usd }
   configured? false = if
+    uxy case xm of xmotor enable-motor endof ym of ymotor enable-motor endof endcase
     uxy case xm of xdata endof ym of ydata endof endcase
     [bind] realtimeMSD construct
     usteps 0 do
       uquickreg udirection calspeed calsteps uxy xysteps
       uxy case xm of xdata endof ym of ydata endof endcase n>data
     loop
+    uxy case xm of xmotor disable-motor endof ym of ymotor disable-motor endof endcase
     uxy case xm of xdata endof ym of ydata endof endcase
     dup nmean@ swap nsdp@
   else 0 0
@@ -427,12 +429,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : ndosteps-list { uquickreg udirection uxy usteps -- uxydll }
   configured? false = if
+    uxy case xm of xmotor enable-motor endof ym of ymotor enable-motor endof endcase
     uxy case xm of x-array-data endof ym of y-array-data endof endcase
     [bind] double-linked-list construct
     usteps 0 do
       uquickreg udirection calspeed calsteps uxy xysteps
       uxy case xm of x-array-data endof ym of y-array-data endof endcase ll-cell!
     loop
+    uxy case xm of xmotor disable-motor endof ym of ymotor disable-motor endof endcase
     uxy case xm of x-array-data endof ym of y-array-data endof endcase
   else 0
   then ;
@@ -440,5 +444,3 @@ true value yposition  \ is the real location of y motor .. note if value is true
 : listmotordata { udatalist -- }
   udatalist ll-set-start
   begin udatalist ll-cell@ . udatalist ll> until ;
-
-  
