@@ -450,7 +450,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case xm of xmotor enable-motor endof ym of ymotor enable-motor endof endcase
     uxy case xm of x-array-data endof ym of y-array-data endof endcase
     [bind] double-linked-list construct
-    uuloop 0 do
+    uloop 0 do
       uquickreg udirection ucalspeed ucalsteps uxy xysteps
       uxy case xm of x-array-data endof ym of y-array-data endof endcase ll-cell!
     loop
