@@ -62,6 +62,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
 800 value calspeed
 256 value calsteps
+800 value xcalspeed
+256 value xcalsteps
+800 value ycalspeed
+256 value ycalsteps
 60 value calstep-amounts
 10 value steps
 6 value xcalreg
@@ -86,13 +90,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
     forward xmotor setdirection
     %100 %00000000000100000000 1 1000 0 0 %00110001000000101000000010010011 %0000000000000000000000000 %0111100000101011111111
     2 xmotor quickreg!
-    %100 %00000000011100000000 1 1000 0 0 %00110001000000001000000010010011 %0010110000000000000000000 %0111100000101011111111
+    %100 %00000000011100000000 1 1000 0 0 %00100110000000001000000010010011 %0011011000000000000000000 %0111100000101011111111
     3 xmotor quickreg!
-    %100 %00000000011100000011 1 1000 0 0 %00110001000000001000000010010011 %0010110000000000000000000 %0111100000101011111111
+    %100 %00000000011100000011 1 1000 0 0 %00100100000000001000000010010011 %0011011000000000000000000 %0111100000101011111111
     4 xmotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00010001000000001000000010010011 %0011011000000000000000000 %0111100000101011111111
+    %100 %00000000001100000011 1 1000 0 0 %00100001000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     5 xmotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00110001000000001000000010010011 %0011011000000000000000000 %0111100000101011111111
+    %100 %00000000001100000011 1 1000 0 0 %00110001000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     6 xmotor quickreg!
 
     %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
@@ -103,11 +107,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
     forward ymotor setdirection
     %100 %00000001111100000011 1 1000 0 0 %00110001000000101000000010010011 %0000000000000000000000000 %0111100000101011111111
     2 ymotor quickreg!
-    %100 %00000001111100000011 1 1000 0 0 %00010001000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+    %100 %00000001111100000011 1 1000 0 0 %00100110000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     3 ymotor quickreg!
-    %100 %00000000011100000011 1 1000 0 0 %00110001000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+    %100 %00000000011100000011 1 1000 0 0 %00100100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     4 ymotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00010001000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+    %100 %00000000001100000011 1 1000 0 0 %00100001000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     5 ymotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00110001000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     6 ymotor quickreg!
@@ -393,18 +397,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm of
       uquickreg xmotor usequickreg
       udirection xmotor setdirection
-\      xmotor enable-motor
       utime usteps xmotor timedsteps
       xm xyget-sg_result
-\      xmotor disable-motor
     endof
     ym of
       uquickreg ymotor usequickreg
       udirection ymotor setdirection
-\      ymotor enable-motor
       utime usteps ymotor timedsteps
       ym xyget-sg_result
-\      ymotor disable-motor
     endof
     endcase
     else 0
@@ -417,7 +417,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case xm of xdata endof ym of ydata endof endcase
     [bind] realtimeMSD construct
     usteps 0 do
-      uquickreg udirection calspeed calsteps uxy xysteps
+      uquickreg udirection
+      uxy case xm of xcalspeed xcalsteps endof ym of ycalspeed ycalsteps endof endcase
+      uxy xysteps
       uxy case xm of xdata endof ym of ydata endof endcase n>data
     loop
     uxy case xm of xmotor disable-motor endof ym of ymotor disable-motor endof endcase
@@ -433,7 +435,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case xm of x-array-data endof ym of y-array-data endof endcase
     [bind] double-linked-list construct
     usteps 0 do
-      uquickreg udirection calspeed calsteps uxy xysteps
+      uquickreg udirection
+      uxy case xm of xcalspeed xcalsteps endof ym of ycalspeed ycalsteps endof endcase
+      uxy xysteps
       uxy case xm of x-array-data endof ym of y-array-data endof endcase ll-cell!
     loop
     uxy case xm of xmotor disable-motor endof ym of ymotor disable-motor endof endcase
