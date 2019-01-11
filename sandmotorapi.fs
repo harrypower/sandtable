@@ -88,11 +88,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1 xmotor quickreg!
     1 xmotor usequickreg
     forward xmotor setdirection
-    %100 %00000000000100000000 1 1000 0 0 %00111000000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+    %100 %00000000000100000000 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     2 xmotor quickreg!
-    %100 %00000000011100000000 1 1000 0 0 %00110110000000001000000010010011 %0011011000000000000000000 %0111100000101011111111
+    %100 %00000000011100000000 1 1000 0 0 %00110011000000001000000010010011 %0011011000000000000000000 %0111100000101011111111
     3 xmotor quickreg!
-    %100 %00000000011100000011 1 1000 0 0 %00110100000000001000000010010011 %0011011000000000000000000 %0111100000101011111111
+    %100 %00000000011100000011 1 1000 0 0 %00110010000000001000000010010011 %0011011000000000000000000 %0111100000101011111111
     4 xmotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00110001000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     5 xmotor quickreg!
@@ -390,20 +390,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 \ *****************************************************************
 \ testing stuff will remove Later
-: xysteps { uquickreg udirection utime usteps uxy -- uresult } \ simply step motor based on this info then return stall guard result
+: xysteps { uquickreg udirection ucalspeed ucalsteps uxy -- uresult } \ simply step motor based on this info then return stall guard result
   configured? false = if
   uxy
   case
     xm of
       uquickreg xmotor usequickreg
       udirection xmotor setdirection
-      utime usteps xmotor timedsteps
+      ucalspeed ucalsteps xmotor timedsteps
       xm xyget-sg_result
     endof
     ym of
       uquickreg ymotor usequickreg
       udirection ymotor setdirection
-      utime usteps ymotor timedsteps
+      ucalspeed ucalsteps ymotor timedsteps
       ym xyget-sg_result
     endof
     endcase
@@ -438,6 +438,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
       uquickreg udirection
       uxy case xm of xcalspeed xcalsteps endof ym of ycalspeed ycalsteps endof endcase
       uxy xysteps
+      uxy case xm of x-array-data endof ym of y-array-data endof endcase ll-cell!
+    loop
+    uxy case xm of xmotor disable-motor endof ym of ymotor disable-motor endof endcase
+    uxy case xm of x-array-data endof ym of y-array-data endof endcase
+  else 0
+  then ;
+
+: nstep-list { uquickreg udirection ucalspeed ucalsteps uloop uxy -- uxydll }
+  configured? false = if
+    uxy case xm of xmotor enable-motor endof ym of ymotor enable-motor endof endcase
+    uxy case xm of x-array-data endof ym of y-array-data endof endcase
+    [bind] double-linked-list construct
+    uuloop 0 do
+      uquickreg udirection ucalspeed ucalsteps uxy xysteps
       uxy case xm of x-array-data endof ym of y-array-data endof endcase ll-cell!
     loop
     uxy case xm of xmotor disable-motor endof ym of ymotor disable-motor endof endcase
