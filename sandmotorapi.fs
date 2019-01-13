@@ -54,12 +54,12 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-6800 value xcalspeed
+6900 value xcalspeed
 32 value xcalsteps
-7100 value ycalspeed
+7200 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
-2.1e fvariable cal-threshold cal-threshold f!
+2.0e fvariable cal-threshold cal-threshold f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
@@ -364,12 +364,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
 : xwarmup ( -- )
   xmotor enable-motor
   xcalreg forward xcalspeed xcalsteps xm xysteps drop
-  10 ms
+  15000 ms
   xmotor disable-motor ;
 : ywarmup ( -- )
   ymotor enable-motor
   ycalreg forward ycalspeed ycalsteps ym xysteps drop
-  10 ms
+  15000 ms
   ymotor disable-motor ;
 
 : dohome ( -- nflag ) \ find x and y home position ... nflag is true if calibration is done.   nflag is false for or other value for a calibration failure
