@@ -56,11 +56,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
 6900 value xcalspeed
 32 value xcalsteps
-7200 value ycalspeed
+7000 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
-1.5e fvariable cal-threshold-a cal-threshold-a f!
-2.0e fvariable cal-threshold-b cal-threshold-b f!
+1.5e fvariable xcal-threshold-a cal-threshold-a f!
+2.0e fvariable xcal-threshold-b cal-threshold-b f!
+1.8e fvariable ycal-threshold-a cal-threshold-a f!
+2.2e fvariable ycal-threshold-b cal-threshold-b f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
@@ -301,11 +303,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
   udatalist ll-set-start
   begin udatalist ll-cell@ . udatalist ll> until ;
 
-: edgedetect ( usd umean utestsd utestmean -- nflag ) \ looks for edge conditions ... nflag is true if edge found or false if not found
+: xedgedetect ( usd umean utestsd utestmean -- nflag ) \ looks for edge conditions ... nflag is true if edge found or false if not found
   { usd umean utestsd utestmean }
-  utestmean usd s>f cal-threshold-a f@ f* f>s umean + >
-  umean usd s>f cal-threshold-a f@ f* f>s - 0 < if utestmean 0 = else utestmean umean usd s>f cal-threshold-a f@ f* f>s - < then or
-  utestsd usd s>f cal-threshold-b f@ f* f>s > or ;
+  utestmean usd s>f xcal-threshold-a f@ f* f>s umean + >
+  umean usd s>f xcal-threshold-a f@ f* f>s - 0 < if utestmean 0 = else utestmean umean usd s>f xcal-threshold-a f@ f* f>s - < then or
+  utestsd usd s>f xcal-threshold-b f@ f* f>s > or ;
+: yedgedetect ( usd umean utestsd utestmean -- nflag ) \ looks for edge conditions ... nflag is true if edge found or false if not found
+  { usd umean utestsd utestmean }
+  utestmean usd s>f ycal-threshold-a f@ f* f>s umean + >
+  umean usd s>f ycal-threshold-a f@ f* f>s - 0 < if utestmean 0 = else utestmean umean usd s>f ycal-threshold-a f@ f* f>s - < then or
+  utestsd usd s>f ycal-threshold-b f@ f* f>s > or ;
 
 : doxycalibrate ( uxy -- nflag ) \ uxy is ym or xm ... nflag is false for calibration failed and true for calibration passed
   0 0 0 { uxy umean usd maxloops }
@@ -319,14 +326,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
         begin
           usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
-          edgedetect if
+          xedgedetect if
             xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
             xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
             xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
             usd . ." x usd " umean . ." x umean  #2" cr
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
             .s ." x usd umean testsd testmean final" cr
-            edgedetect
+            xedgedetect
           else
             false
           then
@@ -343,14 +350,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
         begin
           usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
           .s ." y usd umean testsd testmean " maxloops . ." maxloops" cr
-          edgedetect if
+          yedgedetect if
             ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
             ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
             ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
             usd . ." y usd " umean . ." y umean #2" cr
             usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
             .s ." y usd umean testsd testmean final" cr
-            edgedetect
+            yedgedetect
           else
             false
           then
