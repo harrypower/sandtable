@@ -472,7 +472,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
           usd umean + > swap umean usd - < or
           maxloops 1 + dup to maxloops 23 >= or
         until
-        maxloops 23 >= if 11 abort" edge not detected for y axis calibration failed!" then
+        maxloops 23 >= if 13 abort" edge not detected for y axis calibration failed!" then
         ycalreg forward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
         ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
         ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps drop dup
@@ -481,3 +481,26 @@ true value yposition  \ is the real location of y motor .. note if value is true
       endof
     endcase
   else false then ;
+
+: dohome ( -- nflag ) \ find x and y home position ... nflag is true if calibration is done.   nflag is false for or other value for a calibration failure 
+  try
+    configured? false = if
+      xm doxycalibrate if
+        0 forward silentspeed stopbuffer xm xysteps drop \ moves a small distance from home stop position
+        0 to xposition
+        true
+      else
+        false
+      then
+      ym doxycalibrate if
+        0 forward silentspeed stopbuffer ym xysteps drop \ moves a small distance from home stop position
+        0 to  yposition
+        true
+      else
+        false
+      then
+    else
+        false
+    then
+  restore dup true = if true to homedone? else false to homedone? then
+  endtry ;
