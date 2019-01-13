@@ -44,22 +44,22 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-1500 value stopbuffer
+1600 value stopbuffer
 0 constant xm-min
 0 constant ym-min
-276000 constant xm-max
-276000 constant ym-max
+275500 constant xm-max
+275500 constant ym-max
 1 constant forward
 0 constant backward
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-6700 value xcalspeed
+6800 value xcalspeed
 32 value xcalsteps
 7100 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
-2e fvariable cal-threshold cal-threshold f!
+2.1e fvariable cal-threshold cal-threshold f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
@@ -320,7 +320,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
           edgedetect if
             xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
-            xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop 
+            xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
             xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
             usd . ." x usd " umean . ." x umean  #2" cr
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
