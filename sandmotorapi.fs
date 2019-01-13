@@ -59,7 +59,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 7100 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
-2.5e fvariable cal-threshold cal-threshold f!
+2e fvariable cal-threshold cal-threshold f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
@@ -312,14 +312,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case
       xm of
         xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
-        xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
+        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
+        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
         usd . ." x usd " umean . ." x umean  #1" cr
         begin
           usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
           edgedetect if
             xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
-            xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
+            xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps
+            xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
             usd . ." x usd " umean . ." x umean  #2" cr
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
             .s ." x usd umean testsd testmean final" cr
@@ -334,13 +336,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
       endof
       ym of
         ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
-        ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
+        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
+        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
         usd . ." y usd " umean . ." y umean #1" cr
         begin
           usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
           .s ." y usd umean testsd testmean " maxloops . ." maxloops" cr
           edgedetect if
-            ycalreg forward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
+            ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
+            ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
             ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
             usd . ." y usd " umean . ." y umean #2" cr
             usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
