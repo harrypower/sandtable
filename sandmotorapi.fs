@@ -361,9 +361,21 @@ true value yposition  \ is the real location of y motor .. note if value is true
     endcase
   else false then ;
 
+: xwarmup ( -- )
+  xmotor enable-motor
+  xcalreg forward xcalspeed xcalsteps xm xysteps drop
+  10 ms
+  xmotor disable-motor ;
+: ywarmup ( -- )
+  ymotor enable-motor
+  ycalreg forward ycalspeed ycalsteps ym xysteps drop
+  10 ms
+  ymotor disable-motor ;
+
 : dohome ( -- nflag ) \ find x and y home position ... nflag is true if calibration is done.   nflag is false for or other value for a calibration failure
   try
     configured? false = if
+      xwarmup
       xm doxycalibrate if
         xmotor enable-motor
         0 forward silentspeed stopbuffer xm xysteps drop \ moves a small distance from home stop position
@@ -372,6 +384,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         true
       else false
       then
+      ywarmup
       ym doxycalibrate if
         ymotor enable-motor
         0 forward silentspeed stopbuffer ym xysteps drop \ moves a small distance from home stop position
