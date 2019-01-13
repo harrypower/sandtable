@@ -59,7 +59,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
 7200 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
-2.0e fvariable cal-threshold cal-threshold f!
+1.5e fvariable cal-threshold-a cal-threshold-a f!
+2.0e fvariable cal-threshold-b cal-threshold-b f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
@@ -302,9 +303,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : edgedetect ( usd umean utestsd utestmean -- nflag ) \ looks for edge conditions ... nflag is true if edge found or false if not found
   { usd umean utestsd utestmean }
-  utestmean usd usd umean + + >
-  umean usd usd + - 0 < if utestmean 0 = else utestmean umean usd usd + - < then or
-  utestsd usd s>f cal-threshold f@ f* f>s > or ;
+  utestmean usd s>f cal-threshold-a f@ f* f>s umean + >
+  umean usd s>f cal-threshold-a f@ f* f>s - 0 < if utestmean 0 = else utestmean umean usd s>f cal-threshold-a f@ f* f>s - < then or
+  utestsd usd s>f cal-threshold-b f@ f* f>s > or ;
 
 : doxycalibrate ( uxy -- nflag ) \ uxy is ym or xm ... nflag is false for calibration failed and true for calibration passed
   0 0 0 { uxy umean usd maxloops }
@@ -363,13 +364,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : xwarmup ( -- )
   xmotor enable-motor
-  6 forward xcalspeed xcalsteps xm xysteps drop
-  15000 ms
+  xcalreg forward xcalspeed xcalsteps xm xysteps drop
+  20000 ms
   xmotor disable-motor ;
 : ywarmup ( -- )
   ymotor enable-motor
-  6 forward ycalspeed ycalsteps ym xysteps drop
-  15000 ms
+  ycalreg forward ycalspeed ycalsteps ym xysteps drop
+  20000 ms
   ymotor disable-motor ;
 
 : dohome ( -- nflag ) \ find x and y home position ... nflag is true if calibration is done.   nflag is false for or other value for a calibration failure
