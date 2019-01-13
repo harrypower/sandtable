@@ -301,8 +301,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : edgedetect ( usd umean utestsd utestmean -- nflag ) \ looks for edge conditions ... nflag is true if edge found or false if not found
   { usd umean utestsd utestmean }
-  usd usd umean + + utestmean >
-  utestmean umean usd usd + - < or
+  utestmean usd usd umean + + >
+  umean usd usd + - 0 < if utestmean 0 = else utestmean umean usd usd + - < then or
   usd utestsd > or ;
 
 : doxycalibrate ( uxy -- nflag ) \ uxy is ym or xm ... nflag is false for calibration failed and true for calibration passed
