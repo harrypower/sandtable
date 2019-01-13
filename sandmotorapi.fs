@@ -54,15 +54,15 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-6900 value xcalspeed
+6700 value xcalspeed
 32 value xcalsteps
-7000 value ycalspeed
+6900 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
 1.5e fvariable xcal-threshold-a xcal-threshold-a f!
 2.0e fvariable xcal-threshold-b xcal-threshold-b f!
 1.8e fvariable ycal-threshold-a ycal-threshold-a f!
-2.2e fvariable ycal-threshold-b ycal-threshold-b f!
+2.1e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
@@ -92,7 +92,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     4 xmotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00110010000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     5 xmotor quickreg!
-    %100 %00000000001100000111 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+    %100 %00000000001100000000 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     6 xmotor quickreg!
 
     %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
@@ -109,7 +109,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     4 ymotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00110010000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     5 ymotor quickreg!
-    %100 %00000000001100000111 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+    %100 %00000000001100000000 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     6 ymotor quickreg!
   then
   configured? ;
