@@ -329,7 +329,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         usd . ." y usd " umean . ." y umean " cr
         ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps usd usd + < swap umean usd + < and false = if 12 abort" calibration start y axis readings are bad!" then
         begin
-          usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps egedetect
+          usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps edgedetect
           maxloops 1 + dup to maxloops 23 >= or
         until
         maxloops 23 >= if 13 abort" edge not detected for y axis calibration failed!" then
