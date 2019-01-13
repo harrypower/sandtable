@@ -317,16 +317,19 @@ true value yposition  \ is the real location of y motor .. note if value is true
         begin
           usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
-          edgedetect
+          edgedetect if
+            xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
+            xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
+            usd . ." x usd " umean . ." x umean  #2" cr
+            usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
+            .s ." x usd umean testsd testmean final" cr
+            edgedetect
+          else
+            false
+          then
           maxloops 1 + dup to maxloops 23 >= or
         until
-        maxloops 23 >= if 10 throw then \ edge not detected for x axis calibration failed!
-        xcalreg forward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
-        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
-        usd . ." x usd " umean . ." x umean  #2" cr
-        usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
-        .s ." x usd umean testsd testmean final" cr
-        edgedetect
+        maxloops 23 >= if 10 throw else true then \ edge not detected for x axis calibration failed!
         \ note at this point if the edge is not found here redo the above loop but the maxloops needs to be preserved and continued
       endof
       ym of
@@ -336,16 +339,19 @@ true value yposition  \ is the real location of y motor .. note if value is true
         begin
           usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
           .s ." y usd umean testsd testmean " maxloops . ." maxloops" cr
-          edgedetect
+          edgedetect if
+            ycalreg forward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
+            ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
+            usd . ." y usd " umean . ." y umean #2" cr
+            usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
+            .s ." y usd umean testsd testmean final" cr
+            edgedetect
+          else
+            false
+          then
           maxloops 1 + dup to maxloops 23 >= or
         until
-        maxloops 23 >= if 11 throw then \ edge not detected for y axis calibration failed!
-        ycalreg forward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
-        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
-        usd . ." y usd " umean . ." y umean #2" cr
-        usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
-        .s ." y usd umean testsd testmean final" cr
-        edgedetect
+        maxloops 23 >= if 11 throw else true then \ edge not detected for y axis calibration failed!
         \ note at this point if the edge is not found here redo the above loop but the maxloops needs to be preserved and continued
       endof
     endcase
