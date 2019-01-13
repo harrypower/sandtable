@@ -59,6 +59,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 7100 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
+2.5e fvariable cal-threshold cal-threshold f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
@@ -303,7 +304,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   { usd umean utestsd utestmean }
   utestmean usd usd umean + + >
   umean usd usd + - 0 < if utestmean 0 = else utestmean umean usd usd + - < then or
-  utestsd usd s>f 1.9e f* f>s > or ;
+  utestsd usd s>f cal-threshold f@ f* f>s > or ;
 
 : doxycalibrate ( uxy -- nflag ) \ uxy is ym or xm ... nflag is false for calibration failed and true for calibration passed
   0 0 0 { uxy umean usd maxloops }
