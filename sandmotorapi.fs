@@ -320,7 +320,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
           edgedetect if
             xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
-            xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps
+            xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop 
             xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
             usd . ." x usd " umean . ." x umean  #2" cr
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
