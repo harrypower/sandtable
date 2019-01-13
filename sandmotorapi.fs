@@ -303,7 +303,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   { usd umean utestsd utestmean }
   utestmean usd usd umean + + >
   umean usd usd + - 0 < if utestmean 0 = else utestmean umean usd usd + - < then or
-  usd utestsd > or ;
+  utestsd usd s>f 1.5e f* f>s > or ;
 
 : doxycalibrate ( uxy -- nflag ) \ uxy is ym or xm ... nflag is false for calibration failed and true for calibration passed
   0 0 0 { uxy umean usd maxloops }
