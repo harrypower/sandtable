@@ -54,9 +54,9 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-7000 value xcalspeed
+6700 value xcalspeed
 32 value xcalsteps
-7200 value ycalspeed
+7100 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
 10 value steps
@@ -301,8 +301,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : edgedetect ( usd umean utestsd utestmean -- nflag ) \ looks for edge conditions ... nflag is true if edge found or false if not found
   { usd umean utestsd utestmean }
-  usd umean + utestmean >
-  utestmean umean usd - < or
+  usd usd umean + + utestmean >
+  utestmean umean usd usd + - < or
   usd utestsd > or ;
 
 : doxycalibrate ( uxy -- nflag ) \ uxy is ym or xm ... nflag is false for calibration failed and true for calibration passed
@@ -312,30 +312,40 @@ true value yposition  \ is the real location of y motor .. note if value is true
       xm of
         xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
         xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
-        usd . ." x usd " umean . ." x umean " cr
+        usd . ." x usd " umean . ." x umean  #1" cr
         xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps usd usd + < swap umean usd + < and false = if 10 abort" calibration start x axis readings are bad!" then
         begin
-          usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps edgedetect
+          usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps
+          .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
+          edgedetect
           maxloops 1 + dup to maxloops 23 >= or
         until
         maxloops 23 >= if 11 abort" edge not detected for x axis calibration failed!" then
         xcalreg forward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
         xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
-        usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps edgedetect
+        usd . ." x usd " umean . ." x umean  #2" cr
+        usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps
+        .s ." x usd umean testsd testmean final" cr
+        edgedetect
       endof
       ym of
         ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
         ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
-        usd . ." y usd " umean . ." y umean " cr
+        usd . ." y usd " umean . ." y umean #1" cr
         ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps usd usd + < swap umean usd + < and false = if 12 abort" calibration start y axis readings are bad!" then
         begin
-          usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps edgedetect
+          usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps
+          .s ." y usd umean testsd testmean " maxloops . ." maxloops" cr
+          edgedetect
           maxloops 1 + dup to maxloops 23 >= or
         until
         maxloops 23 >= if 13 abort" edge not detected for y axis calibration failed!" then
         ycalreg forward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
         ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
-        usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps edgedetect
+        usd . ." y usd " umean . ." y umean #2" cr
+        usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps
+        .s ." y usd umean testsd testmean final" cr
+        edgedetect
       endof
     endcase
   else false then ;
