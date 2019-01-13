@@ -89,7 +89,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     4 xmotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00110010000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     5 xmotor quickreg!
-    %100 %00000000001100000000 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+    %100 %00000000001100000111 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     6 xmotor quickreg!
 
     %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
@@ -106,7 +106,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     4 ymotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00110010000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     5 ymotor quickreg!
-    %100 %00000000001100000000 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+    %100 %00000000001100000111 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     6 ymotor quickreg!
   then
   configured? ;
@@ -363,12 +363,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : xwarmup ( -- )
   xmotor enable-motor
-  xcalreg forward xcalspeed xcalsteps xm xysteps drop
+  6 forward xcalspeed xcalsteps xm xysteps drop
   15000 ms
   xmotor disable-motor ;
 : ywarmup ( -- )
   ymotor enable-motor
-  ycalreg forward ycalspeed ycalsteps ym xysteps drop
+  6 forward ycalspeed ycalsteps ym xysteps drop
   15000 ms
   ymotor disable-motor ;
 
