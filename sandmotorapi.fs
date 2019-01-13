@@ -44,13 +44,7 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-5e fvariable xthreshold xthreshold f! \ x threshold for home
-6e fvariable ythreshold ythreshold f! \ y threshold for home
 1500 value stopbuffer
-6 value calloop \ how many times the calibration will repeat for warm up and stable operation
-120 value xcal-std-dev-max \ calibration standard deviation needs to be lower then this value for xmotor
-120 value ycal-std-dev-max \ calibration standard deviation needs to be lower then this value for ymotor
-30 value cal-mean-min \ calibartion mean needs to be above this value
 0 constant xm-min
 0 constant ym-min
 276000 constant xm-max
@@ -60,11 +54,9 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-800 value calspeed
-256 value calsteps
-7000 value xcalspeed
+6900 value xcalspeed
 32 value xcalsteps
-7000 value ycalspeed
+6600 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
 10 value steps
@@ -254,142 +246,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
   endof
   endcase ;
 
-: calxysteps ( utime usteps uxy -- )  \ this is to be used by home position code below use movetox or movetoy for normal motion
- case
-   xm of
-     xmotor timedsteps
-   endof
-   ym of
-     ymotor timedsteps
-   endof
- endcase ;
-
-: docalxybase { uxy -- uresult } \ uxy is the motor x or y ... uresult is stallguard value after moving motor
-  calspeed calsteps uxy calxysteps
-  uxy xyget-sg_result ;
-
-: newcalxybase ( uxy -- nmean usdp nflag ) \ simply run motor x or y then take readings and get standard deiviation and mean
-\ nmean is the mean of stall guard value for uxy motor
-\ uspd is the standard deviation of the readings
-\ nflag is true when readings are believed to be valid false if readings do not meet basic value checks
-  0 0 { uxy nmean nsdp }
-  uxy
-  case
-    xm of
-      xmotor enable-motor
-      xdata [bind] realtimeMSD construct
-      xcalreg xmotor usequickreg
-      calloop 0 ?do
-        1 xmotor setdirection
-        calstep-amounts 0 do xm docalxybase drop loop
-          0 xmotor setdirection
-          calstep-amounts 0 do xm docalxybase xdata n>data
-        loop
-        xdata nsdp@ . ." standard deviation "
-        xdata nmean@ . ." mean for x!" cr
-      loop
-      xdata nsdp@ to nsdp
-      xdata nmean@ to nmean
-      xmotor disable-motor
-      nmean nsdp
-      nmean cal-mean-min > \ mean needs to be above cal-mean-min
-      nsdp xcal-std-dev-max < \ standard deviation needs to be below cal-std-dev-max
-      and
-    endof
-    ym of
-      ymotor enable-motor
-      ydata [bind] realtimeMSD construct
-      ycalreg ymotor usequickreg
-      calloop 0 ?do
-        1 ymotor setdirection
-        calstep-amounts 0 do ym docalxybase drop loop
-          0 ymotor setdirection
-          calstep-amounts 0 do ym docalxybase ydata n>data
-        loop
-        ydata nsdp@ . ." standard deviation "
-        ydata nmean@ . ." mean for y!" cr
-      loop
-      ydata nsdp@ to nsdp
-      ydata nmean@ to nmean
-      ymotor disable-motor
-      nmean nsdp
-      nmean cal-mean-min > \ mean needs to be above cal-mean-min
-      nsdp ycal-std-dev-max < \ standard deviation needs to be below cal-std-dev-max
-      and
-    endof
-  endcase
-  nmean . ." base mean!" nsdp . ." base sdp!" cr ;
-
-: calxhome ( -- nflag ) \ nflag is true if calibration seems to be done false if some issues were found
-  xm newcalxybase 0 { nmean usdp nflag nlvl }
-  nflag
-  if \ now find home
-    xmotor enable-motor
-    0 xmotor setdirection
-    begin
-      xm docalxybase to nlvl
-      nlvl nlvl . ." x reading " nmean usdp s>f xthreshold f@ f* f>s + dup . ." threshold " cr >
-    until
-    true \ now at start edge
-    0 xmotor usequickreg
-    1 xmotor setdirection
-    silentspeed stopbuffer xm calxysteps \ moves a small distance from home stop position
-    0 to xposition
-    xmotor disable-motor
-  else
-    false \ xmotor not stable
-    true to xposition \ this means xposition is not know because of home failure
-  then ;
-
-: calyhome ( -- nflag ) \ nflag is true if calibration seems to be done false if some issues were found
-  ym newcalxybase 0 { nmean usdp nflag nlvl }
-  nflag
-  if \ now find home
-    ymotor enable-motor
-    0 ymotor setdirection
-    begin
-      ym docalxybase to nlvl
-      nlvl nlvl . ." y reading " nmean usdp s>f ythreshold f@ f* f>s + dup . ." threshold " cr >
-    until
-    true \ now at start edge
-    0 ymotor usequickreg
-    1 ymotor setdirection
-    silentspeed stopbuffer ym calxysteps \ moves a small distance from home stop position
-    0 to yposition
-    ymotor disable-motor
-  else
-    false \ ymotor not stable
-    true to yposition \ this means xposition is not know because of home failure
-  then ;
-
-: xyhome ( -- nflag ) \ nflag is true if x and y are at home position and false if there was a falure of some kind
-\ note calibration will be attempted a second time if the first time fails to be inside basic calibration limits
- calyhome
- if true else ymotor enable-motor 1 ymotor setdirection calspeed 10000 ym calxysteps ymotor disable-motor calyhome then
- calxhome
- if true else xmotor enable-motor 1 xmotor setdirection calspeed 10000 xm calxysteps xmotor disable-motor calxhome then
- and dup to homedone? ;
-
-: dogohome ( -- nflag ) \ if nflag is true x and y motors are configured sent home if nflag is false something failed here
-  try
-    configured? false = if xyhome false = if 1 abort" xyhome failed" then else 1 abort" not connfigured yet" then
-    false
-  restore if false else true then
-  endtry ;
-\ ************************
-
-: closedown ( -- )
-  true to configured?  \ true means not configured false means configured
-  false to homedone?   \ false means table has not been homed true means table was homed succesfully
-  true to xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
-  true to yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
-  xmotor disable-motor
-  ymotor disable-motor
-  xmotor [bind] tmc2130 destruct
-  ymotor [bind] tmc2130 destruct ;
-
-\ *****************************************************************
-\ testing stuff will remove Later
 : xysteps { uquickreg udirection ucalspeed ucalsteps uxy -- uresult } \ simply step motor based on this info then return stall guard result
   configured? false = if
     uxy case
@@ -443,6 +299,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
   udatalist ll-set-start
   begin udatalist ll-cell@ . udatalist ll> until ;
 
+: edgedetect ( usd umean utestsd utestmean -- nflag ) \ looks for edge conditions ... nflag is true if edge found or false if not found
+  { usd umean utestsd utestmean }
+  usd umean + utestmean >
+  utestmean umean usd - < or
+  usd utestsd > or ;
+
 : doxycalibrate ( uxy -- nflag ) \ uxy is ym or xm ... nflag is false for calibration failed and true for calibration passed
   0 0 0 { uxy umean usd maxloops }
   configured? false = if
@@ -450,34 +312,30 @@ true value yposition  \ is the real location of y motor .. note if value is true
       xm of
         xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
         xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
+        usd . ." x usd " umean . ." x umean " cr
         xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps usd usd + < swap umean usd + < and false = if 10 abort" calibration start x axis readings are bad!" then
         begin
-          xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps drop dup
-          usd umean + > swap umean usd - < or
+          usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps edgedetect
           maxloops 1 + dup to maxloops 23 >= or
         until
         maxloops 23 >= if 11 abort" edge not detected for x axis calibration failed!" then
         xcalreg forward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
-        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
-        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps drop dup
-        usd umean + > \ simply this should be true for calibration passed or false for failed
-        swap umean usd - < or
+        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
+        usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps edgedetect
       endof
       ym of
         ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
         ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
+        usd . ." y usd " umean . ." y umean " cr
         ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps usd usd + < swap umean usd + < and false = if 12 abort" calibration start y axis readings are bad!" then
         begin
-          ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps drop  dup
-          usd umean + > swap umean usd - < or
+          usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps degedetect
           maxloops 1 + dup to maxloops 23 >= or
         until
         maxloops 23 >= if 13 abort" edge not detected for y axis calibration failed!" then
         ycalreg forward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
-        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
-        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps drop dup
-        usd umean + > \ simply this should be true for calibration passed or false for failed
-        swap umean usd - < or
+        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
+        usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps edgedetect
       endof
     endcase
   else false then ;
@@ -507,3 +365,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
     then
   restore dup true = if true to homedone? else false to homedone? then
   endtry ;
+
+: closedown ( -- )
+  true to configured?  \ true means not configured false means configured
+  false to homedone?   \ false means table has not been homed true means table was homed succesfully
+  true to xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
+  true to yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
+  xmotor disable-motor
+  ymotor disable-motor
+  xmotor [bind] tmc2130 destruct
+  ymotor [bind] tmc2130 destruct ;
