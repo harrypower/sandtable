@@ -482,23 +482,26 @@ true value yposition  \ is the real location of y motor .. note if value is true
     endcase
   else false then ;
 
-: dohome ( -- nflag ) \ find x and y home position ... nflag is true if calibration is done.   nflag is false for or other value for a calibration failure 
+: dohome ( -- nflag ) \ find x and y home position ... nflag is true if calibration is done.   nflag is false for or other value for a calibration failure
   try
     configured? false = if
       xm doxycalibrate if
+        xmotor enable-motor
         0 forward silentspeed stopbuffer xm xysteps drop \ moves a small distance from home stop position
-        0 to xposition
+        xmotor disable-motor
+        xm-min to xposition
         true
-      else
-        false
+      else false
       then
       ym doxycalibrate if
+        ymotor enable-motor
         0 forward silentspeed stopbuffer ym xysteps drop \ moves a small distance from home stop position
-        0 to  yposition
+        ymotor disable-motor
+        ym-min to  yposition
         true
-      else
-        false
+      else false
       then
+      and
     else
         false
     then
