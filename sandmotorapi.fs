@@ -53,8 +53,8 @@ false value homedone?   \ false means table has not been homed true means table 
 30 value cal-mean-min \ calibartion mean needs to be above this value
 0 constant xm-min
 0 constant ym-min
-275968 constant xm-max
-275968 constant ym-max
+276000 constant xm-max
+276000 constant ym-max
 1 constant forward
 0 constant backward
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
@@ -62,14 +62,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
 800 value calspeed
 256 value calsteps
-800 value xcalspeed
-256 value xcalsteps
-800 value ycalspeed
-256 value ycalsteps
-60 value calstep-amounts
+7000 value xcalspeed
+32 value xcalsteps
+7000 value ycalspeed
+32 value ycalsteps
+25 value calstep-amounts
 10 value steps
-6 value xcalreg
-6 value ycalreg
+3 value xcalreg
+3 value ycalreg
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -392,34 +392,29 @@ true value yposition  \ is the real location of y motor .. note if value is true
 \ testing stuff will remove Later
 : xysteps { uquickreg udirection ucalspeed ucalsteps uxy -- uresult } \ simply step motor based on this info then return stall guard result
   configured? false = if
-  uxy
-  case
-    xm of
-      uquickreg xmotor usequickreg
-      udirection xmotor setdirection
-      ucalspeed ucalsteps xmotor timedsteps
-      xm xyget-sg_result
-    endof
-    ym of
-      uquickreg ymotor usequickreg
-      udirection ymotor setdirection
-      ucalspeed ucalsteps ymotor timedsteps
-      ym xyget-sg_result
-    endof
+    uxy case
+      xm of
+        uquickreg xmotor usequickreg
+        udirection xmotor setdirection
+        ucalspeed ucalsteps xmotor timedsteps
+        xm xyget-sg_result
+      endof
+      ym of
+        uquickreg ymotor usequickreg
+        udirection ymotor setdirection
+        ucalspeed ucalsteps ymotor timedsteps
+        ym xyget-sg_result
+      endof
     endcase
-    else 0
-    then
-    ;
+  else 0 then ;
 
-: ndosteps { uquickreg udirection uxy usteps -- umean usd }
+: ndosteps { uquickreg udirection ucalspeed ucalsteps uloop uxy -- umean usd }
   configured? false = if
     uxy case xm of xmotor enable-motor endof ym of ymotor enable-motor endof endcase
     uxy case xm of xdata endof ym of ydata endof endcase
     [bind] realtimeMSD construct
-    usteps 0 do
-      uquickreg udirection
-      uxy case xm of xcalspeed xcalsteps endof ym of ycalspeed ycalsteps endof endcase
-      uxy xysteps
+    uloop 0 do
+      uquickreg udirection ucalspeed ucalsteps uxy xysteps
       uxy case xm of xdata endof ym of ydata endof endcase n>data
     loop
     uxy case xm of xmotor disable-motor endof ym of ymotor disable-motor endof endcase
@@ -429,21 +424,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then
 ;
 
-: ndosteps-list { uquickreg udirection uxy usteps -- uxydll }
-  configured? false = if
-    uxy case xm of xmotor enable-motor endof ym of ymotor enable-motor endof endcase
-    uxy case xm of x-array-data endof ym of y-array-data endof endcase
-    [bind] double-linked-list construct
-    usteps 0 do
-      uquickreg udirection
-      uxy case xm of xcalspeed xcalsteps endof ym of ycalspeed ycalsteps endof endcase
-      uxy xysteps
-      uxy case xm of x-array-data endof ym of y-array-data endof endcase ll-cell!
-    loop
-    uxy case xm of xmotor disable-motor endof ym of ymotor disable-motor endof endcase
-    uxy case xm of x-array-data endof ym of y-array-data endof endcase
-  else 0
-  then ;
 
 : nstep-list { uquickreg udirection ucalspeed ucalsteps uloop uxy -- uxydll }
   configured? false = if
@@ -462,3 +442,36 @@ true value yposition  \ is the real location of y motor .. note if value is true
 : listmotordata { udatalist -- }
   udatalist ll-set-start
   begin udatalist ll-cell@ . udatalist ll> until ;
+
+: doxycalibrate ( uxy -- nflag ) \ uxy is ym or xm ... nflag is false for calibration failed and true for calibration passed
+  0 0 0 { uxy umean usd maxloops }
+  configured? false = if
+    uxy case
+      xm of
+        xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps drop
+        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
+        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps usd usd + < swap umean usd + < and false = if 10 abort" calibration start x axis is bad!" then
+        begin
+          xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps drop usd 2 * umean + >
+          maxloops 1 + dup to maxloops 23 >= or
+        until
+        maxloops 23 >= if 11 abort" edge not detected for x axis calibration failed!" then
+        xcalreg forward xcalspeed xcalsteps calstep-amounts ndosteps 2drop
+        xcalreg backward xcalspeed xcalsteps calstep-amounts ndosteps 2drop
+        xcalreg backward xcalspeed xcalsteps calstep-amounts ndosteps drop usd 2 * umean + > \ simply this should be true for calibration passed or false for failed
+      endof
+      ym of
+        ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps drop
+        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
+        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps usd usd + < swap umean usd + < and false = if 12 abort" calibration start y axis is bad!" then
+        begin
+          ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps drop usd 2 * umean + >
+          maxloops 1 + dup to maxloops 23 >= or
+        until
+        maxloops 23 >= if 11 abort" edge not detected for y axis calibration failed!" then
+        ycalreg forward ycalspeed ycalsteps calstep-amounts ndosteps 2drop
+        ycalreg backward ycalspeed ycalsteps calstep-amounts ndosteps 2drop
+        ycalreg backward ycalspeed ycalsteps calstep-amounts ndosteps drop usd 2 * umean + > \ simply this should be true for calibration passed or false for failed
+      endof
+    endcase
+  else false then ;
