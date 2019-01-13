@@ -59,10 +59,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 7000 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
-1.5e fvariable xcal-threshold-a cal-threshold-a f!
-2.0e fvariable xcal-threshold-b cal-threshold-b f!
-1.8e fvariable ycal-threshold-a cal-threshold-a f!
-2.2e fvariable ycal-threshold-b cal-threshold-b f!
+1.5e fvariable xcal-threshold-a xcal-threshold-a f!
+2.0e fvariable xcal-threshold-b xcal-threshold-b f!
+1.8e fvariable ycal-threshold-a ycal-threshold-a f!
+2.2e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
