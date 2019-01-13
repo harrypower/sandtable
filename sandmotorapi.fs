@@ -448,30 +448,36 @@ true value yposition  \ is the real location of y motor .. note if value is true
   configured? false = if
     uxy case
       xm of
-        xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps drop
+        xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
         xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
-        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps usd usd + < swap umean usd + < and false = if 10 abort" calibration start x axis is bad!" then
+        xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps usd usd + < swap umean usd + < and false = if 10 abort" calibration start x axis readings are bad!" then
         begin
-          xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps drop usd 2 * umean + >
+          xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps drop dup
+          usd umean + > swap umean usd - < or
           maxloops 1 + dup to maxloops 23 >= or
         until
         maxloops 23 >= if 11 abort" edge not detected for x axis calibration failed!" then
         xcalreg forward xcalspeed xcalsteps calstep-amounts ndosteps 2drop
         xcalreg backward xcalspeed xcalsteps calstep-amounts ndosteps 2drop
-        xcalreg backward xcalspeed xcalsteps calstep-amounts ndosteps drop usd 2 * umean + > \ simply this should be true for calibration passed or false for failed
+        xcalreg backward xcalspeed xcalsteps calstep-amounts ndosteps drop dup
+        usd umean + > \ simply this should be true for calibration passed or false for failed
+        swap umean usd - < or
       endof
       ym of
-        ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps drop
+        ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
         ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
-        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps usd usd + < swap umean usd + < and false = if 12 abort" calibration start y axis is bad!" then
+        ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps usd usd + < swap umean usd + < and false = if 12 abort" calibration start y axis readings are bad!" then
         begin
-          ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps drop usd 2 * umean + >
+          ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps drop  dup
+          usd umean + > swap umean usd - < or 
           maxloops 1 + dup to maxloops 23 >= or
         until
         maxloops 23 >= if 11 abort" edge not detected for y axis calibration failed!" then
         ycalreg forward ycalspeed ycalsteps calstep-amounts ndosteps 2drop
         ycalreg backward ycalspeed ycalsteps calstep-amounts ndosteps 2drop
-        ycalreg backward ycalspeed ycalsteps calstep-amounts ndosteps drop usd 2 * umean + > \ simply this should be true for calibration passed or false for failed
+        ycalreg backward ycalspeed ycalsteps calstep-amounts ndosteps drop dup
+        usd umean + > \ simply this should be true for calibration passed or false for failed
+        swap umean usd - < or
       endof
     endcase
   else false then ;
