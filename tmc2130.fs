@@ -101,6 +101,7 @@ require pauses.fs
 0x71 constant PWM_SCALE
 0x6b constant MSCURACT
 0x73 constant LOST_STEPS
+0x6A constant MSCNT
 
 [ifundef] destruction
   interface

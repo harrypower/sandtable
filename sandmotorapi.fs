@@ -320,7 +320,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case
       xm of
         xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
-        \ xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
         xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
         usd . ." x usd " umean . ." x umean  #1" cr
         begin
@@ -328,7 +327,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
           xedgedetect if
             xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
-            \ xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
             xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
             usd . ." x usd " umean . ." x umean  #2" cr
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
@@ -344,7 +342,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
       endof
       ym of
         ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
-      \  ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
         ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
         usd . ." y usd " umean . ." y umean #1" cr
         begin
@@ -352,7 +349,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
           .s ." y usd umean testsd testmean " maxloops . ." maxloops" cr
           yedgedetect if
             ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
-          \  ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
             ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
             usd . ." y usd " umean . ." y umean #2" cr
             usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
@@ -383,7 +379,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 : dohome ( -- nflag ) \ find x and y home position ... nflag is true if calibration is done.   nflag is false for or other value for a calibration failure
   try
     configured? false = if
-      xwarmup
+    \  xwarmup
       xm doxycalibrate if
         xmotor enable-motor
         0 forward silentspeed stopbuffer xm xysteps drop \ moves a small distance from home stop position
@@ -392,7 +388,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         true
       else false
       then
-      ywarmup
+    \  ywarmup
       ym doxycalibrate if
         ymotor enable-motor
         0 forward silentspeed stopbuffer ym xysteps drop \ moves a small distance from home stop position
