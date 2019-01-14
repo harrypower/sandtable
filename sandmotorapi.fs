@@ -345,7 +345,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
             usd . ." x usd " umean . ." x umean  #2" cr
             calwait ms
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
-            .s ." x usd umean testsd testmean final" cr
+            .s ." x usd umean testsd testmean " cr
             xedgedetect if
               calwait ms
               xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
