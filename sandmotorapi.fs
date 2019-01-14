@@ -61,11 +61,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
 25 value calstep-amounts
 2e fvariable xcal-threshold-a xcal-threshold-a f!
 2e fvariable xcal-threshold-b xcal-threshold-b f!
-2.1e fvariable ycal-threshold-a ycal-threshold-a f!
-2.1e fvariable ycal-threshold-b ycal-threshold-b f!
+1.8e fvariable ycal-threshold-a ycal-threshold-a f!
+1.8e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
-6 value xcalreg
-6 value ycalreg
+3 value xcalreg
+3 value ycalreg
 500 value calwait
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
@@ -93,7 +93,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     4 xmotor quickreg!
     %100 %00000000001100000010 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
     5 xmotor quickreg!
-    %100 %00000000001100000001 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
+    %100 %00000000001100000001 1 1000 0 0 %00110100000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
     6 xmotor quickreg!
 
     %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
@@ -110,7 +110,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     4 ymotor quickreg!
     %100 %00000000001100000010 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
     5 ymotor quickreg!
-    %100 %00000000001100000001 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
+    %100 %00000000001100000001 1 1000 0 0 %00110100000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
     6 ymotor quickreg!
   then
   configured? ;
