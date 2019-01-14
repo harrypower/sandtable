@@ -54,15 +54,15 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-6900 value xcalspeed
+6800 value xcalspeed
 32 value xcalsteps
-7000 value ycalspeed
+7100 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
-1.7e fvariable xcal-threshold-a xcal-threshold-a f!
-2.0e fvariable xcal-threshold-b xcal-threshold-b f!
-1.7e fvariable ycal-threshold-a ycal-threshold-a f!
-1.8e fvariable ycal-threshold-b ycal-threshold-b f!
+2e fvariable xcal-threshold-a xcal-threshold-a f!
+2e fvariable xcal-threshold-b xcal-threshold-b f!
+2.1e fvariable ycal-threshold-a ycal-threshold-a f!
+2.1e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
@@ -346,8 +346,19 @@ true value yposition  \ is the real location of y motor .. note if value is true
             calwait ms
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
             .s ." x usd umean testsd testmean final" cr
-            xedgedetect
-          else
+            xedgedetect if
+              calwait ms
+              xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
+              calwait ms
+              xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
+              usd . ." x usd " umean . ." x umean  #3" cr
+              calwait ms
+              usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
+              .s ." x usd umean testsd testmean final" cr
+              xedgedetect
+            else
+              false
+            then          else
             false
           then
           maxloops 1 + dup to maxloops 23 >= or
@@ -372,8 +383,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
             usd . ." y usd " umean . ." y umean #2" cr
             calwait ms
             usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
-            .s ." y usd umean testsd testmean final" cr
-            yedgedetect
+            .s ." y usd umean testsd testmean " cr
+            yedgedetect if
+              calwait ms
+              ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
+              calwait ms
+              ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
+              usd . ." y usd " umean . ." y umean #3" cr
+              calwait ms
+              usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
+              .s ." y usd umean testsd testmean final" cr
+              yedgedetect
+            else
+              false
+            then
           else
             false
           then
