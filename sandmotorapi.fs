@@ -64,9 +64,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
 2.1e fvariable ycal-threshold-a ycal-threshold-a f!
 2.1e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
-3 value xcalreg
-3 value ycalreg
-700 value calwait
+6 value xcalreg
+6 value ycalreg
+500 value calwait
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -456,3 +456,5 @@ true value yposition  \ is the real location of y motor .. note if value is true
   ymotor disable-motor
   xmotor [bind] tmc2130 destruct
   ymotor [bind] tmc2130 destruct ;
+
+: testcal 0 do cr dohome . 275000 dup movetoxy . loop ;
