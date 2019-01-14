@@ -103,13 +103,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
     forward ymotor setdirection
     %100 %00000000001100000011 1 1000 0 0 %00110101000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
     2 ymotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001100000111011111111
+    %100 %00000000001100000011 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001100000111111111111
     3 ymotor quickreg!
-    %100 %00000000011100000011 1 1000 0 0 %00010010000000001000000010010011 %0000000000000000000000000 %0001100000111011111111
+    %100 %00000000011100000011 1 1000 0 0 %00010010000000001000000010010011 %0000000000000000000000000 %0001100000111111111111
     4 ymotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00010000000000001000000010010011 %0000000000000000000000000 %0001100000111011111111
+    %100 %00000000001100000011 1 1000 0 0 %00010000000000001000000010010011 %0000000000000000000000000 %0001100000111111111111
     5 ymotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00010001000000001000000010010011 %0000000000000000000000000 %0001100000111011111111
+    %100 %00000000001100000011 1 1000 0 0 %00010001000000001000000010010011 %0000000000000000000000000 %0001100000111111111111
     6 ymotor quickreg!
   then
   configured? ;
@@ -329,15 +329,21 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case
       xm of
         xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
+        500 ms
         xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
+        500 ms
         usd . ." x usd " umean . ." x umean  #1" cr
         begin
+        500 ms
           usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
           xedgedetect if
+          500 ms
             xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
+            500 ms
             xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
             usd . ." x usd " umean . ." x umean  #2" cr
+            500 ms
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
             .s ." x usd umean testsd testmean final" cr
             xedgedetect
@@ -351,15 +357,21 @@ true value yposition  \ is the real location of y motor .. note if value is true
       endof
       ym of
         ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
+        500 ms
         ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
+        500 ms
         usd . ." y usd " umean . ." y umean #1" cr
         begin
+        500 ms
           usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
           .s ." y usd umean testsd testmean " maxloops . ." maxloops" cr
           yedgedetect if
+          500 ms
             ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
+            500 ms
             ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
             usd . ." y usd " umean . ." y umean #2" cr
+            500 ms
             usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
             .s ." y usd umean testsd testmean final" cr
             yedgedetect
