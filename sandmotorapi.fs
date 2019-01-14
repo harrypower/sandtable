@@ -329,16 +329,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
   configured? false = if
     uxy case
       xm of
-        xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
-        calwait ms
-        xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
-        usd . ." x usd " umean . ." x umean  #1" cr
         begin
-        calwait ms
-          xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap 2dup usd rot rot umean rot rot
+          xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
+          calwait ms
+          xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
+          usd . ." x usd " umean . ." x umean  #1" cr
+          calwait ms
+          usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
           xedgedetect if
-            2drop
             calwait ms
             xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
             calwait ms
@@ -349,7 +348,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
             .s ." x usd umean testsd testmean final" cr
             xedgedetect
           else
-            to umean to usd
             false
           then
           maxloops 1 + dup to maxloops 23 >= or
@@ -358,16 +356,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
         \ note at this point if the edge is not found here redo the above loop but the maxloops needs to be preserved and continued
       endof
       ym of
-        ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
-        calwait ms
-        ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
-        usd . ." y usd " umean . ." y umean #1" cr
         begin
+          ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
           calwait ms
-          ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap 2dup usd rot rot umean rot rot
+          ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
+          usd . ." y usd " umean . ." y umean #1" cr
+          calwait ms
+          usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
           .s ." y usd umean testsd testmean " maxloops . ." maxloops" cr
           yedgedetect if
-            2drop
             calwait ms
             ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
             calwait ms
@@ -378,7 +375,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
             .s ." y usd umean testsd testmean final" cr
             yedgedetect
           else
-            to umean to usd
             false
           then
           maxloops 1 + dup to maxloops 23 >= or
