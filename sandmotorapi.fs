@@ -54,9 +54,9 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-7500 value xcalspeed
+6900 value xcalspeed
 32 value xcalsteps
-8000 value ycalspeed
+7000 value ycalspeed
 32 value ycalsteps
 25 value calstep-amounts
 1.7e fvariable xcal-threshold-a xcal-threshold-a f!
@@ -66,6 +66,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 10 value steps
 3 value xcalreg
 3 value ycalreg
+700 value calwait
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -329,21 +330,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case
       xm of
         xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
-        500 ms
+        calwait ms
         xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
-        500 ms
         usd . ." x usd " umean . ." x umean  #1" cr
         begin
-        500 ms
+        calwait ms
           usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
           xedgedetect if
-          500 ms
+          calwait ms
             xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
-            500 ms
+            calwait ms
             xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
             usd . ." x usd " umean . ." x umean  #2" cr
-            500 ms
+            calwait ms
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
             .s ." x usd umean testsd testmean final" cr
             xedgedetect
@@ -357,21 +357,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
       endof
       ym of
         ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
-        500 ms
+        calwait ms
         ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
-        500 ms
         usd . ." y usd " umean . ." y umean #1" cr
         begin
-        500 ms
+        calwait ms
           usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
           .s ." y usd umean testsd testmean " maxloops . ." maxloops" cr
           yedgedetect if
-          500 ms
+          calwait ms
             ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
-            500 ms
+            calwait ms
             ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
             usd . ." y usd " umean . ." y umean #2" cr
-            500 ms
+            calwait ms
             usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
             .s ." y usd umean testsd testmean final" cr
             yedgedetect
