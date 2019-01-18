@@ -59,10 +59,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 7325 value ycalspeed
 16 value ycalsteps
 64 value calstep-amounts
-1.2e fvariable xcal-threshold-a xcal-threshold-a f!
-1.2e fvariable xcal-threshold-b xcal-threshold-b f!
-1.2e fvariable ycal-threshold-a ycal-threshold-a f!
-1.2e fvariable ycal-threshold-b ycal-threshold-b f!
+1.1e fvariable xcal-threshold-a xcal-threshold-a f!
+1.1e fvariable xcal-threshold-b xcal-threshold-b f!
+1.6e fvariable ycal-threshold-a ycal-threshold-a f!
+1.6e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
@@ -89,7 +89,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     2 xmotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
     3 xmotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
+    %100 %00000000001100000000 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0101000000111111111111
     4 xmotor quickreg!
     %100 %00000000001100000010 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
     5 xmotor quickreg!
@@ -106,7 +106,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     2 ymotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
     3 ymotor quickreg!
-    %100 %00000000011100000011 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
+    %100 %00000000011100000000 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0101000000111111111111
     4 ymotor quickreg!
     %100 %00000000001100000010 1 1000 0 0 %00110100000000001000000010010011 %0000000000000000000000000 %0001000000111111111111
     5 ymotor quickreg!
@@ -444,7 +444,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     else
         false
     then
-  restore dup true = if true to homedone? else false to homedone? then
+  restore dup true = if true to homedone? else false to homedone? true to xposition true to yposition then
   endtry ;
 
 : closedown ( -- )
