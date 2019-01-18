@@ -61,12 +61,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
 64 value calstep-amounts
 1.1e fvariable xcal-threshold-a xcal-threshold-a f!
 1.1e fvariable xcal-threshold-b xcal-threshold-b f!
-1.6e fvariable ycal-threshold-a ycal-threshold-a f!
-1.6e fvariable ycal-threshold-b ycal-threshold-b f!
+1.5e fvariable ycal-threshold-a ycal-threshold-a f!
+1.5e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
 3 value xcalreg
 3 value ycalreg
 500 value calwait
+21 value max-cal-test
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -361,9 +362,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
             then          else
             false
           then
-          maxloops 1 + dup to maxloops 23 >= or
+          maxloops 1 + dup to maxloops max-cal-test >= or
         until
-        maxloops 23 >= if 10 throw else true then \ edge not detected for x axis calibration failed!
+        maxloops max-cal-test >= if 10 throw else true then \ edge not detected for x axis calibration failed!
         \ note at this point if the edge is not found here redo the above loop but the maxloops needs to be preserved and continued
       endof
       ym of
@@ -400,9 +401,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
           else
             false
           then
-          maxloops 1 + dup to maxloops 23 >= or
+          maxloops 1 + dup to maxloops max-cal-test >= or
         until
-        maxloops 23 >= if 11 throw else true then \ edge not detected for y axis calibration failed!
+        maxloops max-cal-test >= if 11 throw else true then \ edge not detected for y axis calibration failed!
         \ note at this point if the edge is not found here redo the above loop but the maxloops needs to be preserved and continued
       endof
     endcase
