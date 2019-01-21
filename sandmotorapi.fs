@@ -54,20 +54,20 @@ false value homedone?   \ false means table has not been homed true means table 
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
 true value yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
 1200 value silentspeed  \ loop wait amount for normal silent operation .... 500 to 3000 is operating range
-30000 value xcalspeed
+20000 value xcalspeed
 1 value xcalsteps
-30000 value ycalspeed
+20000 value ycalspeed
 1 value ycalsteps
-64 value calstep-amounts
-1.1e fvariable xcal-threshold-a xcal-threshold-a f!
-1.1e fvariable xcal-threshold-b xcal-threshold-b f!
-1.1e fvariable ycal-threshold-a ycal-threshold-a f!
-1.1e fvariable ycal-threshold-b ycal-threshold-b f!
+70 value calstep-amounts
+1.4e fvariable xcal-threshold-a xcal-threshold-a f!
+1.4e fvariable xcal-threshold-b xcal-threshold-b f!
+1.4e fvariable ycal-threshold-a ycal-threshold-a f!
+1.4e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
 6 value xcalreg
 6 value ycalreg
 500 value calwait
-21 value max-cal-test
+18 value max-cal-test
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
