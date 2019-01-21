@@ -59,13 +59,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
 20000 value ycalspeed
 1 value ycalsteps
 75 value calstep-amounts
-1.6e fvariable xcal-threshold-a xcal-threshold-a f!
-1.6e fvariable xcal-threshold-b xcal-threshold-b f!
-1.6e fvariable ycal-threshold-a ycal-threshold-a f!
-1.6e fvariable ycal-threshold-b ycal-threshold-b f!
+1.7e fvariable xcal-threshold-a xcal-threshold-a f!
+1.7e fvariable xcal-threshold-b xcal-threshold-b f!
+1.7e fvariable ycal-threshold-a ycal-threshold-a f!
+1.7e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
-6 value xcalreg
-6 value ycalreg
+1 value xcalreg
+1 value ycalreg
 500 value calwait
 21 value max-cal-test
 
@@ -82,7 +82,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     \ GCONF uIHOLD_IRUN uTPOWERDOWN uTPWMTHRS uTCOOLTHRS uTHIGH uCHOPCONF   uCOOLCONF                  uPWMCONF
     %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
     0 xmotor quickreg!
-    %100 %00000000011000000000 1 1000 0 0 %00110001000000101000000010010011 %0000000000000000000000000 %0101100000101011111111
+    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
     1 xmotor quickreg!
     1 xmotor usequickreg
     forward xmotor setdirection
@@ -99,7 +99,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
     %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
     0 ymotor quickreg!
-    %100 %00000000011000000000 1 1000 0 0 %00110001000000101000000010010011 %0000000000000000000000000 %0101100000101011111111
+    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
     1 ymotor quickreg!
     1 ymotor usequickreg
     forward ymotor setdirection
@@ -107,7 +107,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     2 ymotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000111100000000000000000 %0001000000111111111111
     3 ymotor quickreg!
-    %100 %00000000011100000011 1 1000 0 0 %00011000000000001000000010010011 %1000101000000000000000000 %0101000000111111111111
+    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000101000000000000000000 %0101000000111111111111
     4 ymotor quickreg!
     %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000010100000000000000000 %0001000000111111111111
     5 ymotor quickreg!
