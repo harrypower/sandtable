@@ -58,16 +58,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
 1 value xcalsteps
 20000 value ycalspeed
 1 value ycalsteps
-70 value calstep-amounts
-1.4e fvariable xcal-threshold-a xcal-threshold-a f!
-1.4e fvariable xcal-threshold-b xcal-threshold-b f!
-1.4e fvariable ycal-threshold-a ycal-threshold-a f!
-1.4e fvariable ycal-threshold-b ycal-threshold-b f!
+75 value calstep-amounts
+1.6e fvariable xcal-threshold-a xcal-threshold-a f!
+1.6e fvariable xcal-threshold-b xcal-threshold-b f!
+1.6e fvariable ycal-threshold-a ycal-threshold-a f!
+1.6e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
 6 value xcalreg
 6 value ycalreg
 500 value calwait
-18 value max-cal-test
+21 value max-cal-test
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
