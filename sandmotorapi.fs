@@ -217,7 +217,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
-\ also note that these home position words do not check if sandtable is configured so only use the main word to calibrate the sandtable
+\ also note that these home position words do not check if sandtable is configured so only use the dohom word to calibrate the sandtable
 
 : xyget-sg_result ( uxym -- usgr )  \ get result of stall guard readings
   case
@@ -365,7 +365,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
           maxloops 1 + dup to maxloops max-cal-test >= or
         until
         maxloops max-cal-test >= if 10 throw else true then \ edge not detected for x axis calibration failed!
-        \ note at this point if the edge is not found here redo the above loop but the maxloops needs to be preserved and continued
       endof
       ym of
         begin
@@ -404,26 +403,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
           maxloops 1 + dup to maxloops max-cal-test >= or
         until
         maxloops max-cal-test >= if 11 throw else true then \ edge not detected for y axis calibration failed!
-        \ note at this point if the edge is not found here redo the above loop but the maxloops needs to be preserved and continued
       endof
     endcase
   else false then ;
 
-: xwarmup ( -- )
-  xmotor enable-motor
-  xcalreg forward xcalspeed xcalsteps xm xysteps drop
-  30000 ms
-  xmotor disable-motor ;
-: ywarmup ( -- )
-  ymotor enable-motor
-  ycalreg forward ycalspeed ycalsteps ym xysteps drop
-  30000 ms
-  ymotor disable-motor ;
-
 : dohome ( -- nflag ) \ find x and y home position ... nflag is true if calibration is done.   nflag is false for or other value for a calibration failure
   try
     configured? false = if
-    \  xwarmup
       xm doxycalibrate if
         xmotor enable-motor
         0 forward silentspeed stopbuffer xm xysteps drop \ moves a small distance from home stop position
@@ -432,7 +418,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
         true
       else false
       then
-    \  ywarmup
       ym doxycalibrate if
         ymotor enable-motor
         0 forward silentspeed stopbuffer ym xysteps drop \ moves a small distance from home stop position
