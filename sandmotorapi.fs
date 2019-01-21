@@ -67,7 +67,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 1 value xcalreg
 1 value ycalreg
 500 value calwait
-21 value max-cal-test
+28 value max-cal-test
 
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
@@ -331,27 +331,27 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case
       xm of
         begin
-          xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
+          xcalreg forward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
           calwait ms
-          xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
+          xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
           usd . ." x usd " umean . ." x umean  #1" cr
           calwait ms
           usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
           .s ." x usd umean testsd testmean " maxloops . ." maxloops" cr
           xedgedetect if
             calwait ms
-            xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
+            xcalreg forward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
             calwait ms
-            xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
+            xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
             usd . ." x usd " umean . ." x umean  #2" cr
             calwait ms
             usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
             .s ." x usd umean testsd testmean " cr
             xedgedetect if
               calwait ms
-              xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
+              xcalreg forward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
               calwait ms
-              xcalreg backward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps to usd to umean
+              xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps to usd to umean
               usd . ." x usd " umean . ." x umean  #3" cr
               calwait ms
               usd umean xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps swap
@@ -369,27 +369,27 @@ true value yposition  \ is the real location of y motor .. note if value is true
       endof
       ym of
         begin
-          ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
+          ycalreg forward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
           calwait ms
-          ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
+          ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
           usd . ." y usd " umean . ." y umean #1" cr
           calwait ms
           usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
           .s ." y usd umean testsd testmean " maxloops . ." maxloops" cr
           yedgedetect if
             calwait ms
-            ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
+            ycalreg forward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
             calwait ms
-            ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
+            ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
             usd . ." y usd " umean . ." y umean #2" cr
             calwait ms
             usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
             .s ." y usd umean testsd testmean " cr
             yedgedetect if
               calwait ms
-              ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
+              ycalreg forward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
               calwait ms
-              ycalreg backward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps to usd to umean
+              ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps to usd to umean
               usd . ." y usd " umean . ." y umean #3" cr
               calwait ms
               usd umean ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps swap
