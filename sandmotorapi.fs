@@ -59,10 +59,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 20000 value ycalspeed
 1 value ycalsteps
 75 value calstep-amounts
-1.7e fvariable xcal-threshold-a xcal-threshold-a f!
-2.2e fvariable xcal-threshold-b xcal-threshold-b f!
-1.7e fvariable ycal-threshold-a ycal-threshold-a f!
-2.2e fvariable ycal-threshold-b ycal-threshold-b f!
+1.6e fvariable xcal-threshold-a xcal-threshold-a f!
+2.1e fvariable xcal-threshold-b xcal-threshold-b f!
+1.6e fvariable ycal-threshold-a ycal-threshold-a f!
+2.1e fvariable ycal-threshold-b ycal-threshold-b f!
 10 value steps
 1 value xcalreg
 1 value ycalreg
@@ -318,12 +318,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
   { usd umean utestsd utestmean }
   utestmean usd s>f xcal-threshold-a f@ f* f>s umean + >
   umean usd s>f xcal-threshold-a f@ f* f>s - 0 < if utestmean 0 = else utestmean umean usd s>f xcal-threshold-a f@ f* f>s - < then or
-  utestsd usd s>f xcal-threshold-b f@ f* f>s > or ;
+  utestsd usd s>f xcal-threshold-b f@ f* f>s > and ;
 : yedgedetect ( usd umean utestsd utestmean -- nflag ) \ looks for edge conditions ... nflag is true if edge found or false if not found
   { usd umean utestsd utestmean }
   utestmean usd s>f ycal-threshold-a f@ f* f>s umean + >
   umean usd s>f ycal-threshold-a f@ f* f>s - 0 < if utestmean 0 = else utestmean umean usd s>f ycal-threshold-a f@ f* f>s - < then or
-  utestsd usd s>f ycal-threshold-b f@ f* f>s > or ;
+  utestsd usd s>f ycal-threshold-b f@ f* f>s > and ;
 
 : doxycalibrate ( uxy -- nflag ) \ uxy is ym or xm ... nflag is false for calibration failed and true for calibration passed
   0 0 0 { uxy umean usd maxloops }
