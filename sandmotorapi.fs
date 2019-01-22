@@ -217,7 +217,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then ;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
-\ also note that these home position words do not check if sandtable is configured so only use the dohom word to calibrate the sandtable
+\ also note that these home position words do not check if sandtable is configured so only use the dohome word to calibrate the sandtable
 
 : xyget-sg_result ( uxym -- usgr )  \ get result of stall guard readings
   case
@@ -419,6 +419,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     endcase
   else false then ;
 
+\ ********** this is the only word to calibrate the sandtable that should be used.  ************
 : dohome ( -- nflag ) \ find x and y home position ... nflag is true if calibration is done.   nflag is false for or other value for a calibration failure
   try
     configured? false = if
