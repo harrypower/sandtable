@@ -279,7 +279,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     endcase
   else 0 then ;
 
-: ndosteps { uquickreg udirection ucalspeed ucalsteps uloop uxy -- umean usd }
+: ndosteps { uquickreg udirection ucalspeed ucalsteps uloop uxy -- umean usd }  \ used for testing ... umean and usd are returned after uloop of ucalsteps are done
   configured? false = if
     uxy case xm of xmotor enable-motor endof ym of ymotor enable-motor endof endcase
     uxy case xm of xdata endof ym of ydata endof endcase
@@ -296,7 +296,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 ;
 
 
-: nstep-list { uquickreg udirection ucalspeed ucalsteps uloop uxy -- uxydll }
+: nstep-list { uquickreg udirection ucalspeed ucalsteps uloop uxy -- uxydll }  \ used for testing .. uxydll is double linked list containing stall guard data
   configured? false = if
     uxy case xm of xmotor enable-motor endof ym of ymotor enable-motor endof endcase
     uxy case xm of x-array-data endof ym of y-array-data endof endcase
@@ -310,7 +310,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   else 0
   then ;
 
-: listmotordata { udatalist -- }
+: listmotordata { udatalist -- }  \ use for testing..  displays data in double linked list to console 
   udatalist ll-set-start
   begin udatalist ll-cell@ . udatalist ll> until ;
 
