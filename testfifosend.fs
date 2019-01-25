@@ -16,21 +16,16 @@
 \    You should have received a copy of the GNU General Public License
 \    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-\ will be the first test server to process web and pattern messages
-\ will process web at first... later will break up into pthreads for web and pattern messages
+\ used to test fifo for messaging stuff to server and getting response back from server
 
 \ Requires:
-\ sandmotorapi.fs
-\ config-pins.fs
-
+\ sandserver.fs to be running on system
 \ Revisions:
-\ 12/13/2018 started coding
+\ 25/1/2019 started coding
 
-require sandmotorapi.fs
 
 0 value infid
 0 value outfid
-0 value logfid
 variable buffer$
 variable message$
 
@@ -38,29 +33,6 @@ variable message$
     swap over dabs <<# #s rot #> #>> buffer$ $! buffer$ $@ ;
 : dto$ ( d -- caddr u )  \ convert double signed to a string
     swap over dabs <<# #s rot sign #> #>> buffer$ $! buffer$ $@ ;
-
-: openlog ( -- )
-  s" /run/sandtablelog" file-status swap drop false = if
-    s" /run/sandtablelog" r/w open-file throw
-    to logfid
-  else
-    s" /run/sandtablelog" r/w create-file throw
-    to logfid
-  then ;
-
-: addtolog ( caddr u -- )
-  openlog
-  logfid file-size throw
-  logfid reposition-file throw
-  utime udto$ logfid write-line throw
-  logfid write-line throw
-  utime dto$ logfid write-line throw
-  logfid flush-file throw
-  logfid close-file throw ;
-
-: startfifos ( -- )
-  s" mkfifo /run/sandtablein -m666" system
-  s" mkfifo /run/sandtableout -m666" system ;
 
 : getmessage ( -- ucaddr u )
   s" /run/sandtablein" r/o open-file throw to infid
@@ -73,23 +45,11 @@ variable message$
   outfid flush-file throw
   outfid close-file throw ;
 
-: mainloop ( -- )
+s" testing message from 123" message$ $!
+
+: testloop ( -- )
   begin
-    getmessage
-    2dup addtolog
-    putmessage
+    message$ $@ putmessage
+    getmessage type cr
+    500 ms
   again ;
-
-: repeatmain ( -- )
-  startfifos
-  begin
-    try
-      mainloop
-      false
-    restore dto$ addtolog
-    endtry
-  again ;
-
-repeatmain
-
-bye
