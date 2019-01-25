@@ -1,5 +1,5 @@
-#! /usr/local/bin/gforth-arm
-\ sandserver.fs
+\ #! /usr/local/bin/gforth-arm
+\ testfifosend.fs
 
 \    Copyright (C) 2018  Philip King Smith
 
