@@ -64,7 +64,8 @@ variable message$
 
 : getmessage ( -- ucaddr u )
   s" /run/sandtablein" r/o open-file throw to infid
-  pad pad 80 infid read-file throw
+  infid slurp-fid
+  \ pad pad 80 infid read-file throw
   infid close-file throw ;
 
 : putmessage ( ucaddr u -- )
@@ -77,6 +78,7 @@ variable message$
   begin
     getmessage
     2dup addtolog
+    2dup type ." < message " cr
     putmessage
   again ;
 
