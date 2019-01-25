@@ -45,7 +45,7 @@ variable message$
   outfid flush-file throw
   outfid close-file throw ;
 
-s" testing message from 123" message$ $!
+s\" testing message from 123\n" message$ $!
 
 : testloop ( -- )
   begin
