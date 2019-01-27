@@ -68,7 +68,7 @@ sandtable-port# create-server to userver
 : read-socket ( -- caddr u )
   userver 1 listen
   userver accept-socket to usockfd
-  usockfd message-buffer @ mb-size read-socket ;
+  usockfd message-buffer @ mb-maxsize read-socket ;
 
 : socketloop ( -- )
   begin
