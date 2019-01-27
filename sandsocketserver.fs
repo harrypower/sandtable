@@ -68,7 +68,10 @@ sandtable-port# create-server to userver
 : readthesocket ( -- caddr u )
   userver 1 listen
   userver accept-socket to usockfd
-  usockfd message-buffer @ mb-maxsize read-socket ;
+  usockfd message-buffer @ mb-maxsize read-socket
+  usockfd . ." < socket id " cr
+  userver . ." < server id " cr
+;
 
 : socketloop ( -- )
   begin
@@ -76,6 +79,8 @@ sandtable-port# create-server to userver
     2dup addtolog
     type cr ." ^ message ^" cr
     s" data recieved" usockfd write-socket
+    usockfd close-socket
+    userver close-server
   again ;
 
 : repeatmain ( -- )
