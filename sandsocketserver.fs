@@ -65,14 +65,14 @@ variable buffer$
 
 sandtable-port# create-server to userver
 
-: read-socket ( -- caddr u )
+: readthesocket ( -- caddr u )
   userver 1 listen
   userver accept-socket to usockfd
   usockfd message-buffer @ mb-maxsize read-socket ;
 
 : socketloop ( -- )
   begin
-    read-socket
+    readthesocket
     2dup addtolog
     type cr ." ^ message ^" cr
     s" data recieved" usockfd write-socket
