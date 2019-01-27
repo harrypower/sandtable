@@ -28,7 +28,9 @@
 \ 1/26/2019 started coding
 
 require unix/socket.fs
+require sandmotorapi.fs
 
+10000000 value stream-timeout
 5354 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
@@ -59,29 +61,24 @@ variable buffer$
   logfid reposition-file throw
   utime udto$ logfid write-line throw
   logfid write-line throw
-  utime udto$ logfid write-line throw
   logfid flush-file throw
   logfid close-file throw ;
 
-
-: readthesocket ( -- caddr u )
+: socketloop ( -- )
+  stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
   userver 1 listen
-  userver accept-socket to usockfd
-  usockfd message-buffer @ mb-maxsize read-socket
-  usockfd . ." < socket id " cr
   userver . ." < server id " cr
-;
-
-: socketloop ( -- )
   begin
-    readthesocket
+    userver accept-socket to usockfd
+    usockfd message-buffer @ mb-maxsize read-socket
     2dup addtolog
     type cr ." ^ message ^" cr
     s" data recieved" usockfd write-socket
     usockfd close-socket
-    userver close-server
-  again ;
+  again
+  userver close-server
+ ;
 
 : repeatmain ( -- )
   begin
