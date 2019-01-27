@@ -65,7 +65,7 @@ variable buffer$
 
 
 : readthesocket ( -- caddr u )
-  sandtable-port# create-server to userver
+  sandtable-port# create-udp-server to userver
   userver 1 listen
   userver accept-socket to usockfd
   usockfd message-buffer @ mb-maxsize read-socket
