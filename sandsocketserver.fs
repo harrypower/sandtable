@@ -73,7 +73,7 @@ variable buffer$
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
     2dup addtolog
-    dup s>d dto$ buffer$ $! s"  data recieved" buffer$ $+! buffer$ $@ usockfd write-socket
+    dup s>d dto$ buffer$ $! s\"  data recieved\n\n" buffer$ $+! buffer$ $@ usockfd write-socket
     type ." < message" cr
     usockfd close-socket
   again
