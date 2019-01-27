@@ -69,15 +69,13 @@ variable buffer$
   sandtable-port# create-server to userver
   userver 3 listen
   userver . ." < server id " cr
-
   begin
-  userver accept-socket to usockfd
-  usockfd message-buffer @ mb-maxsize read-socket
-    userver message-buffer @ mb-maxsize read-socket
+    userver accept-socket to usockfd
+    usockfd message-buffer @ mb-maxsize read-socket
     2dup addtolog
     type cr ." ^ message ^" cr
     dup 0 <> if s" data recieved" usockfd write-socket else s" no data recieved" usockfd write-socket then
-  usockfd close-socket
+    usockfd close-socket
   again
   userver close-server
  ;
