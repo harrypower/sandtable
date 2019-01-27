@@ -38,7 +38,7 @@ mb-maxsize allocate throw message-buffer !
 0 value userver
 0 value usockfd
 0 value logfid
-variable junkbuffer$
+\ variable junkbuffer$
 variable buffer$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
@@ -73,8 +73,8 @@ variable buffer$
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
     2dup addtolog
-    type cr ." ^ message ^" cr
-    dup 0 <> if s" data recieved" usockfd write-socket else s" no data recieved" usockfd write-socket then
+    dup s>d dto$ buffer$ $! s"  data recieved" buffer$ $+! buffer$ $@ usockfd write-socket
+    type ." < message" cr
     usockfd close-socket
   again
   userver close-server
@@ -85,7 +85,7 @@ variable buffer$
     try
       socketloop
       false
-    restore dto$ buffer$ $! s"  <-error" buffer$ $+! addtolog
+    restore s>d dto$ buffer$ $! s"  <-error" buffer$ $+! addtolog
     endtry
   again ;
 
