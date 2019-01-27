@@ -92,4 +92,4 @@ variable buffer$
     endtry
   again ;
 
-repeatmain
+\ repeatmain
