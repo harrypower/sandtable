@@ -63,7 +63,7 @@ variable buffer$
   logfid flush-file throw
   logfid close-file throw ;
 
-sandtable-port# create-udp-server to userver
+sandtable-port# create-server to userver
 
 : read-socket ( -- caddr u )
   userver 1 listen
