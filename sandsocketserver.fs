@@ -16,8 +16,8 @@
 \    You should have received a copy of the GNU General Public License
 \    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-\ will be the first test server to process web and pattern messages
-\ will process web at first... later will break up into pthreads for web and pattern messages
+\ socket server for sandtable
+\ the sandtable cgi will talk to this server and other code that wishes to make the sand table do things
 
 \ Requires:
 \ unix/socket.fs
@@ -28,3 +28,63 @@
 \ 1/26/2019 started coding
 
 require unix/socket.fs
+
+5354 value sandtable-port#
+1024 value mb-maxsize
+variable message-buffer
+mb-maxsize allocate throw message-buffer !
+0 value userver
+0 value usockfd
+0 value logfid
+variable junkbuffer$
+variable buffer$
+
+: udto$ ( ud -- caddr u )  \ convert double to a string
+    swap over dabs <<# #s rot #> #>> buffer$ $! buffer$ $@ ;
+: dto$ ( d -- caddr u )  \ convert double signed to a string
+    swap over dabs <<# #s rot sign #> #>> buffer$ $! buffer$ $@ ;
+
+: openlog ( -- )
+  s" /run/sandtablelog" file-status swap drop false = if
+    s" /run/sandtablelog" r/w open-file throw
+    to logfid
+  else
+    s" /run/sandtablelog" r/w create-file throw
+    to logfid
+  then ;
+
+: addtolog ( caddr u -- )
+  openlog
+  logfid file-size throw
+  logfid reposition-file throw
+  utime udto$ logfid write-line throw
+  logfid write-line throw
+  utime udto$ logfid write-line throw
+  logfid flush-file throw
+  logfid close-file throw ;
+
+sandtable-port# create-server to userver
+
+: read-socket ( -- caddr u )
+  userver 1 listen
+  userver accept-socket to usockfd
+  usockfd message-buffer @ mb-size read-socket ;
+
+: socketloop ( -- )
+  begin
+    read-socket
+    2dup addtolog
+    type cr ." ^ message ^" cr
+    s" data recieved" usockfd write-socket
+  again ;
+
+: repeatmain ( -- )
+  begin
+    try
+      socketloop
+      false
+    restore dto$ buffer$ $! s"  <-error" buffer$ $+! addtolog
+    endtry
+  again ;
+
+repeatmain
