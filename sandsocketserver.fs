@@ -30,7 +30,7 @@
 require unix/socket.fs
 \ require sandmotorapi.fs
 
-10000000 value stream-timeout
+2000 value stream-timeout
 5354 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
@@ -38,7 +38,6 @@ mb-maxsize allocate throw message-buffer !
 0 value userver
 0 value usockfd
 0 value logfid
-\ variable junkbuffer$
 variable buffer$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
@@ -55,7 +54,7 @@ variable buffer$
     to logfid
   then ;
 
-: addtolog ( caddr u -- )
+: addtolog ( caddr u -- )  \ *** need to put a trim to this file in here to prevent large log files ***
   openlog
   logfid file-size throw
   logfid reposition-file throw
@@ -77,8 +76,7 @@ variable buffer$
     type cr ." ^ message ^" cr
     usockfd close-socket
   again
-  userver close-server
- ;
+  userver close-server ;
 
 : repeatmain ( -- )
   begin
