@@ -70,7 +70,7 @@ variable buffer$
   s\" Server: Gforth0.79\n" buffer$ $+!
   s\" Accept-Ranges: bytes\n" buffer$ $+!
   s\" Content-type: text/html; charset=utf-8\n" buffer$ $+!
-  s\" Content-Length: 32\n" buffer$ $+!
+  s\" Content-Length: 248\n" buffer$ $+!
   s\" Last-Modified: Tue, 18 May 2004 10:14:49 GMT\n" buffer$ $+!
   s\" <html> message recieved </html>\n" buffer$ $+!
   s\" \n\n" buffer$ $+!
