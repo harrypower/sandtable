@@ -71,10 +71,10 @@ variable buffer$
   userver . ." < server id " cr
   begin
     userver accept-socket to usockfd
-    usockfd message-buffer @ mb-maxsize read-socket .s ."  <caddr u " cr
-    dup s>d dto$ buffer$ $! s\"  data recieved\n\n" buffer$ $+! buffer$ $@ usockfd write-socket
-    \ 2dup addtolog
-    dump ." < message" cr
+    usockfd message-buffer @ mb-maxsize read-socket
+    dup s>d udto$ buffer$ $! s\"  data recieved\n\n" buffer$ $+! buffer$ $@ usockfd write-socket
+    2dup addtolog
+    type cr ." ^ message ^" cr
     usockfd close-socket
   again
   userver close-server
