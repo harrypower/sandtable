@@ -34,7 +34,6 @@ variable message-buffer
 mb-maxsize allocate throw message-buffer !
 0 value userver
 0 value usockfd
-0 value logfid
 variable buffer$
 
 variable query$
