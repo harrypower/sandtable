@@ -46,7 +46,7 @@ variable port#$
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> buffer$ $! buffer$ $@ ;
 
-sandtable-port# s>d udt$ port#$ $!
+sandtable-port# s>d udto$ port#$ $!
 
 : getmessage ( -- ucaddr u )
 
