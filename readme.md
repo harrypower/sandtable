@@ -92,7 +92,7 @@ cd /etc/apache2/mods-enabled
 sudo ln -s ../mods-available/cgi.load
 sudo apachectl -k graceful
 ```
-* Edit `/etc/apache2/etc/apache2/sites-enabled/000-default.conf` as follows :
+* Edit `/etc/apache2/sites-enabled/000-default.conf` as follows :
    * place this after `DocumentRoot` command and before `ErrorLog` command.
 ```
 ScriptAlias "/cgi-bin/" "/usr/lib/cgi-bin/"
