@@ -71,6 +71,7 @@ variable buffer$
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
+    s\" Content-type: text/html; charset=utf-8\n\n" usockfd write-socket
     dup s>d udto$ buffer$ $! s\"  data recieved\n\n" buffer$ $+! buffer$ $@ usockfd write-socket
     2dup addtolog
     type cr ." ^ message ^" cr
