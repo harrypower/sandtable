@@ -23,7 +23,7 @@
 \ Revisions:
 \ 1/26/2019 changes from fifo to socket coding started
 
-warnings off
+\ warnings off
 :noname ; is bootmessage
 
 require unix/socket.fs
