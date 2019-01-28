@@ -42,7 +42,7 @@ mb-maxsize allocate throw message-buffer !
 variable buffer$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
-    swap over dabs <<# #s rot #> #>> buffer$ $! buffer$ $@ ;
+    <<# #s  #> #>> buffer$ $! buffer$ $@ ;
 : dto$ ( d -- caddr u )  \ convert double signed to a string
     swap over dabs <<# #s rot sign #> #>> buffer$ $! buffer$ $@ ;
 
