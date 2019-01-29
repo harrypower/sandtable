@@ -17,7 +17,6 @@
 \
 \ Requires:
 \
-\	syscalls386.fs
 \ BBB_GPIO_lib.fs
 \ objects.fs
 \ mdca-obj.fs
@@ -27,6 +26,7 @@
 \ 6/24/2018 started coding
 \ 01/05/2019 added some constants and changed throws to abort"
 \ requires pauses.fs but may not use this addition
+\ 01/28/2019 remove syscalls38f.fs and put needed calls directly in below code
 
 c-library mysyscallsGNU
 
@@ -51,7 +51,6 @@ c-function ioctlGNU ioctl n n a -- n ( fd  request argp -- error )
 
 end-c-library
 
-\ require BBB_Gforth_gpio/syscalls386.fs
 require Gforth-Objects/objects.fs
 require BBB_Gforth_gpio/BBB_GPIO_lib.fs
 require Gforth-Objects/mdca-obj.fs
