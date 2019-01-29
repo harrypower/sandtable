@@ -18,17 +18,20 @@
 \ configures x and y motors and can control motors
 
 \ Requires:
-\ config-pins.fs
 \ tmc2130.fs
-\	syscalls386.fs
 \ BBB_GPIO_lib.fs
 \ objects.fs
 \ mdca-obj.fs
+\ double-linked-list.fs
 
 \ Revisions:
 \ 11/09/2018 started coding
 \ 19/12/2018 calibration simplified but needs to have realtime standard deviation impimented to detect bad calibration
 \ - movetoxy has issues yet with speed and calculation errors... need to come up with better idea here
+\ 28/1/2019 updated require list
+\ many changes to calibration method with helper words for testing
+\ movetoxy now does both x and y at same time based on y=mx+b slope idea
+\ test outputs need to be removed yet from calibration or set up as a test flag conditional to output 
 
 require tmc2130.fs
 require realtimeMSD.fs
@@ -310,7 +313,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   else 0
   then ;
 
-: listmotordata { udatalist -- }  \ use for testing..  displays data in double linked list to console 
+: listmotordata { udatalist -- }  \ use for testing..  displays data in double linked list to console
   udatalist ll-set-start
   begin udatalist ll-cell@ . udatalist ll> until ;
 

@@ -22,10 +22,13 @@
 \ Requires:
 \ unix/socket.fs
 \ sandmotorapi.fs
-\ config-pins.fs
+\ objects.fs
 
 \ Revisions:
 \ 1/26/2019 started coding
+\ 1/28/2019 added sandmotorapi.fs require for later motor control threads
+\ *** note this means bind is redefined in objects.fs from its first use in unix/socket.fs so be aware of this
+\ *** bind can be used for an object and is not needed as a socket item so it is an ok tradeoff
 
 require unix/socket.fs
 require sandmotorapi.fs
