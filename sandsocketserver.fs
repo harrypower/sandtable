@@ -28,7 +28,7 @@
 \ 1/26/2019 started coding
 
 require unix/socket.fs
-\ require sandmotorapi.fs
+require sandmotorapi.fs
 
 2000 value stream-timeout
 5354 value sandtable-port#
