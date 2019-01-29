@@ -28,7 +28,30 @@
 \ 01/05/2019 added some constants and changed throws to abort"
 \ requires pauses.fs but may not use this addition
 
-require BBB_Gforth_gpio/syscalls386.fs
+c-library mysyscallsGNU
+
+\c #include <sys/types.h>
+\c #include <sys/stat.h>
+\c #include <fcntl.h>
+\c #include <unistd.h>
+\c #include <sys/ioctl.h>
+
+c-function openGNU open a n -- n  ( ^zaddr  flags -- fd )
+\   file descriptor is returned
+\   Note zaddr points to a buffer containing the filename
+\   string terminated with a null character.
+c-function closeGNU close n -- n ( fd -- flag )
+c-function readGNU read n a n -- n ( fd  buf  count --  n )
+\ read count byes into buf from file
+c-function writeGNU write n a n -- n ( fd  buf  count  --  n )
+\ write count bytes from buf to file
+c-function lseekGNU lseek n n n -- n ( fd  offset  type  --  offs )
+\ reposition the file ptr
+c-function ioctlGNU ioctl n n a -- n ( fd  request argp -- error )
+
+end-c-library
+
+\ require BBB_Gforth_gpio/syscalls386.fs
 require Gforth-Objects/objects.fs
 require BBB_Gforth_gpio/BBB_GPIO_lib.fs
 require Gforth-Objects/mdca-obj.fs
@@ -211,17 +234,17 @@ object class
       true [to-inst] spihandle
       uspi case
         \ this is spi1 on the BBB schematic and mode chart. Linux enumerates the spi starting at 1!
-        1 of s\" /dev/spidev2.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open [to-inst] spihandle endof
+        1 of s\" /dev/spidev2.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or openGNU [to-inst] spihandle endof
         \ this is spi0 on the BBB schematic and mode chart. Linux enumerates the spi starting at 1!
-        0 of s\" /dev/spidev1.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or open [to-inst] spihandle endof
+        0 of s\" /dev/spidev1.0\x00" drop O_NDELAY O_NOCTTY or O_RDWR or openGNU [to-inst] spihandle endof
       endcase
       spihandle 0> if
         200000 u32data !
-        spihandle SPI_IOC_WR_MAX_SPEED_HZ u32data ioctl abort" construct of tmc2130 failure f" \ set spi speed to 100000 hz
+        spihandle SPI_IOC_WR_MAX_SPEED_HZ u32data ioctlGNU abort" construct of tmc2130 failure f" \ set spi speed to 100000 hz
         8 bytedata c!
-        spihandle SPI_IOC_WR_BITS_PER_WORD bytedata ioctl abort" construct of tmc2130 failure g" \ set bits per word to 8
+        spihandle SPI_IOC_WR_BITS_PER_WORD bytedata ioctlGNU abort" construct of tmc2130 failure g" \ set bits per word to 8
         0 bytedata c!
-        spihandle SPI_IOC_WR_MODE bytedata ioctl abort" construct of tmc2130 failure h" \ set to low on idle and capture on rising of clock
+        spihandle SPI_IOC_WR_MODE bytedata ioctlGNU abort" construct of tmc2130 failure h" \ set to low on idle and capture on rising of clock
       else
         spihandle abort" construct of tmc2130 failure i"
       then
@@ -237,7 +260,7 @@ object class
   m: ( tmc2130 -- ) \ destructor
     spihandle 0> if
       this disable-motor
-      spihandle close abort" destruct of tmc2130 failure a"
+      spihandle closeGNU abort" destruct of tmc2130 failure a"
       bufferA free abort" destruct of tmc2130 failure b"
       bufferB free abort" destruct of tmc2130 failure c"
       quickreg [bind] multi-cell-array destruct
@@ -252,8 +275,8 @@ object class
     bufferA 6 0 fill bufferB 6 0 fill
     %1111111 and
     bufferA c!
-    spihandle bufferA 5 write 5 = if
-      spihandle bufferB 5 read 5 = if
+    spihandle bufferA 5 writeGNU 5 = if
+      spihandle bufferB 5 readGNU 5 = if
         bufferB c@ %00001111 and \ note only the lower 4 bits are used
         bufferB 1 + this $-data
         0
@@ -271,8 +294,8 @@ object class
     bufferA 6 0 fill bufferB 6 0 fill
     this data-$ bufferA 1 + 4 cmove
     %1111111 and %10000000 or bufferA c!
-    spihandle bufferA 5 write 5 = if
-      spihandle bufferB 5 read 5 = if
+    spihandle bufferA 5 writeGNU 5 = if
+      spihandle bufferB 5 readGNU 5 = if
         bufferB c@ %00001111 and \ note only the lower 4 bits are used
         false
       else
