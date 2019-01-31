@@ -50,7 +50,7 @@ variable port#$
 sandtable-port# s>d udto$ port#$ $!
 
 : getmessage ( -- ucaddr u )
-s" date" sh-get
+s" curl 192.168.0.59:5354/?command=directtest" sh-get
 ;
 
 : putmessage ( ucaddr u -- )
