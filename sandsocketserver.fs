@@ -67,17 +67,17 @@ variable buffer$
   logfid close-file throw ;
 
 : http-response ( -- caddr u )
-  s\" HTTP/1.1 200 OK\n" buffer$ $!
-  s\" Date: Mon, 28 Jan 2019 11:31:00 GMT\n" buffer$ $+!
-  s\" Connection: close\n" buffer$ $+!
-  s\" Server: Gforth0.79\n" buffer$ $+!
-  s\" Accept-Ranges: bytes\n" buffer$ $+!
-  s\" Content-type: text/html; charset=utf-8\n" buffer$ $+!
-  s\" Content-Length: 32\n" buffer$ $+!
-  s\" Last-Modified: Mon, 28 Jan 2019 10:14:49 GMT\n" buffer$ $+!
-  s\" \n" buffer$ $+!
-  s\" <html> message recieved </html>\n" buffer$ $+!
-  s\" \n\n" buffer$ $+!
+  s\" HTTP/1.1 200 OK\r\n" buffer$ $!
+  s\" Date: Mon, 28 Jan 2019 11:31:00 GMT\r\n" buffer$ $+!
+  s\" Connection: close\r\n" buffer$ $+!
+  s\" Server: Gforth0.79\r\n" buffer$ $+!
+  s\" Accept-Ranges: bytes\r\n" buffer$ $+!
+  s\" Content-type: text/html; charset=utf-8\r\n" buffer$ $+!
+  s\" Content-Length: 32\r\n" buffer$ $+!
+  s\" Last-Modified: Mon, 28 Jan 2019 10:14:49 GMT\r\n" buffer$ $+!
+  s\" \r\n" buffer$ $+!
+  s\" <html> message recieved </html>\r\n" buffer$ $+!
+  s\" \r\n\r\n" buffer$ $+!
   buffer$ $@ ;
 
 : socketloop ( -- )
@@ -88,11 +88,14 @@ variable buffer$
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
-    http-response usockfd write-socket
-    \ dup s>d udto$ buffer$ $! s\"  data recieved\n\n" buffer$ $+! buffer$ $@ usockfd write-socket
-    2dup addtolog
-    type cr ." ^ message ^" cr
-    usockfd close-socket
+    2dup s\" \r\n" compare 0 <>
+    if
+      http-response usockfd write-socket
+      \ dup s>d udto$ buffer$ $! s\"  data recieved\n\n" buffer$ $+! buffer$ $@ usockfd write-socket
+      2dup addtolog
+      type cr ." ^ message ^" cr
+      usockfd close-socket
+    then
   again
   userver close-server ;
 
