@@ -23,10 +23,11 @@
 \ Revisions:
 \ 1/26/2019 changes from fifo to socket coding started
 
-\ warnings off
+warnings off
 :noname ; is bootmessage
 
 require unix/socket.fs
+\ require script.fs
 
 5354 value sandtable-port#
 1024 value mb-maxsize
@@ -49,7 +50,7 @@ variable port#$
 sandtable-port# s>d udto$ port#$ $!
 
 : getmessage ( -- ucaddr u )
-
+s" testing"
 ;
 
 : putmessage ( ucaddr u -- )
