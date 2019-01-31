@@ -26,8 +26,8 @@
 warnings off
 :noname ; is bootmessage
 
-require unix/socket.fs
-\ require script.fs
+\ require unix/socket.fs
+require script.fs
 
 5354 value sandtable-port#
 1024 value mb-maxsize
@@ -50,7 +50,7 @@ variable port#$
 sandtable-port# s>d udto$ port#$ $!
 
 : getmessage ( -- ucaddr u )
-s" testing"
+s" date" sh-get
 ;
 
 : putmessage ( ucaddr u -- )
