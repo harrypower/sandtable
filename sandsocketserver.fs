@@ -33,7 +33,7 @@
 require unix/socket.fs
 require sandmotorapi.fs
 
-20000 value stream-timeout
+40000 value stream-timeout
 5354 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
@@ -68,13 +68,13 @@ variable buffer$
 
 : http-response ( -- caddr u )
   s\" HTTP/1.1 200 OK\r\n" buffer$ $!
-  s\" Date: Mon, 28 Jan 2019 11:31:00 GMT\r\n" buffer$ $+!
+  \ s\" Date: Mon, 28 Jan 2019 11:31:00 GMT\r\n" buffer$ $+!
   s\" Connection: close\r\n" buffer$ $+!
   s\" Server: Gforth0.79\r\n" buffer$ $+!
   s\" Accept-Ranges: bytes\r\n" buffer$ $+!
   s\" Content-type: text/html; charset=utf-8\r\n" buffer$ $+!
-  s\" Content-Length: 32\r\n" buffer$ $+!
-  s\" Last-Modified: Mon, 28 Jan 2019 10:14:49 GMT\r\n" buffer$ $+!
+  s\" Content-Length: 33\r\n" buffer$ $+!
+  \ s\" Last-Modified: Mon, 28 Jan 2019 10:14:49 GMT\r\n" buffer$ $+!
   s\" \r\n" buffer$ $+!
   s\" <html> message recieved </html>\r\n" buffer$ $+!
   s\" \r\n\r\n" buffer$ $+!
@@ -88,18 +88,11 @@ variable buffer$
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
-\    2dup s\" \r\n" compare 0 <>
-\    if
-\      2dup s\" \n" compare 0 <>
-\      if
         http-response usockfd write-socket
         2dup addtolog
         dump cr ." ^ message ^" cr
         usockfd close-socket
-\      else 2drop
-\      then
-\    else 2drop
-\    then
+
   again
   userver close-server ;
 

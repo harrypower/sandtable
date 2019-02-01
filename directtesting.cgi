@@ -26,7 +26,6 @@
 warnings off
 :noname ; is bootmessage
 
-\ require unix/socket.fs
 require script.fs
 
 5354 value sandtable-port#
@@ -38,7 +37,7 @@ mb-maxsize allocate throw message-buffer !
 variable buffer$
 
 variable query$
-variable test$
+variable thequery$
 variable apache$s
 variable output$
 variable http_host$
@@ -50,11 +49,12 @@ variable port#$
 sandtable-port# s>d udto$ port#$ $!
 
 : getmessage ( -- ucaddr u )
-s" curl 192.168.0.59:5354/?command=directtest" sh-get
 ;
 
-: putmessage ( ucaddr u -- )
-
+: sendmessage ( ucaddr u -- ucaddr1 u1 )
+2drop 
+s" curl 192.168.0.59:5354/?command=atest" sh-get
+\ s" curl 192.168.0.59:5354/?" buffer$ $! $+! buffer$ $@ sh-get
 ;
 
 : lineending ( -- caddr u )
@@ -64,14 +64,14 @@ s" curl 192.168.0.59:5354/?command=directtest" sh-get
   s\" Content-type: text/html; charset=utf-8\n\n" type
   query$ $@ type
   apache$s $@ type
-  test$ $@ type lineending type
-  test$ $@ putmessage
-  getmessage s" The message recieved is: " type type lineending type
+  thequery$ $@ type lineending type
+  thequery$ $@ sendmessage
+  s" The message recieved is: " type type lineending type
   s\" All Ok\n\n" type ;
 
 : get-get-message ( -- )
   s" QUERY_STRING is:" query$ $! s" QUERY_STRING" getenv query$ $+! lineending query$ $+!
-  s" QUERY_STRING" getenv test$ $! ;
+  s" QUERY_STRING" getenv thequery$ $! ;
 
 : get-apache-stuff ( -- )
   s" REMOTE_ADDR is :" apache$s $! s" REMOTE_ADDR" getenv apache$s $+! lineending apache$s $+!
