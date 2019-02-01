@@ -67,9 +67,9 @@ s" 5354" port#$ $!
   s\" <body>\n" type
   query$ $@ type
   apache$s $@ type
-  thequery$ $@ type
+  s" CGI got this message: " type thequery$ $@ type lineending type
   thequery$ $@ sendmessage
-  s" The message recieved is: " type type lineending type
+  s" Server message recieved is: " type type lineending type
   s\" </body></html>\n" type
 ;
 
