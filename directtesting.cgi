@@ -29,7 +29,6 @@ warnings off
 
 require script.fs
 
-\ 5354 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
 mb-maxsize allocate throw message-buffer !
@@ -48,7 +47,6 @@ variable server_addres$
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> buffer$ $! buffer$ $@ ;
 
-\ sandtable-port# s>d udto$ port#$ $!
 s" 192.168.0.59" server_addres$ $!
 s" 5354" port#$ $!
 
@@ -57,7 +55,6 @@ s" 5354" port#$ $!
 
 : sendmessage ( ucaddr u -- ucaddr1 u1 )
   s\" curl \"" buffer$ $! server_addres$ $@ buffer$ $+! s" :" buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
-\  s\" curl \"192.168.0.59:5354/?" buffer$ $! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
 ;
 
 : lineending ( -- caddr u )
@@ -68,14 +65,13 @@ s" 5354" port#$ $!
   s\" <html>\n" type
   s\" <head><title>CGI return</title></head>\n" type
   s\" <body>\n" type
-  query$ $@ type lineending type
-  apache$s $@ type lineending type
-  thequery$ $@ type lineending type
+  query$ $@ type
+  apache$s $@ type
+  thequery$ $@ type
   thequery$ $@ sendmessage
   s" The message recieved is: " type type lineending type
   s\" </body></html>\n" type
-\ s\" \r\n\r\n" type
-  ;
+;
 
 : get-get-message ( -- )
   s" QUERY_STRING is:" query$ $! s" QUERY_STRING" getenv query$ $+! lineending query$ $+!
