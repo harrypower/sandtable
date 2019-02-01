@@ -74,7 +74,7 @@ s" 5354" port#$ $!
   thequery$ $@ sendmessage
   s" The message recieved is: " type type lineending type
   s\" </body></html>\n" type
-  s\" \r\n\r\n" type
+\ s\" \r\n\r\n" type
   ;
 
 : get-get-message ( -- )
