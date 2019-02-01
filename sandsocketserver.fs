@@ -80,6 +80,22 @@ variable buffer$
   s\" \r\n\r\n" buffer$ $+!
   buffer$ $@ ;
 
+: http-header ( -- caddr u )
+  s\" HTTP/1.1 200 OK\r\n" buffer$ $!
+  \ s\" Date: Mon, 28 Jan 2019 11:31:00 GMT\r\n" buffer$ $+!
+  s\" Connection: close\r\n" buffer$ $+!
+  s\" Server: Gforth0.79\r\n" buffer$ $+!
+  s\" Accept-Ranges: bytes\r\n" buffer$ $+!
+  s\" Content-type: text/html; charset=utf-8\r\n" buffer$ $+!
+  s\" Content-Length: 33\r\n" buffer$ $+!
+  \ s\" Last-Modified: Mon, 28 Jan 2019 10:14:49 GMT\r\n" buffer$ $+!
+  s\" \r\n" buffer$ $+!
+;
+
+: parsemessage ( caddr u -- caddr1 u1 )
+
+;
+
 : socketloop ( -- )
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
