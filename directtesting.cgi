@@ -52,8 +52,8 @@ sandtable-port# s>d udto$ port#$ $!
 ;
 
 : sendmessage ( ucaddr u -- ucaddr1 u1 )
-2drop 
-s" curl 192.168.0.59:5354/?command=atest" sh-get
+2drop
+s" curl 192.168.0.59:5354/?command=atest" buffer$ $! buffer$ $@ sh-get
 \ s" curl 192.168.0.59:5354/?" buffer$ $! $+! buffer$ $@ sh-get
 ;
 
