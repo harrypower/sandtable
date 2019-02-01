@@ -64,7 +64,7 @@ s" 5354" port#$ $!
   s\" <br>\n" ;
 
 : return-message ( -- )
-  s\" Content-type: text/html; charset=utf-8\r\n" type
+  s\" Content-type: text/html; charset=utf-8\n\n" type
   s\" <html>\n" type
   s\" <head><title>CGI return</title></head>\n" type
   s\" <body>\n" type
