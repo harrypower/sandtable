@@ -22,13 +22,14 @@
 
 \ Revisions:
 \ 1/26/2019 changes from fifo to socket coding started
+\ 2/1/2019 using curl to send message to server
 
 warnings off
 :noname ; is bootmessage
 
 require script.fs
 
-5354 value sandtable-port#
+\ 5354 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
 mb-maxsize allocate throw message-buffer !
@@ -42,30 +43,39 @@ variable apache$s
 variable output$
 variable http_host$
 variable port#$
+variable server_addres$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> buffer$ $! buffer$ $@ ;
 
-sandtable-port# s>d udto$ port#$ $!
+\ sandtable-port# s>d udto$ port#$ $!
+s" 192.168.0.59" server_addres$ $!
+s" 5354" port#$ $!
 
 : getmessage ( -- ucaddr u )
 ;
 
 : sendmessage ( ucaddr u -- ucaddr1 u1 )
-  s\" curl \"192.168.0.59:5354/?" buffer$ $! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
+  s\" curl \"" buffer$ $! server_addres$ $@ buffer$ $+! s" :" buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
+\  s\" curl \"192.168.0.59:5354/?" buffer$ $! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
 ;
 
 : lineending ( -- caddr u )
-  s\" <br>\n\n" ;
+  s\" <br>\n" ;
 
 : return-message ( -- )
-  s\" Content-type: text/html; charset=utf-8\n\n" type
-  query$ $@ type
-  apache$s $@ type
+  s\" Content-type: text/html; charset=utf-8\r\n" type
+  s\" <html>\n" type
+  s\" <head><title>CGI return</title></head>\n" type
+  s\" <body>\n" type
+  query$ $@ type lineending type
+  apache$s $@ type lineending type
   thequery$ $@ type lineending type
   thequery$ $@ sendmessage
   s" The message recieved is: " type type lineending type
-  s\" All Ok\n\n" type ;
+  s\" </body></html>\n" type
+  s\" \r\n\r\n" type
+  ;
 
 : get-get-message ( -- )
   s" QUERY_STRING is:" query$ $! s" QUERY_STRING" getenv query$ $+! lineending query$ $+!
