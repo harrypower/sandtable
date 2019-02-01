@@ -33,7 +33,7 @@
 require unix/socket.fs
 require sandmotorapi.fs
 
-20000 value stream-timeout
+40000 value stream-timeout
 5354 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
