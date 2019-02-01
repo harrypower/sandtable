@@ -88,18 +88,18 @@ variable buffer$
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
-    2dup s\" \r\n" compare 0 <>
-    if
-      2dup s\" \n" compare 0 <>
-      if
+\    2dup s\" \r\n" compare 0 <>
+\    if
+\      2dup s\" \n" compare 0 <>
+\      if
         http-response usockfd write-socket
         2dup addtolog
-        type cr ." ^ message ^" cr
+        dump cr ." ^ message ^" cr
         usockfd close-socket
-      else 2drop
-      then
-    else 2drop
-    then
+\      else 2drop
+\      then
+\    else 2drop
+\    then
   again
   userver close-server ;
 
