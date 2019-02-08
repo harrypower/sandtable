@@ -57,11 +57,11 @@ s" 5354" port#$ $!
 \  s\" curl \"" buffer$ $! server_addres$ $@ buffer$ $+! s" :" buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
   s\" echo \"" buffer$ $!
   buffer$ $+!
-  s\" \" netcat " buffer$ $+!
+  s\" \" | netcat " buffer$ $+!
   server_addres$ $@ buffer$ $+!
   s"  " buffer$ $+!
   port#$ $@ buffer$ $+!
-  buffer$ $@ sh-get 
+  buffer$ $@ sh-get
 ;
 
 : lineending ( -- caddr u )
