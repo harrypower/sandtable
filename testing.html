@@ -10,11 +10,22 @@
 <form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
   Issue a command to SandTable <br>
   <div class="form-a">
-    <label for="name">Command: </lable>
-    <input type="text" name="command" value="gohome" required>
+    <label for="name">Command:</label>
+    <select name="command">
+      <option value="">--Choose a command--</opiton>
+      <option value="gohome">gohome</option>
+      <option value="status">status</option>
+      <option value="xmin">xmin</option>
+      <option value="ymin">ymin</option>
+      <option value="xmax">xmax</option>
+      <option value="ymax">ymax</option>
+      <option value="xnow">xnow</option>
+      <option value="ynow">ynow</option>
+      <option value="lastresult">lastresult</option>
+    </select>
   </div>
   <div class="form-a">
-    <input type="submit" value="Submit Command">
+    <input type="submit" value="Send Command">
   </div>
 </form>
 
