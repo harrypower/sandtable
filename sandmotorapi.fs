@@ -31,7 +31,7 @@
 \ 28/1/2019 updated require list
 \ many changes to calibration method with helper words for testing
 \ movetoxy now does both x and y at same time based on y=mx+b slope idea
-\ test outputs need to be removed yet from calibration or set up as a test flag conditional to output 
+\ test outputs need to be removed yet from calibration or set up as a test flag conditional to output
 
 require tmc2130.fs
 require realtimeMSD.fs
@@ -458,5 +458,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
   ymotor disable-motor
   xmotor [bind] tmc2130 destruct
   ymotor [bind] tmc2130 destruct ;
+
+: zigzag-clean ( nsteps -- )
+  0 { nsteps nxamount }
+  xm-max xm-min - nsteps / to nxamount
+  xm-min ym-min movetoxy throw
+  xm-max xm-min do
+    i nxamount 2 / + ym-max movetoxy throw
+    i nxamount + ym-min movetoxy throw
+  nxamount +loop ;
 
 : testcal 0 do cr dohome . 275000 dup movetoxy . loop ;
