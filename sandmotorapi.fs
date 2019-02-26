@@ -462,10 +462,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 : zigzag-clean ( nsteps -- )
   0 { nsteps nxamount }
   xm-max xm-min - nsteps / to nxamount
-  xm-min ym-min movetoxy throw
+  xm-min ym-min movetoxy true <> throw
   xm-max xm-min do
-    i nxamount 2 / + ym-max movetoxy throw
-    i nxamount + ym-min movetoxy throw
+    i nxamount 2 / + ym-max movetoxy true <> throw
+    i nxamount + ym-min movetoxy true <> throw 
   nxamount +loop ;
 
 : testcal 0 do cr dohome . 275000 dup movetoxy . loop ;
