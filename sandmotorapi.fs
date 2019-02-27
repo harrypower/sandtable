@@ -464,7 +464,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm-min ym-min movetoxy false = throw
     xm-min ym-max movetoxy false = throw
     xm-max ym-max movetoxy false = throw
-    xm-min ym-max movetoxy false = throw
+    xm-max ym-min movetoxy false = throw
     xm-min ym-min movetoxy false = throw
     false
   restore
