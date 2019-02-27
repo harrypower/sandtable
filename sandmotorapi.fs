@@ -459,13 +459,44 @@ true value yposition  \ is the real location of y motor .. note if value is true
   xmotor [bind] tmc2130 destruct
   ymotor [bind] tmc2130 destruct ;
 
-: zigzag-clean ( nsteps -- )
-  0 { nsteps nxamount }
-  xm-max xm-min - nsteps / to nxamount
-  xm-min ym-min movetoxy true <> throw
-  xm-max xm-min do
-    i nxamount 2 / + ym-max movetoxy true <> throw
-    i nxamount + ym-min movetoxy true <> throw 
-  nxamount +loop ;
+: border ( -- nflag )
+  try
+    xm-min ym-min movetoxy throw
+    xm-min ym-max movetoxy throw
+    xm-max ym-max movetoxy throw
+    xm-min ym-max movetoxy throw
+    xm-min ym-min movetoxy throw
+    false
+  restore
+  endtry ;
+
+: zigzag-clean ( nsteps uxy -- nflag )
+  0 { nsteps uxy nxyamount }
+  try
+    uxy case
+      xm of
+        xm-max xm-min - nsteps / to nxyamount
+        xm-min ym-min movetoxy false = if 100 throw then
+        xm-max xm-min do
+          i nxyamount 2 / + ym-max movetoxy false = if 101 throw then
+          i nxyamount + ym-min movetoxy false = if 102 throw then
+        nxyamount +loop
+      \  xm-min ym-min movetoxy false = if 103 throw then
+        border
+        false
+      endof
+      ym of
+        ym-max ym-min - nsteps / to nxyamount
+        xm-min ym-min movetoxy false = if 100 throw then
+        ym-max ym-min do
+          i nxyamount 2 / + xm-max swap movetoxy false = if 101 throw then
+          i nxyamount + xm-min swap movetoxy false = if 102 throw then
+        nxyamount +loop
+        border  
+        false
+      endof
+    endcase
+  restore
+  endtry ;
 
 : testcal 0 do cr dohome . 275000 dup movetoxy . loop ;
