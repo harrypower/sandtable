@@ -461,11 +461,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : border ( -- nflag )
   try
-    xm-min ym-min movetoxy throw
-    xm-min ym-max movetoxy throw
-    xm-max ym-max movetoxy throw
-    xm-min ym-max movetoxy throw
-    xm-min ym-min movetoxy throw
+    xm-min ym-min movetoxy false = throw
+    xm-min ym-max movetoxy false = throw
+    xm-max ym-max movetoxy false = throw
+    xm-min ym-max movetoxy false = throw
+    xm-min ym-min movetoxy false = throw
     false
   restore
   endtry ;
@@ -492,7 +492,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
           i nxyamount 2 / + xm-max swap movetoxy false = if 101 throw then
           i nxyamount + xm-min swap movetoxy false = if 102 throw then
         nxyamount +loop
-        border  
+        border
         false
       endof
     endcase
