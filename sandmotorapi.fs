@@ -477,7 +477,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       xm of
         xm-max xm-min - nsteps / to nxyamount
         xm-min ym-min movetoxy false = if 100 throw then
-        xm-max xm-min do
+        nxyamount nsteps * xm-min do
           i nxyamount 2 / + ym-max movetoxy false = if 101 throw then
           i nxyamount + ym-min movetoxy false = if 102 throw then
         nxyamount +loop
@@ -488,7 +488,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       ym of
         ym-max ym-min - nsteps / to nxyamount
         xm-min ym-min movetoxy false = if 100 throw then
-        ym-max ym-min do
+        nxyamount nsteps * ym-min do
           i nxyamount 2 / + xm-max swap movetoxy false = if 101 throw then
           i nxyamount + xm-min swap movetoxy false = if 102 throw then
         nxyamount +loop
@@ -517,7 +517,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         xm-min ym-min movetoxy false = if 100 throw then
         usteps 0 do
           i uxyamount * xm-max swap movetoxy false = if 101 throw then
-          i uxyamount * uxyamount + xm-min swap movetoxy false = if 102 throw then 
+          i uxyamount * uxyamount + xm-min swap movetoxy false = if 102 throw then
         loop
         border true = if 103 throw then
       endof
