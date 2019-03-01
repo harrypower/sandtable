@@ -499,31 +499,4 @@ true value yposition  \ is the real location of y motor .. note if value is true
   restore
   endtry ;
 
-: zigzag-clean2 ( usteps uxy -- nflag )
-  0 { usteps uxy uxyamount }
-  try
-    uxy case
-      xm of
-        xm-max xm-min - usteps / to uxyamount
-        xm-min ym-min movetoxy false = if 100 throw then
-        usteps 0 do
-          i uxyamount * ym-max movetoxy false = if 101 throw then
-          i uxyamount * uxyamount + ym-min movetoxy false = if 102 throw then
-        loop
-        border true = if 103 throw then
-      endof
-      ym of
-        ym-max ym-min - usteps / to uxyamount
-        xm-min ym-min movetoxy false = if 100 throw then
-        usteps 0 do
-          i uxyamount * xm-max swap movetoxy false = if 101 throw then
-          i uxyamount * uxyamount + xm-min swap movetoxy false = if 102 throw then
-        loop
-        border true = if 103 throw then
-      endof
-    endcase
-    false
-  restore
-  endtry ;
-
 : testcal 0 do cr dohome . 275000 dup movetoxy . loop ;
