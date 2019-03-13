@@ -72,6 +72,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 200 value calwait
 32 value max-cal-test
 
+\ ************ configure-stuff needs to be used first and return false to allow other operations with sandtable
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   s" /home/debian/sandtable/config-pins.fs" system $? to configured?
   configured? 0 = if
@@ -218,6 +219,23 @@ true value yposition  \ is the real location of y motor .. note if value is true
     then
   else false \ not configured or home yet
   then ;
+
+\ *********** these next words are used to process and make a word that allows printing on the sandtable as a window
+\ these valuese are used to do internal sandtable location calculations in the following words only
+0 value nsx1
+0 value nsy1
+0 value nsx2
+0 value nxy2
+: drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
+\ nflag returns information about what happened in drawing the requested line
+  { nx1 ny1 nx2 ny2 }
+\ move stylus to nx1 ny1 or the correct x or y intersection of boarder of sandtable
+
+\ calculate correct line end location either intersection of boarder or location on sandtable
+
+\ draw the two above calculated endpoints for line onto table
+
+;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
 \ also note that these home position words do not check if sandtable is configured so only use the dohome word to calibrate the sandtable
