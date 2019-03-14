@@ -267,7 +267,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then
 
 \    ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
-\    ny1 s>f nx1 s>f mslope f@ f* f- nbintersect f!
+\    ny1 s>f nx1 s>f mslope f@ f* f- bintersect f!
 
 \ move stylus to nx1 ny1 or the correct x or y intersection of boarder of sandtable
 
