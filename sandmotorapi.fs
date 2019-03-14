@@ -226,7 +226,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0 value nsy1
 0 value nsx2
 0 value nsy2
-0e fvariable mslope nmslope f!
+0e fvariable mslope mslope f!
 0e fvariable bintersect nbintersect f!
 : drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
 \ nflag returns information about what happened in drawing the requested line
