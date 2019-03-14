@@ -225,10 +225,50 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0 value nsx1
 0 value nsy1
 0 value nsx2
-0 value nxy2
+0 value nsy2
+0e fvariable mslope nmslope f!
+0e fvariable bintersect nbintersect f!
 : drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
 \ nflag returns information about what happened in drawing the requested line
   { nx1 ny1 nx2 ny2 }
+  nx1 nx2 = ny1 ny2 = and if 100 exit then \ this is not a line but a dot
+  nx1 nx2 = nx1 xm-min < nx1 xm-max > or and if 101 exit then \ vertical line not on sandtable
+  ny1 ny2 = ny1 ym-min < ny1 ym-max > or and if 102 exit then \ horizontal line not on sandtable
+  nx1 nx2 = if
+  \ vertical line case
+    nx1 to nsx1
+    nx1 to nsx2
+    ny1 ym-min >= ny1 ym-max <= and ny2 ym-min >= ny2 ym-max <= and and if
+      \ y is on sandtable
+      ny1 to nsy1 ny2 to nsy2
+    else
+      \ y is not on sandtable
+      ny1 ny2 min
+      ny1 ny2 max to ny2 to ny1
+      ny1 ym-min >= if ny1 to nsy1 else ym-min to nsy1 then
+      ny2 ym-max <= if ny2 to nsy2 else ym-max to nsy2 then
+    then
+  then
+
+  ny1 ny2 = if
+  \ horizontal line case
+    ny1 to nsy1
+    ny1 to nsy2
+    nx1 xm-min >= nx1 xm-max <= and nx2 xm-min >= nx2 xm-max <= and and if
+      \ x is on sandtable
+      nx1 to nsx1 nx2 to nsx2
+    else
+      \ x is not on sandtable
+      nx1 nx2 min
+      nx1 nx2 max to nx2 to nx1
+      nx1 xm-min >= if nx1 to nsx1 else xm-min to nsx1 then
+      nx2 xm-max <= if nx2 to nsx2 else xm-max to nsx2 then
+    then
+  then
+
+\    ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
+\    ny1 s>f nx1 s>f mslope f@ f* f- nbintersect f!
+
 \ move stylus to nx1 ny1 or the correct x or y intersection of boarder of sandtable
 
 \ calculate correct line end location either intersection of boarder or location on sandtable
