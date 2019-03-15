@@ -234,8 +234,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nx1 nx2 = ny1 ny2 = and if 100 exit then \ this is not a line but a dot
   nx1 nx2 = nx1 xm-min < nx1 xm-max > or and if 101 exit then \ vertical line not on sandtable
   ny1 ny2 = ny1 ym-min < ny1 ym-max > or and if 102 exit then \ horizontal line not on sandtable
+
   nx1 nx2 = if
-  \ vertical line case
+  \ vertical line
     nx1 to nsx1
     nx1 to nsx2
     ny1 ym-min >= ny1 ym-max <= and ny2 ym-min >= ny2 ym-max <= and and if
@@ -251,7 +252,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then
 
   ny1 ny2 = if
-  \ horizontal line case
+  \ horizontal line
     ny1 to nsy1
     ny1 to nsy2
     nx1 xm-min >= nx1 xm-max <= and nx2 xm-min >= nx2 xm-max <= and and if
@@ -266,8 +267,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     then
   then
 
-\    ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
-\    ny1 s>f nx1 s>f mslope f@ f* f- bintersect f!
+  ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
+  ny1 s>f nx1 s>f mslope f@ f* f- bintersect f!
 
 \ move stylus to nx1 ny1 or the correct x or y intersection of boarder of sandtable
 
