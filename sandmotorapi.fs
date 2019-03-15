@@ -270,12 +270,29 @@ true value yposition  \ is the real location of y motor .. note if value is true
   ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
   ny1 s>f nx1 s>f mslope f@ f* f- bintersect f!
 
-\ move stylus to nx1 ny1 or the correct x or y intersection of boarder of sandtable
+  nx1 nx2 <> ny1 ny2 <> and \ test horizontal or vertical
+  nx1 xm-min >= nx1 xm-max <= and \ test if in bounds or out of bounds
+  ny1 ym-min >= ny1 ym-max <= and and
+  if \ nx1 ny1 are on real sandtable
+    nx1 to nsx1
+    ny1 to nsy1
+  else \ nx1 ny1 are not on real sandtable
+     \ do math here to find border intersection
+  then
 
-\ calculate correct line end location either intersection of boarder or location on sandtable
+  nx1 nx2 <> ny1 ny2 <> and \ test no horizontal or vertical
+  nx2 xm-min >= nx2 xm-max <= and \ test if in bounds or out of bounds
+  ny2 ym-min >= ny2 ym-max <= and and
+  if \ nx2 ny2 are on real sandtable
+    nx2 to nsx2
+    ny2 to nsy2
+  else \ nx2 ny2 are not on real sandtable
+     \ do math here to find border intersection
+  then
 
-\ draw the two above calculated endpoints for line onto table
-
+\ at this moment nsx1 nsy1 nsx2 nsy2 have the real sandtable locations to draw on
+\ so now find were the current x and y possition is and move the ball to the nsx1 nsy1 location
+\ then issue command to move the ball the the nsx2 nsy2 location 
 ;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
