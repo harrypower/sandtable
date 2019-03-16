@@ -269,7 +269,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
   ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
   ny1 s>f nx1 s>f mslope f@ f* f- bintersect f!
-." here is stack " .s cr 
+\ ." here is stack " .s cr 
   nx1 nx2 = ny1 ny2 = or invert \ test horizontal or vertical
   nx1 xm-min >= nx1 xm-max <= and \ test if in bounds or out of bounds
   ny1 ym-min >= ny1 ym-max <= and and and
@@ -280,7 +280,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
      \ do math here to find border intersection
   then
 
-  nx1 nx2 = ny1 ny2 = invert \ test no horizontal or vertical
+  nx1 nx2 = ny1 ny2 = or invert \ test no horizontal or vertical
   nx2 xm-min >= nx2 xm-max <= and \ test if in bounds or out of bounds
   ny2 ym-min >= ny2 ym-max <= and and and
   if \ nx2 ny2 are on real sandtable
