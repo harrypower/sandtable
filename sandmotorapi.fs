@@ -226,7 +226,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0 value nsy1
 0 value nsx2
 0 value nsy2
-0 value edgetest
+0 value pointtest
 0e fvariable mslope mslope f!
 0e fvariable bintersect bintersect f!
 : drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
@@ -277,29 +277,30 @@ true value yposition  \ is the real location of y motor .. note if value is true
   if \ nx1 ny1 are on real sandtable
     nx1 to nsx1
     ny1 to nsy1
-    0 to edgetest
-  else \ nx1 ny1 are not on real sandtable
-    bintersect f@ ym-min s>f f>= bintercept f@ ym-max s>f f<= and if 0 to nsx1 bintercept f@ f>s to nsy1 1 to edgetest else 0 to edgetest then
-    \ y=mx+b
-    mslope f@ xm-max s>f f* bintercept f@ f+ fdup fdup
-    ym-min s>f f>= ym-max s>f f<= and if edgetest 1 + dup to edgetest 2 = if xm-max to nsx2 f>s to nsy2 else xm-max to nsx1 f>s to nsy1 then else fdrop then
-    \ y-b=mx ... (y-b)/m=x
-    ym-min s>f bintercept f@ f+ mslope f@ f/ fdup fdup
-    xm-min s>f f>= xm-max s>f f<= and if edgetest 1 + dup to edgetest 2 = if f>s to nsx2 ym-min to nsy2 else f>s to nsx1 ym-min to nsy1 then else fdrop then
-    ym-max s>f bintercept f@ f+ mslope f@ f/ fdup fdup
-    xm-min s>f f>= xm-max s>f f<= and if edgetest 1 + dup to edgetest 2 = if f>s to nsx2 ym-max to nsy2 else f>s to nsx1 ym-max to nsy1 then else fdrop then
+    1 to pointtest
+  else
+    0 to pointtest
   then
 
   nx1 nx2 = ny1 ny2 = or invert \ test no horizontal or vertical
   nx2 xm-min >= nx2 xm-max <= and \ test if in bounds or out of bounds
   ny2 ym-min >= ny2 ym-max <= and and and
   if \ nx2 ny2 are on real sandtable
-    nx2 to nsx2
-    ny2 to nsy2
-  \ else \ nx2 ny2 are not on real sandtable
-     \ this is not needed because there should already be two points defined and this if then corrects second point if it happens to be on the stand table 
+    pointtest 0 = if nx2 to nsx1 ny2 to nsy1 else nx2 to nsx2 ny2 to nsy2 then
+    pointtest 1 + to pointtest
   then
 
+  pointtest 2 <> if
+    bintersect f@ ym-min s>f f>= bintercept f@ ym-max s>f f<= and if pointtest 0 = if 0 to nsx1 bintercept f@ f>s to nsy1 else 0 to nsx2 bintercept f@ f>s to nsy2 then pointtest 1 + to pointtest then
+    \ y=mx+b
+    mslope f@ xm-max s>f f* bintercept f@ f+ fdup fdup
+    ym-min s>f f>= ym-max s>f f<= and if pointtest 0 = if xm-max to nsx1 f>s to nsy1 else xm-max to nsx2 f>s to nsy2 then pointtest 1 + to pointtest else fdrop then
+    \ y-b=mx ... (y-b)/m=x
+    ym-min s>f bintercept f@ f+ mslope f@ f/ fdup fdup
+    xm-min s>f f>= xm-max s>f f<= and if pointtest 0 = if f>s to nsx1 ym-min to nsy1 else f>s to nsx2 ym-min to nsy2 then pointtest 1 + to pointtest else fdrop then
+    ym-max s>f bintercept f@ f+ mslope f@ f/ fdup fdup
+    xm-min s>f f>= xm-max s>f f<= and if pointtest 0 = if f>s to nsx1 ym-max to nsy1 else f>s to nsx2 ym-max to nsy2 then pointtest 1 + to pointtest else fdrop then
+  then
 \ at this moment nsx1 nsy1 nsx2 nsy2 have the real sandtable locations to draw on
 \ so now find were the current x and y possition is and move the ball to the nsx1 nsy1 location
 \ then issue command to move the ball the the nsx2 nsy2 location
