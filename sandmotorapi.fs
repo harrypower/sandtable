@@ -226,6 +226,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0 value nsy1
 0 value nsx2
 0 value nsy2
+0 value edgetest
 0e fvariable mslope mslope f!
 0e fvariable bintersect bintersect f!
 : drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
@@ -269,15 +270,24 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
   ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
   ny1 s>f nx1 s>f mslope f@ f* f- bintersect f!
-\ ." here is stack " .s cr 
+
   nx1 nx2 = ny1 ny2 = or invert \ test horizontal or vertical
   nx1 xm-min >= nx1 xm-max <= and \ test if in bounds or out of bounds
   ny1 ym-min >= ny1 ym-max <= and and and
   if \ nx1 ny1 are on real sandtable
     nx1 to nsx1
     ny1 to nsy1
+    0 to edgetest
   else \ nx1 ny1 are not on real sandtable
-     \ do math here to find border intersection
+    bintersect f@ ym-min s>f f>= bintercept f@ ym-max s>f f<= and if 0 to nsx1 bintercept f@ f>s to nsy1 1 to edgetest else 0 to edgetest then
+    \ y=mx+b
+    mslope f@ xm-max s>f f* bintercept f@ f+ fdup fdup
+    ym-min s>f f>= ym-max s>f f<= and if edgetest 1 + dup to edgetest 2 = if xm-max to nsx2 f>s to nsy2 else xm-max to nsx1 f>s to nsy1 then else fdrop then
+    \ y-b=mx ... (y-b)/m=x
+    ym-min s>f bintercept f@ f+ mslope f@ f/ fdup fdup
+    xm-min s>f f>= xm-max s>f f<= and if edgetest 1 + dup to edgetest 2 = if f>s to nsx2 ym-min to nsy2 else f>s to nsx1 ym-min to nsy1 then else fdrop then
+    ym-max s>f bintercept f@ f+ mslope f@ f/ fdup fdup
+    xm-min s>f f>= xm-max s>f f<= and if edgetest 1 + dup to edgetest 2 = if f>s to nsx2 ym-max to nsy2 else f>s to nsx1 ym-max to nsy1 then else fdrop then
   then
 
   nx1 nx2 = ny1 ny2 = or invert \ test no horizontal or vertical
@@ -286,8 +296,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
   if \ nx2 ny2 are on real sandtable
     nx2 to nsx2
     ny2 to nsy2
-  else \ nx2 ny2 are not on real sandtable
-     \ do math here to find border intersection
+  \ else \ nx2 ny2 are not on real sandtable
+     \ this is not needed because there should already be two points defined and this if then corrects second point if it happens to be on the stand table 
   then
 
 \ at this moment nsx1 nsy1 nsx2 nsy2 have the real sandtable locations to draw on
