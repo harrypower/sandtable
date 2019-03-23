@@ -291,14 +291,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then
 
   pointtest 2 <> if
-    bintersect f@ ym-min s>f f>= bintercept f@ ym-max s>f f<= and if pointtest 0 = if 0 to nsx1 bintercept f@ f>s to nsy1 else 0 to nsx2 bintercept f@ f>s to nsy2 then pointtest 1 + to pointtest then
+    bintersect f@ ym-min s>f f>= bintersect f@ ym-max s>f f<= and if pointtest 0 = if 0 to nsx1 bintersect f@ f>s to nsy1 else 0 to nsx2 bintersect f@ f>s to nsy2 then pointtest 1 + to pointtest then
     \ y=mx+b
-    mslope f@ xm-max s>f f* bintercept f@ f+ fdup fdup
+    mslope f@ xm-max s>f f* bintersect f@ f+ fdup fdup
     ym-min s>f f>= ym-max s>f f<= and pointtest 2 < and if pointtest 0 = if xm-max to nsx1 f>s to nsy1 else xm-max to nsx2 f>s to nsy2 then pointtest 1 + to pointtest else fdrop then
     \ y-b=mx ... (y-b)/m=x
-    ym-min s>f bintercept f@ f+ mslope f@ f/ fdup fdup
+    ym-min s>f bintersect f@ f+ mslope f@ f/ fdup fdup
     xm-min s>f f>= xm-max s>f f<= and pointtest 2 < and if pointtest 0 = if f>s to nsx1 ym-min to nsy1 else f>s to nsx2 ym-min to nsy2 then pointtest 1 + to pointtest else fdrop then
-    ym-max s>f bintercept f@ f+ mslope f@ f/ fdup fdup
+    ym-max s>f bintersect f@ f+ mslope f@ f/ fdup fdup
     xm-min s>f f>= xm-max s>f f<= and pointtest 2 < and if pointtest 0 = if f>s to nsx1 ym-max to nsy1 else f>s to nsx2 ym-max to nsy2 then pointtest 1 + to pointtest else fdrop then
   then
 \ at this moment nsx1 nsy1 nsx2 nsy2 have the real sandtable locations to draw on
