@@ -222,11 +222,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 \ *********** these next words are used to process and make a word that allows printing on the sandtable as a window
 \ these valuese are used to do internal sandtable location calculations in the following words only
-0 value nsx1
+: distance? { nx1 ny1 nx2 ny2 -- ndistance } \ return calculated distance between two dots
+  nx2 nx1 - s>f 2e f**
+  ny2 ny1 - s>f 2e f**
+  f+ fsqrt f>s ;
+0 value nsx1 \ used by drawline for real sandtable corrodinates
 0 value nsy1
 0 value nsx2
 0 value nsy2
+0 value nbx1 \ used by drawline for real boarder corrodinates on sandtable
+0 value nby1
+0 value nbx2
+0 value nby2
 0 value pointtest
+0 value boardertest
 0e fvariable mslope mslope f!
 0e fvariable bintersect bintersect f!
 : drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
@@ -278,8 +287,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
     nx1 to nsx1
     ny1 to nsy1
     1 to pointtest
-  else
-    0 to pointtest
   then
 
   nx1 nx2 = ny1 ny2 = or invert \ test no horizontal or vertical
@@ -291,16 +298,29 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then
 
   pointtest 2 <> if
-    bintersect f@ ym-min s>f f>= bintersect f@ ym-max s>f f<= and if pointtest 0 = if 0 to nsx1 bintersect f@ f>s to nsy1 else 0 to nsx2 bintersect f@ f>s to nsy2 then pointtest 1 + to pointtest then
+    0 to boardertest
+    \ x=0 then bintersect is y
+    bintersect f@ ym-min s>f f>= bintersect f@ ym-max s>f f<= and if 0 to nbx1 bintersect f@ f>s to nby1 1 to boardertest else 0 to boardertest then
     \ y=mx+b
     mslope f@ xm-max s>f f* bintersect f@ f+ fdup fdup
-    ym-min s>f f>= ym-max s>f f<= and pointtest 2 < and if pointtest 0 = if xm-max to nsx1 f>s to nsy1 else xm-max to nsx2 f>s to nsy2 then pointtest 1 + to pointtest else fdrop then
+    ym-min s>f f>= ym-max s>f f<= and if boardertest 0 = if xm-max to nbx1 f>s to nby1 else xm-max to nbx2 f>s to nby2 then boardertest 1 + to boardertest else fdrop then
     \ y-b=mx ... (y-b)/m=x
     ym-min s>f bintersect f@ f+ mslope f@ f/ fdup fdup
-    xm-min s>f f>= xm-max s>f f<= and pointtest 2 < and if pointtest 0 = if f>s to nsx1 ym-min to nsy1 else f>s to nsx2 ym-min to nsy2 then pointtest 1 + to pointtest else fdrop then
+    xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-min to nby1 else f>s to nbx2 ym-min to nby2 then boardertest 1 + to boardertest else fdrop then
     ym-max s>f bintersect f@ f+ mslope f@ f/ fdup fdup
-    xm-min s>f f>= xm-max s>f f<= and pointtest 2 < and if pointtest 0 = if f>s to nsx1 ym-max to nsy1 else f>s to nsx2 ym-max to nsy2 then pointtest 1 + to pointtest else fdrop then
+    xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-max to nby1 else f>s to nbx2 ym-max to nby2 then boardertest 1 + to boardertest else fdrop then
+    pointtest 0 = if \ then both boarders found are simply used
+      nbx1 to nsx1
+      nby1 to nsy1
+      nbx2 to nsx2
+      nby2 to nsy2
+    else \ this means only the closest of two boardres need to be used only
+      
+    then
+
   then
+  boardertest 0 = pointtest = 0 and if 103 exit then \ 103 the line is not on sandtable
+
 \ at this moment nsx1 nsy1 nsx2 nsy2 have the real sandtable locations to draw on
 \ so now find were the current x and y possition is and move the ball to the nsx1 nsy1 location
 \ then issue command to move the ball the the nsx2 nsy2 location
