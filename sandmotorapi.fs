@@ -288,7 +288,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     ny1 to nsy1
     1 to pointtest
   else
-    0 to pointtest 
+    0 to pointtest
   then
 
   nx1 nx2 = ny1 ny2 = or invert \ test no horizontal or vertical
@@ -306,18 +306,21 @@ true value yposition  \ is the real location of y motor .. note if value is true
     \ y=mx+b
     mslope f@ xm-max s>f f* bintersect f@ f+ fdup fdup
     ym-min s>f f>= ym-max s>f f<= and if boardertest 0 = if xm-max to nbx1 f>s to nby1 else xm-max to nbx2 f>s to nby2 then boardertest 1 + to boardertest else fdrop then
-    \ y-b=mx ... (y-b)/m=x
-    ym-min s>f bintersect f@ f+ mslope f@ f/ fdup fdup
+    \ y-b=mx ... x = (y/m)-(b/m)
+    \ ym-min s>f bintersect f@ f+ mslope f@ f/ fdup fdup
+    ym-min s>f mslope f@ f/ bintersect f@ mslope f@ f/ f- fdup fdup
     xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-min to nby1 else f>s to nbx2 ym-min to nby2 then boardertest 1 + to boardertest else fdrop then
-    ym-max s>f bintersect f@ f+ mslope f@ f/ fdup fdup
+    \ ym-max s>f bintersect f@ f+ mslope f@ f/ fdup fdup
+    ym-max s>f mslope f@ f/ bintersect f@ mslope f@ f/ f- fdup fdup
     xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-max to nby1 else f>s to nbx2 ym-max to nby2 then boardertest 1 + to boardertest else fdrop then
+    \ above is a equation mistake of some kind for boarder caluclation find this mistake !!!******
     pointtest 0 = if \ then both boarders found are simply used
       nbx1 to nsx1
       nby1 to nsy1
       nbx2 to nsx2
       nby2 to nsy2
-    else \ this means only the closest of two boardres need to be used only
-
+    else
+      \ figure out the method to determine witch boarder to use for the second point
     then
 
   then
