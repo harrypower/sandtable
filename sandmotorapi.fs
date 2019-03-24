@@ -287,6 +287,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
     nx1 to nsx1
     ny1 to nsy1
     1 to pointtest
+  else
+    0 to pointtest 
   then
 
   nx1 nx2 = ny1 ny2 = or invert \ test no horizontal or vertical
@@ -315,7 +317,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       nbx2 to nsx2
       nby2 to nsy2
     else \ this means only the closest of two boardres need to be used only
-      
+
     then
 
   then
