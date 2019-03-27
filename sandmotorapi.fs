@@ -312,14 +312,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-min to nby1 else f>s to nbx2 ym-min to nby2 then boardertest 1 + to boardertest else fdrop then
     ym-max s>f mslope f@ f/ bintersect f@ mslope f@ f/ f- fdup fdup
     xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-max to nby1 else f>s to nbx2 ym-max to nby2 then boardertest 1 + to boardertest else fdrop then
-    pointtest 0 = if \ then both boarders found are simply used
+    pointtest 0 = boardertest 0 <> and if \ then both boarders found are simply used
       nbx1 to nsx1
       nby1 to nsy1
       nbx2 to nsx2
       nby2 to nsy2
       2 to pointtest
-    else
-      \ figure out the method to determine which boarder to use for the second point
+    else \ pointtest must be 1 so the correct boarder to use needs to be determined 
       nx1 nsx1 = nx2 nx1 > and if nbx1 nx1 > if nbx1 to nsx2 nby1 to nsy2 else nbx2 to nsx2 nby2 to nsy2 then then
       nx1 nsx1 = nx2 nx1 < and if nbx1 nx1 < if nbx1 to nsx2 nby1 to nsy2 else nbx2 to nsx2 nby2 to nsy2 then then
 
@@ -327,7 +326,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
       nx2 nsx1 = nx1 nx2 < and if nbx1 nx2 < if nbx1 to nsx2 nby1 to nsy2 else nbx2 to nsx2 nby2 to nsy2 then then
       2 to pointtest
     then
-
   then
   boardertest 0 = pointtest 0 = and if 103 exit then \ 103 the line is not on sandtable
 
