@@ -171,7 +171,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
     false
   then ;
 
-: movetoxy ( ux uy -- nflag ) \ move to the x and y location at the same time ... nflag is true if the move is executed and false if the move was not possible
+: movetoxy ( ux uy -- nflag ) \ move to the x and y location at the same time ...
+  \ nflag is 200 if the move is executed
+  \ nflag is 201 if ux uy are not on sandtable
+  \ nflag is 202 if sandtable is not configured or homed yet
   0e 0e { ux uy F: mslope F: bintercept }
   ux xposition = if uy movetoy exit then
   uy yposition = if ux movetox exit then
@@ -214,10 +217,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
         steps -loop
       then
       ymotor disable-motor xmotor disable-motor
-      true \ move done
-    else false \ not in bounds
+      200 \ move done
+    else 201 \ not in bounds
     then
-  else false \ not configured or home yet
+  else 202 \ not configured or home yet
   then ;
 
 \ *********** these next words are used to process and make a word that allows printing on the sandtable as a window
@@ -240,6 +243,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0e fvariable bintersect bintersect f!
 : drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
 \ nflag returns information about what happened in drawing the requested line
+\ nflag is 100 if nx1 ny1 nx2 ny2 is a dot not a line
+\ nflag is 101 if input is a vertical line but not on the sandtable
+\ nflag is 102 if input is a horizontal line not on sandtable
+\ nflag is 200 if line was drawn with no issues
+\ nflag is 103 if input line not on the sandtalbe at all so nothing is drawn
+\ nflag is 202 if sandtable not congigured yet home not found yet
   { nx1 ny1 nx2 ny2 }
   0 to pointtest
   0 to boardertest
@@ -329,9 +338,18 @@ true value yposition  \ is the real location of y motor .. note if value is true
     then
   then
 
+  nsx1 xposition = nsy1 yposition = and if
+    \ draw to nsx2 nsy2
+    nsx2 nsy2 movetoxy exit
+  then
+  nsx2 xposition = nsy2 yposition = and if
+    \ draw to nsx1 nsy1
+    nsx1 nsy1 movetoxy exit
+  then
+
 \ at this moment nsx1 nsy1 nsx2 nsy2 have the real sandtable locations to draw on
-\ so now find were the current x and y possition is and move the ball to the nsx1 nsy1 location
-\ then issue command to move the ball the the nsx2 nsy2 location
+\ so now find were the current x and y position of the ball is and move the ball to the closest of the two points
+\ then issue command to move the ball to the second location
 ;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
@@ -574,14 +592,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
   xmotor [bind] tmc2130 destruct
   ymotor [bind] tmc2130 destruct ;
 
-: border ( -- nflag )
+: border ( -- nflag )  \ draws a boarder around sandtable ... nflag is 200 if no drawing issues ... any other number is some sandtable error
   try
-    xm-min ym-min movetoxy false = throw
-    xm-min ym-max movetoxy false = throw
-    xm-max ym-max movetoxy false = throw
-    xm-max ym-min movetoxy false = throw
-    xm-min ym-min movetoxy false = throw
-    false
+    xm-min ym-min movetoxy dup 200 <> if throw else drop then
+    xm-min ym-max movetoxy dup 200 <> if throw else drop then
+    xm-max ym-max movetoxy dup 200 <> if throw else drop then
+    xm-max ym-min movetoxy dup 200 <> if throw else drop then
+    xm-min ym-min movetoxy dup 200 <> if throw else drop then
+    200
   restore
   endtry ;
 
@@ -591,23 +609,22 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case
       xm of
         xm-max xm-min - nsteps / to nxyamount
-        xm-min ym-min movetoxy false = if 100 throw then
+        xm-min ym-min movetoxy 200 <> if 100 throw then
         nxyamount nsteps * xm-min do
-          i nxyamount 2 / + ym-max movetoxy false = if 101 throw then
-          i nxyamount + ym-min movetoxy false = if 102 throw then
+          i nxyamount 2 / + ym-max movetoxy 200 <> if 101 throw then
+          i nxyamount + ym-min movetoxy 200 <> if 102 throw then
         nxyamount +loop
-      \  xm-min ym-min movetoxy false = if 103 throw then
         border drop
         false
       endof
       ym of
         ym-max ym-min - nsteps / to nxyamount
-        xm-min ym-min movetoxy false = if 100 throw then
+        xm-min ym-min movetoxy 200 <> if 100 throw then
         nxyamount nsteps * ym-min do
-          i nxyamount 2 / + xm-max swap movetoxy false = if 101 throw then
-          i nxyamount + xm-min swap movetoxy false = if 102 throw then
+          i nxyamount 2 / + xm-max swap movetoxy 200 <> if 101 throw then
+          i nxyamount + xm-min swap movetoxy 200 <> if 102 throw then
         nxyamount +loop
-        border drop
+        border 200 <> if 103 throw then
         false
       endof
     endcase
