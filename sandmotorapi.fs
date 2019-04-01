@@ -121,7 +121,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
   configured? ;
 
 \ ************************ These following words are for normal speed movement only and as such are silent
-: movetox { ux -- nflag } \ move to x position on table nflag is true if the move is executed and false if the move was not possible for some reason
+: movetox { ux -- nflag } \ move to x position on table
+  \ nflag is 200 if the move is executed
+  \ nflag is 201 if ny is not on sandtable
+  \ nflag is 202 if table not configured or homed
   configured? false = homedone? true = xposition true <> and and
   if \ only do steps if all configured and home is know
     xm-max ux >= xm-min ux <= and
@@ -138,15 +141,18 @@ true value yposition  \ is the real location of y motor .. note if value is true
       then
       ux to xposition
       xmotor disable-motor
-      true
+      200
     else
-      false
+      201
     then
   else
-    false
+    202
   then ;
 
-: movetoy { uy -- nflag } \ move to y position on table nflag is true if the move is executed and false if the move was not possible for some reason
+: movetoy { uy -- nflag } \ move to y position on table
+  \ nflag is 200 if the move is executed
+  \ nflag is 201 if ny is not on sandtable
+  \ nflag is 202 if table not configured or homed
   configured? false = homedone? true = yposition true <> and and
   if \ only do steps if all configured and home is know
     ym-max uy >= ym-min uy <= and
@@ -163,12 +169,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
       then
       uy to yposition
       ymotor disable-motor
-      true
+      200
     else
-      false
+      201
     then
   else
-    false
+    202
   then ;
 
 : movetoxy ( ux uy -- nflag ) \ move to the x and y location at the same time ...
@@ -611,20 +617,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
         xm-max xm-min - nsteps / to nxyamount
         xm-min ym-min movetoxy 200 <> if 100 throw then
         nxyamount nsteps * xm-min do
-          i nxyamount 2 / + ym-max movetoxy 200 <> if 101 throw then
-          i nxyamount + ym-min movetoxy 200 <> if 102 throw then
+          i nxyamount 2 / + ym-max movetoxy 200 <> if 301 throw then
+          i nxyamount + ym-min movetoxy 200 <> if 302 throw then
         nxyamount +loop
         border drop
         false
       endof
       ym of
         ym-max ym-min - nsteps / to nxyamount
-        xm-min ym-min movetoxy 200 <> if 100 throw then
+        xm-min ym-min movetoxy 200 <> if 300 throw then
         nxyamount nsteps * ym-min do
-          i nxyamount 2 / + xm-max swap movetoxy 200 <> if 101 throw then
-          i nxyamount + xm-min swap movetoxy 200 <> if 102 throw then
+          i nxyamount 2 / + xm-max swap movetoxy 200 <> if 301 throw then
+          i nxyamount + xm-min swap movetoxy 200 <> if 302 throw then
         nxyamount +loop
-        border 200 <> if 103 throw then
+        border 200 <> if 303 throw then
         false
       endof
     endcase
