@@ -242,6 +242,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0e fvariable mslope mslope f!
 0e fvariable bintersect bintersect f!
 : drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
+\ nx1 ny1 is start of line ... nx2 ny2 is end of line drawn
 \ nflag returns information about what happened in drawing the requested line
 \ nflag is 100 if nx1 ny1 nx2 ny2 is a dot not a line
 \ nflag is 101 if input is a vertical line but not on the sandtable
@@ -337,20 +338,19 @@ true value yposition  \ is the real location of y motor .. note if value is true
       2 to pointtest
     then
   then
-
+  nx1 ny1 nsx1 nsy1 distance?
+  nx1 ny1 nsx2 nsy2 distance? > if
+    nsx1 nsy1 nsx2 nsy2
+    to nsy1 to nsx1
+    to nsy2 to nsy2
+  then
   nsx1 xposition = nsy1 yposition = and if
     \ draw to nsx2 nsy2
     nsx2 nsy2 movetoxy exit
-  then
-  nsx2 xposition = nsy2 yposition = and if
-    \ draw to nsx1 nsy1
-    nsx1 nsy1 movetoxy exit
-  then
-
-\ at this moment nsx1 nsy1 nsx2 nsy2 have the real sandtable locations to draw on
-\ so now find were the current x and y position of the ball is and move the ball to the closest of the two points
-\ then issue command to move the ball to the second location
-;
+  else
+    nsx1 nsy1 movetoxy drop
+    nsx2 nsy2 movetoxy exit
+  then ;
 
 \ ************************   these following words are for home position use only not for normal movement use above words for that
 \ also note that these home position words do not check if sandtable is configured so only use the dohome word to calibrate the sandtable
