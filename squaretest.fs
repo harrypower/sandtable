@@ -43,7 +43,7 @@
 : nrotsquare { usize ux uy uangle usteps } \ will make an angle square but then rotate it usteps around 360 degrees for a full circle
   usteps 0 ?do usize ux uy uangle 360 usteps / i * + nanglesquare loop ;
 
-: nsquare.2 ( usize ux uy -- )\ draw usize square starting at ux uy location
+: nsquare.2 ( usize ux uy -- ) \ draw usize square starting at ux uy location
   { usize ux uy }
   ux uy ux usize + to ux ux uy drawline .
   ux uy uy usize + to uy ux uy drawline .

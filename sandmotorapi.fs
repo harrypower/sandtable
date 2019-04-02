@@ -358,7 +358,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
     nsx2 nsy2 movetoxy exit
   then
 ;
-: testdata nsx1 . nsy1 . nsx2 . nsy2 . pointtest . boardertest . xposition . yposition . cr ;
 \ ************************   these following words are for home position use only not for normal movement use above words for that
 \ also note that these home position words do not check if sandtable is configured so only use the dohome word to calibrate the sandtable
 
@@ -637,5 +636,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
     endcase
   restore
   endtry ;
+\ ******************* these words are for testing 
+: quickstart ( ux uy -- nflag ) \ start up sandtable assuming the physical table is at ux and uy location
+  to yposition
+  to xposition
+  true to homedone?
+  configure-stuff ;
 
-: testcal 0 do cr dohome . 275000 dup movetoxy . loop ;
+: testdata nsx1 . nsy1 . nsx2 . nsy2 . pointtest . boardertest . xposition . yposition . cr ;
