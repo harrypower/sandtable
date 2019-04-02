@@ -348,17 +348,17 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nx1 ny1 nsx2 nsy2 distance? > if
     nsx1 nsy1 nsx2 nsy2
     to nsy1 to nsx1
-    to nsy2 to nsy2
+    to nsy2 to nsx2
   then
-\  nsx1 xposition = nsy1 yposition = and if
+  nsx1 xposition = nsy1 yposition = and if
     \ draw to nsx2 nsy2
-\    nsx2 nsy2 movetoxy exit
-\  else
-\    nsx1 nsy1 movetoxy drop
-\    nsx2 nsy2 movetoxy exit
-\  then
+    nsx2 nsy2 movetoxy exit
+  else
+    nsx1 nsy1 movetoxy drop
+    nsx2 nsy2 movetoxy exit
+  then
 ;
-: test nsx1 . nsy1 . nsx2 . nsy2 . pointtest . boardertest . xposition . yposition cr ;
+: testdata nsx1 . nsy1 . nsx2 . nsy2 . pointtest . boardertest . xposition . yposition . cr ;
 \ ************************   these following words are for home position use only not for normal movement use above words for that
 \ also note that these home position words do not check if sandtable is configured so only use the dohome word to calibrate the sandtable
 
