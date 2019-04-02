@@ -251,10 +251,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 \ nx1 ny1 is start of line ... nx2 ny2 is end of line drawn
 \ nflag returns information about what happened in drawing the requested line
 \ nflag is 100 if nx1 ny1 nx2 ny2 is a dot not a line
-\ nflag is 101 if input is a vertical line but not on the sandtable
-\ nflag is 102 if input is a horizontal line not on sandtable
-\ nflag is 200 if line was drawn with no issues
+\ nflag is 101 if input is a vertical line not on the sandtable nothing is drawn
+\ nflag is 102 if input is a horizontal line not on sandtable nothing is drawn
 \ nflag is 103 if input line not on the sandtalbe at all so nothing is drawn
+\ nflag is 200 if line was drawn with no issues
 \ nflag is 202 if sandtable not congigured yet home not found yet
   { nx1 ny1 nx2 ny2 }
   0 to pointtest
