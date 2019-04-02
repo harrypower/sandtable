@@ -1,17 +1,11 @@
 \ squaretest.fs
 
-: square 140000 movetox 140000 movetoy drop drop
-120000 movetox 140000 movetoy drop drop
-120000 movetox 120000 movetoy drop drop
-140000 movetox 120000 movetoy drop drop ;
-
 : nsquare { usize ux uy }
   ux uy movetoxy .
   usize ux + uy movetoxy .
   usize ux + usize uy + movetoxy .
   ux usize uy + movetoxy .
   ux uy movetoxy . ;
-
 
 : nanglesquare ( usize ux uy uangle ) \ uangle is degrees
   0 0 { usize ux uy uangle ua ub }
@@ -43,9 +37,9 @@
 : nrotsquare { usize ux uy uangle usteps } \ will make an angle square but then rotate it usteps around 360 degrees for a full circle
   usteps 0 ?do usize ux uy uangle 360 usteps / i * + nanglesquare loop ;
 
-: nsquare.2 ( usize ux uy -- ) \ draw usize square starting at ux uy location
+: nsquare2 ( usize ux uy -- ) \ draw usize square using drawline starting at ux uy location 
   { usize ux uy }
-  ux uy ux usize + to ux ux uy drawline .
-  ux uy uy usize + to uy ux uy drawline .
-  ux uy ux usize - to ux ux uy drawline .
-  ux uy uy usize - to uy ux uy drawline . cr ;
+  ux uy ux usize + uy drawline .
+  ux usize + uy ux usize + uy usize + drawline .
+  ux usize + uy usize + ux uy usize + drawline .
+  ux uy usize + ux uy drawline . cr ;
