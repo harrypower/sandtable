@@ -47,5 +47,5 @@
   0 0 { usize ux uy ux1 uy1 }
   ux uy usize ux + to ux1 uy to uy1 ux1 uy1 drawline .
   ux1 uy1 usize uy + to uy1 ux1 uy1 drawline .
-  ux1 uy1 usize ux - to ux1 uy1 drawline .
+  ux1 uy1 usize ux - to ux1 ux1 uy1 drawline .
   ux1 uy1 usize uy - to uy1 ux1 uy1 drawline . cr ;
