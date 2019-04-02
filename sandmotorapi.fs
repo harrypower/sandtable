@@ -272,10 +272,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
       ny1 to nsy1 ny2 to nsy2
     else
       \ y is not on sandtable
-      ny1 ny2 min
-      ny1 ny2 max to ny2 to ny1
-      ny1 ym-min >= if ny1 to nsy1 else ym-min to nsy1 then
-      ny2 ym-max <= if ny2 to nsy2 else ym-max to nsy2 then
+      ny1 ym-min >= ny1 ym-max <= and if
+        ny1 to nsy1
+      else
+        ny1 ym-min < if ym-min to nsy1 else ym-max to nsy1 then
+      then
+      ny2 ym-min >= ny2 ym-max <= and if
+        ny2 to nsy2
+      else
+        ny2 ym-min < if ym-min to nsy2 else ym-max to nsy2 then
+      then
     then
     2 to pointtest
   then
@@ -289,10 +295,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
       nx1 to nsx1 nx2 to nsx2
     else
       \ x is not on sandtable
-      nx1 nx2 min
-      nx1 nx2 max to nx2 to nx1
-      nx1 xm-min >= if nx1 to nsx1 else xm-min to nsx1 then
-      nx2 xm-max <= if nx2 to nsx2 else xm-max to nsx2 then
+      nx1 xm-min >= nx1 xm-max <= and if
+        nx1 to nsx1
+      else
+        nx1 xm-min < if xm-min to nsx1 else xm-max to nsx1 then
+      then
+      nx2 xm-min >= nx2 xm-max <= and if
+        nx2 to nsx2
+      else
+        nx2 xm-min < if xm-min to nsx2 else xm-max to nsx2 then
+      then
     then
     2 to pointtest
   then
@@ -636,7 +648,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     endcase
   restore
   endtry ;
-\ ******************* these words are for testing 
+\ ******************* these words are for testing
 : quickstart ( ux uy -- nflag ) \ start up sandtable assuming the physical table is at ux and uy location
   to yposition
   to xposition
