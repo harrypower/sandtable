@@ -366,6 +366,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     to nsy1 to nsx1
     to nsy2 to nsx2
   then
+  nsx1 . nsy1 . nsx2 . nsy2 . cr 
   nsx1 xposition = nsy1 yposition = and if
     \ draw to nsx2 nsy2
     nsx2 nsy2 movetoxy exit
