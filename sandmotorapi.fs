@@ -266,7 +266,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nx1 nx2 = ny1 ny2 = and if 100 exit then \ this is not a line but a dot
   nx1 nx2 = nx1 xm-min < nx1 xm-max > or and if nx2 ny2 boardermove exit then \ vertical line not on sandtable
   ny1 ny2 = ny1 ym-min < ny1 ym-max > or and if nx2 ny2 boardermove exit then \ horizontal line not on sandtable
-  ." after h v not on table test" cr 
+
   nx1 nx2 = if
   \ vertical line
     nx1 to nsx1
@@ -289,7 +289,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     then
     2 to pointtest
   then
-  ." done vertical stuff" cr
+
   ny1 ny2 = if
   \ horizontal line
     ny1 to nsy1
@@ -312,7 +312,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     then
     2 to pointtest
   then
- ." done horizontal stuff" cr
+
   ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
   ny1 s>f nx1 s>f mslope f@ f* f- bintersect f!
 
