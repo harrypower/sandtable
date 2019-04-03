@@ -232,7 +232,6 @@ true value yposition  \ is the real location of y motor .. note if value is true
 \ *********** these next words are used to process and make a word that allows printing on the sandtable as a window
 \ these valuese are used to do internal sandtable location calculations in the following words only
 : boardermove { nx ny -- nflag } \ simply move the ball to each closest edge one dirction at a time
-  ." boarermove " nx . ny . cr
   nx xm-min < if xm-min movetox then
   nx xm-max > if xm-max movetox then
   ny ym-min < if ym-min movetoy then
@@ -345,14 +344,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-min to nby1 else f>s to nbx2 ym-min to nby2 then boardertest 1 + to boardertest else fdrop then
     ym-max s>f mslope f@ f/ bintersect f@ mslope f@ f/ f- fdup fdup
     xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-max to nby1 else f>s to nbx2 ym-max to nby2 then boardertest 1 + to boardertest else fdrop then
-    nsx1 . nsy1 . nsx2 . nsy2 . boardertest . pointtest . cr
+
     boardertest 0 = pointtest 0 = and if nx2 ny2 boardermove exit then \ line is not on sandtable
     nx1 xm-min < nx2 xm-min < and
     ny1 ym-min < ny2 ym-min < and or
     nx1 xm-max > nx2 xm-max > and
     ny1 ym-max > ny2 ym-max > and or or if nx2 ny2 boardermove exit then \ line intersects with sandtable but is not on the sandtable
+
     pointtest 0 = if \ then both boarders found are simply used
-      nx1 ny1 boardermove drop \ this is prefered rather then diagnal movement to first boarder 
+      nx1 ny1 boardermove drop \ this is prefered rather then diagnal movement to first boarder
       nbx1 to nsx1
       nby1 to nsy1
       nbx2 to nsx2
