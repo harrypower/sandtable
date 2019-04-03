@@ -231,6 +231,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 \ *********** these next words are used to process and make a word that allows printing on the sandtable as a window
 \ these valuese are used to do internal sandtable location calculations in the following words only
+: boardermove { nx ny -- nflag } \ simply move the ball to each closest edge one dirction at a time
+  nx xm-min < if xm-min movetox then
+  nx xm-max > if xm-max movetox then
+  ny ym-min < if ym-min movetoy then
+  ny ym-max > if ym-max movetoy then
+  drop ;
+
 : distance? { nx1 ny1 nx2 ny2 -- ndistance } \ return calculated distance between two dots
   nx2 nx1 - s>f 2e f**
   ny2 ny1 - s>f 2e f**
@@ -251,17 +258,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
 \ nx1 ny1 is start of line ... nx2 ny2 is end of line drawn
 \ nflag returns information about what happened in drawing the requested line
 \ nflag is 100 if nx1 ny1 nx2 ny2 is a dot not a line
-\ nflag is 101 if input is a vertical line not on the sandtable nothing is drawn
-\ nflag is 102 if input is a horizontal line not on sandtable nothing is drawn
-\ nflag is 103 if input line not on the sandtalbe at all so nothing is drawn
 \ nflag is 200 if line was drawn with no issues
 \ nflag is 202 if sandtable not congigured yet home not found yet
   { nx1 ny1 nx2 ny2 }
   0 to pointtest
   0 to boardertest
   nx1 nx2 = ny1 ny2 = and if 100 exit then \ this is not a line but a dot
-  nx1 nx2 = nx1 xm-min < nx1 xm-max > or and if 101 exit then \ vertical line not on sandtable
-  ny1 ny2 = ny1 ym-min < ny1 ym-max > or and if 102 exit then \ horizontal line not on sandtable
+  nx1 nx2 = nx1 xm-min < nx1 xm-max > or and if nx2 ny2 boardermove exit then \ vertical line not on sandtable
+  ny1 ny2 = ny1 ym-min < ny1 ym-max > or and if nx2 ny2 boardermove exit then \ horizontal line not on sandtable
 
   nx1 nx2 = if
   \ vertical line
@@ -340,7 +344,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-min to nby1 else f>s to nbx2 ym-min to nby2 then boardertest 1 + to boardertest else fdrop then
     ym-max s>f mslope f@ f/ bintersect f@ mslope f@ f/ f- fdup fdup
     xm-min s>f f>= xm-max s>f f<= and boardertest 2 < and if boardertest 0 = if f>s to nbx1 ym-max to nby1 else f>s to nbx2 ym-max to nby2 then boardertest 1 + to boardertest else fdrop then
-    boardertest 0 = pointtest 0 = and if 103 exit then \ 103 the line is not on sandtable
+    boardertest 0 = pointtest 0 = and if nx2 ny2 boardermove exit then \ line is not on sandtable
     pointtest 0 = if \ then both boarders found are simply used
       nbx1 to nsx1
       nby1 to nsy1
