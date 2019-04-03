@@ -231,12 +231,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 \ *********** these next words are used to process and make a word that allows printing on the sandtable as a window
 \ these valuese are used to do internal sandtable location calculations in the following words only
-: boardermove { nx ny -- nflag } \ simply move the ball to each closest edge one dirction at a time
-  nx xm-min < if xm-min movetox then
-  nx xm-max > if xm-max movetox then
-  ny ym-min < if ym-min movetoy then
-  ny ym-max > if ym-max movetoy then
-  drop ;
+: boardermove  ( nx ny -- nflag )
+  0 { nx ny nflag } \ simply move the ball to each closest edge one dirction at a time
+  nx xm-min < if xm-min movetox to nflag then
+  nx xm-max > if xm-max movetox to nflag then
+  ny ym-min < if ym-min movetoy to nflag then
+  ny ym-max > if ym-max movetoy to nflag then nflag ;
 
 : distance? { nx1 ny1 nx2 ny2 -- ndistance } \ return calculated distance between two dots
   nx2 nx1 - s>f 2e f**
@@ -266,7 +266,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nx1 nx2 = ny1 ny2 = and if 100 exit then \ this is not a line but a dot
   nx1 nx2 = nx1 xm-min < nx1 xm-max > or and if nx2 ny2 boardermove exit then \ vertical line not on sandtable
   ny1 ny2 = ny1 ym-min < ny1 ym-max > or and if nx2 ny2 boardermove exit then \ horizontal line not on sandtable
-
+  ." after h v not on table test" cr 
   nx1 nx2 = if
   \ vertical line
     nx1 to nsx1
@@ -312,7 +312,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     then
     2 to pointtest
   then
- ." done horizontal stuff" cr 
+ ." done horizontal stuff" cr
   ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
   ny1 s>f nx1 s>f mslope f@ f* f- bintersect f!
 
