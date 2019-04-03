@@ -289,7 +289,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     then
     2 to pointtest
   then
-
+  ." done vertical stuff" cr
   ny1 ny2 = if
   \ horizontal line
     ny1 to nsy1
@@ -312,7 +312,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     then
     2 to pointtest
   then
-
+ ." done horizontal stuff" cr 
   ny2 ny1 - s>f nx2 nx1 - s>f f/ mslope f!
   ny1 s>f nx1 s>f mslope f@ f* f- bintersect f!
 
