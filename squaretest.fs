@@ -45,14 +45,14 @@
   ux uy usize + ux uy drawline . cr ;
 
 require random.fs
-: rndsqures ( namount -- )
+: rndsquares ( namount -- )
   seed-init
-  0 do?
+  0 ?do
     xm-max random \ usize
     xm-max random
     xm-max random - \ ux
     ym-max random
     ym-max random - \ uy
     .s
-    nsquare2 
+    nsquare2
   loop ;
