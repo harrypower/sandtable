@@ -56,3 +56,13 @@ require random.fs
     .s
     nsquare2
   loop ;
+
+: rndsquares2 ( namount -- )
+  seed-init
+  0 ?do
+    xm-max random
+    xm-max random - \ usize
+    xposition
+    yposition
+    nsquare2
+  loop ;
