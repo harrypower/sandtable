@@ -49,11 +49,11 @@ require random.fs
   seed-init
   0 ?do
     xm-max random \ usize
-    xm-max random \ ux
+    xm-max 2 / random \ ux
     dup movetox .
-    ym-max random \ uy
+    ym-max 2 / random \ uy
     dup movetoy .
-    .s cr 
+    .s cr
     nsquare2
   loop ;
 
