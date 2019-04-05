@@ -51,9 +51,15 @@ require random.fs
     xm-max random \ usize
     xm-max random
     xm-max random - \ ux
+    dup xm-min <= if drop xm-min then
+    dup xm-max >= if drop xm-max then
+    dup movetox .
     ym-max random
     ym-max random - \ uy
-    .s
+    dup ym-min <= if drop ym-min then
+    dup ym-max >= if drop xm-max then
+    dup movetoy .
+    .s cr 
     nsquare2
   loop ;
 
