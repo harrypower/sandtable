@@ -49,15 +49,9 @@ require random.fs
   seed-init
   0 ?do
     xm-max random \ usize
-    xm-max random
-    xm-max random - \ ux
-    dup xm-min <= if drop xm-min then
-    dup xm-max >= if drop xm-max then
+    xm-max random \ ux
     dup movetox .
-    ym-max random
-    ym-max random - \ uy
-    dup ym-min <= if drop ym-min then
-    dup ym-max >= if drop xm-max then
+    ym-max random \ uy
     dup movetoy .
     .s cr 
     nsquare2

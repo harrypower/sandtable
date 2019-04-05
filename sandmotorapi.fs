@@ -632,7 +632,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   restore
   endtry ;
 
-: zigzag-clean ( nsteps uxy -- nflag )
+: zigzag-clean ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors 
   0 { nsteps uxy nxyamount }
   try
     uxy case
