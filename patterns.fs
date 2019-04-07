@@ -24,6 +24,8 @@
 \ Revisions:
 \ 04/06/2019 started coding
 
+require random.fs
+
 : rndstar ( namount ) \ will start at a random board location and draw random length lines from that start point radiating out
   xm-max random ym-max random 0 0 { nx ny nx1 ny1 }
   0 ?do
@@ -31,4 +33,4 @@
     ym-max random to ny1
     nx ny nx1 ny1 drawline .
     nx1 ny1 nx ny drawline .
-  loop ;  
+  loop ;
