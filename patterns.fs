@@ -26,7 +26,7 @@
 
 require random.fs
 
-: rndstar ( namount ) \ will start at a random board location and draw random length lines from that start point radiating out
+: rndstar ( namount -- ) \ will start at a random board location and draw random length lines from that start point radiating out
   xm-max random ym-max random 0 0 { nx ny nx1 ny1 }
   0 ?do
     xm-max random to nx1
@@ -34,3 +34,18 @@ require random.fs
     nx ny nx1 ny1 drawline .
     nx1 ny1 nx ny drawline .
   loop ;
+
+: rndstar2 ( namount nx ny -- )
+  0 0 { namount nx ny nx1 ny1 }
+  namount 0 ?do
+    xm-max random to nx1
+    ym-max random to ny1
+    nx ny nx1 ny1 drawline .
+    nx1 ny1 nx ny drawline .  
+  loop ;
+
+: linestar ( nx ny nangle nsize nquant -- ) \ move to nx ny and draw nquant lines of nsize from nx ny location with rotation of nangle
+  { nx ny nangle nsize nquant }
+  xposition yposition nx ny drawline .
+
+;
