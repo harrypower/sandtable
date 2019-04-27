@@ -1,13 +1,13 @@
 \ squaretest.fs
 
-: nsquare { usize ux uy }
+: nsquare { usize ux uy -- }
   ux uy movetoxy .
   usize ux + uy movetoxy .
   usize ux + usize uy + movetoxy .
   ux usize uy + movetoxy .
   ux uy movetoxy . ;
 
-: nanglesquare ( usize ux uy uangle ) \ uangle is degrees
+: nanglesquare ( usize ux uy uangle -- ) \ uangle is degrees
   0 0 { usize ux uy uangle ua ub }
   ux uy movetoxy .
 
@@ -34,7 +34,7 @@
 
   ux uy  movetoxy . ;
 
-: n>square ( usize ux uy uangle ) \ uangle is degrees
+: n>square ( usize ux uy uangle -- ) \ uangle is degrees
   0 0 0 0 { usize ux uy uangle ua ub ux1 uy1 }
 
   uangle s>f pi 180e f/ f*
@@ -46,16 +46,16 @@
   uangle s>f pi 180e f/ f*
   fsin f/ f>s to ub
 
-  xposition yposition ux dup to ux1 uy dup to uy1 drawline .
-  ux1 uy1 ux ub + dup to ux1 uy ua - dup to uy1 drawline .
-  ux1 uy1 ux ub + ua - dup to ux1 uy ua - ub - dup to uy1 drawline .
-  ux1 uy1 ux ua - dup to ux1 uy ub - dup to uy1 drawline .
-  ux1 uy1 ux uy drawline . ;
+  xposition yposition ux dup to ux1 uy dup to uy1 drawline . testdata
+  ux1 uy1 ux ub + dup to ux1 uy ua - dup to uy1 drawline . testdata
+  ux1 uy1 ux ub + ua - dup to ux1 uy ua - ub - dup to uy1 drawline . testdata
+  ux1 uy1 ux ua - dup to ux1 uy ub - dup to uy1 drawline . testdata
+  ux1 uy1 ux uy drawline . testdata ;
 
-: nrotsquare { usize ux uy uangle usteps } \ will make an angle square but then rotate it usteps around 360 degrees for a full circle
+: nrotsquare { usize ux uy uangle usteps -- } \ will make an angle square but then rotate it usteps around 360 degrees for a full circle
   usteps 0 ?do usize ux uy uangle 360 usteps / i * + nanglesquare loop ;
 
-: nrotsquare2 { usize ux uy uangle usteps }
+: nrotsquare2 { usize ux uy uangle usteps -- }
   usteps 0 ?do usize ux uy uangle 360 usteps / i * + n>square loop ;
 
 : nsquare2 ( usize ux uy -- ) \ draw usize square using drawline starting at ux uy location
