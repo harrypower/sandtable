@@ -257,13 +257,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
 : drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
 \ nx1 ny1 is start of line ... nx2 ny2 is end of line drawn
 \ nflag returns information about what happened in drawing the requested line
-\ nflag is 100 if nx1 ny1 nx2 ny2 is a dot not a line
 \ nflag is 200 if line was drawn with no issues
-\ nflag is 202 if sandtable not congigured yet home not found yet
+\ nflag is 202 if sandtable not configured yet home not found yet
   { nx1 ny1 nx2 ny2 }
   0 to pointtest
   0 to boardertest
-  nx1 nx2 = ny1 ny2 = and if 100 exit then \ this is not a line but a dot
+  nx1 nx2 = ny1 ny2 = and nx1 xm-min >= nx1 xm-max <= and and ny1 ym-min >= ny1 ym-max <= and and if nx1 ny1 movetoxy exit then
+  nx1 nx2 = ny1 ny2 = and nx1 xm-min < nx1 xm-max > or and if nx1 ny1 boardermove exit then
+  nx1 nx2 = ny1 ny2 = and ny1 ym-min < ny1 ym-max > or and if nx1 ny1 boardermove exit then 
   nx1 nx2 = nx1 xm-min < nx1 xm-max > or and if nx2 ny2 boardermove exit then \ vertical line not on sandtable
   ny1 ny2 = ny1 ym-min < ny1 ym-max > or and if nx2 ny2 boardermove exit then \ horizontal line not on sandtable
 
