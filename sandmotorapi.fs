@@ -623,7 +623,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : border ( -- nflag )  \ draws a boarder around sandtable ... nflag is 200 if no drawing issues ... any other number is some sandtable error
   try
-    xm-min ym-min movetoxy dup 200 <> if throw else drop then
+    xm-min movetox dup 200 <> if throw else drop then
+    ym-min movetoy dup 200 <> if throw else drop then
     xm-min ym-max movetoxy dup 200 <> if throw else drop then
     xm-max ym-max movetoxy dup 200 <> if throw else drop then
     xm-max ym-min movetoxy dup 200 <> if throw else drop then
@@ -632,18 +633,18 @@ true value yposition  \ is the real location of y motor .. note if value is true
   restore
   endtry ;
 
-: zigzag-clean ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors 
+: zigzag-clean ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
   0 { nsteps uxy nxyamount }
   try
     uxy case
       xm of
         xm-max xm-min - nsteps / to nxyamount
-        xm-min ym-min movetoxy 200 <> if 100 throw then
+        xm-min ym-min movetoxy 200 <> if 300 throw then
         nxyamount nsteps * xm-min do
           i nxyamount 2 / + ym-max movetoxy 200 <> if 301 throw then
           i nxyamount + ym-min movetoxy 200 <> if 302 throw then
         nxyamount +loop
-        border drop
+        border 200 <> if 303 throw then
         false
       endof
       ym of
