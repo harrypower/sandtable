@@ -35,7 +35,7 @@
   ux uy  movetoxy . ;
 
 : n>square ( usize ux uy uangle ) \ uangle is degrees
-  0 0 { usize ux uy uangle ua ub }
+  0 0 0 0 { usize ux uy uangle ua ub ux1 uy1 }
 
   uangle s>f pi 180e f/ f*
   fsin usize s>f f*
@@ -46,11 +46,11 @@
   uangle s>f pi 180e f/ f*
   fsin f/ f>s to ub
 
-  xposition yposition ux uy drawline .
-  xposition yposition ux ub + uy ua - drawline .
-  xposition yposition ux ub + ua - uy ua - ub - drawline .
-  xposition yposition ux ua - uy ub - drawline .
-  xposition yposition ux uy drawline . ;
+  xposition yposition ux dup to ux1 uy dup to uy1 drawline .
+  ux1 uy1 ux ub + dup to ux1 uy ua - dup to uy1 drawline .
+  ux1 uy1 ux ub + ua - dup to ux1 uy ua - ub - dup to uy1 drawline .
+  ux1 uy1 ux ua - dup to ux1 uy ub - dup to uy1 drawline .
+  ux1 uy1 ux uy drawline . ;
 
 : nrotsquare { usize ux uy uangle usteps } \ will make an angle square but then rotate it usteps around 360 degrees for a full circle
   usteps 0 ?do usize ux uy uangle 360 usteps / i * + nanglesquare loop ;
