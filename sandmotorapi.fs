@@ -223,6 +223,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
         steps -loop
       then
       ymotor disable-motor xmotor disable-motor
+      xposition ux <> if ux movetox dup 200 <> if exit else drop then then
+      yposition uy <> if uy movetoy dup 200 <> if exit else drop then then  
       200 \ move done
     else 201 \ not in bounds
     then
@@ -264,7 +266,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   0 to boardertest
   nx1 nx2 = ny1 ny2 = and nx1 xm-min >= nx1 xm-max <= and and ny1 ym-min >= ny1 ym-max <= and and if nx1 ny1 movetoxy exit then
   nx1 nx2 = ny1 ny2 = and nx1 xm-min < nx1 xm-max > or and if nx1 ny1 boardermove exit then
-  nx1 nx2 = ny1 ny2 = and ny1 ym-min < ny1 ym-max > or and if nx1 ny1 boardermove exit then 
+  nx1 nx2 = ny1 ny2 = and ny1 ym-min < ny1 ym-max > or and if nx1 ny1 boardermove exit then
   nx1 nx2 = nx1 xm-min < nx1 xm-max > or and if nx2 ny2 boardermove exit then \ vertical line not on sandtable
   ny1 ny2 = ny1 ym-min < ny1 ym-max > or and if nx2 ny2 boardermove exit then \ horizontal line not on sandtable
 
