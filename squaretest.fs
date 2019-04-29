@@ -46,12 +46,11 @@
   uangle s>f pi 180e f/ f*
   fsin f/ f>s to ub
 
-  \ xposition yposition ux dup to ux1 uy dup to uy1 .s ." first " drawline . testdata
-  ux uy ux ub + dup to ux1 uy ua - dup to uy1 .s ." second " drawline . testdata
-  \ ux1 uy1 ux ub + dup to ux1 uy ua - dup to uy1 .s ." second " drawline . testdata
-  ux1 uy1 ux ub + ua - dup to ux1 uy ua - ub - dup to uy1 .s ." third " drawline . testdata
-  ux1 uy1 ux ua - dup to ux1 uy ub - dup to uy1 .s ." fourth " drawline . testdata
-  ux1 uy1 ux uy .s ." last " drawline . testdata ;
+  ux uy ux ub + dup to ux1 uy ua - dup to uy1 ( .s ." first " ) drawline . \ testdata
+  ux1 uy1 ux ub + ua - dup to ux1 uy ua - ub - dup to uy1 ( .s ." second " ) drawline . \ testdata
+  ux1 uy1 ux ua - dup to ux1 uy ub - dup to uy1 ( .s ." third " ) drawline . \ testdata
+  ux1 uy1 ux uy ( .s ." last " ) drawline . \ testdata 
+  ;
 
 : nrotsquare { usize ux uy uangle usteps -- } \ will make an angle square but then rotate it usteps around 360 degrees for a full circle
   usteps 0 ?do usize ux uy uangle 360 usteps / i * + nanglesquare loop ;
