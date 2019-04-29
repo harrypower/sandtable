@@ -224,7 +224,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       then
       ymotor disable-motor xmotor disable-motor
     \  xposition ux <> if ux movetox dup 200 <> if exit else drop then then
-    \  yposition uy <> if uy movetoy dup 200 <> if exit else drop then then  
+    \  yposition uy <> if uy movetoy dup 200 <> if exit else drop then then
       200 \ move done
     else 201 \ not in bounds
     then
@@ -378,12 +378,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then
   nsx1 xposition = nsy1 yposition = and if
     \ draw to nsx2 nsy2
-    nsx2 nsy2 movetoxy exit
-    ." single move" cr
+    nsx2 nsy2 movetoxy \ exit
+    ." single move" cr exit
   else
     nsx1 nsy1 movetoxy drop
-    nsx2 nsy2 movetoxy exit
-    ." double move" cr
+    nsx2 nsy2 movetoxy \ exit
+    ." double move" cr exit 
   then
 ;
 \ ************************   these following words are for home position use only not for normal movement use above words for that
