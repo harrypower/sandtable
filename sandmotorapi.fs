@@ -223,7 +223,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         steps -loop
       then
       ymotor disable-motor xmotor disable-motor
-      \ rounding error cleanup final draw 
+      \ rounding error cleanup final draw
       xposition ux <> if ux movetox dup 200 <> if exit else drop then then
       yposition uy <> if uy movetoy dup 200 <> if exit else drop then then
       200 \ move done
@@ -380,15 +380,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nsx1 xposition = nsy1 yposition = and if
     \ draw to nsx2 nsy2
     nsx2 nsy2 movetoxy
-    ." sm "
-    ." nsx2 " nsx2 . ." nsy2 " nsy2 .
   else
     nsx1 nsy1 movetoxy drop
     nsx2 nsy2 movetoxy
-    ." dm"
-    ." nsx1 " nsx1 . ." nsy1 " nsy1 . ." nsx2 " nsx2 . ." nsy2 " nsy2 .
-  then
-;
+  then ;
 \ ************************   these following words are for home position use only not for normal movement use above words for that
 \ also note that these home position words do not check if sandtable is configured so only use the dohome word to calibrate the sandtable
 
