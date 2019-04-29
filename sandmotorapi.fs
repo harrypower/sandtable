@@ -378,12 +378,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then
   nsx1 xposition = nsy1 yposition = and if
     \ draw to nsx2 nsy2
-    nsx2 nsy2 movetoxy \ exit
-    ." single move" cr exit
+    nsx2 nsy2 movetoxy
+    ." sm "
+    ." nsx2 " nsx2 . ." nsy2 " nsy2 .
   else
     nsx1 nsy1 movetoxy drop
-    nsx2 nsy2 movetoxy \ exit
-    ." double move" cr exit 
+    nsx2 nsy2 movetoxy
+    ." dm"
+    ." nsx1 " nsx1 . ." nsy1 " nsy1 . ." nsx2 " nsx2 . ." nsy2 " nsy2 . 
   then
 ;
 \ ************************   these following words are for home position use only not for normal movement use above words for that
