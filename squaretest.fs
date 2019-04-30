@@ -14,7 +14,7 @@
     fsin f/ f>s to ub
   else
     usize to ub
-    usize to ua
+    0 to ua
   then
 
   ux uy ux ub + dup to ux1 uy ua - dup to uy1 ( .s ." first " ) drawline . \ testdata
