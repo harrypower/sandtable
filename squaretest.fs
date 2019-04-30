@@ -26,6 +26,12 @@
 : nrotsquare { usize ux uy uangle usteps -- }
   usteps 0 ?do usize ux uy uangle 360 usteps / i * + n>square loop ;
 
+: n*nrotsquare { udeltasize ux uy ucirclesteps uoutsidesteps }
+  uoutsidesteps 0 ?do
+    udeltasize i * udeltasize + ux uy 0 ucirclesteps nrotsquare
+  loop
+;
+
 : nsquare ( usize ux uy -- ) \ draw usize square using drawline starting at ux uy location
   { usize ux uy }
   ux uy ux usize + uy drawline .
