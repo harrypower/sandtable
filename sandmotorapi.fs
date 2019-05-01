@@ -640,13 +640,13 @@ true value yposition  \ is the real location of y motor .. note if value is true
   0 0 { ux uy nsteps uangle ub ua }
   uangle 360 mod to uangle
   uangle 0 <> if
-    180 uangle 90 + - s>f fsin f>s 1000000 * to ub
-    uangle s>f fsin f>s 1000000 * to ua
+    180 uangle 90 + - s>f fsin 1000000e f* f>s to ub
+    uangle s>f fsin 1000000e f* f>s to ua
   else
     1000000 to ub
     0 to ua
   then
-  ux ub - uy ua - ux ub + uy ua + cr .s drawline . ua . ub . cr 
+  ux ub - uy ua - ux ub + uy ua + cr .s drawline . ua . ub . cr
 ;
 
 : zigzag-clean ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
