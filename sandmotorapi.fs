@@ -636,6 +636,19 @@ true value yposition  \ is the real location of y motor .. note if value is true
   restore
   endtry ;
 
+: lines ( ux uy nsteps uangle ) \ draw nsteps quantity of lines that are uangle from horizontal that intersect with ux uy then return to ux uy
+  0 0 { ux uy nsteps uangle ub ua }
+  uangle 360 mod to uangle
+  uangle <> 0 if
+    180 uangle 90 + - s>f fsin f>s 1000000 * to ub
+    uangle s>f fsin f>s 1000000 * to ua
+  else
+    1000000 to ub
+    0 to ua
+  then
+  ux ub - uy ua - ux ub + uy ua + drawline .
+;
+
 : zigzag-clean ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
   0 { nsteps uxy nxyamount }
   try
