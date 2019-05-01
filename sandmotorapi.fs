@@ -638,7 +638,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : line ( ux uy uangle ) \ draw lines that intersects with ux uy with uangle from horizontal
   0 0 { ux uy uangle ub ua }
-  uangle 360 mod to uangle
+  uangle 180 mod to uangle
   uangle 0 <> if
     180 uangle 90 + - s>f fsin 1000000e f* f>s to ub
     uangle s>f fsin 1000000e f* f>s to ua
