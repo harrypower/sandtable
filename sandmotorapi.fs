@@ -646,7 +646,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     1000000 to ub
     0 to ua
   then
-  ux ub - uy ua - ux ub + uy ua + drawline .
+  ux ub - uy ua - ux ub + uy ua + cr .s drawline . ua . ub . cr 
 ;
 
 : zigzag-clean ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
