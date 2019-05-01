@@ -636,8 +636,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
   restore
   endtry ;
 
-: lines ( ux uy nsteps uangle ) \ draw nsteps quantity of lines that are uangle from horizontal that intersect with ux uy then return to ux uy
-  0 0 { ux uy nsteps uangle ub ua }
+: line ( ux uy uangle ) \ draw lines that intersects with ux uy with uangle from horizontal
+  0 0 { ux uy uangle ub ua }
   uangle 360 mod to uangle
   uangle 0 <> if
     180 uangle 90 + - s>f fsin 1000000e f* f>s to ub
