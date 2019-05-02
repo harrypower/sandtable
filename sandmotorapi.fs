@@ -636,17 +636,26 @@ true value yposition  \ is the real location of y motor .. note if value is true
   restore
   endtry ;
 
-: line ( ux uy uangle ) \ draw lines that intersects with ux uy with uangle from horizontal
-  0 0 { ux uy uangle ub ua }
-  uangle 180 mod to uangle
+: lines ( ux uy uangle uqnt ) \ draw uqnt lines with one intersecting with ux uy with uangle from horizontal
+  0 0 1000000 { ux uy uangle uqnt ub ua usize }
+  uangle 360 mod to uangle
   uangle 0 <> if
-    180 uangle 90 + - s>f fsin 1000000e f* f>s to ub
-    uangle s>f fsin 1000000e f* f>s to ua
+    uangle s>f pi 180e f/ f* \ remember fsin uses rads not angles so convert
+    fsin usize s>f f*
+    90e pi 180e f/ f*
+    fsin f/ f>s to ua
+    90 uangle - s>f pi 180e f/ f*
+    fsin ua s>f f*
+    uangle s>f pi 180e f/ f*
+    fsin f/ f>s to ub
   else
-    1000000 to ub
+    usize to ub
     0 to ua
   then
-  ux ub - uy ua + ux ub + uy ua - cr .s drawline . ua . ub . cr
+  ux ub - uy ua + \ - direction from ux uy
+  ux ub + uy ua - \ + direction from ux uy
+  \ ( ux1 uy1 ux2 uy2 )  this is the line that intersects with ux uy point  
+  cr .s drawline . ua . ub . cr
 ;
 
 : zigzag-clean ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
