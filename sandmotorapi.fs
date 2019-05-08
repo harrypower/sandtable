@@ -643,6 +643,23 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0 value nbasey1
 0 value nbasex2
 0 value nbasey2
+: order-line ( nx1 ny1 nx2 ny2 -- nx ny nx' ny' ) \ reorder input x y such that nx ny is closest to current xposition yposition
+  { nx1 ny1 nx2 ny2 }
+  xposition yposition nx1 ny1 distance?
+  xposition yposition nx2 ny2 distance?
+  < if
+    nx1 ny1 nx2 ny2
+  else
+    nx2 ny2 nx1 ny1
+  then ;
+
+: offset-line ( nx1 ny1 nx2 ny2 noffset -- nx ny nx' ny' ) \ add noffset to quardinates
+  { nx1 ny1 nx2 ny2 noffset }
+  nx1 noffset +
+  ny1 noffset +
+  nx2 noffset +
+  ny2 noffset + ;
+
 : lines ( nx ny uangle uqnt -- ) \ draw uqnt lines with one intersecting with nx ny with uangle from horizontal
   0 0 1500000 { nx ny uangle uqnt nb na usize }
   uangle 360 mod to uangle
@@ -664,36 +681,19 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nx nb + ny na - \ + direction from nx ny
   to nbasey2 to nbasex2
   \ this is the line that intersects with nx ny point
-  xm-max uqnt 1 + dup to uqnt / to usize
+  xm-max uqnt / to usize
   uqnt 1 ?do
     i usize * to na
-    xposition yposition nbasex1 na - nbasey1 na - distance?
-    xposition yposition nbasex2 na - nbasey2 na - distance?
-    < if
-      nbasex1 na - nbasey1 na - nbasex2 na - nbasey2 na - .s drawline . cr
-    else
-      nbasex2 na - nbasey2 na - nbasex1 na - nbasey1 na - .s drawline . cr
-    then
+    nbasex1 nbasey1 nbasex2 nbasey2 order-line na offset-line
+    .s drawline . cr
   loop
   uqnt 1 ?do
     i usize * to na
-    xposition yposition nbasex1 na + nbasey1 na + distance?
-    xposition yposition nbasex2 na + nbasey2 na + distance?
-    < if
-      nbasex1 na + nbasey1 na + nbasex2 na + nbasey2 na + .s drawline . cr
-    else
-      nbasex2 na + nbasey2 na + nbasex1 na + nbasey1 na + .s drawline . cr
-    then
+    nbasex1 nbasey1 nbasex2 nbasey2 order-line 0 na - offset-line
+    .s drawline . cr
   loop
-  xposition yposition nbasex1 na + nbasey1 na + distance?
-  xposition yposition nbasex2 na + nbasey2 na + distance?
-  < if
-    nbasex1 nbasey1 nbasex2 nbasey2 .s drawline . cr
-    nbasex2 nbasey2 nx ny .s drawline . cr
-  else
-    nbasex2 nbasey2 nbasex1 nbasey1 .s drawline . cr
-    nbasex1 nbasey1 nx ny .s drawline . cr
-  then
+  nbasex1 nbasey1 nbasex2 nbasey2 order-line .s drawline . cr
+  nx ny movetoxy . cr 
 ;
 
 : zigzag-line ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
