@@ -669,7 +669,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     i usize * to na
     xposition yposition nbasex1 na - nbasey1 na - distance?
     xposition yposition nbasex2 na - nbasey2 na - distance?
-    > if
+    < if
       nbasex1 na - nbasey1 na - nbasex2 na - nbasey2 na - .s drawline . cr
     else
       nbasex2 na - nbasey2 na - nbasex1 na - nbasey1 na - .s drawline . cr
@@ -679,7 +679,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     i usize * to na
     xposition yposition nbasex1 na + nbasey1 na + distance?
     xposition yposition nbasex2 na + nbasey2 na + distance?
-    > if
+    < if
       nbasex1 na + nbasey1 na + nbasex2 na + nbasey2 na + .s drawline . cr
     else
       nbasex2 na + nbasey2 na + nbasex1 na + nbasey1 na + .s drawline . cr
@@ -687,7 +687,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   loop
   xposition yposition nbasex1 na + nbasey1 na + distance?
   xposition yposition nbasex2 na + nbasey2 na + distance?
-  > if
+  < if
     nbasex1 nbasey1 nbasex2 nbasey2 .s drawline . cr
     nbasex2 nbasey2 nx ny .s drawline . cr
   else
