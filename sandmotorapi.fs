@@ -664,19 +664,36 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nx nb + ny na - \ + direction from nx ny
   to nbasey2 to nbasex2
   \ this is the line that intersects with nx ny point
-  xm-max uqnt 3 + dup to uqnt / to usize
+  xm-max uqnt 1 + dup to uqnt / to usize
   uqnt 1 ?do
     i usize * to na
-    nbasex1 na - nbasey1 na - nbasex2 na - nbasey2 na - .s drawline . cr
-    nbasex2 na na + - nbasey2 na na + - nbasex1 na na + - nbasey1 na na + - .s drawline . cr
-  2 +loop
-  uqnt 1 ?do
-    i usize * to na
-    nbasex1 na + nbasey1 na + nbasex2 na + nbasey2 na + .s drawline . cr
-    nbasex2 na na + + nbasey2 na na + + nbasex1 na na + + nbasey1 na na + + .s drawline . cr
+    xposition yposition nbasex1 na - nbasey1 na - distance?
+    xposition yposition nbasex2 na - nbasey2 na - distance?
+    > if
+      nbasex1 na - nbasey1 na - nbasex2 na - nbasey2 na - .s drawline . cr
+    else
+      nbasex2 na - nbasey2 na - nbasex1 na - nbasey1 na - .s drawline . cr
+    then
   loop
-  nbasex1 nbasey1 nbasex2 nbasey2 .s drawline . cr
-  nbasex2 nbasey2 nx ny .s drawline . cr
+  uqnt 1 ?do
+    i usize * to na
+    xposition yposition nbasex1 na + nbasey1 na + distance?
+    xposition yposition nbasex2 na + nbasey2 na + distance?
+    > if
+      nbasex1 na + nbasey1 na + nbasex2 na + nbasey2 na + .s drawline . cr
+    else
+      nbasex2 na + nbasey2 na + nbasex1 na + nbasey1 na + .s drawline . cr
+    then
+  loop
+  xposition yposition nbasex1 na + nbasey1 na + distance?
+  xposition yposition nbasex2 na + nbasey2 na + distance?
+  > if
+    nbasex1 nbasey1 nbasex2 nbasey2 .s drawline . cr
+    nbasex2 nbasey2 nx ny .s drawline . cr
+  else
+    nbasex2 nbasey2 nbasex1 nbasey1 .s drawline . cr
+    nbasex1 nbasey1 nx ny .s drawline . cr
+  then
 ;
 
 : zigzag-line ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
