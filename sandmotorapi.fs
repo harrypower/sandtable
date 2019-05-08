@@ -643,7 +643,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0 value nbasey1
 0 value nbasex2
 0 value nbasey2
-: lines ( nx ny uangle uqnt ) \ draw uqnt lines with one intersecting with nx ny with uangle from horizontal
+: lines ( nx ny uangle uqnt -- ) \ draw uqnt lines with one intersecting with nx ny with uangle from horizontal
   0 0 1500000 { nx ny uangle uqnt nb na usize }
   uangle 360 mod to uangle
   uangle 0 <> if
@@ -668,13 +668,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
   uqnt 1 ?do
     i usize * to na
     nbasex1 na - nbasey1 na - nbasex2 na - nbasey2 na - .s drawline . cr
-  loop
+    nbasex2 na na + - nbasey2 na na + - nbasex1 na na + - nbasey1 na na + - .s drawline . cr
+  2 +loop
   uqnt 1 ?do
     i usize * to na
     nbasex1 na + nbasey1 na + nbasex2 na + nbasey2 na + .s drawline . cr
+    nbasex2 na na + + nbasey2 na na + + nbasex1 na na + + nbasey1 na na + + .s drawline . cr
   loop
   nbasex1 nbasey1 nbasex2 nbasey2 .s drawline . cr
-  nbasex2 nbasey2 nx ny .s drawline . cr 
+  nbasex2 nbasey2 nx ny .s drawline . cr
 ;
 
 : zigzag-line ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
