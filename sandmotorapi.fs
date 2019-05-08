@@ -644,7 +644,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0 value nbasex2
 0 value nbasey2
 : lines ( nx ny uangle uqnt ) \ draw uqnt lines with one intersecting with nx ny with uangle from horizontal
-  0 0 1000000 { nx ny uangle uqnt nb na usize }
+  0 0 1500000 { nx ny uangle uqnt nb na usize }
   uangle 360 mod to uangle
   uangle 0 <> if
     uangle s>f pi 180e f/ f* \ remember fsin uses rads not angles so convert
@@ -660,14 +660,24 @@ true value yposition  \ is the real location of y motor .. note if value is true
     0 to na
   then
   nx nb - ny na + \ - direction from nx ny
-  2dup to nbasey1 to nbasex1
+  to nbasey1 to nbasex1
   nx nb + ny na - \ + direction from nx ny
-  2dup to nbasey2 to nbasex2
-  \ ( nx1 ny1 nx2 ny2 )  this is the line that intersects with nx ny point
-  cr .s drawline . na . nb . cr
+  to nbasey2 to nbasex2
+  \ this is the line that intersects with nx ny point
+  xm-max uqnt 3 + dup to uqnt / to usize
+  uqnt 1 ?do
+    i usize * to na
+    nbasex1 na - nbasey1 na - nbasex2 na - nbasey2 na - .s drawline . cr
+  loop
+  uqnt 1 ?do
+    i usize * to na
+    nbasex1 na + nbasey1 na + nbasex2 na + nbasey2 na + .s drawline . cr
+  loop
+  nbasex1 nbasey1 nbasex2 nbasey2 .s drawline . cr
+  nbasex2 nbasey2 nx ny .s drawline . cr 
 ;
 
-: zigzag-clean ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
+: zigzag-line ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
   0 { nsteps uxy nxyamount }
   try
     uxy case
