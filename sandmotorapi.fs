@@ -693,8 +693,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     nxj1 nyj1 nxj2 nyj2 na offset-line order-line
     .s drawline . cr
   loop
-  xposition yposition
-  nbasex1 nbasey1 nbasex2 nbasey2 order-line 2drop
+  nbasex1 nbasey1 nbasex2 nbasey2 order-line 
   .s drawline . cr
   nx ny movetoxy . cr ;
 
