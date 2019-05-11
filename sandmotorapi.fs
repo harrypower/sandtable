@@ -690,7 +690,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   to nyj2 to nxj2 to nyj1 to nxj1
   uqnt 2 * 0 ?do
     i usize * to na
-    nxj1 nyj1 nxj2 nyj2 order-line na offset-line
+    nxj1 nyj1 nxj2 nyj2 na offset-line order-line
     .s drawline . cr
   loop
   xposition yposition
