@@ -687,9 +687,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
   \ this is the line that intersects with nx ny point
   xm-max uqnt / to usize
   nbasex1 nbasey1 nbasex2 nbasey2  0 xm-max 2 * - offset-line
+  to nyj2 to nxj1 to nyj1 to nxj1
   uqnt 2 * 0 ?do
     i usize * to na
-    nbasex1 nbasey1 nbasex2 nbasey2 order-line na offset-line
+    nxj1 nyj1 nxj2 nyj2 order-line na offset-line
     .s drawline . cr
   loop
   xposition yposition
