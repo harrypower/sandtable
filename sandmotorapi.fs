@@ -53,8 +53,8 @@ false value homedone?   \ false means table has not been homed true means table 
 1600 value stopbuffer
 0 constant xm-min
 0 constant ym-min
-275500 constant xm-max
-275500 constant ym-max
+275000 constant xm-max
+275000 constant ym-max
 1 constant forward
 0 constant backward
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
