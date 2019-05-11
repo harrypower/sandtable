@@ -50,11 +50,11 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-1600 value stopbuffer
+2000 value stopbuffer
 0 constant xm-min
 0 constant ym-min
-275000 constant xm-max
-275000 constant ym-max
+274000 constant xm-max
+274000 constant ym-max
 1 constant forward
 0 constant backward
 true value xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
