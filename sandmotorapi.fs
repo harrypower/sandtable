@@ -643,6 +643,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0 value nbasey1
 0 value nbasex2
 0 value nbasey2
+0 value nxj1
+0 value nyj1
+0 value nxj2
+0 value nyj2
 : order-line ( nx1 ny1 nx2 ny2 -- nx ny nx' ny' ) \ reorder input x y such that nx ny is closest to current xposition yposition
   { nx1 ny1 nx2 ny2 }
   xposition yposition nx1 ny1 distance?
@@ -682,19 +686,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
   to nbasey2 to nbasex2
   \ this is the line that intersects with nx ny point
   xm-max uqnt / to usize
-  uqnt 1 ?do
+  nbasex1 nbasey1 nbasex2 nbasey2  0 xm-max 2 * - offset-line
+  uqnt 2 * 0 ?do
     i usize * to na
     nbasex1 nbasey1 nbasex2 nbasey2 order-line na offset-line
     .s drawline . cr
   loop
-  uqnt 1 ?do
-    i usize * to na
-    nbasex1 nbasey1 nbasex2 nbasey2 order-line 0 na - offset-line
-    .s drawline . cr
-  loop
-  nbasex1 nbasey1 nbasex2 nbasey2 order-line .s drawline . cr
-  nx ny movetoxy . cr 
-;
+  xposition yposition
+  nbasex1 nbasey1 nbasex2 nbasey2 order-line 2drop
+  .s drawline . cr
+  nx ny movetoxy . cr ;
 
 : zigzag-line ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
   0 { nsteps uxy nxyamount }
