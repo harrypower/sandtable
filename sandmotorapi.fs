@@ -628,7 +628,12 @@ true value yposition  \ is the real location of y motor .. note if value is true
   ymotor [bind] tmc2130 destruct ;
 
 : border ( -- nflag )  \ draws a boarder around sandtable ... nflag is 200 if no drawing issues ... any other number is some sandtable error
+\ if nflag is 200 then ball currently is at x 0 y 0
   try
+    xposition xm-min = if ym-min movetoy dup 200 <> if throw else drop then then
+    xposition xm-max = if ym-min movetoy dup 200 <> if throw else drop then then
+    yposition ym-min = if xm-min movetox dup 200 <> if throw else drop then then
+    yposition ym-max = if xm-min movetox dup 200 <> if throw else drop then then
     xm-min movetox dup 200 <> if throw else drop then
     ym-min movetoy dup 200 <> if throw else drop then
     xm-min ym-max movetoxy dup 200 <> if throw else drop then
@@ -685,10 +690,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nx nb + ny na - \ + direction from nx ny
   to nbasey2 to nbasex2
   \ this is the line that intersects with nx ny point
-  uangle 90 mod s>f pi 180e f/ f* \ convert to rads
-  fdup fsin fswap fcos f+ xm-max xm-min - s>f f* fdup f>s uqnt / to usize  \ figure line step size from uqnt
-  \ xm-max uqnt / to usize
-  nbasex1 nbasey1 nbasex2 nbasey2 0 f>s - offset-line \ calculate start line with offset from base line
+  xm-max uqnt / to usize
+  nbasex1 nbasey1 nbasex2 nbasey2 0 xm-max - offset-line \ calculate start line with offset from base line
   to nyj2 to nxj2 to nyj1 to nxj1
   uqnt 2 * 0 ?do
     i usize * to na
@@ -698,9 +701,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
     usize offset-line \ add offset for second line
     .s drawline . cr
   2 +loop
+  border ." boarder " . cr
   nbasex1 nbasey1 nbasex2 nbasey2 \ order-line
   .s drawline . cr
-  nx ny movetoxy . cr ;
+  nx ny movetoxy . cr  ;
 
 : zigzag-line ( nsteps uxy -- nflag ) \ nflag is false if all ok other numbers are errors
   0 { nsteps uxy nxyamount }
