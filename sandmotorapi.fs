@@ -685,15 +685,20 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nx nb + ny na - \ + direction from nx ny
   to nbasey2 to nbasex2
   \ this is the line that intersects with nx ny point
-  xm-max uqnt / to usize
-  nbasex1 nbasey1 nbasex2 nbasey2 0 xm-max - offset-line
+  uangle 90 mod s>f pi 180e f/ f* \ convert to rads
+  fdup fsin fswap fcos f+ xm-max xm-min - s>f f* fdup f>s uqnt / to usize  \ figure line step size from uqnt
+  \ xm-max uqnt / to usize
+  nbasex1 nbasey1 nbasex2 nbasey2 f>s - offset-line \ calculate start line with offset from base line
   to nyj2 to nxj2 to nyj1 to nxj1
   uqnt 2 * 0 ?do
     i usize * to na
-    nxj1 nyj1 nxj2 nyj2 na offset-line order-line
+    nxj1 nyj1 nxj2 nyj2 na offset-line
     .s drawline . cr
-  loop
-  nbasex1 nbasey1 nbasex2 nbasey2 order-line 
+    nxj2 nyj2 nxj1 nyj1 na offset-line
+    usize offset-line \ add offset for second line
+    .s drawline . cr
+  2 +loop
+  nbasex1 nbasey1 nbasex2 nbasey2 \ order-line 
   .s drawline . cr
   nx ny movetoxy . cr ;
 
