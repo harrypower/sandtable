@@ -701,8 +701,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
     usize offset-line \ add offset for second line
     .s drawline . cr
   2 +loop
+  xposition . ."  xposition"
+  yposition . ."  yposition"
+  xposition xm-min = if ym-min movetoy ."  xm-min" . then
+  xposition xm-max = if ym-min movetoy ."  xm-max" . then
+  yposition ym-min = if xm-min movetox ."  ym-min" . then
+  yposition ym-max = if xm-min movetox ."  ym-max" . then
   border ." boarder " . cr
-  nbasex1 nbasey1 nbasex2 nbasey2 \ order-line
+  nbasex1 nbasey1 nbasex2 nbasey2 order-line
   .s drawline . cr
   nx ny movetoxy . cr  ;
 
