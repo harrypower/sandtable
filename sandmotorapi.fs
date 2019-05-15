@@ -674,14 +674,14 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 : (calc-c) ( uangle uqnt -- utotal ustep ) \ used by lines to be the distance offset calulation
   { uangle uqnt }
-  unagle 90 mod dup
+  uangle 90 mod dup
   deg>rads fsin deg>rads fcos f+ xm-max s>f f*
   fdup uqnt s>f f/
   f>s f>s swap ;
 : (calc-x) ( uc uangle -- nx )
-  deg>rads fsin swap s>f f* f>s ;
+  deg>rads fsin s>f f* f>s ;
 : (calc-y) ( uc uangle -- ny )
-  90 swap - deg>rads fsin swap s>f f* f>s ;
+  90 swap - deg>rads fsin s>f f* f>s ;
 
 : lines ( nx ny uangle uqnt -- ) \ draw uqnt lines with one intersecting with nx ny with uangle from horizontal
   0 0 1500000 { nx ny uangle uqnt nb na usize }
