@@ -50,7 +50,7 @@ true value configured?  \ true means not configured false means configured
 false value homedone?   \ false means table has not been homed true means table was homed succesfully
 0 constant xm
 1 constant ym
-2000 value stopbuffer
+2500 value stopbuffer
 0 constant xm-min
 0 constant ym-min
 274000 constant xm-max
