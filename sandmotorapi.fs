@@ -669,17 +669,25 @@ true value yposition  \ is the real location of y motor .. note if value is true
   nx2 noffset +
   ny2 noffset + ;
 
+: deg>rads ( uangle -- f: rrad )
+  s>f pi 180e f/ f* ;
+
+: (calc-c) ( uangle uqnt -- utotal ustep )
+  { uangle uqnt }
+
+;
+
 : lines ( nx ny uangle uqnt -- ) \ draw uqnt lines with one intersecting with nx ny with uangle from horizontal
   0 0 1500000 { nx ny uangle uqnt nb na usize }
   uangle 360 mod to uangle
   uangle 0 <> if
-    uangle s>f pi 180e f/ f* \ remember fsin uses rads not angles so convert
+    uangle deg>rads   \ remember fsin uses rads not angles so convert
     fsin usize s>f f*
-    90e pi 180e f/ f*
+    90 deg>rads
     fsin f/ f>s to na
-    90 uangle - s>f pi 180e f/ f*
+    90 uangle - deg>rads
     fsin na s>f f*
-    uangle s>f pi 180e f/ f*
+    uangle deg>rads
     fsin f/ f>s to nb
   else
     usize to nb
