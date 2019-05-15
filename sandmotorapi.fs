@@ -678,9 +678,9 @@ true value yposition  \ is the real location of y motor .. note if value is true
   deg>rads fsin deg>rads fcos f+ xm-max s>f f*
   fdup uqnt s>f f/
   f>s f>s swap ;
-: (calc-x) ( uc uangle -- nx )
+: (calc-x) ( uc uangle -- nx ) \ used by lines to calculate x offset from uangle and c distance from calc-c
   deg>rads fsin s>f f* f>s ;
-: (calc-y) ( uc uangle -- ny )
+: (calc-y) ( uc uangle -- ny ) \ used by lines to calculate y offset from uangle and c distance from calc-c 
   90 swap - deg>rads fsin s>f f* f>s ;
 
 : lines ( nx ny uangle uqnt -- ) \ draw uqnt lines with one intersecting with nx ny with uangle from horizontal
