@@ -701,7 +701,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     usize offset-line \ add offset for second line
     .s drawline . cr
   2 +loop
-  border ." boarder " . cr
+  \ border ." boarder " . cr
   nbasex1 nbasey1 nbasex2 nbasey2 order-line
   .s drawline . cr
   nx ny movetoxy . cr  ;
