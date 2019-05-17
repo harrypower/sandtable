@@ -51,8 +51,8 @@ require sandmotorapi.fs
   uquant s>f 360e f/ f>s to uintangle
   uquant 0 ?do
     nx ny
-    uintangle nangle + s>f fcos usize s>f f* f>s nx +
-    uintangle nangle + s>f fsin usize s>f f* f>s ny +
+    uintangle i * nangle + s>f fcos usize s>f f* f>s nx +
+    uintangle i * nangle + s>f fsin usize s>f f* f>s ny +
     drawline .
     xposition yposition nx ny drawline .
   loop ;
