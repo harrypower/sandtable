@@ -48,11 +48,11 @@ require sandmotorapi.fs
 : linestar ( nx ny nangle usize uquant -- ) \ move to nx ny and draw nquant lines of nsize from nx ny location with rotation of nangle
   0e { nx ny nangle usize uquant F: uintangle }
   xposition yposition nx ny drawline .
-  uquant s>f 360e f/ to uintangle
+  360e uquant s>f f/ to uintangle
   uquant 0 ?do
     nx ny
     uintangle i s>f f* nangle s>f f+ fcos usize s>f f* f>s nx +
     uintangle i s>f f* nangle s>f f+ fsin usize s>f f* f>s ny +
-    .s drawline . cr 
+    .s drawline . cr
     xposition yposition nx ny drawline .
   loop ;
