@@ -47,7 +47,7 @@ require sandmotorapi.fs
   loop ;
 
 : rdeg>rrad ( rangle -- f: rrad ) \ rangle from fstack gets converted to rads and place back in floating stack
-  fpi 180e f/ f* ;
+  pi 180e f/ f* ;
 
 : linestar ( nx ny nangle usize uquant -- ) \ move to nx ny and draw nquant lines of usize from nx ny location with rotation of nangle
   0 { nx ny nangle usize uquant uintangle }
