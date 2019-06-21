@@ -26,7 +26,7 @@
 
 \ require random.fs
 \ require sandmotorapi.fs
-needs sandmotorapi.f
+require sandmotorapi.fs
 
 : rndstar ( uamount -- ) \ will start at a random board location and draw random length lines from that start point radiating out
   xm-max random ym-max random 0 0 { nx ny nx1 ny1 }
