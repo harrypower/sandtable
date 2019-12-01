@@ -264,6 +264,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 \ nx1 ny1 is start of line ... nx2 ny2 is end of line drawn
 \ nflag returns information about what happened in drawing the requested line
 \ nflag is 200 if line was drawn with no issues
+\ nflag is 201 if line is not on sandtable ( line end points exceeds sandtable )
 \ nflag is 202 if sandtable not configured yet home not found yet
   { nx1 ny1 nx2 ny2 }
   0 to pointtest
@@ -680,7 +681,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   f>s f>s swap ;
 : (calc-x) ( uc uangle -- nx ) \ used by lines to calculate x offset from uangle and c distance from calc-c
   deg>rads fsin s>f f* f>s ;
-: (calc-y) ( uc uangle -- ny ) \ used by lines to calculate y offset from uangle and c distance from calc-c 
+: (calc-y) ( uc uangle -- ny ) \ used by lines to calculate y offset from uangle and c distance from calc-c
   90 swap - deg>rads fsin s>f f* f>s ;
 
 : lines ( nx ny uangle uqnt -- ) \ draw uqnt lines with one intersecting with nx ny with uangle from horizontal
