@@ -62,7 +62,7 @@ gforthtest true = [if]
   nx2 nxoffset +
   ny2 nyoffset + ;
 
-gforth true = [if]
+gforthtest true = [if]
   : deg>rads ( uangle -- f: rrad ) \ unangle from stack gets converted to rads and place in floating stack
     s>f pi 180e f/ f* ;
 [else]
