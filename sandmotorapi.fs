@@ -680,7 +680,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   ndistance s>f 360 uangle - deg>rads fsin f* f>s to nb
   nx1 na + ny1 nb + ;
 
-: (calc-na) ( uc uangle -- nx ) \ find na
+: (calc-na) ( uc uangle -- nx ) \ find na this is used by lines internaly
   { uc uangle } uangle 90 >= if
     180 90 90 180 uangle - - + - deg>rads fsin
   else
@@ -688,7 +688,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   then
   uc s>f f* f>s ;
 
-: (calc-nb) ( uc uangle -- ny ) \ find nb
+: (calc-nb) ( uc uangle -- ny ) \ find nb this is used by lines internaly 
   { uc uangle } uangle 90 >= if
     90 180 uangle - - deg>rads fsin
   else
