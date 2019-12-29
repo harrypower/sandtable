@@ -79,15 +79,15 @@ gforthtest true = [if]
     trianglecenter
   loop ;
 
-  : equaltrianglecenter ( nx ny udist uangle -- ) \ make a equalateral triangle where nx ny is reference pint and first leg is udist and uangle from reference
-    0 0 { nx ny udist uangle nlastx nlasty }
-    nx ny udist uangle coordinates?
-    nx ny udist uangle 120 + coordinates? 2dup to nlasty to nlastx .s drawline . cr
-    nlastx nlasty nx ny udist uangle 240 + coordinates? 2dup to nlasty to nlastx .s drawline . cr
-    nlastx nlasty nx ny udist uangle 360 + coordinates? .s drawline . cr ;
+: equaltrianglecenter ( nx ny udist uangle -- ) \ make a equalateral triangle where nx ny is reference pint and first leg is udist and uangle from reference
+  0 0 { nx ny udist uangle nlastx nlasty }
+  nx ny udist uangle coordinates?
+  nx ny udist uangle 120 + coordinates? 2dup to nlasty to nlastx .s drawline . cr
+  nlastx nlasty nx ny udist uangle 240 + coordinates? 2dup to nlasty to nlastx .s drawline . cr
+  nlastx nlasty nx ny udist uangle 360 + coordinates? .s drawline . cr ;
 
-  : nequaltrianglecenter ( nqnt udistchange uanglechange nx ny udist uangle -- )
-    { nqnt udistchange uanglechange nx ny udist uangle }
-    nqnt 0 ?do
-      nx ny udist udistchange i * + uangle uanglechange i * + equaltrianglecenter
-    loop ;
+: nequaltrianglecenter ( nqnt udistchange uanglechange nx ny udist uangle -- )
+  { nqnt udistchange uanglechange nx ny udist uangle }
+  nqnt 0 ?do
+    nx ny udist udistchange i * + uangle uanglechange i * + equaltrianglecenter
+  loop ;
