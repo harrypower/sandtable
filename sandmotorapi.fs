@@ -271,11 +271,10 @@ true value yposition  \ is the real location of y motor .. note if value is true
 0e fvariable mslope mslope f!
 0e fvariable bintersect bintersect f!
 : drawline ( nx1 ny1 nx2 ny2 -- nflag ) \ draw the line on the sandtable and move drawing stylus around the boarder if needed because line is behond table
-\ note *** drawline can only draw a line that is fully on the sandtable aka inside the sandtable min max dimensions
 \ nx1 ny1 is start of line ... nx2 ny2 is end of line drawn
+\ drawline can draw lines with parts off the sandtable in which case the boarders of the sandtable will be redrawn on
 \ nflag returns information about what happened in drawing the requested line
 \ nflag is 200 if line was drawn with no issues
-\ nflag is 201 if line is not on sandtable ( line end points exceeds sandtable )
 \ nflag is 202 if sandtable not configured yet home not found yet
   { nx1 ny1 nx2 ny2 }
   0 to pointtest
