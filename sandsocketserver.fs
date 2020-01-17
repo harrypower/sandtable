@@ -113,7 +113,9 @@ variable buffer$
     try
       socketloop
       false
-    restore s>d dto$ buffer$ $! s"  <-error" buffer$ $+! addtolog
+    restore
+      s>d dto$ buffer$ $! s"  <-error" buffer$ $+! addtolog
+      usockfd close-socket
     endtry
   again ;
 
