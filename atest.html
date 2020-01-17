@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sandtable Testing </title>
+<link rel="stylesheet" href="sandtablestyle.css">
+</head>
+<body>
+<h1>Sandtable Testing</h1>
+
+<form action="192.168.0.59:5354" method="get" class="form-a">
+  Issue a command to SandTable <br>
+  <div class="form-a">
+    <label for="name">Command:</label>
+    <select name="command">
+      <option value="">--Choose a command--</opiton>
+      <option value="gohome">gohome</option>
+      <option value="status">status</option>
+      <option value="xmin">xmin</option>
+      <option value="ymin">ymin</option>
+      <option value="xmax">xmax</option>
+      <option value="ymax">ymax</option>
+      <option value="xnow">xnow</option>
+      <option value="ynow">ynow</option>
+      <option value="lastresult">lastresult</option>
+      <option value="stopmotors">stopmotors</option>
+      <option value="stopsandtable">stopsandtable</option>
+    </select>
+  </div>
+  <div class="form-a">
+    <input type="submit" value="Send Command">
+  </div>
+</form>
+
+
+<form action="192.168.0.59:5354" method="get" class="form-a">
+  Move to absolute X,Y address (0 to 275500)<br>
+  <div class="form-a">
+    <input type="hidden" name="command" value="gotoxy" readonly>
+  </div>
+  <div class="form-a">
+    <lable for="name">absolute X: </lable>
+    <input type="number" name="x" min="0" max="275500" required>
+  </div>
+  <div class="form-a">absolule Y: </lable>
+    <input type="number" name="y" min="0" max="275500" required=><br>
+  </div>
+  <div class="form-a">
+    <input type="submit" value="Submit gotoxy">
+  </div>
+</form>
+
+<form action="192.168.0.59:5354" method="get" class="form-a">
+  <input type="hidden" name="command" value="stopsandtable" readonly>
+  <input class="form-b" type="submit" value="STOP table now">
+</form>
+
+</body>
+</html>
