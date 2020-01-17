@@ -116,6 +116,7 @@ variable buffer$
     restore
       s>d dto$ buffer$ $! s"  <-error" buffer$ $+! addtolog
       usockfd close-socket
+      userver close-server
     endtry
   again ;
 
