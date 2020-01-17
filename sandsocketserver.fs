@@ -86,7 +86,7 @@ variable buffer$
   s\" Content-type: text/html; charset=utf-8\r\n" buffer$ $+!
   s\" Content-Length: 33\r\n" buffer$ $+!
   s\" \r\n" buffer$ $+!
-;
+  buffer$ $@ ;
 
 : parsemessage ( caddr u -- caddr1 u1 )
 

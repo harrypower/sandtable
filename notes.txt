@@ -1,0 +1,9 @@
+Notes
+1/16/2020
+  - playing with the idea of not even using the cgi stuff and just processing the get response directly in my own socket server.
+  - need to play with threads in socket server to break up tasks to do
+  - need to come up with a parsing method really simple but yet basic to be secure from obvious stuff
+  - more thought on draying letters.. basic idea is to use a linked list for each ascii letter to impliment then
+  the link will have another level of linked lists for all the move commands to make the letter.   Also will need words to implement this letter drawing
+  maybe make it an object but not really any reason do to that other then encapsulating all the stuff in bit.
+  
