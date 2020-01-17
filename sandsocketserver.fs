@@ -100,7 +100,7 @@ variable buffer$
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
-        \ http-response usockfd write-socket
+        http-response usockfd write-socket
         2dup usockfd write-socket
         2dup addtolog
         dump cr ." ^ message ^" cr
