@@ -104,7 +104,7 @@ variable buffer$
         2dup usockfd write-socket
         2dup addtolog
         dump cr ." ^ message ^" cr
-        \ usockfd close-socket
+        usockfd close-socket
   again
   \ userver close-server
   ;
