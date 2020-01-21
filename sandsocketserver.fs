@@ -42,11 +42,12 @@ mb-maxsize allocate throw message-buffer !
 0 value usockfd
 0 value logfid
 variable buffer$
+variable convert$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
-    <<# #s  #> #>> buffer$ $! buffer$ $@ ;
+    <<# #s  #> #>> convert$ $! convert$ $@ ;
 : dto$ ( d -- caddr u )  \ convert double signed to a string
-    swap over dabs <<# #s rot sign #> #>> buffer$ $! buffer$ $@ ;
+    swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
 
 : openlog ( -- )
   s" /run/sandtablelog" file-status swap drop false = if
@@ -66,26 +67,25 @@ variable buffer$
   logfid flush-file throw
   logfid close-file throw ;
 
-: http-response ( -- caddr u )
-  s\" HTTP/1.1 200 OK\r\n" buffer$ $!
-  s\" Connection: close\r\n" buffer$ $+!
-  s\" Server: Gforth0.79\r\n" buffer$ $+!
-  s\" Accept-Ranges: bytes\r\n" buffer$ $+!
-  s\" Content-type: text/plain; charset=utf-8\r\n" buffer$ $+!
-  s\" Content-Length: 19\r\n" buffer$ $+!
-  s\" \r\n" buffer$ $+!
-  s\" message recieved \r\n" buffer$ $+!
-  s\" \r\n\r\n" buffer$ $+!
-  buffer$ $@ ;
-
 : http-header ( -- caddr u )
   s\" HTTP/1.1 200 OK\r\n" buffer$ $!
   s\" Connection: close\r\n" buffer$ $+!
   s\" Server: Gforth0.79\r\n" buffer$ $+!
   s\" Accept-Ranges: bytes\r\n" buffer$ $+!
   s\" Content-type: text/html; charset=utf-8\r\n" buffer$ $+!
-  s\" Content-Length: 33\r\n" buffer$ $+!
+  buffer$ $@ ;
+
+: http-response ( caddr u -- caddr' u' ) \ caddr u is the message string to send
+  { caddr u }
+  http-header buffer$ $!
+  s\" Content-Length: " buffer$ $+!
+  u s>d udto$ buffer$ $+!
   s\" \r\n" buffer$ $+!
+  s\" \r\n" buffer$ $+!
+
+  caddr u buffer$ $+!
+  s\" \r\n" buffer$ $+!
+  s\" \r\n\r\n" buffer$ $+!
   buffer$ $@ ;
 
 : parsemessage ( caddr u -- caddr1 u1 )
@@ -100,13 +100,14 @@ variable buffer$
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
+        s" Got the message"
         http-response usockfd write-socket
         2dup usockfd write-socket
         2dup addtolog
         dump cr ." ^ message ^" cr
         usockfd close-socket
   again
-  \ userver close-server
+  userver close-server 
   ;
 
 : repeatmain ( -- )
