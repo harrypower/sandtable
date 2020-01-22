@@ -43,6 +43,7 @@ mb-maxsize allocate throw message-buffer !
 0 value logfid
 variable buffer$
 variable convert$
+variable buffer1$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
@@ -88,26 +89,44 @@ variable convert$
   s\" \r\n\r\n" buffer$ $+!
   buffer$ $@ ;
 
-: parsemessage ( caddr u -- caddr1 u1 )
-
+: parseGET ( caddr u -- caddr1 u1 ) \ searches caddr u for the GET message from tcp/ip header and extracts and returns caddr1 u1 as message
+\ will return caddr1 u1 as 0 0 if there is no GET message or partial GET message 
+   0 0 { caddr u startgetcaddr endgetcaddr }
+   caddr u s" GET " search true = if
+    4 - swap 4 + dup to startgetcaddr swap
+    s"  "  search true = if
+      drop to endgetcaddr
+      startgetcaddr endgetcaddr startgetcaddr -
+    else
+      2drop 0 0 \ no space after get before header
+    then
+   else
+    2drop 0 0 \ no GET found
+   then
 ;
+
+: keyboardstop ( -- nflag ) \ nflag is true if 's' is pressed on keyboard false otherwise
+  ekey? if ekey 115 = if true else false then else false then ;
 
 : socketloop ( -- )
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
-  userver 3 listen
+  userver 4 listen
   userver . ." < server id " cr
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
-        s" Got the message"
-        http-response usockfd write-socket
-        2dup usockfd write-socket
-        2dup addtolog
-        dump cr ." ^ message ^" cr
-        usockfd close-socket
-  again
-  userver close-server 
+    2dup addtolog
+    2dup dump ." ^ message ^" cr
+    hostname dump ." ^ hostname ^" cr
+    usockfd . ." < socket fd" cr
+    s" Got this message > " buffer1$ $!
+    parseGET buffer1$ $+!
+    buffer1$ $@ http-response usockfd write-socket
+    usockfd close-socket
+    keyboardstop
+  until
+  userver close-server
   ;
 
 : repeatmain ( -- )
