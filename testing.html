@@ -7,7 +7,7 @@
 <body>
 <h1>Sandtable Testing</h1>
 
-<form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="http://sandtable/cgi-bin/directtesting.cgi" method="get" class="form-a">
   Issue a command to SandTable <br>
   <div class="form-a">
     <label for="name">Command:</label>
@@ -32,7 +32,7 @@
 </form>
 
 
-<form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="http://sandtable/cgi-bin/directtesting.cgi" method="get" class="form-a">
   Move to absolute X,Y address (0 to 275500)<br>
   <div class="form-a">
     <input type="hidden" name="command" value="gotoxy" readonly>
@@ -49,7 +49,7 @@
   </div>
 </form>
 
-<form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="http://sandtable:5354" method="get" class="form-a">
   <input type="hidden" name="command" value="stopsandtable" readonly>
   <input class="form-b" type="submit" value="STOP table now">
 </form>
