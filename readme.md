@@ -50,7 +50,27 @@
     ```
     systemctl disable wifi-reset.service
     ```
-
+## 3.B configure hostname
+  * log into beaglebone and change the name in /etc/hostname to sandtable
+  ```
+  sudo nano /etc/hostname
+  ```
+  * Now change the following lines to include this new name in /etc/hosts as follows:
+  ```
+  sudo nano /etc/hosts
+  ```
+  ```
+  127.0.1.1     beaglebone.localdomain   beaglebone
+  ```
+  change this to bellow
+  ```
+  127.0.1.1     sandtable.localdomain    sandtable
+  ```
+  * Reboot the beaglebone black to finish setup!
+## 3.C Add some services to get hostname to work
+  ```
+  sudo apt-get install samba
+  ```
 ## 4. Remove some services on BBB
   ```
   sudo systemctl disable cloud9.service
