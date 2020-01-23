@@ -47,14 +47,14 @@ variable server_addres$
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> buffer$ $! buffer$ $@ ;
 
-s" 192.168.0.59" server_addres$ $!
+s" http://sandtable" server_addres$ $!
 s" 5354" port#$ $!
 
 : getmessage ( -- ucaddr u )
 ;
 
 : sendmessage ( ucaddr u -- ucaddr1 u1 )
-  s\" curl \"" buffer$ $! server_addres$ $@ buffer$ $+! s" :" buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
+  s\" curl " buffer$ $! server_addres$ $@ buffer$ $+! s" :" buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
 \  s\" echo \"" buffer$ $!
 \  buffer$ $+!
 \  s\" \" | netcat " buffer$ $+!
