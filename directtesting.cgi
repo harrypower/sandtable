@@ -48,20 +48,13 @@ variable server_addres$
     <<# #s  #> #>> buffer$ $! buffer$ $@ ;
 
 s" http://sandtable" server_addres$ $!
-s" 5354" port#$ $!
+s" :5354" port#$ $!
 
 : getmessage ( -- ucaddr u )
 ;
 
 : sendmessage ( ucaddr u -- ucaddr1 u1 )
-  s\" curl " buffer$ $! server_addres$ $@ buffer$ $+! s" :" buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! buffer$ $@ sh-get
-\  s\" echo \"" buffer$ $!
-\  buffer$ $+!
-\  s\" \" | netcat " buffer$ $+!
-\  server_addres$ $@ buffer$ $+!
-\  s"  " buffer$ $+!
-\  port#$ $@ buffer$ $+!
-\  buffer$ $@ sh-get
+  s\" curl \"" buffer$ $! server_addres$ $@ buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
 ;
 
 : lineending ( -- caddr u )
@@ -89,8 +82,8 @@ s" 5354" port#$ $!
   s" REQUEST_METHOD is :" apache$s $+! s" REQUEST_METHOD" getenv apache$s $+! lineending apache$s $+!
   s" HTTP_REFERER is:" apache$s $+! s" HTTP_REFERER" getenv apache$s $+! lineending apache$s $+!
   s" HTTP_HOST is:" apache$s $+! s" HTTP_HOST" getenv apache$s $+! lineending apache$s $+!
-  s" HTTP_HOST" getenv http_host$ $!
   s" SERVER_SOFTWARE is:" apache$s $+! s" SERVER_SOFTWARE" getenv  apache$s $+! lineending apache$s $+!
+  s" HTTP_HOST" getenv http_host$ $!
 ;
 
 : prep-message ( -- )
