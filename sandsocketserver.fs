@@ -34,7 +34,7 @@ require unix/socket.fs
 require sandmotorapi.fs
 
 40000 value stream-timeout
-5354 value sandtable-port#
+52222 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
 mb-maxsize allocate throw message-buffer !
@@ -90,7 +90,7 @@ variable buffer1$
   buffer$ $@ ;
 
 : parseGET ( caddr u -- caddr1 u1 ) \ searches caddr u for the GET message from tcp/ip header and extracts and returns caddr1 u1 as message
-\ will return caddr1 u1 as 0 0 if there is no GET message or partial GET message 
+\ will return caddr1 u1 as 0 0 if there is no GET message or partial GET message
    0 0 { caddr u startgetcaddr endgetcaddr }
    caddr u s" GET " search true = if
     4 - swap 4 + dup to startgetcaddr swap

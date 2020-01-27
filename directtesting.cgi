@@ -48,7 +48,7 @@ variable server_addres$
     <<# #s  #> #>> buffer$ $! buffer$ $@ ;
 
 s" http://sandtable" server_addres$ $!
-s" :5354" port#$ $!
+s" :52222" port#$ $!
 
 : getmessage ( -- ucaddr u )
 ;
