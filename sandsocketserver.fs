@@ -139,6 +139,7 @@ variable GET$
     recieve-buffer$ $@ dump ." ^ message ^" cr
     hostname dump ." ^ hostname ^" cr
     usockfd . ." < socket fd" cr
+    parsestuff 
     s" Got this message > " buffer1$ $!
     GET$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
     s" Command is > " buffer1$ $+!
