@@ -110,7 +110,7 @@ variable command$
 
 : parse$to$ ( caddr u start$addr ustart end$addr uend -- caddr1 u1 )
 \ find start$ in caddr string then look for end$ .. if found return the string between start$ and end$ only or return 0 0 if start$ and end$ not found
-  0 0 { caddr u start$addr ustart end$addr uend addr-a baddr-b }
+  0 0 { caddr u start$addr ustart end$addr uend addr-a addr-b }
   caddr u start$addr ustart search true = if
     ustart - swap ustart + dup to addr-a swap
     end$addr uend search true = if
