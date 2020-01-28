@@ -46,8 +46,10 @@ mb-maxsize allocate throw message-buffer !
 variable buffer$
 variable convert$
 variable buffer1$
-variable message-buffer$
+variable recieve-buffer$
 variable command$
+variable User_Agent$
+variable GET$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
@@ -110,6 +112,20 @@ variable command$
 : keyboardstop ( -- nflag ) \ nflag is true if 's' is pressed on keyboard false otherwise
   ekey? if ekey 115 = if true else false then else false then ;
 
+: parsestuff ( -- ) \ get the command, user-agent
+  recieve-buffer$ $@ s" GET " s"  " parse$to$ GET$ $!
+  GET$ $@ s" /?command=" s" &" parse$to$ dup 0 = if
+    2drop GET$ $@ s" /?command=" search true = if
+      10 - swap 10 + swap command$ $!
+    else
+      2drop 0 0 command$ $!
+    then
+  else
+    2drop 0 0 command$ $!
+  then
+  recieve-buffer$ $@ s" User-Agent: " s\" \r\n" parse$to$ User_Agent$ $!
+;
+
 : socketloop ( -- )
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
@@ -118,14 +134,17 @@ variable command$
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
-    message-buffer$ $!
-    message-buffer$ $@
-    2dup addtolog
-    2dup dump ." ^ message ^" cr
+    recieve-buffer$ $!
+    recieve-buffer$ $@ addtolog
+    recieve-buffer$ $@ dump ." ^ message ^" cr
     hostname dump ." ^ hostname ^" cr
     usockfd . ." < socket fd" cr
     s" Got this message > " buffer1$ $!
-    s" GET " s"  " parse$to$ buffer1$ $+!
+    GET$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
+    s" Command is > " buffer1$ $+!
+    command$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
+    s" From User-Agent> " buffer1$ $+!
+    User-Agent$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
     buffer1$ $@ http-response usockfd write-socket
     usockfd close-socket
     keyboardstop
