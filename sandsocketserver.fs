@@ -93,21 +93,6 @@ variable command$
   s\" \r\n\r\n" buffer$ $+!
   buffer$ $@ ;
 
-: parseGET ( caddr u -- caddr1 u1 ) \ searches caddr u for the GET message from tcp/ip header and extracts and returns caddr1 u1 as message
-\ will return caddr1 u1 as 0 0 if there is no GET message or partial GET message
-   0 0 { caddr u startgetcaddr endgetcaddr }
-   caddr u s" GET " search true = if
-    4 - swap 4 + dup to startgetcaddr swap
-    s"  "  search true = if
-      drop to endgetcaddr
-      startgetcaddr endgetcaddr startgetcaddr -
-    else
-      2drop 0 0 \ no space after get before header
-    then
-   else
-    2drop 0 0 \ no GET found
-   then ;
-
 : parse$to$ ( caddr u start$addr ustart end$addr uend -- caddr1 u1 )
 \ find start$ in caddr string then look for end$ .. if found return the string between start$ and end$ only or return 0 0 if start$ and end$ not found
   0 0 { caddr u start$addr ustart end$addr uend addr-a addr-b }
@@ -141,7 +126,6 @@ variable command$
     usockfd . ." < socket fd" cr
     s" Got this message > " buffer1$ $!
     s" GET " s"  " parse$to$ buffer1$ $+!
-    \ parseGET buffer1$ $+!
     buffer1$ $@ http-response usockfd write-socket
     usockfd close-socket
     keyboardstop
