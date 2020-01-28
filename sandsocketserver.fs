@@ -48,7 +48,7 @@ variable convert$
 variable buffer1$
 variable recieve-buffer$
 variable command$
-variable User_Agent$
+variable User-Agent$
 variable GET$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
@@ -123,7 +123,7 @@ variable GET$
   else
     2drop 0 0 command$ $!
   then
-  recieve-buffer$ $@ s" User-Agent: " s\" \r\n" parse$to$ User_Agent$ $!
+  recieve-buffer$ $@ s" User-Agent: " s\" \r\n" parse$to$ User-Agent$ $!
 ;
 
 : socketloop ( -- )
