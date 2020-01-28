@@ -32,6 +32,8 @@
 
 require unix/socket.fs
 require sandmotorapi.fs
+require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
+
 
 40000 value stream-timeout
 52222 value sandtable-port#
@@ -44,6 +46,8 @@ mb-maxsize allocate throw message-buffer !
 variable buffer$
 variable convert$
 variable buffer1$
+variable message-buffer$
+variable command$
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
@@ -102,8 +106,21 @@ variable buffer1$
     then
    else
     2drop 0 0 \ no GET found
-   then
-;
+   then ;
+
+: parse$to$ ( caddr u start$addr ustart end$addr uend -- caddr1 u1 )
+\ find start$ in caddr string then look for end$ .. if found return the string between start$ and end$ only or return 0 0 if start$ and end$ not found
+  0 0 { caddr u start$addr ustart end$addr uend addr-a baddr-b }
+  caddr u start$addr ustart search true = if
+    ustart - swap ustart + dup to addr-a swap
+    end$addr uend search true = if
+      drop to addr-b
+      addr-a addr-b addr-a -
+      else 2drop 0 0
+      then
+  else
+    2drop 0 0
+  then ;
 
 : keyboardstop ( -- nflag ) \ nflag is true if 's' is pressed on keyboard false otherwise
   ekey? if ekey 115 = if true else false then else false then ;
@@ -116,29 +133,18 @@ variable buffer1$
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
+    message-buffer$ $!
+    message-buffer$ $@
     2dup addtolog
     2dup dump ." ^ message ^" cr
     hostname dump ." ^ hostname ^" cr
     usockfd . ." < socket fd" cr
     s" Got this message > " buffer1$ $!
-    parseGET buffer1$ $+!
+    s" GET " s"  " parse$to$ buffer1$ $+!
+    \ parseGET buffer1$ $+!
     buffer1$ $@ http-response usockfd write-socket
     usockfd close-socket
     keyboardstop
   until
   userver close-server
   ;
-
-: repeatmain ( -- )
-  begin
-    try
-      socketloop
-      false
-    restore
-      s>d dto$ buffer$ $! s"  <-error" buffer$ $+! addtolog
-      usockfd close-socket
-      userver close-server
-    endtry
-  again ;
-
-\ repeatmain
