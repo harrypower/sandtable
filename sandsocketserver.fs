@@ -121,7 +121,7 @@ variable GET$
       2drop 0 0 command$ $!
     then
   else
-    2drop 0 0 command$ $!
+    command$ $!
   then
   recieve-buffer$ $@ s" User-Agent: " s\" \r\n" parse$to$ User-Agent$ $!
 ;
@@ -139,7 +139,7 @@ variable GET$
     recieve-buffer$ $@ dump ." ^ message ^" cr
     hostname dump ." ^ hostname ^" cr
     usockfd . ." < socket fd" cr
-    parsestuff 
+    parsestuff
     s" Got this message > " buffer1$ $!
     GET$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
     s" Command is > " buffer1$ $+!
