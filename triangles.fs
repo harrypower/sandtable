@@ -1,4 +1,4 @@
-\ triangles.f
+\ triangles.fs
 
 \    Copyright (C) 2019  Philip King Smith
 
