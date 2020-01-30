@@ -132,13 +132,13 @@ variable GET$
 ;
 
 : html-header ( -- caddr u )
-  s\" Content-type: text/html; charset=utf-8\n\n" buffer$ $!
-  s\" <html>\n" buffer$ $+!
-  s\" <head><title>Sandtable Message return</title></head>\n" buffer$ $+!
-  s\" <body>\n" buffer$ $+!
+  s\" Content-type: text/html; charset=utf-8" buffer$ $!
+  s\" <html>" buffer$ $+!
+  s\" <head><title>Sandtable Message return</title></head>" buffer$ $+!
+  s\" <body>" buffer$ $+!
   buffer$ $@ ;
 : html-footer ( -- caddr u )
-  s\" </body></html>\n" ;
+  s\" </body></html>" ;
 
 : process-recieve ( caddr u -- caddr u )
   recieve-buffer$ $!
@@ -175,5 +175,4 @@ variable GET$
     usockfd close-socket
     keyboardstop
   until
-  userver close-server
-  ;
+  userver close-server ;
