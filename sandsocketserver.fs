@@ -141,12 +141,12 @@ require sandcommands.fs
   s\" </body></html>" ;
 
 : parse-command ( -- )
-  command$ $@ s" &"  search if
+  command$ $@ s" &" search if
     swap drop
     command$ $@ rot swap -
   then
   thecommand$ $!
-  thecommand$ $@ 0 swap drop > if
+  thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
       execute buffer1$ $+! lineending buffer1$ $+!
     else
