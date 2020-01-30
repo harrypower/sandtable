@@ -150,14 +150,14 @@ require sandcommands.fs
     command$ $@ rot swap -
   then
   thecommand$ $!
-  thecommand$ $@ 0 swap drop > if
+  thecommand$ $@ 1 swap drop >= if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
       execute buffer1$ $+! lineending buffer1$ $+!
     else
-      s" The slow commands need to be setup yet!"  buffer1$ $+! lineending buffer1$ $+!
+      s" The command not found!"  buffer1$ $+! lineending buffer1$ $+!
     then
   else
-    s" The command is empty so nothing is to be commanded!" buffer1$ $+! lineending buffer1$ $+!
+    s" No command issued!" buffer1$ $+! lineending buffer1$ $+!
   then
 ;
 : process-recieve ( caddr u -- caddr u )
