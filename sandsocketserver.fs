@@ -55,6 +55,8 @@ variable GET$
     <<# #s  #> #>> convert$ $! convert$ $@ ;
 : dto$ ( d -- caddr u )  \ convert double signed to a string
     swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
+: lineending ( -- caddr u ) \ return a string to produce a line end in html
+  s\" <br>\n" ;
 
 : openlog ( -- )
   s" /run/sandtablelog" file-status swap drop false = if
@@ -126,6 +128,21 @@ variable GET$
   recieve-buffer$ $@ s" User-Agent: " s\" \r\n" parse$to$ User-Agent$ $!
 ;
 
+: process-recieve ( caddr u -- caddr u )
+  recieve-buffer$ $!
+  recieve-buffer$ $@ addtolog
+  recieve-buffer$ $@ dump ." ^ message ^" cr
+  hostname dump ." ^ hostname ^" cr
+  usockfd . ." < socket fd" cr
+  parsestuff
+  s" Got this message > " buffer1$ $!
+  GET$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
+  s" Command is > " buffer1$ $+!
+  command$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
+  s" From User-Agent> " buffer1$ $+!
+  User-Agent$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
+  buffer1$ $@ http-response
+;
 : socketloop ( -- )
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
@@ -134,19 +151,8 @@ variable GET$
   begin
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
-    recieve-buffer$ $!
-    recieve-buffer$ $@ addtolog
-    recieve-buffer$ $@ dump ." ^ message ^" cr
-    hostname dump ." ^ hostname ^" cr
-    usockfd . ." < socket fd" cr
-    parsestuff
-    s" Got this message > " buffer1$ $!
-    GET$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
-    s" Command is > " buffer1$ $+!
-    command$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
-    s" From User-Agent> " buffer1$ $+!
-    User-Agent$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
-    buffer1$ $@ http-response usockfd write-socket
+    process-recieve
+    usockfd write-socket
     usockfd close-socket
     keyboardstop
   until
