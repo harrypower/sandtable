@@ -44,7 +44,7 @@ commands-instant set-current
   ym-min 0 udto$ junk$ $+!
   junk$ $@ ;
 
-command-slow set-current
-\ place slow sandtable commands here 
+commands-slow set-current
+\ place slow sandtable commands here
 
 only forth also
