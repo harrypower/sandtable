@@ -122,7 +122,7 @@ require sandcommands.fs
 
 : parsehttp ( -- ) \ get the command, user-agent
   recieve-buffer$ $@ s" GET " s"  " parse$to$ GET$ $!
-  2drop GET$ $@ s" /?command=" search true = if
+  GET$ $@ s" /?command=" search true = if
     10 - swap 10 + swap command$ $!
   else
     2drop 0 0 command$ $!
