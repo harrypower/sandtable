@@ -19,6 +19,18 @@
 
 \ Requires:
 \ will be included by socksandserver.fs
+\ forth-packages/multi-tasking/0.4.0/multi-tasking.fs \ from theforth.net multi-tasking 0.4.0 package
 
 \ Revisions:
 \ 01/29/2020 started coding
+
+require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
+
+only forth also
+wordlist constant commands-slow
+wordlist constant commands-instant
+
+variable lastresult$
+
+
+sandtablecommands set-current
