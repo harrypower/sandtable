@@ -46,10 +46,12 @@ mb-maxsize allocate throw message-buffer !
 variable buffer$
 variable convert$
 variable buffer1$
+variable buffer2$
 variable recieve-buffer$
 variable command$
 variable User-Agent$
 variable GET$
+0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
@@ -126,7 +128,17 @@ variable GET$
     command$ $!
   then
   recieve-buffer$ $@ s" User-Agent: " s\" \r\n" parse$to$ User-Agent$ $!
+  User-Agent$ $@ s" curl/" search true to curlagent 2drop
 ;
+
+: html-header ( -- caddr u )
+  s\" Content-type: text/html; charset=utf-8\n\n" buffer$ $!
+  s\" <html>\n" buffer$ $+!
+  s\" <head><title>Sandtable Message return</title></head>\n" buffer$ $+!
+  s\" <body>\n" buffer$ $+!
+  buffer$ $@ ;
+: html-footer ( -- caddr u )
+  s\" </body></html>\n" ;
 
 : process-recieve ( caddr u -- caddr u )
   recieve-buffer$ $!
@@ -135,13 +147,20 @@ variable GET$
   hostname dump ." ^ hostname ^" cr
   usockfd . ." < socket fd" cr
   parsestuff
-  s" Got this message > " buffer1$ $!
-  GET$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
+  s" Message is > " buffer1$ $!
+  GET$ $@ buffer1$ $+! lineending buffer1$ $+!
   s" Command is > " buffer1$ $+!
-  command$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
+  command$ $@ buffer1$ $+! lineending buffer1$ $+!
   s" From User-Agent> " buffer1$ $+!
-  User-Agent$ $@ buffer1$ $+! s\" \r\n" buffer1$ $+!
-  buffer1$ $@ http-response
+  User-Agent$ $@ buffer1$ $+! lineending buffer1$ $+!
+  curlagent if
+    buffer1$ $@ http-response
+  else
+    html-header buffer2$ $!
+    buffer1$ $@ buffer2$ $+!
+    html-footer buffer2$ $+!
+    buffer2$ $@ http-response
+  then
 ;
 : socketloop ( -- )
   stream-timeout set-socket-timeout
