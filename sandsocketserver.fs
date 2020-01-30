@@ -62,6 +62,8 @@ variable thecommand$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
+require sandcommands.fs
+
 : openlog ( -- )
   s" /run/sandtablelog" file-status swap drop false = if
     s" /run/sandtablelog" r/w open-file throw
