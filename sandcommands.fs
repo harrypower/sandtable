@@ -47,4 +47,4 @@ commands-instant set-current
 commands-slow set-current
 \ place slow sandtable commands here
 
-only forth also
+only forth also definitions
