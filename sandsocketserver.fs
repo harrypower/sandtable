@@ -136,8 +136,8 @@ require sandcommands.fs
 ;
 
 : html-header ( -- caddr u )
-  s\" Content-type: text/html; charset=utf-8\n\n" buffer$ $!
-  s\" <html>" buffer$ $+!
+  \ s\" Content-type: text/html; charset=utf-8\n\n" buffer$ $!
+  s\" <html>" buffer$ $!
   s\" <head><title>Sandtable Message return</title></head>" buffer$ $+!
   s\" <body>" buffer$ $+!
   buffer$ $@ ;
