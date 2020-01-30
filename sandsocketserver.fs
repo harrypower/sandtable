@@ -120,7 +120,7 @@ require sandcommands.fs
 : keyboardstop ( -- nflag ) \ nflag is true if 's' is pressed on keyboard false otherwise
   ekey? if ekey 115 = if true else false then else false then ;
 
-: parsestuff ( -- ) \ get the command, user-agent
+: parsehttp ( -- ) \ get the command, user-agent
   recieve-buffer$ $@ s" GET " s"  " parse$to$ GET$ $!
   GET$ $@ s" /?command=" s" &" parse$to$ dup 0 = if
     2drop GET$ $@ s" /?command=" search true = if
@@ -151,8 +151,7 @@ require sandcommands.fs
   then
   thecommand$ $!
   thecommand$ $@ 0 swap drop > if
-    thecommand$ $@ commands-instant search-wordlist
-    0 = if
+    thecommand$ $@ commands-instant search-wordlist 0 <> if
       execute buffer1$ $+! lineending buffer1$ $+!
     else
       s" The slow commands need to be setup yet!"  buffer1$ $+! lineending buffer1$ $+!
@@ -167,7 +166,7 @@ require sandcommands.fs
   recieve-buffer$ $@ dump ." ^ message ^" cr
   hostname dump ." ^ hostname ^" cr
   usockfd . ." < socket fd" cr
-  parsestuff
+  parsehttp
   s" Message $ is > " buffer1$ $!
   GET$ $@ buffer1$ $+! lineending buffer1$ $+!
   s" Command $ is > " buffer1$ $+!
