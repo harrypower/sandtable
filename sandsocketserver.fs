@@ -128,7 +128,7 @@ variable GET$
     command$ $!
   then
   recieve-buffer$ $@ s" User-Agent: " s\" \r\n" parse$to$ User-Agent$ $!
-  User-Agent$ $@ s" curl/" search true to curlagent 2drop
+  User-Agent$ $@ s" curl/" search to curlagent 2drop
 ;
 
 : html-header ( -- caddr u )
