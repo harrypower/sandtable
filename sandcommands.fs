@@ -26,11 +26,25 @@
 
 require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
+variable junk$
+
 only forth also
 wordlist constant commands-slow
 wordlist constant commands-instant
 
-variable lastresult$
+commands-instant set-current
+\ place instant commands there
+: xmin ( -- caddr u )
+  s" xmin value is " junk$ $!
+  xm-min 0 udto$ junk$ $+!
+  junk$ $@ ;
 
+: ymin ( -- caddr u )
+  s" ymin value is " junk$ $!
+  ym-min 0 udto$ junk$ $+!
+  junk$ $@ ;
 
-sandtablecommands set-current
+command-slow set-current
+\ place slow sandtable commands here 
+
+only forth also

@@ -52,6 +52,8 @@ variable command$
 variable User-Agent$
 variable GET$
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
+variable thecommand$
+0 value commandxt
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
@@ -140,6 +142,23 @@ variable GET$
 : html-footer ( -- caddr u )
   s\" </body></html>" ;
 
+: parse-command ( -- )
+  command$ $@ s" &"  search if
+    swap drop
+    command$ $@ rot swap -
+  then
+  thecommand$ $!
+  thecommand$ $@ 0 swap drop > if
+    thecommand$ $@ commands-instant search-wordlist
+    0 = if
+      execute buffer1$ $+! lineending buffer1$ $+!
+    else
+      s" The slow commands need to be setup yet!"  buffer1$ $+! lineending buffer1$ $+!
+    then
+  else
+    s" The command is empty so nothing is to be commanded!" buffer1$ $+! lineending buffer1$ $+!
+  then
+;
 : process-recieve ( caddr u -- caddr u )
   recieve-buffer$ $!
   recieve-buffer$ $@ addtolog
@@ -147,12 +166,13 @@ variable GET$
   hostname dump ." ^ hostname ^" cr
   usockfd . ." < socket fd" cr
   parsestuff
-  s" Message is > " buffer1$ $!
+  s" Message $ is > " buffer1$ $!
   GET$ $@ buffer1$ $+! lineending buffer1$ $+!
-  s" Command is > " buffer1$ $+!
+  s" Command $ is > " buffer1$ $+!
   command$ $@ buffer1$ $+! lineending buffer1$ $+!
   s" From User-Agent> " buffer1$ $+!
   User-Agent$ $@ buffer1$ $+! lineending buffer1$ $+!
+  parse-command  \ find and execute commands
   curlagent if
     buffer1$ $@ http-response
   else
