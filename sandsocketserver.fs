@@ -122,14 +122,10 @@ require sandcommands.fs
 
 : parsehttp ( -- ) \ get the command, user-agent
   recieve-buffer$ $@ s" GET " s"  " parse$to$ GET$ $!
-  GET$ $@ s" /?command=" s" &" parse$to$ dup 0 = if
-    2drop GET$ $@ s" /?command=" search true = if
-      10 - swap 10 + swap command$ $!
-    else
-      2drop 0 0 command$ $!
-    then
+  2drop GET$ $@ s" /?command=" search true = if
+    10 - swap 10 + swap command$ $!
   else
-    command$ $!
+    2drop 0 0 command$ $!
   then
   recieve-buffer$ $@ s" User-Agent: " s\" \r\n" parse$to$ User-Agent$ $!
   User-Agent$ $@ s" curl/" search to curlagent 2drop
@@ -150,7 +146,7 @@ require sandcommands.fs
     command$ $@ rot swap -
   then
   thecommand$ $!
-  thecommand$ $@ 1 swap drop >= if
+  thecommand$ $@ 0 swap drop > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
       execute buffer1$ $+! lineending buffer1$ $+!
     else
