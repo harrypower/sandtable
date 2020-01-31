@@ -75,7 +75,9 @@ commands-instant set-current
 
 : stopsandserver ( -- caddr u ) \ stop the sand server loop
   true to sandserverloop
-  s" Sandserver loop shutting done now!"  ;
+  s" Sandserver loop shutting done now!" junk$ $!
+  lineending junk$ $+!
+  junk$ $@ ;
 
 commands-slow set-current
 \ place slow sandtable commands here
