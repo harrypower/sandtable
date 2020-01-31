@@ -54,6 +54,10 @@ variable GET$
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
 variable thecommand$
 0 value commandxt
+false value sandserverloop \ flag to turn off sand server loop false is run true is stop
+
+task servertask \ task for sand server running in
+servertask construct
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
@@ -190,6 +194,12 @@ require sandcommands.fs
     process-recieve
     usockfd write-socket
     usockfd close-socket
-    keyboardstop
+    \ keyboardstop
+    sandserverloop
   until
   userver close-server ;
+
+: startsandserver
+  false to sandserverloop
+  ['] socketloop start-task
+;
