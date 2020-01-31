@@ -201,5 +201,5 @@ require sandcommands.fs
 
 : startsandserver
   false to sandserverloop
-  ['] socketloop start-task
+  ['] socketloop servertask start-task
 ;
