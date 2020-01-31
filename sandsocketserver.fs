@@ -198,6 +198,7 @@ require sandcommands.fs
     sandserverloop
   until
   userver close-server
+  s" sand server shutting down now!" type cr
   exit ;
 
 : startsandserver
