@@ -203,3 +203,6 @@ require sandcommands.fs
 : startsandserver ( -- ) \ start the socket sand server ... note this does not work until i figure out user variable spaces
   false to sandserverloop
   ['] socketloop servertask start-task ;
+
+startsandserver
+bye
