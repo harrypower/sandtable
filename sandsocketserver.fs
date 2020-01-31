@@ -141,7 +141,7 @@ require sandcommands.fs
   s\" </body></html>" ;
 
 : parse-command ( -- )
-  command$ $@ s" &" search if
+  command$ $@ s" ?" search if
     swap drop
     command$ $@ rot swap -
   then
