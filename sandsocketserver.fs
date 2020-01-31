@@ -197,7 +197,8 @@ require sandcommands.fs
     \ keyboardstop
     sandserverloop
   until
-  userver close-server ;
+  userver close-server
+  exit ;
 
 : startsandserver
   false to sandserverloop
