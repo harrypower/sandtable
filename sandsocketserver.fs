@@ -200,9 +200,6 @@ require sandcommands.fs
   s" sand server shutting down now!" type cr
   exit ;
 
-: startsandserver ( -- ) \ start the socket sand server ... note this does not work until i figure out user variable spaces
+: startsandserver ( -- ) \ start the socket sand server ... note this will work but can not be used at command line with gforth still responding to user terminal 
   false to sandserverloop
   ['] socketloop servertask start-task ;
-
-startsandserver
-\ 60000 ms bye
