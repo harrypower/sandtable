@@ -183,7 +183,7 @@ require sandcommands.fs
 : socketloop ( -- )
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
-  userver 1 listen
+  userver 2 listen
   userver . ." < server id " cr
   begin
     userver accept-socket to usockfd
