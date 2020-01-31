@@ -35,7 +35,7 @@ require sandmotorapi.fs
 require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
 
-100 value stream-timeout
+1000 value stream-timeout
 52222 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
