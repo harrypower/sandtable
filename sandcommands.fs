@@ -67,8 +67,10 @@ commands-instant set-current
 : status ( -- caddr u )
   configured? false = if  s" Sandtable is configured now!" junk$ $! then
   configured? true = if s" Sandtable is not configured now!" junk$ $! then
+  lineending junk$ $+!
   homedone? true = if s" Sandtable has been sent to home succesfully" junk$ $+! then
-  homedone? false = if s" Sandtable has not been sent to home succesffly" junk$ $+! then
+  homedone? false = if s" Sandtable has not been sent to home succesfully" junk$ $+! then
+  lineending junk$ $+!
   junk$ $@ ;
 
 
