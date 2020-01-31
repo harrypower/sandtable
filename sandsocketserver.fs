@@ -170,7 +170,7 @@ require sandcommands.fs
   command$ $@ buffer1$ $+! lineending buffer1$ $+!
   s" From User-Agent> " buffer1$ $+!
   User-Agent$ $@ buffer1$ $+! lineending buffer1$ $+!
-  \ parse-command  \ find and execute commands
+  parse-command  \ find and execute commands
   curlagent if
     buffer1$ $@ http-response
   else
