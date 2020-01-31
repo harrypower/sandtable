@@ -34,6 +34,8 @@ require unix/socket.fs
 require sandmotorapi.fs
 require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
+task servertask \ task for sand server running in
+servertask construct
 
 10000 value stream-timeout
 52222 value sandtable-port#
@@ -197,9 +199,6 @@ require sandcommands.fs
   userver close-server
   s" sand server shutting down now!" type cr
   exit ;
-
-  task servertask \ task for sand server running in
-  servertask construct
 
 : startsandserver ( -- ) \ start the socket sand server ... note this does not work until i figure out user variable spaces
   false to sandserverloop
