@@ -56,9 +56,6 @@ variable thecommand$
 0 value commandxt
 false value sandserverloop \ flag to turn off sand server loop false is run true is stop
 
-task servertask \ task for sand server running in
-servertask construct
-
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
 : dto$ ( d -- caddr u )  \ convert double signed to a string
@@ -201,7 +198,9 @@ require sandcommands.fs
   s" sand server shutting down now!" type cr
   exit ;
 
-: startsandserver
+  task servertask \ task for sand server running in
+  servertask construct
+
+: startsandserver ( -- ) start the socket sand server ... note this does not work until i figure out user variable spaces
   false to sandserverloop
-  ['] socketloop servertask start-task
-;
+  ['] socketloop servertask start-task ;
