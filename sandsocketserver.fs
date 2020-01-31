@@ -35,7 +35,7 @@ require sandmotorapi.fs
 require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
 
-40000 value stream-timeout
+100 value stream-timeout
 52222 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
@@ -186,7 +186,7 @@ require sandcommands.fs
 : socketloop ( -- )
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
-  userver 10 listen
+  userver 0 listen
   userver . ." < server id " cr
   begin
     userver accept-socket to usockfd
