@@ -201,6 +201,6 @@ require sandcommands.fs
   task servertask \ task for sand server running in
   servertask construct
 
-: startsandserver ( -- ) start the socket sand server ... note this does not work until i figure out user variable spaces
+: startsandserver ( -- ) \ start the socket sand server ... note this does not work until i figure out user variable spaces
   false to sandserverloop
   ['] socketloop servertask start-task ;
