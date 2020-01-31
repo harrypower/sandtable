@@ -143,7 +143,7 @@ require sandcommands.fs
 : parse-command ( -- )
   command$ $@ s" &" search if
     swap drop
-    command$ $@ rot swap -
+    command$ $@ rot -
   then
   thecommand$ $!
   thecommand$ $@ swap drop 0 > if
