@@ -74,8 +74,8 @@ commands-instant set-current
   junk$ $@ ;
 
 : stopsandserver ( -- caddr u ) \ stop the sand server loop
-  true to sandseververloop
-  s" Sandserver loop shutting done now!"  ; 
+  true to sandserverloop
+  s" Sandserver loop shutting done now!"  ;
 
 commands-slow set-current
 \ place slow sandtable commands here
