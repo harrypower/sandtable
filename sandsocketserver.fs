@@ -36,6 +36,8 @@ require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
 task servertask \ task for sand server running in
 servertask construct
+task sandtable
+sandtable construct
 
 10000 value stream-timeout
 52222 value sandtable-port#
@@ -57,6 +59,7 @@ variable GET$
 variable thecommand$
 0 value commandxt
 false value sandserverloop \ flag to turn off sand server loop false is run true is stop
+false value sandtabletask \ flag false when no task running true when sandtable task is active
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
@@ -152,13 +155,27 @@ require sandcommands.fs
   thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
       execute buffer1$ $+! lineending buffer1$ $+!
-    else
-      s" The command not found!"  buffer1$ $+! lineending buffer1$ $+!
+    then
+    thecommand$ $@ commands-slow search-wordlist 0 <> if
+      sandtabletask false = if
+        true to sandtabletask
+        sandtabletask start-task
+        thecommand$ $@ buffer1$ $+! s"  command has started!" buffer1$ $+! lineending buffer1$ $+!
+      else
+        s" Sandtable is currently busy with another task!"  buffer1$ $+! lineending buffer1$ $+!
+      then
+    then
+    thecommand$ $@ commands-instant search-wordlist 0 = if
+      thecommand$ $@ commands-slow search-wordlist 0 = if
+        thecommand$ $@ buffer1$ $+! s"  command not found!" buffer1$ $+! lineending buffer1$ $+!
+      else drop
+      then
+    else drop
     then
   else
     s" No command issued!" buffer1$ $+! lineending buffer1$ $+!
-  then
-;
+  then ;
+
 : process-recieve ( caddr u -- caddr u )
   recieve-buffer$ $!
   recieve-buffer$ $@ addtolog
@@ -197,9 +214,8 @@ require sandcommands.fs
     sandserverloop
   until
   userver close-server
-  s" sand server shutting down now!" type cr
-  exit ;
+  s" sand server shutting down now!" type cr ;
 
-: startsandserver ( -- ) \ start the socket sand server ... note this will work but can not be used at command line with gforth still responding to user terminal 
+: startsandserver ( -- ) \ start the socket sand server ... note this will work but can not be used at command line with gforth still responding to user terminal
   false to sandserverloop
   ['] socketloop servertask start-task ;

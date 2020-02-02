@@ -82,4 +82,10 @@ commands-instant set-current
 commands-slow set-current
 \ place slow sandtable commands here
 
+: configuresandtable ( -- )
+  20000 ms
+  \ just a test for sandtable task for now
+  false to sandtabletask \ to allow other sandtable tasks to perform 
+;
+
 only forth also definitions
