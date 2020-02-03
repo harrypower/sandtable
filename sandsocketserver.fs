@@ -225,5 +225,5 @@ require sandcommands.fs
   ;
 
 \ startsandserver
-socketloop
-bye
+\ socketloop
+\ bye
