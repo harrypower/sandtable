@@ -221,8 +221,9 @@ require sandcommands.fs
 : startsandserver ( -- ) \ start the socket sand server ... note this will work but can not be used at command line with gforth still responding to user terminal
   false to sandserverloop
   ['] socketloop servertask start-task
-  begin 1000 ms again 
+  begin 1000 ms again
   ;
 
-startsandserver
+\ startsandserver
+socketloop
 bye
