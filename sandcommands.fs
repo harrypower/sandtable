@@ -82,8 +82,9 @@ commands-instant set-current
   ;
 
 : lastresult ( -- caddr u )
-  s" The last sandtable command result is: " junk$ $!
-  lastresult$ $@ junk$ $+! junk$ $@ ;
+  s" The last sandtable command result is:> " junk$ $!
+  lastresult$ $@ s" is:>" search true = if 4 - swap 4 + swap then
+  junk$ $+! junk$ $@ lastresult$ $! ;
 
 commands-slow set-current
 \ place slow sandtable commands here
