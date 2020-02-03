@@ -53,11 +53,11 @@ variable buffer1$
 variable buffer2$
 variable recieve-buffer$
 variable command$
+variable thecommand$
 variable User-Agent$
 variable GET$
+variable lastresult$
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
-variable thecommand$
-0 value commandxt
 false value sandserverloop \ flag to turn off sand server loop false is run true is stop
 false value sandtabletask \ flag false when no task running true when sandtable task is active
 
@@ -154,7 +154,8 @@ require sandcommands.fs
   thecommand$ $!
   thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
-      execute buffer1$ $+! lineending buffer1$ $+!
+      execute
+      lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
     then
     thecommand$ $@ commands-slow search-wordlist 0 <> if
       sandtabletask false = if
