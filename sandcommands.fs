@@ -19,14 +19,12 @@
 
 \ Requires:
 \ will be included by socksandserver.fs
-\ forth-packages/multi-tasking/0.4.0/multi-tasking.fs \ from theforth.net multi-tasking 0.4.0 package
 
 \ Revisions:
 \ 01/29/2020 started coding
 
-require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
-
 variable junk$
+variable submessages$
 
 only forth also
 wordlist constant commands-slow
@@ -34,37 +32,37 @@ wordlist constant commands-instant
 
 commands-instant set-current
 \ place instant commands there
-: xmin ( -- caddr u )
+: xmin ( -- )
   s" xmin value is " junk$ $!
   xm-min 0 udto$ junk$ $+!
   junk$ $@ lastresult$ $! ;
 
-: ymin ( -- caddr u )
+: ymin ( -- )
   s" ymin value is " junk$ $!
   ym-min 0 udto$ junk$ $+!
   junk$ $@  lastresult$ $! ;
 
-: xmax ( -- caddr u )
+: xmax ( -- )
   s" xmax value is " junk$ $!
   xm-max 0 udto$ junk$ $+!
   junk$ $@  lastresult$ $! ;
 
-: ymax ( -- caddr u )
+: ymax ( -- )
   s" ymax value is " junk$ $!
   ym-max 0 udto$ junk$ $+!
   junk$ $@  lastresult$ $! ;
 
-: xnow ( -- caddr u )
+: xnow ( -- )
   s" Current x value is " junk$ $!
   xposition 0 udto$ junk$ $+!
   junk$ $@  lastresult$ $! ;
 
-: ynow ( -- caddr u )
+: ynow ( -- )
   s" Current y value is " junk$ $!
   yposition 0 udto$ junk$ $+!
   junk$ $@  lastresult$ $! ;
 
-: status ( -- caddr u )
+: status ( -- )
   configured? false = if  s" Sandtable is configured now!" junk$ $! then
   configured? true = if s" Sandtable is not configured now!" junk$ $! then
   lineending junk$ $+!
@@ -73,7 +71,7 @@ commands-instant set-current
   lineending junk$ $+!
   junk$ $@  lastresult$ $! ;
 
-: stopsandserver ( -- caddr u ) \ stop the sand server loop
+: stopsandserver ( -- ) \ stop the sand server loop
   true to sandserverloop
   s" Sandserver loop shutting done now!" junk$ $!
   lineending junk$ $+!
@@ -81,11 +79,22 @@ commands-instant set-current
   \ closedown
   ;
 
-: lastresult ( -- caddr u )
+: lastresult ( -- )
   s" The last sandtable command result is:> " junk$ $!
   lastresult$ $@ s" is:>" search true = if 4 - swap 4 + swap then
   junk$ $+! junk$ $@ lastresult$ $! ;
 
+: fastcalibration ( -- )
+  \ get x and y from submessage if present 
+  \ place x and y on stack
+  \ quickstart false = if
+  \   s" Fast calibration done!" junk$ $! lineending junk$ $+!
+  \ else
+  \   s" Fast calibration failed!" junk$ $! lineending junk$ $+!
+  \ then
+  \ junk$ $@ lastresult$ $!
+
+;
 commands-slow set-current
 \ place slow sandtable commands here
 
