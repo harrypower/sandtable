@@ -159,7 +159,7 @@ require sandcommands.fs
     thecommand$ $@ commands-slow search-wordlist 0 <> if
       sandtabletask false = if
         true to sandtabletask
-        sandtabletask start-task
+        sandtable start-task
         thecommand$ $@ buffer1$ $+! s"  command has started!" buffer1$ $+! lineending buffer1$ $+!
       else
         s" Sandtable is currently busy with another task!"  buffer1$ $+! lineending buffer1$ $+!
