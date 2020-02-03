@@ -83,8 +83,7 @@ commands-instant set-current
 
 : lastresult ( -- caddr u )
   s" The last sandtable command result is: " junk$ $!
-  lastresult$ $@ junk$ $+!
-  junk$ $@ lastresult$ $! ;
+  lastresult$ $@ ;
 
 commands-slow set-current
 \ place slow sandtable commands here
@@ -95,7 +94,7 @@ commands-slow set-current
   \ configuration commands put here
   \ configure-stuff false = if
   \  s" Sandtable software configured!" junk$ $! lineending junk$ $+!
-  \ else 
+  \ else
   \  s" Sandtable software not configured!" junk$ $! lineending junk$ $+!
   \ then
   \ dohome true = if
