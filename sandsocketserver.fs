@@ -162,6 +162,7 @@ require sandcommands.fs
         sandtable start-task
         thecommand$ $@ buffer1$ $+! s"  command has started!" buffer1$ $+! lineending buffer1$ $+!
       else
+        drop \ remove command xt
         s" Sandtable is currently busy with another task!"  buffer1$ $+! lineending buffer1$ $+!
       then
     then
