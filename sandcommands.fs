@@ -83,7 +83,7 @@ commands-instant set-current
 
 : lastresult ( -- caddr u )
   s" The last sandtable command result is: " junk$ $!
-  lastresult$ $@ ;
+  lastresult$ $@ junk$ $+! junk$ $@ ;
 
 commands-slow set-current
 \ place slow sandtable commands here
