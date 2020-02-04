@@ -40,7 +40,7 @@ servertask construct
 task sandtable
 sandtable construct
 
-include objects.fs
+\ include objects.fs
 
 10000 value stream-timeout
 52222 value sandtable-port#
@@ -66,9 +66,9 @@ false value sandtabletask \ flag false when no task running true when sandtable 
 strings heap-new constant submessages$
 
 : parse-command-submessages ( -- ) \ take command$ and parse command and submessages out of it
-  submessages$ destruct
-  submessages$ construct
-  s" &" command$ $@ submessages$ split$>$s
+  submessages$ [bind] strings destruct
+  submessages$ [bind] strings construct
+  s" &" command$ $@ submessages$ [bind] strings split$>$s
 
 ;
 
