@@ -79,8 +79,8 @@ commands-instant set-current
   \ closedown
   ;
 
-: lastresult ( -- )
-  \ this does nothing and does not change the lastresult$ ;
+: lastresult ( -- )  \ this does nothing and does not change the lastresult$
+  ;
 
 : fastcalibration ( -- )
   \ get x and y from submessage if present
