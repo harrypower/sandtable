@@ -33,6 +33,11 @@
 require Gforth-Objects/stringobj.fs
 require unix/socket.fs
 require sandmotorapi.fs
+
+only forth
+wordlist constant multitasking
+multitasking set-current
+get-order multitasking swap 1+ set-order
 require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
 task servertask \ task for sand server running in
@@ -40,7 +45,9 @@ servertask construct
 task sandtable
 sandtable construct
 
-\ include objects.fs
+only forth
+get-order multitasking swap 1+ rot swap set-order \ now order is Forth multitasking Root ... this allows multitasking to work and construct to work from objects.fs
+also definitions
 
 10000 value stream-timeout
 52222 value sandtable-port#
