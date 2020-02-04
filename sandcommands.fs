@@ -24,7 +24,6 @@
 \ 01/29/2020 started coding
 
 variable junk$
-variable submessages$
 
 only forth also
 wordlist constant commands-slow
@@ -95,7 +94,7 @@ commands-instant set-current
   \ junk$ $@ lastresult$ $!
   s" not done!" junk$ $! lineending junk$ $+!
   junk$ $@ lastresult$ $! ;
-  
+
 commands-slow set-current
 \ place slow sandtable commands here
 
