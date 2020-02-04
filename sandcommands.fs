@@ -80,9 +80,7 @@ commands-instant set-current
   ;
 
 : lastresult ( -- )
-  s" The last sandtable command result is:> " junk$ $!
-  lastresult$ $@ s" is:>" search true = if 4 - swap 4 + swap else lastresult$ $@ then
-  junk$ $+! junk$ $@ lastresult$ $! ;
+  \ this does nothing and does not change the lastresult$ ;
 
 : fastcalibration ( -- )
   \ get x and y from submessage if present
