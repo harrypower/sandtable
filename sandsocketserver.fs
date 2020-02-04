@@ -49,6 +49,8 @@ only forth
 get-order multitasking swap 1+ rot swap set-order \ now order is Forth multitasking Root ... this allows multitasking to work and construct to work from objects.fs
 also definitions
 
+." this is the order here>> " order cr 
+
 10000 value stream-timeout
 52222 value sandtable-port#
 1024 value mb-maxsize
