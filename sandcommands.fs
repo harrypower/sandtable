@@ -18,7 +18,7 @@
 \ commands used by socket server to control sandtable
 
 \ Requires:
-\ will be included by socksandserver.fs
+\ will be included by socksandserver.fs and not to be used on its own
 
 \ Revisions:
 \ 01/29/2020 started coding
@@ -26,6 +26,18 @@
 get-order get-current
 
 variable junk$
+
+: get-pairs ( -- ) \ extract variable pairs from submessages$ strings
+  0 { nqty }
+  submessages$ [bind] strings $qty to nqty
+  get-variable-pairs$ [bind] strings destruct
+  get-variable-pairs$ [bind] strings construct
+  nqty 1 > if \ there are some variable pairs to parse
+    nqty 1 do
+      i submessages$ [bind] strings []@$ drop
+      s" =" get-variable-pairs$ [bind] strings split$>$s
+    loop
+  then ;
 
 wordlist constant commands-slow
 wordlist constant commands-instant
@@ -83,7 +95,28 @@ commands-instant set-current
   ;
 
 : fastcalibration ( -- )
+  0 0 { nx ny }
   \ get x and y from submessage if present
+  0 submessages$ [bind] strings []@$ drop
+  s" fastcalibration" compare false = if
+    get-pairs
+    get-variable-pairs$ [bind] strings $qty 2 /mod drop 0 = if \ at least there are pairs
+      s" The following data found!" junk$ $! lineending junk$ $+!
+      get-variable-pairs$ [bind] strings $qty 0 do  \ find x variable
+        i get-variable-pairs$ [bind] strings []@$ drop s" x" compare false = if s" x is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! leave then
+      2 +loop
+      get-variable-pairs$ [bind] strings $qty 0 do  \ find x variable
+        i get-variable-pairs$ [bind] strings []@$ drop s" y" compare false = if s" y is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! leave then
+      2 +loop
+    else  \ not all pairs so data bad
+      s" some varible data bad or missing ... following is what was recievd!" junk$ $! lineending junk$ $+!
+      submessages$ [bind] strings $qty 1 do
+        i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
+      loop
+    then
+  else
+    s" needed fast calibration data missing!" junk$ $! lineending junk$ $+!
+  then
   \ place x and y on stack
   \ quickstart false = if
   \   s" Fast calibration done!" junk$ $! lineending junk$ $+!
@@ -91,7 +124,6 @@ commands-instant set-current
   \   s" Fast calibration failed!" junk$ $! lineending junk$ $+!
   \ then
   \ junk$ $@ lastresult$ $!
-  s" not done!" junk$ $! lineending junk$ $+!
   junk$ $@ lastresult$ $! ;
 
 commands-slow set-current

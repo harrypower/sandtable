@@ -71,6 +71,7 @@ variable lastresult$
 false value sandserverloop \ flag to turn off sand server loop false is run true is stop
 false value sandtabletask \ flag false when no task running true when sandtable task is active
 strings heap-new constant submessages$
+strings heap-new constant get-variable-pairs$
 
 : parse-command&submessages ( -- ) \ take command$ and parse command and submessages out of it
   submessages$ [bind] strings destruct
@@ -165,8 +166,7 @@ require sandcommands.fs
 
 : parse-command ( -- )
   parse-command&submessages
-  submessages$ [bind] strings reset
-  submessages$ [bind] strings @$x \ the first string should be the command
+  0 submessages$ [bind] strings []@$ drop \ the first string should be the command
   thecommand$ $!
   thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
