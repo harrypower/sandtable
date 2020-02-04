@@ -30,6 +30,7 @@
 \ *** note this means bind is redefined in objects.fs from its first use in unix/socket.fs so be aware of this
 \ *** bind can be used for an object and is not needed as a socket item so it is an ok tradeoff
 
+require Gforth-Objects/stringobj.fs
 require unix/socket.fs
 require sandmotorapi.fs
 require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
@@ -39,7 +40,7 @@ servertask construct
 task sandtable
 sandtable construct
 
-require Gforth-Objects/stringobj.fs
+include objects.fs
 
 10000 value stream-timeout
 52222 value sandtable-port#
