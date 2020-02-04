@@ -85,7 +85,7 @@ commands-instant set-current
   junk$ $+! junk$ $@ lastresult$ $! ;
 
 : fastcalibration ( -- )
-  \ get x and y from submessage if present 
+  \ get x and y from submessage if present
   \ place x and y on stack
   \ quickstart false = if
   \   s" Fast calibration done!" junk$ $! lineending junk$ $+!
@@ -93,8 +93,9 @@ commands-instant set-current
   \   s" Fast calibration failed!" junk$ $! lineending junk$ $+!
   \ then
   \ junk$ $@ lastresult$ $!
-
-;
+  s" not done!" junk$ $! lineending junk$ $+!
+  junk$ $@ lastresult$ $! ;
+  
 commands-slow set-current
 \ place slow sandtable commands here
 

@@ -33,6 +33,7 @@
 require unix/socket.fs
 require sandmotorapi.fs
 require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
+require Gforth-Objects/stringobj.fs
 
 task servertask \ task for sand server running in
 servertask construct
@@ -60,6 +61,14 @@ variable lastresult$
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
 false value sandserverloop \ flag to turn off sand server loop false is run true is stop
 false value sandtabletask \ flag false when no task running true when sandtable task is active
+strings heap-new constant submessages$
+
+: parse-command-submessages ( -- ) \ take command$ and parse command and submessages out of it
+  submessages$ destruct
+  submessages$ construct
+  s" &" command$ $@ submessages$ split$>$s
+
+;
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
