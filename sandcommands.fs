@@ -23,9 +23,10 @@
 \ Revisions:
 \ 01/29/2020 started coding
 
+get-order get-current
+
 variable junk$
 
-only forth also
 wordlist constant commands-slow
 wordlist constant commands-instant
 
@@ -116,4 +117,4 @@ commands-slow set-current
   false to sandtabletask \ to allow other sandtable tasks to perform
 ;
 
-only forth also definitions
+set-current set-order 
