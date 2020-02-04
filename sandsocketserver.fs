@@ -30,9 +30,9 @@
 \ *** note this means bind is redefined in objects.fs from its first use in unix/socket.fs so be aware of this
 \ *** bind can be used for an object and is not needed as a socket item so it is an ok tradeoff
 
-require Gforth-Objects/stringobj.fs
 require unix/socket.fs
 require sandmotorapi.fs
+require Gforth-Objects/stringobj.fs
 
 only forth also definitions
 wordlist constant multitasking
@@ -72,11 +72,10 @@ false value sandserverloop \ flag to turn off sand server loop false is run true
 false value sandtabletask \ flag false when no task running true when sandtable task is active
 strings heap-new constant submessages$
 
-: parse-command-submessages ( -- ) \ take command$ and parse command and submessages out of it
+: parse-command&submessages ( -- ) \ take command$ and parse command and submessages out of it
   submessages$ [bind] strings destruct
   submessages$ [bind] strings construct
   s" &" command$ $@ submessages$ [bind] strings split$>$s
-
 ;
 
 : udto$ ( ud -- caddr u )  \ convert double to a string
@@ -165,10 +164,9 @@ require sandcommands.fs
   s\" </body></html>" ;
 
 : parse-command ( -- )
-  command$ $@ s" &" search if
-    swap drop
-    command$ $@ rot -
-  then
+  parse-command&submessages
+  submessages$ [bind] strings reset
+  submessages$ [bind] strings @$x \ the first string should be the command
   thecommand$ $!
   thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
