@@ -81,7 +81,7 @@ commands-instant set-current
 
 : lastresult ( -- )
   s" The last sandtable command result is:> " junk$ $!
-  lastresult$ $@ s" is:>" search true = if 4 - swap 4 + swap then
+  lastresult$ $@ s" is:>" search true = if 4 - swap 4 + swap else lastresult$ $@ then
   junk$ $+! junk$ $@ lastresult$ $! ;
 
 : fastcalibration ( -- )
@@ -117,4 +117,4 @@ commands-slow set-current
   false to sandtabletask \ to allow other sandtable tasks to perform
 ;
 
-set-current set-order 
+set-current set-order
