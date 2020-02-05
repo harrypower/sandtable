@@ -95,7 +95,7 @@ commands-instant set-current
   ;
 
 : fastcalibration ( -- )
-  0 0 { nx ny }
+  \ 0 0 { nx ny }
   \ get x and y from submessage if present
   0 submessages$ [bind] strings []@$ drop
   s" fastcalibration" compare false = if
