@@ -97,8 +97,8 @@ commands-instant set-current
 : fastcalibration ( -- )
   \ 0 0 { nx ny }
   \ get x and y from submessage if present
-  0 submessages$ [bind] strings []@$ drop
-  s" fastcalibration" compare false = if
+\  0 submessages$ [bind] strings []@$ drop
+\  s" fastcalibration" compare false = if
     get-pairs
     get-variable-pairs$ [bind] strings $qty 2 /mod drop 0 = if \ at least there are pairs
       s" The following data found!" junk$ $! lineending junk$ $+!
@@ -116,9 +116,9 @@ commands-instant set-current
         i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
       loop
     then
-  else
-    s" needed fast calibration data missing!" junk$ $! lineending junk$ $+!
-  then
+\  else
+\    s" needed fast calibration data missing!" junk$ $! lineending junk$ $+!
+\  then
   \ place x and y on stack
   \ quickstart false = if
   \   s" Fast calibration done!" junk$ $! lineending junk$ $+!
