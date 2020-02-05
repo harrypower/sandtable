@@ -105,11 +105,11 @@ commands-instant set-current
       get-variable-pairs$ [bind] strings $qty 0 do  \ find x variable
         i get-variable-pairs$ [bind] strings []@$ drop s" x" compare false =
         if s" x is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
-      2 +loop
+      loop
       get-variable-pairs$ [bind] strings $qty 0 do  \ find x variable
         i get-variable-pairs$ [bind] strings []@$ drop s" y" compare false =
         if s" y is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
-      2 +loop
+      loop
     else  \ not all pairs so data bad
       s" some varible data bad or missing ... following is what was recievd!" junk$ $! lineending junk$ $+!
       submessages$ [bind] strings $qty 1 do
