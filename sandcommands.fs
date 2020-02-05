@@ -102,7 +102,7 @@ commands-instant set-current
     get-pairs
     get-variable-pairs$ [bind] strings $qty 2 /mod drop 0 = if \ at least there are pairs
       s" The following data found!" junk$ $! lineending junk$ $+!
-      get-variable-pairs$ [bind] strings $qty 0 do  \ find x variable
+      get-variable-pairs$ [bind] strings $qty 0 ?do \ find x variable
         i get-variable-pairs$ [bind] strings []@$ drop s" x" compare false =
         if s" x is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
       loop
