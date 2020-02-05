@@ -97,18 +97,18 @@ commands-instant set-current
 : fastcalibration ( -- )
   \ 0 0 { nx ny }
   \ get x and y from submessage if present
-\  0 submessages$ [bind] strings []@$ drop
-\  s" fastcalibration" compare false = if
+  0 submessages$ [bind] strings []@$ drop
+  s" fastcalibration" compare false = if
     get-pairs
     get-variable-pairs$ [bind] strings $qty 2 /mod drop 0 = if \ at least there are pairs
       s" The following data found!" junk$ $! lineending junk$ $+!
       get-variable-pairs$ [bind] strings $qty 0 do  \ find x variable
         i get-variable-pairs$ [bind] strings []@$ drop s" x" compare false =
-        if s" x is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! leave then
+        if s" x is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
       2 +loop
       get-variable-pairs$ [bind] strings $qty 0 do  \ find x variable
         i get-variable-pairs$ [bind] strings []@$ drop s" y" compare false =
-        if s" y is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! leave then
+        if s" y is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
       2 +loop
     else  \ not all pairs so data bad
       s" some varible data bad or missing ... following is what was recievd!" junk$ $! lineending junk$ $+!
@@ -116,9 +116,9 @@ commands-instant set-current
         i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
       loop
     then
-\  else
-\    s" needed fast calibration data missing!" junk$ $! lineending junk$ $+!
-\  then
+  else
+    s" needed fast calibration data missing!" junk$ $! lineending junk$ $+!
+  then
   \ place x and y on stack
   \ quickstart false = if
   \   s" Fast calibration done!" junk$ $! lineending junk$ $+!
