@@ -112,8 +112,8 @@ commands-instant set-current
       2 +loop
     else  \ not all pairs so data bad
       s" some varible data bad or missing ... following is what was recievd!" junk$ $! lineending junk$ $+!
-      submessages$ [bind] strings $qty 1 ~~ do
-        i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
+      get-variable-pairs$ [bind] strings $qty 0 ?do
+        i get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
       loop
     then
   else
