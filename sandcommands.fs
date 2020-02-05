@@ -97,14 +97,14 @@ commands-instant set-current
 : fastcalibration ( -- )
   \ 0 0 { nx ny }
   \ get x and y from submessage if present
-  0 submessages$ [bind] strings []@$ drop
+  0 submessages$ ( [bind] strings ) []@$ drop
   s" fastcalibration" compare false = if
     get-pairs
-    get-variable-pairs$ [bind] strings $qty 2 /mod drop 0 = if \ at least there are pairs
+    get-variable-pairs$ ( [bind] strings ) $qty 2 /mod drop 0 = if \ at least there are pairs
       s" The following data found!" junk$ $! lineending junk$ $+!
-      get-variable-pairs$ [bind] strings $qty 0 ?do \ find x variable
-        i get-variable-pairs$ [bind] strings []@$ drop s" x" compare false =
-        if s" x is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
+      get-variable-pairs$ ( [bind] strings )  $qty 0 ?do \ find x variable
+        i get-variable-pairs$ ( [bind] strings ) []@$ drop s" x" compare false =
+        if s" x is " junk$ $+! i 1+ get-variable-pairs$ ( [bind] strings ) []@$ drop junk$ $+! lineending junk$ $+! then
       loop
 \      get-variable-pairs$ [bind] strings $qty 0 do  \ find x variable
 \        i get-variable-pairs$ [bind] strings []@$ drop s" y" compare false =
