@@ -76,7 +76,7 @@ strings heap-new constant get-variable-pairs$
 : parse-command&submessages ( -- ) \ take command$ and parse command and submessages out of it
   submessages$ [bind] strings destruct
   submessages$ [bind] strings construct
-  command$ $@ s" &" submessages$ [bind] strings split$>$s
+  s" &" command$ $@ submessages$ [bind] strings split$>$s
 ;
 
 : udto$ ( ud -- caddr u )  \ convert double to a string

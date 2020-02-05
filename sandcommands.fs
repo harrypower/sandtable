@@ -34,8 +34,8 @@ variable junk$
   get-variable-pairs$ [bind] strings construct
   nqty 1 > if \ there are some variable pairs to parse
     nqty 1 do
-      i submessages$ [bind] strings []@$ drop
-      s" =" get-variable-pairs$ [bind] strings split$>$s
+      s" =" i submessages$ [bind] strings []@$ drop
+      get-variable-pairs$ [bind] strings split$>$s
     loop
   then ;
 
