@@ -98,23 +98,23 @@ commands-instant set-current
   \ 0 0 { nx ny }
   \ get x and y from submessage if present
   0 submessages$ [bind] strings []@$ drop
-  s" fastcalibration" compare false = if
+  s" fastcalibration" compare false = ~~ if
     get-pairs
-    get-variable-pairs$ [bind] strings $qty dup 0 <> swap 2 /mod drop 0 = and if \ at least there are pairs
+    get-variable-pairs$ [bind] strings $qty dup 0 <> swap 2 /mod drop 0 = and ~~ if \ at least there are pairs
       s" The following data found!" junk$ $! lineending junk$ $+!
-      get-variable-pairs$ [bind] strings $qty 0 do \ find x variable
-        i get-variable-pairs$ [bind] strings []@$ drop s" x" compare false =
+      get-variable-pairs$ [bind] strings $qty 0 ~~ do \ find x variable
+        i get-variable-pairs$ [bind] strings []@$ drop s" x" compare false = ~~
         if s" x is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
       2 +loop
-      get-variable-pairs$ [bind] strings $qty 0 do  \ find x variable
-        i get-variable-pairs$ [bind] strings []@$ drop s" y" compare false =
+      get-variable-pairs$ [bind] strings $qty 0 ~~ do  \ find x variable
+        i get-variable-pairs$ [bind] strings []@$ drop s" y" compare false = ~~
         if s" y is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
-      loop
+      2 +loop
     else  \ not all pairs so data bad
       s" some varible data bad or missing ... following is what was recievd!" junk$ $! lineending junk$ $+!
-      submessages$ [bind] strings $qty 1 do
+      submessages$ [bind] strings $qty 1 ~~ do
         i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
-      2 +loop
+      loop
     then
   else
     s" needed fast calibration data missing!" junk$ $! lineending junk$ $+!
