@@ -144,7 +144,7 @@ commands-instant set-current
     drop
     s" x variable missing or bad!" junk$ $! lineending junk$ $+!
   then
-  nflag false = if s" Data recieved is out of bounds!" junk$ $! lineending junk$ $+!
+  nflag false = if s" Data recieved is out of bounds!" junk$ $! lineending junk$ $+! then
   \ place x and y on stack
   \ quickstart false = if
   \   s" Fast calibration done!" junk$ $! lineending junk$ $+!
