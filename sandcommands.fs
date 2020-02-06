@@ -108,43 +108,25 @@ commands-instant set-current
 : fastcalibration ( -- )
   0 0 false { nx ny nflag }
   \ get x and y from submessage if present
-  0 submessages$ [bind] strings []@$ drop
-  s" fastcalibration" compare false =  if
-    (get-pairs$)
-    get-variable-pairs$ [bind] strings $qty dup 0 <> swap 2 /mod drop 0 = and  if \ at least there are pairs
-      s" The following data found!" junk$ $! lineending junk$ $+!
-      get-variable-pairs$ [bind] strings $qty 0  do \ find x variable
-        i get-variable-pairs$ [bind] strings []@$ drop s" x" compare false =
-        if s" x is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
-      2 +loop
-      get-variable-pairs$ [bind] strings $qty 0  do  \ find x variable
-        i get-variable-pairs$ [bind] strings []@$ drop s" y" compare false =
-        if s" y is " junk$ $+! i 1+ get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+! then
-      2 +loop
-    else  \ not all pairs so data bad
-      s" some varible data bad or missing ... following is what was recievd!" junk$ $! lineending junk$ $+!
-      get-variable-pairs$ [bind] strings $qty 0 ?do
-        i get-variable-pairs$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
-      loop
-    then
-  else
-    s" needed fast calibration data missing!" junk$ $! lineending junk$ $+!
-  then
-  \ junk$ $@ lastresult$ $!
+  s" " junk$ $!
+  (get-pairs$)
   s" x" (variable-pair-value) = if
     to nx
     s" y" (variable-pair-value) = if
       to ny
-      nx xm-min >= if nx xm-max <= if true to nflag then then
+      nx xm-min >= nx xm-max <= ny ym-min >= ny ym-max <= and and and to nflag
     else
       drop
-      s" y variable missing or bad!" junk$ $! lineending junk$ $+!
+      s" y variable missing or bad!" junk$ $+! lineending junk$ $+!
     then
   else
     drop
-    s" x variable missing or bad!" junk$ $! lineending junk$ $+!
+    s" x variable missing or bad!" junk$ $+! lineending junk$ $+!
   then
-  nflag false = if s" Data recieved is out of bounds!" junk$ $! lineending junk$ $+! then
+  s" Following was recievd:" junk$ $! lineending junk$ $+!
+  submessages$ [bind] strings $qty 0 ?do
+    i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
+  loop
   \ place x and y on stack
   \ quickstart false = if
   \   s" Fast calibration done!" junk$ $! lineending junk$ $+!
