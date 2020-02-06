@@ -110,7 +110,7 @@ commands-instant set-current
   \ get x and y from submessage if present
   s" " junk$ $!
   (get-pairs$)
-  s" x" (variable-pair-value) = if
+  s" x" (variable-pair-value) = if ~~
     to nx
     s" y" (variable-pair-value) = if
       to ny
@@ -123,7 +123,7 @@ commands-instant set-current
     drop
     s" x variable missing or bad!" junk$ $+! lineending junk$ $+!
   then ~~
-  s" Following was recievd:" junk$ $! lineending junk$ $+!
+  s" Following was recievd:" junk$ $+! lineending junk$ $+!
   submessages$ [bind] strings $qty 0 ?do
     i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
   loop
