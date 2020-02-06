@@ -115,14 +115,14 @@ commands-instant set-current
     s" y" (variable-pair-value) = if
       to ny
       nx xm-min >= nx xm-max <= ny ym-min >= ny ym-max <= and and and to nflag
-    else
+    else ~~
       drop
       s" y variable missing or bad!" junk$ $+! lineending junk$ $+!
     then
-  else
+  else ~~
     drop
     s" x variable missing or bad!" junk$ $+! lineending junk$ $+!
-  then
+  then ~~
   s" Following was recievd:" junk$ $! lineending junk$ $+!
   submessages$ [bind] strings $qty 0 ?do
     i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
