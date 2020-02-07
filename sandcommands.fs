@@ -193,6 +193,6 @@ else
   s" Gotoxy was not performed!" junk$ $+! lineending junk$ $+!
 then
 junk$ $@ lastresult$ $! ;
-;
+
 
 set-current set-order
