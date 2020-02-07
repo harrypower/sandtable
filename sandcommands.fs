@@ -117,11 +117,11 @@ commands-instant set-current
       nx xm-min >= nx xm-max <= ny ym-min >= ny ym-max <= and and and to nflag
     else
       drop
-      s" y variable missing or bad!" junk$ $+! lineending junk$ $+!
+      s" y variable missing or not valid!" junk$ $+! lineending junk$ $+!
     then
   else
     drop
-    s" x variable missing or bad!" junk$ $+! lineending junk$ $+!
+    s" x variable missing or not valid!" junk$ $+! lineending junk$ $+!
   then
   s" Following was recievd:" junk$ $+! lineending junk$ $+!
   submessages$ [bind] strings $qty 0 ?do

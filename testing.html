@@ -22,8 +22,6 @@
       <option value="xnow">xnow</option>
       <option value="ynow">ynow</option>
       <option value="lastresult">lastmessage</option>
-      <option value="stopmotors">stopmotors</option>
-      <option value="stopsandtable">stopsandtable</option>
       <option value="stopsandserver">stopsandserver</option>
     </select>
   </div>
@@ -34,7 +32,7 @@
 
 
 <form action="http://sandtable/cgi-bin/directtesting.cgi" method="get" class="form-a">
-  Move to absolute X,Y address (0 to 275500)<br>
+  Move to absolute X,Y location (0 to 274000)<br>
   <div class="form-a">
     <input type="hidden" name="command" value="gotoxy" readonly>
   </div>
@@ -50,8 +48,54 @@
   </div>
 </form>
 
-<form action="http://sandtable:52222" method="get" class="form-a">
-  <input type="hidden" name="command" value="stopsandtable" readonly>
+<form action="http://sandtable/cgi-bin/directtesting.cgi" method="get" class="form-a">
+  Move to absolute X location (0 to 274000)<br>
+  <div class="form-a">
+    <input type="hidden" name="command" value="gotox" readonly>
+  </div>
+  <div class="form-a">
+    <lable for="name">absolute X: </lable>
+    <input type="number" name="x" min="0" max="274000" required>
+  </div>
+  <div class="form-a">
+    <input type="submit" value="Submit gotox">
+  </div>
+</form>
+
+<form action="http://sandtable/cgi-bin/directtesting.cgi" method="get" class="form-a">
+  Move to absolute Y location (0 to 274000)<br>
+  <div class="form-a">
+    <input type="hidden" name="command" value="gotoy" readonly>
+  </div>
+  <div class="form-a">
+    <lable for="name">absolute X: </lable>
+    <input type="number" name="y" min="0" max="274000" required>
+  </div>
+  <div class="form-a">
+    <input type="submit" value="Submit gotoy">
+  </div>
+</form>
+
+<form action="http://sandtable/cgi-bin/directtesting.cgi" method="get" class="form-a">
+  Perform fast calibration of sandtable with the given x and y values! (0 to 274000)<br>
+  Note the x and y values should be the real current location of the x and y motors!<br>
+  <div class="form-a">
+    <input type="hidden" name="command" value="fastcalibration" readonly>
+  </div>
+  <div class="form-a">
+    <lable for="name">Current X: </lable>
+    <input type="number" name="x" min="0" max="274000" required>
+  </div>
+  <div class="form-a">Current Y: </lable>
+    <input type="number" name="y" min="0" max="274000" required=><br>
+  </div>
+  <div class="form-a">
+    <input type="submit" value="Do Fastcalibration">
+  </div>
+</form>
+
+<form action="http://sandtable/cgi-bin/directtesting.cgi" method="get" class="form-a">
+  <input type="hidden" name="command" value="stopsandserver" readonly>
   <input class="form-b" type="submit" value="STOP table now">
 </form>
 
