@@ -169,7 +169,7 @@ s" x" (variable-pair-value) if
   to nx
   s" y" (variable-pair-value) if
     to ny
-    true to nflag
+    nx xm-min >= nx xm-max <= ny ym-min >= ny ym-max <= and and and to nflag
   else
     drop
     s" y variable missing or not valid!" junk$ $+! lineending junk$ $+!
@@ -186,7 +186,7 @@ nflag if
   nx ny \ place x and y on stack
   movetoxy case
     200 of s" move done!" junk$ $+! lineending junk$ $+! endof
-    201 of s" x and or y not on table but move executed to closest edge!" junk$ $+! lineending junk$ $+! endof
+    201 of s" x and or y not on table so movement not performed!" junk$ $+! lineending junk$ $+! endof
     202 of s" Sandtable not configured or calibrated yet!" junk$ $+! lineending junk$ $+! endof
   endcase
 else
