@@ -169,7 +169,7 @@ s" x" (variable-pair-value) if
   to nx
   s" y" (variable-pair-value) if
     to ny
-\    true to nflag
+    true to nflag
   else
     drop
     s" y variable missing or not valid!" junk$ $+! lineending junk$ $+!
