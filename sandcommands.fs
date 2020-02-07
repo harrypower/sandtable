@@ -185,18 +185,13 @@ loop
 nflag if
   nx ny \ place x and y on stack
   movetoxy case
-    200 of s" move done!"
-    \ nflag is 200 if the move is executed
-    \ nflag is 201 if ux uy are not on sandtable
-    \ nflag is 202 if sandtable is not configured or homed yet
-    201 of s" x and or y not on table but move executed to closest edge!"
-    202 of s" Sandtable not configured or calibrated yet!"
+    200 of s" move done!" junk$ $+! lineending junk$ $+! endof
+    201 of s" x and or y not on table but move executed to closest edge!" junk$ $+! lineending junk$ $+! endof
+    202 of s" Sandtable not configured or calibrated yet!" junk$ $+! lineending junk$ $+! endof
   endcase
-  junk$ $+! lineending junk$ $+!
 else
-  s" Gotoxy was not performed!" 
+  s" Gotoxy was not performed!" junk$ $+! lineending junk$ $+!
 then
-junk$ $+! lineending junk$ $+!
 junk$ $@ lastresult$ $! ;
 ;
 
