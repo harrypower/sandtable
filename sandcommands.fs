@@ -192,7 +192,9 @@ nflag if
 else
   s" Gotoxy was not performed!" junk$ $+! lineending junk$ $+!
 then
-junk$ $@ lastresult$ $! ;
+junk$ $@ lastresult$ $!
+false to sandtabletask \ to allow other sandtable tasks to perform
+;
 
 
 set-current set-order
