@@ -105,7 +105,7 @@ commands-instant set-current
 : lastresult ( -- )  \ this does nothing and does not change the lastresult$
   ;
 
-: fastcalibration ( -- )
+: fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
   0 0 false { nx ny nflag }
   \ get x and y from submessage if present
   s" " junk$ $!
@@ -127,33 +127,77 @@ commands-instant set-current
   submessages$ [bind] strings $qty 0 ?do
     i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
   loop
-  \ place x and y on stack
-  \ quickstart false = if
-  \   s" Fast calibration done!" junk$ $! lineending junk$ $+!
-  \ else
-  \   s" Fast calibration failed!" junk$ $! lineending junk$ $+!
-  \ then
+  nflag if
+    nx ny \ place x and y on stack
+    quickstart false = if
+      s" Fast calibration done!"
+    else
+      s" Fast calibration failed!"
+    then
+    junk$ $+! lineending junk$ $+!
+  else
+    s" Fast calibration was not performed!" junk$ $+! lineending junk$ $+!
+  then
   junk$ $@ lastresult$ $! ;
 
 commands-slow set-current
 \ place slow sandtable commands here
 
-: configuresandtable ( -- )
-  20000 ms
-  \ just a test for sandtable task for now
-  \ configuration commands put here
-  \ configure-stuff false = if
-  \  s" Sandtable software configured!" junk$ $! lineending junk$ $+!
-  \ else
-  \  s" Sandtable software not configured!" junk$ $! lineending junk$ $+!
-  \ then
-  \ dohome true = if
-  \  s" Sandtable motors calibrated!" junk$ $! lineending junk$ $+!
-  \ else
-  \  s" Sandtable motors not calibrated!" junk$ $! lineending junk$ $+!
-  \ junk$ $@  lastresult$ $!
-  s" Sandtable configuration was completed properly!" lastresult$ $!
+: configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sadntableapi.fs
+  configure-stuff false = if
+    s" Sandtable software configured!"
+  else
+    s" Sandtable software not configured!"
+  then
+  junk$ $! lineending junk$ $+!
+  dohome true = if
+    s" Sandtable motors calibrated!"
+  else
+    s" Sandtable motors not calibrated!"
+  then
+  junk$ $+! lineending junk$ $+!
+  junk$ $@  lastresult$ $!
   false to sandtabletask \ to allow other sandtable tasks to perform
+;
+
+: gotoxy ( -- ) \ perform the movetoxy word from
+0 0 false { nx ny nflag }
+\ get x and y from submessage if present
+s" " junk$ $!
+(get-pairs$)
+s" x" (variable-pair-value) if
+  to nx
+  s" y" (variable-pair-value) if
+    to ny
+\    true to nflag
+  else
+    drop
+    s" y variable missing or not valid!" junk$ $+! lineending junk$ $+!
+  then
+else
+  drop
+  s" x variable missing or not valid!" junk$ $+! lineending junk$ $+!
+then
+s" Following was recievd:" junk$ $+! lineending junk$ $+!
+submessages$ [bind] strings $qty 0 ?do
+  i submessages$ [bind] strings []@$ drop junk$ $+! lineending junk$ $+!
+loop
+nflag if
+  nx ny \ place x and y on stack
+  movetoxy case
+    200 of s" move done!"
+    \ nflag is 200 if the move is executed
+    \ nflag is 201 if ux uy are not on sandtable
+    \ nflag is 202 if sandtable is not configured or homed yet
+    201 of s" x and or y not on table but move executed to closest edge!"
+    202 of s" Sandtable not configured or calibrated yet!"
+  endcase
+  junk$ $+! lineending junk$ $+!
+else
+  s" Gotoxy was not performed!" 
+then
+junk$ $+! lineending junk$ $+!
+junk$ $@ lastresult$ $! ;
 ;
 
 set-current set-order
