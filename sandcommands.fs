@@ -144,7 +144,7 @@ commands-slow set-current
 \ place slow sandtable commands here
 
 : testslow ( -- )
-  58 . cr 
+  58 . cr
   s" well see what this does" type
   s" then this also " type
   false to sandtabletask
