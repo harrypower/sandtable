@@ -172,12 +172,12 @@ commands-slow set-current
     s" Sandtable software not configured!"
   then
   junk$ $! lineending junk$ $+!
-\  dohome true = if
-\    s" Sandtable motors calibrated!"
-\  else
-\    s" Sandtable motors not calibrated!"
-\  then
-\  junk$ $+! lineending junk$ $+!
+  dohome true = if
+    s" Sandtable motors calibrated!"
+  else
+    s" Sandtable motors not calibrated!"
+  then
+  junk$ $+! lineending junk$ $+!
   junk$ $@  lastresult$ $!
   false to sandtabletask \ to allow other sandtable tasks to perform
 ;
