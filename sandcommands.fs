@@ -145,6 +145,7 @@ commands-slow set-current
 
 : testslow ( -- )
   58 . cr
+  5000 ms 
   s" well see what this does" type
   s" then this also " type
   false to sandtabletask
