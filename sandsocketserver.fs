@@ -23,6 +23,7 @@
 \ unix/socket.fs
 \ sandmotorapi.fs
 \ objects.fs
+\ stringobj.fs from Gforth-Objects git 
 
 \ Revisions:
 \ 1/26/2019 started coding

@@ -165,7 +165,7 @@ commands-slow set-current
   ['] testslow stdouttestfile outfile-execute
   false to sandtabletask
 ;
-: configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sadntableapi.fs
+: configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
   configure-stuff false = if
     s" Sandtable software configured!"
   else
