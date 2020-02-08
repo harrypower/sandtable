@@ -47,7 +47,7 @@ variable server_addres$
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> buffer$ $! buffer$ $@ ;
 
-s" http://mysandtable" server_addres$ $!
+s" 192.168.0.59" server_addres$ $!
 s" :52222" port#$ $!
 
 : getmessage ( -- ucaddr u )
