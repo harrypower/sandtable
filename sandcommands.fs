@@ -27,7 +27,7 @@ get-order get-current
 
 variable junk$
 
-: testslow ( -- ) testing stdout
+: testslow ( -- ) \ testing stdout
   58 . cr
   5000 ms
   s" this is from  testslow" type cr
@@ -161,7 +161,7 @@ commands-slow set-current
 \ place slow sandtable commands here
 
 : teststdout ( -- )
-  5000 ms \ wait 5 seconds then see what happens 
+  5000 ms \ wait 5 seconds then see what happens
   ['] testslow stdout outfile-execute
   false to sandtabletask
 ;
