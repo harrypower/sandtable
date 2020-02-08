@@ -143,6 +143,12 @@ commands-instant set-current
 commands-slow set-current
 \ place slow sandtable commands here
 
+: testslow ( -- )
+  s" well see what this does" type
+  s" then this also " type
+  false to sandtabletask
+;
+
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sadntableapi.fs
   configure-stuff false = if
     s" Sandtable software configured!"
