@@ -18,7 +18,8 @@
 \
 
 \ Requires:
-\ unix/socket.fs
+\ script.fs
+\ curl to be installed on BBB 
 
 \ Revisions:
 \ 1/26/2019 changes from fifo to socket coding started
