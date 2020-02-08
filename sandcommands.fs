@@ -162,7 +162,7 @@ commands-slow set-current
 
 : teststdout ( -- )
   5000 ms \ wait 5 seconds then see what happens
-  ['] testslow stdout outfile-execute
+  ['] testslow stdouttestfile outfile-execute
   false to sandtabletask
 ;
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sadntableapi.fs
