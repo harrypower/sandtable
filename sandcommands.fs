@@ -27,6 +27,23 @@ get-order get-current
 
 variable junk$
 
+: testslow ( -- ) testing stdout
+  58 . cr
+  5000 ms
+  s" this is from  testslow" type cr
+  s" this is also from testslow " type cr
+  102 .  103 . cr ;
+0 value stdouttestfile
+: setupredirection ( -- )
+s" /run/sandout" file-status swap drop false = if
+  s" /run/sandout" r/w open-file throw
+  to stdouttestfile
+else
+  s" /run/sandout" r/w create-file throw
+  to stdouttestfile
+then ;
+setupredirection
+
 : (get-pairs$) ( -- ) \ extract variable pairs from submessages$ strings
   0 { nqty }
   submessages$ [bind] strings $qty to nqty
@@ -143,15 +160,11 @@ commands-instant set-current
 commands-slow set-current
 \ place slow sandtable commands here
 
-: testslow ( -- )
-  58 . cr
-  5000 ms
-  s" well see what this does" type cr
-  s" then this also " type cr
-  102 .  103 . cr
+: teststdout ( -- )
+  5000 ms \ wait 5 seconds then see what happens 
+  ['] testslow stdout outfile-execute
   false to sandtabletask
 ;
-
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sadntableapi.fs
   configure-stuff false = if
     s" Sandtable software configured!"
