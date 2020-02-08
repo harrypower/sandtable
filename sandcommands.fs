@@ -148,7 +148,7 @@ commands-slow set-current
   5000 ms
   s" well see what this does" type cr
   s" then this also " type cr
-  102 .  103 . cr 
+  102 .  103 . cr
   false to sandtabletask
 ;
 
@@ -159,12 +159,12 @@ commands-slow set-current
     s" Sandtable software not configured!"
   then
   junk$ $! lineending junk$ $+!
-  dohome true = if
-    s" Sandtable motors calibrated!"
-  else
-    s" Sandtable motors not calibrated!"
-  then
-  junk$ $+! lineending junk$ $+!
+\  dohome true = if
+\    s" Sandtable motors calibrated!"
+\  else
+\    s" Sandtable motors not calibrated!"
+\  then
+\  junk$ $+! lineending junk$ $+!
   junk$ $@  lastresult$ $!
   false to sandtabletask \ to allow other sandtable tasks to perform
 ;
