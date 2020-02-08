@@ -7,7 +7,7 @@
 <body>
 <h1>Sandtable Testing</h1>
 
-<form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
   Issue a command to SandTable <br>
   <div class="form-a">
     <label for="name">Command:</label>
@@ -30,7 +30,7 @@
   </div>
 </form>
 
-<form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
   Move to absolute X,Y location (0 to 274000 for x & y)<br>
   <div class="form-a">
     <input type="hidden" name="command" value="gotoxy" readonly>
@@ -47,7 +47,7 @@
   </div>
 </form>
 
-<form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
   Move to absolute X location (0 to 274000)<br>
   <div class="form-a">
     <input type="hidden" name="command" value="gotox" readonly>
@@ -61,7 +61,7 @@
   </div>
 </form>
 
-<form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
   Move to absolute Y location (0 to 274000)<br>
   <div class="form-a">
     <input type="hidden" name="command" value="gotoy" readonly>
@@ -75,7 +75,7 @@
   </div>
 </form>
 
-<form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
   Perform fast calibration of sandtable with the given x and y values! (0 to 274000 for x & y)<br>
   Note the x and y values should be the real current location of the x and y motors!<br>
   <div class="form-a">
@@ -93,7 +93,7 @@
   </div>
 </form>
 
-<form action="/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
   <input type="hidden" name="command" value="stopsandserver" readonly>
   <input class="form-b" type="submit" value="STOP table now">
 </form>
