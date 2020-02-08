@@ -158,7 +158,7 @@ require sandcommands.fs
 : html-header ( -- caddr u )
   s\" <!DOCTYTPE html>" buffer$ $!
   s\" <html>" buffer$ $+!
-  s\" <head><title>Sandtable Message return</title><link rel=\"icon\" href=\"data:;base64,iVBORw0KGgo=\"></head>" buffer$ $+!
+  s\" <head><title>Sandtable Message return</title></head>" buffer$ $+!
   s\" <body>" buffer$ $+!
   buffer$ $@ ;
 : html-footer ( -- caddr u )
