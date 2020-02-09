@@ -95,6 +95,7 @@ commands-instant set-current
   junk$ $@  lastresult$ $! ;
 
 : stopsandserver ( -- ) \ stop the sand server loop
+  true to Stopserver
   s" Sandserver loop shutting done now!" junk$ $!
   lineending junk$ $+!
   junk$ $@  lastresult$ $!

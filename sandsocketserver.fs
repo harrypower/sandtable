@@ -68,6 +68,7 @@ variable GET$
 variable lastresult$
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
 false value sandtabletask \ flag false when no task running true when sandtable task is active
+false value Stopserver \ false means server runs ... true means socket server loop stop 
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
 
@@ -227,7 +228,7 @@ require sandcommands.fs
     usockfd write-socket
     usockfd close-socket
     \ keyboardstop
-    sandserverloop
+    Stopserver
   until
   userver close-server
   s" sand server shutting down now!" type cr ;
