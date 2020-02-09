@@ -99,7 +99,7 @@ commands-instant set-current
   s" Sandserver loop shutting done now!" junk$ $!
   lineending junk$ $+!
   junk$ $@  lastresult$ $!
-  closedown ;
+  configured? false = if closedown then ;
 
 : lastresult ( -- )  \ this does nothing and does not change the lastresult$
   ;
@@ -143,7 +143,7 @@ commands-slow set-current
 \ place slow sandtable commands here
 
 : teststuff ( -- ) \ just a test without type or . or other like it used
-  5000 ms \ wait 5 seconds then see what happens
+  \ 5000 ms \ wait 5 seconds then see what happens
   s" stuff to see if it works in teststuff" lastresult$ !$
   false to sandtabletask ;
 
