@@ -23,7 +23,7 @@
 \ unix/socket.fs
 \ sandmotorapi.fs
 \ objects.fs
-\ stringobj.fs from Gforth-Objects git 
+\ stringobj.fs from Gforth-Objects git
 
 \ Revisions:
 \ 1/26/2019 started coding
@@ -238,7 +238,7 @@ require sandcommands.fs
 : startsandserver ( -- ) \ start the socket sand server ... note this will work but can not be used at command line with gforth still responding to user terminal
   false to sandserverloop
   ['] socketloop servertask start-task
-  begin 1000 ms again
+  \ begin 1000 ms again
   ;
 
 \ startsandserver

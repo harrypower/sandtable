@@ -77,7 +77,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 \ ************ configure-stuff needs to be used first and return false to allow other operations with sandtable
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
-  s" /home/debian/sandtable/config-pins.fs" system $? to configured?
+  s" sudo /home/debian/sandtable/config-pins.fs" system $? to configured?
   configured? 0 = if
     1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
     tmc2130 heap-new to xmotor abort" xmotor did not construct"
