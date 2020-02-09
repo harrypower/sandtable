@@ -68,7 +68,7 @@ variable GET$
 variable lastresult$
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
 false value sandtabletask \ flag false when no task running true when sandtable task is active
-false value Stopserver \ false means server runs ... true means socket server loop stop 
+false value Stopserver \ false means server runs ... true means socket server loop stop
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
 
@@ -139,9 +139,6 @@ require sandcommands.fs
   else
     2drop 0 0
   then ;
-
-: keyboardstop ( -- nflag ) \ nflag is true if 's' is pressed on keyboard false otherwise
-  ekey? if ekey 115 = if true else false then else false then ;
 
 : parsehttp ( -- ) \ get the command, user-agent
   recieve-buffer$ $@ s" GET " s"  " parse$to$ GET$ $!
@@ -227,7 +224,6 @@ require sandcommands.fs
     process-recieve
     usockfd write-socket
     usockfd close-socket
-    \ keyboardstop
     Stopserver
   until
   userver close-server
