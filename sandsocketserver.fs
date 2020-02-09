@@ -41,8 +41,6 @@ multitasking set-current
 get-order multitasking swap 1+ set-order
 require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
-task servertask \ task for sand server running in
-servertask construct
 task sandtable
 sandtable construct
 
@@ -69,7 +67,6 @@ variable User-Agent$
 variable GET$
 variable lastresult$
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
-false value sandserverloop \ flag to turn off sand server loop false is run true is stop
 false value sandtabletask \ flag false when no task running true when sandtable task is active
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
@@ -216,8 +213,8 @@ require sandcommands.fs
     buffer1$ $@ buffer2$ $+!
     html-footer buffer2$ $+!
     buffer2$ $@ http-response
-  then
-;
+  then ;
+
 : socketloop ( -- )
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
@@ -235,12 +232,5 @@ require sandcommands.fs
   userver close-server
   s" sand server shutting down now!" type cr ;
 
-: startsandserver ( -- ) \ start the socket sand server ... note this will work but can not be used at command line with gforth still responding to user terminal
-  false to sandserverloop
-  ['] socketloop servertask start-task
-  \ begin 1000 ms again
-  ;
-
-\ startsandserver
 \ socketloop
 \ bye
