@@ -27,23 +27,6 @@ get-order get-current
 
 variable junk$
 
-: testslow ( -- ) \ testing stdout
-  58 . cr
-  5000 ms
-  s" this is from  testslow" type cr
-  s" this is also from testslow " type cr
-  102 .  103 . cr ;
-0 value stdouttestfile
-: setupredirection ( -- )
-s" /run/sandout" file-status swap drop false = if
-  s" /run/sandout" r/w open-file throw
-  to stdouttestfile
-else
-  s" /run/sandout" r/w create-file throw
-  to stdouttestfile
-then ;
-setupredirection
-
 : (get-pairs$) ( -- ) \ extract variable pairs from submessages$ strings
   0 { nqty }
   submessages$ [bind] strings $qty to nqty
@@ -116,8 +99,7 @@ commands-instant set-current
   s" Sandserver loop shutting done now!" junk$ $!
   lineending junk$ $+!
   junk$ $@  lastresult$ $!
-  \ closedown
-  ;
+  closedown ;
 
 : lastresult ( -- )  \ this does nothing and does not change the lastresult$
   ;
@@ -160,11 +142,11 @@ commands-instant set-current
 commands-slow set-current
 \ place slow sandtable commands here
 
-: teststdout ( -- )
+: teststuff ( -- ) \ just a test without type or . or other like it used
   5000 ms \ wait 5 seconds then see what happens
-  ['] testslow stdouttestfile outfile-execute
-  false to sandtabletask
-;
+  s" stuff to see if it works in teststuff" lastresult$ !$
+  false to sandtabletask ;
+
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
   configure-stuff false = if
     s" Sandtable software configured!"
@@ -172,12 +154,12 @@ commands-slow set-current
     s" Sandtable software not configured!"
   then
   junk$ $! lineending junk$ $+!
-  dohome true = if
-    s" Sandtable motors calibrated!"
-  else
-    s" Sandtable motors not calibrated!"
-  then
-  junk$ $+! lineending junk$ $+!
+\  dohome true = if
+\    s" Sandtable motors calibrated!"
+\  else
+\    s" Sandtable motors not calibrated!"
+\  then
+\  junk$ $+! lineending junk$ $+!
   junk$ $@  lastresult$ $!
   false to sandtabletask \ to allow other sandtable tasks to perform
 ;
