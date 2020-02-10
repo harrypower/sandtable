@@ -144,7 +144,7 @@ commands-slow set-current
 
 : teststuff ( -- ) \ just a test without type or . or other like it used
   \ 5000 ms \ wait 5 seconds then see what happens
-  \ s" stuff to see if it works in teststuff" lastresult$ !$
+  s" stuff to see if it works in teststuff" lastresult$ !$
   false to sandtabletask ;
 
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
