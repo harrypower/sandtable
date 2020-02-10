@@ -174,9 +174,11 @@ require sandcommands.fs
         true to sandtabletask
         sandtable start-task
         thecommand$ $@ buffer1$ $+! s"  command has started!" buffer1$ $+! lineending buffer1$ $+!
+        sandtable awaken
       else
         drop \ remove command xt
         s" Sandtable is currently busy with another task!"  buffer1$ $+! lineending buffer1$ $+!
+        sandtable awaken
       then
     then
     thecommand$ $@ commands-instant search-wordlist 0 = if
