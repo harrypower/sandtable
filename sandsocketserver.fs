@@ -43,11 +43,14 @@ require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
 task sandtable
 sandtable construct
+<<<<<<< HEAD
 task sandserver
 sandserver construct
 
 create task-lock /mutex allot
 task-lock mutex-init
+=======
+>>>>>>> parent of 468c159... added mutex stuff
 
 only forth
 get-order multitasking swap 1+ rot swap set-order \ now order is Forth multitasking Root ... this allows multitasking to work and construct to work from objects.fs

@@ -143,10 +143,16 @@ commands-slow set-current
 \ place slow sandtable commands here
 
 : teststuff ( -- ) \ just a test without type or . or other like it used
+<<<<<<< HEAD
   task-lock get
   s" stuff to see if it works in teststuff" lastresult$ !$
   false to sandtabletask
   task-lock release ;
+=======
+  \ 5000 ms \ wait 5 seconds then see what happens
+  \ s" stuff to see if it works in teststuff" lastresult$ !$
+  false to sandtabletask ;
+>>>>>>> parent of 468c159... added mutex stuff
 
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
   configure-stuff false = if
