@@ -44,6 +44,9 @@ require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 task sandtable
 sandtable construct
 
+create task-lock /mutex allot
+task-lock mutex-init
+
 only forth
 get-order multitasking swap 1+ rot swap set-order \ now order is Forth multitasking Root ... this allows multitasking to work and construct to work from objects.fs
 also definitions
@@ -221,6 +224,7 @@ require sandcommands.fs
   userver 8 listen
   userver . ." < server id " cr
   begin
+    sandtabletask if sandtable awaken then 
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
     process-recieve
