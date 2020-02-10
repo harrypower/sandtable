@@ -43,8 +43,6 @@ require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
 task sandtable
 sandtable construct
-create task-lock /mutex allot
-task-lock mutex-init
 
 only forth
 get-order multitasking swap 1+ rot swap set-order \ now order is Forth multitasking Root ... this allows multitasking to work and construct to work from objects.fs
@@ -172,7 +170,6 @@ require sandcommands.fs
       lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
     then
     thecommand$ $@ commands-slow search-wordlist 0 <> if
-      task-lock get
       sandtabletask false = if
         true to sandtabletask
         sandtable start-task
@@ -181,7 +178,6 @@ require sandcommands.fs
         drop \ remove command xt
         s" Sandtable is currently busy with another task!"  buffer1$ $+! lineending buffer1$ $+!
       then
-      task-lock release 
     then
     thecommand$ $@ commands-instant search-wordlist 0 = if
       thecommand$ $@ commands-slow search-wordlist 0 = if
