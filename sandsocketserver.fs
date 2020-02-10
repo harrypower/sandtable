@@ -217,9 +217,9 @@ require sandcommands.fs
   task-lock get
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
-  userver 8 listen
   userver . ." < server id " cr
   begin
+    userver 8 listen
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
     process-recieve
