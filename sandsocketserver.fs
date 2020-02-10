@@ -43,6 +43,8 @@ require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
 task sandtable
 sandtable construct
+task sandserver
+sandserver construct
 
 create task-lock /mutex allot
 task-lock mutex-init
@@ -219,12 +221,13 @@ require sandcommands.fs
   then ;
 
 : socketloop ( -- )
+  task-lock get
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
   userver 8 listen
   userver . ." < server id " cr
   begin
-    sandtabletask if sandtable awaken then 
+    sandtabletask if sandtable awaken then
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
     process-recieve
@@ -233,7 +236,13 @@ require sandcommands.fs
     Stopserver
   until
   userver close-server
-  s" sand server shutting down now!" type cr ;
+  s" sand server shutting down now!" type cr
+  task-lock release
+  ;
+
+: startserver ( -- )
+  sandserver start-task
+;
 
 \ socketloop
 \ bye
