@@ -214,7 +214,6 @@ require sandcommands.fs
   then ;
 
 : socketloop ( -- )
-  task-lock get
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
   userver . ." < server id " cr
@@ -229,7 +228,6 @@ require sandcommands.fs
   until
   userver close-server
   s" sand server shutting down now!" type cr
-  task-lock release
   ;
 
 \ socketloop
