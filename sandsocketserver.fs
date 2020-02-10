@@ -43,14 +43,6 @@ require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
 
 task sandtable
 sandtable construct
-<<<<<<< HEAD
-task sandserver
-sandserver construct
-
-create task-lock /mutex allot
-task-lock mutex-init
-=======
->>>>>>> parent of 468c159... added mutex stuff
 
 only forth
 get-order multitasking swap 1+ rot swap set-order \ now order is Forth multitasking Root ... this allows multitasking to work and construct to work from objects.fs
@@ -182,11 +174,9 @@ require sandcommands.fs
         true to sandtabletask
         sandtable start-task
         thecommand$ $@ buffer1$ $+! s"  command has started!" buffer1$ $+! lineending buffer1$ $+!
-        sandtable awaken
       else
         drop \ remove command xt
         s" Sandtable is currently busy with another task!"  buffer1$ $+! lineending buffer1$ $+!
-        sandtable awaken
       then
     then
     thecommand$ $@ commands-instant search-wordlist 0 = if
@@ -230,7 +220,6 @@ require sandcommands.fs
   userver 8 listen
   userver . ." < server id " cr
   begin
-    sandtabletask if sandtable awaken then
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
     process-recieve
@@ -242,10 +231,6 @@ require sandcommands.fs
   s" sand server shutting down now!" type cr
   task-lock release
   ;
-
-: startserver ( -- )
-  sandserver start-task
-;
 
 \ socketloop
 \ bye
