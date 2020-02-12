@@ -209,13 +209,21 @@ require sandcommands.fs
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
     process-recieve
-    usockfd write-socket
-    usockfd close-socket
-    Stopserver
+    sandtablePID 0 > if
+      usockfd write-socket
+      usockfd close-socket
+      Stopserver
+    else
+      usockfd close-socket
+      true
+    then
   until
   userver close-server
-  s" sand server shutting down now!" type cr
-  ;
+  sandtablePID 0 > if
+    s" sand server shutting down now!" type cr
+  else
+    s" sand table child command shutting down now!" type cr
+  then ;
 
 \ socketloop
 \ bye
