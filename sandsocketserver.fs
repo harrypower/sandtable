@@ -34,6 +34,7 @@
 require unix/socket.fs
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
+require epoll.fs
 
 only forth also definitions
 wordlist constant multitasking
@@ -213,6 +214,20 @@ require sandcommands.fs
     buffer2$ $@ http-response
   then ;
 
+: allocate-structure: ( usize ustruct "allocated-structure-name" -- )  \ creates a word called allocated-structure-name
+  \ usize is the quantity of the indexed array to create
+  \ ustruct is the size of the structure that is returned from the name used with end-struct
+	%size dup rot swap * allocate throw create , ,
+	DOES> ( uindex -- uaddr ) \
+		dup >r cell+ @ * r> @ + ;
+
+0 epoll_create1 dup -1 = [if] abort" Failed to create epoll file descriptor" [then]
+value epoll_fd
+3 epoll_event% allocate-structure: events-wait
+1 epoll_event% allocate-structure: event-ctl
+EPOLLIN 0 event-ctl events !
+
+
 : socketloop ( -- )
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
@@ -220,6 +235,7 @@ require sandcommands.fs
   begin
     userver 8 listen
     userver accept-socket to usockfd
+    ." after accept-socket" cr 
     usockfd message-buffer @ mb-maxsize read-socket
     process-recieve
     usockfd write-socket
