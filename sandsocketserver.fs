@@ -235,7 +235,6 @@ EPOLLIN 0 event-ctl events !
   begin
     userver 8 listen
     userver accept-socket to usockfd
-    ." after accept-socket" cr 
     usockfd message-buffer @ mb-maxsize read-socket
     process-recieve
     usockfd write-socket
