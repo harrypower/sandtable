@@ -876,10 +876,15 @@ true value yposition  \ is the real location of y motor .. note if value is true
   restore
   endtry ;
 : quickstart ( ux uy -- nflag ) \ start up sandtable assuming the physical table is at ux and uy location
-  to yposition
-  to xposition
-  true to homedone?
-  configure-stuff ;
+  0 { ux uy nconfig }
+  configure-stuff dup to nconfig false = if
+    uy to yposition
+    ux to xposition
+    true to homedone?
+  else
+    false to homedone?
+  then
+  nconfig ;
 
 \ ******************* these words are for testing
 : testdata nsx1 . nsy1 . nsx2 . nsy2 . pointtest . boardertest . xposition . yposition . cr ;

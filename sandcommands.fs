@@ -23,8 +23,6 @@
 \ Revisions:
 \ 01/29/2020 started coding
 
-get-order get-current
-
 variable junk$
 
 : (get-pairs$) ( -- ) \ extract variable pairs from submessages$ strings
@@ -50,7 +48,9 @@ variable junk$
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
   nvalue nflag ;
 
-wordlist constant commands-slow
+get-order get-current
+
+wordlist constant commands-forked
 wordlist constant commands-instant
 
 commands-instant set-current
@@ -104,6 +104,8 @@ commands-instant set-current
 : lastresult ( -- )  \ this does nothing and does not change the lastresult$
   ;
 
+\ this fast calibration needs to be rethought as to if it goes here or as a forked process
+\ at the vary least the forked processes need to call the quickstart that this does to work
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
   0 0 false { nx ny nflag }
   \ get x and y from submessage if present
@@ -139,12 +141,13 @@ commands-instant set-current
   then
   junk$ $@ lastresult$ $! ;
 
-commands-slow set-current
-\ place slow sandtable commands here
+commands-forked set-current
+\ place forked sandtable commands here
 
 : teststuff ( -- ) \ just a test without type or . or other like it used
   s" stuff to see if it works in teststuff" lastresult$ !$
-  false to sandtabletask ;
+  \ need to add fork stuff here
+   ;
 
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
   configure-stuff false = if
@@ -160,7 +163,7 @@ commands-slow set-current
 \  then
 \  junk$ $+! lineending junk$ $+!
   junk$ $@  lastresult$ $!
-  false to sandtabletask \ to allow other sandtable tasks to perform
+  \ need to add fork stuff here
 ;
 
 : gotoxy ( -- ) \ perform the movetoxy word from
@@ -196,7 +199,7 @@ else
   s" Gotoxy was not performed!" junk$ $+! lineending junk$ $+!
 then
 junk$ $@ lastresult$ $!
-false to sandtabletask \ to allow other sandtable tasks to perform
+\ need to add fork stuff here
 ;
 
 

@@ -36,17 +36,6 @@ require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 
 only forth also definitions
-wordlist constant multitasking
-multitasking set-current
-get-order multitasking swap 1+ set-order
-require forth-packages/multi-tasking/0.4.0/multi-tasking.fs
-
-task sandtable
-sandtable construct
-
-only forth
-get-order multitasking swap 1+ rot swap set-order \ now order is Forth multitasking Root ... this allows multitasking to work and construct to work from objects.fs
-also definitions
 
 1000 value stream-timeout
 52222 value sandtable-port#
@@ -66,9 +55,8 @@ variable thecommand$
 variable User-Agent$
 variable GET$
 variable lastresult$
+372 value sandtablePID  \ just a test pid that would normaly be the parent pid ... note child pid would be 0
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
-false value sandtabletask \ flag false when no task running true when sandtable task is active
-false value Stopserver \ false means server runs ... true means socket server loop stop
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
 
@@ -166,21 +154,19 @@ require sandcommands.fs
   thecommand$ $!
   thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
+      \ note here before exeuting the instant command i need to get all the data from the last child run or if no child was run then continue so this logic needs to be in place here
       execute
       lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
     then
-    thecommand$ $@ commands-slow search-wordlist 0 <> if
-      sandtabletask false = if
-        true to sandtabletask
-        sandtable start-task
-        thecommand$ $@ buffer1$ $+! s"  command has started!" buffer1$ $+! lineending buffer1$ $+!
-      else
-        drop \ remove command xt
-        s" Sandtable is currently busy with another task!"  buffer1$ $+! lineending buffer1$ $+!
+    thecommand$ $@ commands-forked search-wordlist 0 <> if
+      \ fork logic here
+      sandtablePID 0 > if
+        drop \ removes the xt at this moment untill i can figure out how to set up fork process
+        thecommand$ $@ buffer1$ $+! s"  command is possible execute but code fork has not be impemented yet!" buffer1$ $+! lineending buffer1$ $+!
       then
     then
     thecommand$ $@ commands-instant search-wordlist 0 = if
-      thecommand$ $@ commands-slow search-wordlist 0 = if
+      thecommand$ $@ commands-forked search-wordlist 0 = if
         thecommand$ $@ buffer1$ $+! s"  command not found!" buffer1$ $+! lineending buffer1$ $+!
       else drop
       then
