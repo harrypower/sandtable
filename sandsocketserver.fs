@@ -55,6 +55,7 @@ variable thecommand$
 variable User-Agent$
 variable GET$
 variable lastresult$
+false to value stopserver \ this is the server loop control itself .. when it is false the loop continues when it is true the loop stops
 372 value sandtablePID  \ just a test pid that would normaly be the parent pid ... note child pid would be 0
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
 strings heap-new constant submessages$
