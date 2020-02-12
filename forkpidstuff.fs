@@ -22,7 +22,7 @@
 \ Revisions:
 \ 02/12/2020 started coding
 
-c-library defines_data
+c-library forkgetpid
   \c #include <unistd.h>
 
   c-function fork     fork     void -- n ( -- npid ) \ fork process npid is 0 to child forked process and a non zero non repeated pid for the parent process
