@@ -163,8 +163,8 @@ require sandcommands.fs
     thecommand$ $@ commands-forked search-wordlist 0 <> if
       \ fork logic here
       sandtablePID 0 > if
-        drop \ removes the xt at this moment untill i can figure out how to set up fork process
-        thecommand$ $@ buffer1$ $+! s"  command is possible execute but code fork has not be impemented yet!" buffer1$ $+! lineending buffer1$ $+!
+        drop \ removes the xt at this moment until i can figure out how to set up fork process
+        thecommand$ $@ buffer1$ $+! s"  command is possible to execute but code fork has not be impemented yet!" buffer1$ $+! lineending buffer1$ $+!
       then
     then
     thecommand$ $@ commands-instant search-wordlist 0 = if
