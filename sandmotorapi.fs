@@ -77,49 +77,51 @@ true value yposition  \ is the real location of y motor .. note if value is true
 
 \ ************ configure-stuff needs to be used first and return false to allow other operations with sandtable
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
-  s" sudo /home/debian/sandtable/config-pins.fs" system $? to configured?
-  configured? 0 = if
-    1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
-    tmc2130 heap-new to xmotor abort" xmotor did not construct"
-    xmotor disable-motor
-    1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
-    tmc2130 heap-new to ymotor abort" ymotor did not construct"
-    ymotor disable-motor
+  configured? true = if \ only construct motor objects if they are not currently constructed!
+    s" sudo /home/debian/sandtable/config-pins.fs" system $? to configured?
+    configured? 0 = if \ now do the motor construction after the system pins have been setup 
+      1 %10000000000000000 1 %10000000000000 1 %1000000000000 1
+      tmc2130 heap-new to xmotor abort" xmotor did not construct"
+      xmotor disable-motor
+      1 %100000000000000000 1 %1000000000000000 1 %100000000000000 0
+      tmc2130 heap-new to ymotor abort" ymotor did not construct"
+      ymotor disable-motor
 
-    \ GCONF uIHOLD_IRUN uTPOWERDOWN uTPWMTHRS uTCOOLTHRS uTHIGH uCHOPCONF   uCOOLCONF                  uPWMCONF
-    %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
-    0 xmotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
-    1 xmotor quickreg!
-    1 xmotor usequickreg
-    forward xmotor setdirection
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
-    2 xmotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000111100000000000000000 %0001000000111111111111
-    3 xmotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000101000000000000000000 %0001000000111111111111
-    4 xmotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000010100000000000000000 %0001000000111111111111
-    5 xmotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
-    6 xmotor quickreg!
+      \ GCONF uIHOLD_IRUN uTPOWERDOWN uTPWMTHRS uTCOOLTHRS uTHIGH uCHOPCONF   uCOOLCONF                  uPWMCONF
+      %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
+      0 xmotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
+      1 xmotor quickreg!
+      1 xmotor usequickreg
+      forward xmotor setdirection
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+      2 xmotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000111100000000000000000 %0001000000111111111111
+      3 xmotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000101000000000000000000 %0001000000111111111111
+      4 xmotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000010100000000000000000 %0001000000111111111111
+      5 xmotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
+      6 xmotor quickreg!
 
-    %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
-    0 ymotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
-    1 ymotor quickreg!
-    1 ymotor usequickreg
-    forward ymotor setdirection
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
-    2 ymotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000111100000000000000000 %0001000000111111111111
-    3 ymotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000101000000000000000000 %0001000000111111111111
-    4 ymotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000010100000000000000000 %0001000000111111111111
-    5 ymotor quickreg!
-    %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
-    6 ymotor quickreg!
+      %100 %01110001111100000000 1 0    0 0 %00110000000000101000000010010011 0                          %0111000000101011111111
+      0 ymotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
+      1 ymotor quickreg!
+      1 ymotor usequickreg
+      forward ymotor setdirection
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %0000000000000000000000000 %0111100000101011111111
+      2 ymotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000111100000000000000000 %0001000000111111111111
+      3 ymotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000101000000000000000000 %0001000000111111111111
+      4 ymotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000010100000000000000000 %0001000000111111111111
+      5 ymotor quickreg!
+      %100 %00000000001100000011 1 1000 0 0 %00011000000000001000000010010011 %1000000000000000000000000 %0001000000111111111111
+      6 ymotor quickreg!
+    then
   then
   configured? ;
 
@@ -658,14 +660,16 @@ true value yposition  \ is the real location of y motor .. note if value is true
   endtry ;
 
 : closedown ( -- )
-  true to configured?  \ true means not configured false means configured
-  false to homedone?   \ false means table has not been homed true means table was homed succesfully
-  true to xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
-  true to yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
-  xmotor disable-motor
-  ymotor disable-motor
-  xmotor [bind] tmc2130 destruct
-  ymotor [bind] tmc2130 destruct ;
+  configured? false = if \ only destruct motor objects if they were constructed in the first place
+    xmotor disable-motor
+    ymotor disable-motor
+    xmotor [bind] tmc2130 destruct
+    ymotor [bind] tmc2130 destruct
+    true to configured?  \ true means not configured false means configured
+    false to homedone?   \ false means table has not been homed true means table was homed succesfully
+    true to xposition  \ is the real location of x motor .. note if value is true then home position not know so x is not know yet
+    true to yposition  \ is the real location of y motor .. note if value is true then home position not know so y is not know yet
+  then ;
 
 : border ( -- nflag )  \ draws a boarder around sandtable ... nflag is 200 if no drawing issues ... any other number is some sandtable error
 \ if nflag is 200 then ball currently is at x 0 y 0
