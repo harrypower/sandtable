@@ -47,12 +47,12 @@ then
     r/o open-pipe throw dup >r slurp-fid
     r> close-pipe throw
     dump cr ." above is parent recieved message > " . cr
-    1000 ms 
+    1000 ms
     bye
   then
   cpid 0 = if \ child
     s\" message from child\n"
-    w/o open-pipe throw close-pipe throw
+    w/o open-pipe throw \ close-pipe throw
     ." child sent message! > " . cr
     1000 ms
     bye
