@@ -37,7 +37,7 @@ c-library forkmessaging
   \ this function returns the process ID of the parent process. Otherwise, this function returns a value of 1 which is the process id for init process.
   c-function exit     exit    n -- void   ( nstatus -- ) \ exit process
   c-function wait     wait    a -- n      ( a*wstatus -- npid_t )
-\  c-function waitpid  waitid  n a n -- n  ( npid a*wstatus noptions -- npid_t )
+  c-function waitpid  waitid  n a n -- n  ( npid a*wstatus noptions -- npid_t )
   c-function pipe     pipe    a -- n      ( apipefd[2] -- n )
 \  c-function pipe2    pipe2   a n -- n    ( apipefd[2] nflags -- n )
 end-c-library
