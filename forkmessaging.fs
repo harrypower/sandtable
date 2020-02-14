@@ -36,8 +36,8 @@ c-library forkmessaging
   \ If the calling process was created by the fork() function and the parent process still exists at the time of the getppid function call,
   \ this function returns the process ID of the parent process. Otherwise, this function returns a value of 1 which is the process id for init process.
   c-function exit     exit    n -- void   ( nstatus -- ) \ exit process
-  c-function wait     wait    n -- n      ( n*wstatus -- npid_t )
-  c-function waitpid  waitid  n n n -- n  ( npid n*wstatus noptions -- npid_t )
-  c-function pipe     pipe    n -- n      ( npipefd[2] -- n )
-  c-function pipe2    pipe2   n n -- n    ( npipefd[2] nflags -- n )
+  c-function wait     wait    a -- n      ( a*wstatus -- npid_t )
+  c-function waitpid  waitid  n a n -- n  ( npid a*wstatus noptions -- npid_t )
+  c-function pipe     pipe    a -- n      ( apipefd[2] -- n )
+  c-function pipe2    pipe2   a n -- n    ( apipefd[2] nflags -- n )
 end-c-library
