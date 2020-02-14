@@ -1,4 +1,4 @@
-\ forkpidstuff.fs
+\ forkmessaging.fs
 
 \    Copyright (C) 2020  Philip King Smith
 
@@ -22,13 +22,22 @@
 \ Revisions:
 \ 02/12/2020 started coding
 
-c-library forkgetpid
+c-library forkmessaging
   \c #include <unistd.h>
+  \c #include <stdlib.h>
+  \c #include <sys/wait.h>
+  \c #include <sys/types.h>
+  \ need to export these types used in functions below to use the functions but this will be later as i need them
 
-  c-function fork     fork     void -- n ( -- npid ) \ fork process npid is 0 to child forked process and a non zero non repeated pid for the parent process
-  c-function getpid   getpid   void -- n ( -- npid ) \ returns the process ID of the calling process
-  c-function getppid  getppid  void -- n ( -- npid ) \ returns the process ID of the parent of the calling process.
+
+  c-function fork     fork    void -- n   ( -- npid ) \ fork process npid is 0 to child forked process and a non zero non repeated pid for the parent process
+  c-function getpid   getpid  void -- n   ( -- npid ) \ returns the process ID of the calling process
+  c-function getppid  getppid void -- n   ( -- npid ) \ returns the process ID of the parent of the calling process.
   \ If the calling process was created by the fork() function and the parent process still exists at the time of the getppid function call,
   \ this function returns the process ID of the parent process. Otherwise, this function returns a value of 1 which is the process id for init process.
-
+  c-function exit     exit    n -- void   ( nstatus -- ) \ exit process
+  c-function wait     wait    n -- n      ( n*wstatus -- npid_t )
+  c-function waitpid  waitid  n n n -- n  ( npid n*wstatus noptions -- npid_t )
+  c-function pipe     pipe    n -- n      ( npipefd[2] -- n )
+  c-function pipe2    pipe2   n n -- n    ( npipefd[2] nflags -- n )
 end-c-library

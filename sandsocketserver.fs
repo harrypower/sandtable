@@ -34,7 +34,7 @@
 require unix/socket.fs
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
-require forkpidstuff.fs
+require forkmessaging.fs
 
 only forth also definitions
 
