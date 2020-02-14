@@ -20,7 +20,6 @@ end-struct pipefd%
 0 pipefd readend pipe ." this is pipe returned status > " . cr
 
 0 value cpid
-fork to cpid
 
 cpid -1 [if] -1 exit  [else] ." fork worked" cr [then]  \ fork did not work so exit
 
@@ -43,6 +42,7 @@ then
 ;
 
 : dopipe ( -- )
+  fork to cpid
   cpid 0 = if \ child
     s\" message from child\n"
     w/o open-pipe throw close-pipe throw
@@ -59,4 +59,4 @@ then
 
 dopipe
 
-bye 
+bye
