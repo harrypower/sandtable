@@ -15,9 +15,9 @@ struct
   cell% field writeend
 end-struct pipefd%
 
-\ 1 pipefd% allocate-structure: pipefd
+1 pipefd% allocate-structure: pipefd
 
-\ 0 pipefd readend pipe ." this is the returned message > " . cr
+0 pipefd readend pipe ." this is pipe returned status > " . cr
 
 0 value cpid
 fork to cpid
