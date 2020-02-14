@@ -56,3 +56,7 @@ then
     bye
   then
 ;
+
+dopipe
+
+bye 
