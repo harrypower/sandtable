@@ -22,20 +22,20 @@ end-struct pipefd%
 0 value cpid
 fork to cpid
 
-cpid -1 if -1 exit  then  \ fork did not work so exit
+cpid -1 [if] -1 exit  [then]  \ fork did not work so exit
 
-cpid 0 = if
+cpid 0 = [if]
   ." child speaking now! " cr
   0 pipefd readend @ closeGNU throw
   ." child writing to pipe " cr
   0 pipefd writeend @ closeGNU throw
   0 exit
-then
+[then]
 
-cpid 0 > if
+cpid 0 > [if]
   ." parent speaking now!" cr
   0 pipefd writeend @ closeGNU throw
   ." parent to read pipe " cr
   0 pipefd readend @ closeGNU throw
   0 exit
-then
+[then]
