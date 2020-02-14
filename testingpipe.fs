@@ -46,13 +46,13 @@ then
   cpid 0 = if \ child
     s\" message from child\n"
     w/o open-pipe throw close-pipe throw
-    ." child sent message! >" . cr
+    ." child sent message! > " . cr
     bye
   then
   cpid 0 > if \ parent
     r/o open-pipe throw dup >r slurp-fid
     r> close-pipe throw
-    type cr ." above is parent recieved message > " . cr
+    dump cr ." above is parent recieved message > " . cr
     bye
   then
 ;
