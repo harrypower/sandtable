@@ -38,5 +38,5 @@ c-library forkmessaging
   c-function exit()   exit  n -- void   ( nstatus -- ) \ exit process
   c-function wait     wait    a -- n      ( a*wstatus -- npid_t )
   c-function pipe     pipe    a -- n      ( apipefd[2] -- n )
-\  c-function pipe2    pipe2   a n -- n    ( apipefd[2] nflags -- n )
+  c-function pipe2    pipe2   a n -- n    ( apipefd[2] nflags -- n )
 end-c-library
