@@ -1,3 +1,4 @@
+#! /usr/local/bin/gforth
 \ testingpipe.fs
 \ testing pipe fork and such for messaging issues
 
