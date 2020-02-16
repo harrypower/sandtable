@@ -18,13 +18,13 @@ end-struct pipefd%
 
 1 pipefd% allocate-structure: pipefd
 
-0 pipefd readend pipe ." this is pipe returned status > " . cr
+0 pipefd readend pipe ." this is pipe returned status at its creation time > " . cr
 
 0 value cpid
 
 : dochildparent ( -- ) \ this does not work
 	fork to cpid
-	cpid -1 = if ." fork failed! " cr bye   else ." fork worked" cr then   \ fork did not work so exit
+	cpid -1 = if ." fork failed! " cr bye   else ." fork worked " cr then   \ fork did not work so exit
 
 	cpid 0 = if
 		5000 ms
@@ -35,7 +35,6 @@ end-struct pipefd%
  		writeGNU . ." < how much was writen in chars!" cr
 		." child wrote message and sent it! pipe closing!" cr
 	  0 pipefd writeend @ closeGNU throw
-	  0 exit()
 	then
 
 	cpid 0 > if
@@ -44,11 +43,12 @@ end-struct pipefd%
 	  ." parent to read pipe " cr
 		0 pipefd readend @ pad 80
 		readGNU
-		pad swap type cr 
+		pad swap type cr
 		." parent closeing pipe now!" cr
 		0 pipefd readend @ closeGNU throw
-	  bye
 	then
 ;
 
 dochildparent
+
+bye
