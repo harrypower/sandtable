@@ -35,8 +35,8 @@ require unix/socket.fs
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
-\ require forkmessaging.fs
-c-library mywait
+
+c-library syswait \ this is the wait command need after (fork) to allow the detection of child status
   \c #include <unistd.h>
   \c #include <sys/wait.h>
   c-function wait     wait    a -- n      ( a*wstatus -- npid_t )
@@ -230,7 +230,10 @@ require sandcommands.fs
     sandtablePID 0 > if
       usockfd write-socket
       usockfd close-socket
-      waitflag if wstatus wait drop false to waitflag then 
+      waitflag if
+          wstatus wait . ." < status of the child closing down!" cr  
+          false to waitflag
+        then
       \ wstatus wait drop \ this will not work because it stops processing the socket so the child process never finishes so wait never finishes
       stopserverflag
     else

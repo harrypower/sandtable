@@ -151,7 +151,8 @@ commands-instant set-current
   then
   junk$ $@ lastresult$ $! ;
 
-: trywait ( -- )
+: trywait ( -- ) \ this is called as a command to fininish the commands-forded below
+  \ this command should be configured to only responde to the child sending this message back to the parent to allow parent to do this wait and return information 
   true to waitflag
   s" got the child message!" lastresult$ $! lineending lastresult$ $+!
 ;
