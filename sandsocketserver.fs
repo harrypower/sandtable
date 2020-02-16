@@ -231,7 +231,8 @@ require sandcommands.fs
       usockfd write-socket
       usockfd close-socket
       waitflag if
-          wstatus wait . ." < status of the child closing down!" cr  
+          wstatus wait . ." < pid of the child closing down!" cr
+          wstatus @ . ." < the status value of the child that closed!"
           false to waitflag
         then
       \ wstatus wait drop \ this will not work because it stops processing the socket so the child process never finishes so wait never finishes
