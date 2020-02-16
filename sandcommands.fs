@@ -27,7 +27,8 @@ variable junk$
 variable port#$
 variable server_addres$
 
-s" 192.168.0.59" server_addres$ $!
+\ s" 192.168.0.59" server_addres$ $!
+s" localhost" server_addres$ $!
 s" :52222" port#$ $!
 
 : sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
