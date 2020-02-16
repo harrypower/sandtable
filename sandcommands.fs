@@ -151,12 +151,17 @@ commands-instant set-current
   then
   junk$ $@ lastresult$ $! ;
 
+: trywait ( -- )
+  true to waitflag
+  s" got the child message!" lastresult$ $! lineending lastresult$ $+!
+;
+
 commands-forked set-current
 \ place forked sandtable commands here
 
 : teststuff ( -- ) \ just a test without type or . or other like it used
   10000 ms
-  s" command=ymax"
+  s" command=trywait"
   sendcurlmessage
   lastresult$ $!
   \ need to add fork stuff here

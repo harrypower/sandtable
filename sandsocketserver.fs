@@ -36,7 +36,11 @@ require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
 \ require forkmessaging.fs
-
+c-library mywait
+  \c #include <unistd.h>
+  \c #include <sys/wait.h>
+  c-function wait     wait    a -- n      ( a*wstatus -- npid_t )
+end-c-library
 
 only forth also definitions
 
@@ -58,6 +62,8 @@ variable thecommand$
 variable User-Agent$
 variable GET$
 variable lastresult$
+false value waitflag
+variable wstatus
 false value stopserverflag \ this is the server loop control itself .. when it is false the loop continues when it is true the loop stops
 getpid value sandtablePID  \ this is initalized with this process pid that will be the parent one normaly ... note child pid would be 0
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
@@ -224,14 +230,16 @@ require sandcommands.fs
     sandtablePID 0 > if
       usockfd write-socket
       usockfd close-socket
+      waitflag if wstatus wait drop false to waitflag then 
       \ wstatus wait drop \ this will not work because it stops processing the socket so the child process never finishes so wait never finishes
       stopserverflag
     else
       2drop \ to  drop the string from the child process at this time and close this child down
       usockfd close-socket
       userver close-server
-      \ 0 exit() \ exit child process so no defunk zombies are alive
-      bye \ not sure if this should be used or exit() so we will see.. also code past here will not happen that is clearly the way it is to be
+      10000 ms \ give time to get parent to wait to see this child close down
+      0 exit() \ exit child process so no defunk zombies are alive
+      \ bye \ not sure if this should be used or exit() so we will see.. also code past here will not happen that is clearly the way it is to be
       true
     then
   until
