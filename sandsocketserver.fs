@@ -56,8 +56,8 @@ variable thecommand$
 variable User-Agent$
 variable GET$
 variable lastresult$
-false value stopserver \ this is the server loop control itself .. when it is false the loop continues when it is true the loop stops
-372 value sandtablePID  \ just a test pid that would normaly be the parent pid ... note child pid would be 0
+false value stopserverflag \ this is the server loop control itself .. when it is false the loop continues when it is true the loop stops
+getpid value sandtablePID  \ this is initalized with this process pid that will be the parent one normaly ... note child pid would be 0
 0 value curlagent \ true means it is a curl agent false means it is a browser based or other agent
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
@@ -162,9 +162,13 @@ require sandcommands.fs
     then
     thecommand$ $@ commands-forked search-wordlist 0 <> if
       \ fork logic here
+      fork to sandtablePID
       sandtablePID 0 > if
-        drop \ removes the xt at this moment until i can figure out how to set up fork process
-        thecommand$ $@ buffer1$ $+! s"  command is possible to execute but code fork has not be impemented yet!" buffer1$ $+! lineending buffer1$ $+!
+        drop \ removes the xt because this parent process simply returns the following message
+        thecommand$ $@ buffer1$ $+! s"  command has been started!" buffer1$ $+! lineending buffer1$ $+!
+      else
+        execute \ this is the child process executing the sandtable code
+        lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
       then
     then
     thecommand$ $@ commands-instant search-wordlist 0 = if
@@ -178,7 +182,7 @@ require sandcommands.fs
     s" No command issued!" buffer1$ $+! lineending buffer1$ $+!
   then ;
 
-: process-recieve ( caddr u -- caddr u )
+: process-recieve ( caddr u -- caddr1 u1 )
   recieve-buffer$ $!
   recieve-buffer$ $@ addtolog
   recieve-buffer$ $@ dump ." ^ message ^" cr
@@ -209,13 +213,20 @@ require sandcommands.fs
     userver 8 listen
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket
-    process-recieve
+    process-recieve \ remember this will have ( -- caddr u ) on stack as string to return
+    \ now this string will be the message return from commands-instant via parent process in the socket
+    \ or the default message for commands-forked when started
+    \ or i will contain the data from child process about how process finished.
+    \ Note if this is the data from child process it is to be deleted here because each commands-forked command sends the message back to this parent via curl
     sandtablePID 0 > if
       usockfd write-socket
       usockfd close-socket
-      Stopserver
+      stopserverflag
     else
+      2drop \ to  drop the string from the child process at this time and close this child down
       usockfd close-socket
+      userver close-server
+      bye \ not sure if this should be used or exit() so we will see.. also code past here will not happen that is clearly the way it is to be 
       true
     then
   until

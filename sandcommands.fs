@@ -24,6 +24,15 @@
 \ 01/29/2020 started coding
 
 variable junk$
+variable port#$
+variable server_addres$
+
+s" 192.168.0.59" server_addres$ $!
+s" :52222" port#$ $!
+
+: sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
+  s\" curl \"" buffer$ $! server_addres$ $@ buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
+;
 
 : (get-pairs$) ( -- ) \ extract variable pairs from submessages$ strings
   0 { nqty }
@@ -95,7 +104,7 @@ commands-instant set-current
   junk$ $@  lastresult$ $! ;
 
 : stopsandserver ( -- ) \ stop the sand server loop
-  true to Stopserver
+  true to stopserverflag
   s" Sandserver loop shutting done now!" junk$ $!
   lineending junk$ $+!
   junk$ $@  lastresult$ $!
@@ -145,7 +154,10 @@ commands-forked set-current
 \ place forked sandtable commands here
 
 : teststuff ( -- ) \ just a test without type or . or other like it used
-  s" stuff to see if it works in teststuff" lastresult$ !$
+  10000 ms
+  s" command=ymax"
+  sendcurlmessage
+  lastresult$ $!
   \ need to add fork stuff here
    ;
 
