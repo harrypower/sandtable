@@ -30,7 +30,7 @@ cpid 0 = if
   0 pipefd readend @ closeGNU throw
   ." child writing to pipe " cr
   0 pipefd writeend @ closeGNU throw
-  0 exit
+  bye
 then
 
 cpid 0 > if
@@ -38,9 +38,11 @@ cpid 0 > if
   0 pipefd writeend @ closeGNU throw
   ." parent to read pipe " cr
   0 pipefd readend @ closeGNU throw
-  0 exit
+  bye
 then
 ;
+
+dochildparent
 
 : dopipe ( -- )
   fork to cpid
