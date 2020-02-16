@@ -205,6 +205,7 @@ require sandcommands.fs
     buffer2$ $@ http-response
   then ;
 
+variable wstatus
 : socketloop ( -- )
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
@@ -221,12 +222,13 @@ require sandcommands.fs
     sandtablePID 0 > if
       usockfd write-socket
       usockfd close-socket
+      wstatus wait drop
       stopserverflag
     else
       2drop \ to  drop the string from the child process at this time and close this child down
       usockfd close-socket
       userver close-server
-      0 exit() \ exit child process so no defunk zombies are alive 
+      0 exit() \ exit child process so no defunk zombies are alive
       \ bye \ not sure if this should be used or exit() so we will see.. also code past here will not happen that is clearly the way it is to be
       true
     then
