@@ -27,10 +27,14 @@ end-struct pipefd%
 	cpid -1 = if ." fork failed! " cr bye   else ." fork worked" cr then   \ fork did not work so exit
 
 	cpid 0 = if
-	  ." child speaking now! " cr
+		5000 ms
+	  ." child speaking now!" cr
 	  0 pipefd readend @ closeGNU throw
-	  ." child writing to pipe " cr
+	  ." child writing to pipe!" cr
+		s\" This is message from child\n"
+		0 pipefd writeend @ write-file
 	  0 pipefd writeend @ closeGNU throw
+		." child wrote message and sent it!" cr
 	  bye
 	then
 
@@ -38,27 +42,13 @@ end-struct pipefd%
 	  ." parent speaking now!" cr
 	  0 pipefd writeend @ closeGNU throw
 	  ." parent to read pipe " cr
-	  0 pipefd readend @ closeGNU throw
+		pad 80
+		0 pipefd readend @ read-file throw
+		pad swap type cr 
+		." parent closeing pipe now!" cr
+		0 pipefd readend @ closeGNU throw
 	  bye
 	then
 ;
 
 dochildparent
-
-: dopipe ( -- )
-  fork to cpid
-  cpid 0 > if \ parent
-    r/o open-pipe throw dup >r slurp-fid
-    r> close-pipe throw
-    dump cr ." above is parent recieved message > " . cr
-    1000 ms
-    bye
-  then
-  cpid 0 = if \ child
-    s\" message from child\n"
-    w/o open-pipe throw \ close-pipe throw
-    ." child sent message! > " . cr
-    1000 ms
-    bye
-  then
-;
