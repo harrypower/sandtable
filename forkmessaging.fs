@@ -41,7 +41,10 @@ c-library forkmessaging
   c-function pipe     pipe    a -- n      ( apipefd[2] -- n )
   c-function pipe2    pipe2   a n -- n    ( apipefd[2] nflags -- n )
   c-function closeGNU close   n -- n      ( fd -- flag )
-
+  c-function readGNU  read    n a n -- n  ( fd  buf  count --  n )
+  \ read count byes into buf from file
+  c-function writeGNU write   n a n -- n  ( fd  buf  count  --  n )
+  \ write count bytes from buf to file
   c-function epoll_create   epoll_create  n -- n        ( nsize -- nfd )
   c-function epoll_create1  epoll_create1 n -- n        ( nflag -- nfd )
   c-function epoll_ctl      epoll_ctl     n n n a -- n  ( nepfd nop nfd astructevent -- nflag )

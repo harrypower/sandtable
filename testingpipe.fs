@@ -31,10 +31,10 @@ end-struct pipefd%
 	  ." child speaking now!" cr
 	  0 pipefd readend @ closeGNU throw
 	  ." child writing to pipe!" cr
-		s\" This is message from child\n"
-		0 pipefd writeend @ write-file
+		0 pipefd writeend @	s\" This is message from child\n"
+ 		writeGNU . ." < how much was writen in chars!" cr
+		." child wrote message and sent it! pipe closing!" cr
 	  0 pipefd writeend @ closeGNU throw
-		." child wrote message and sent it!" cr
 	  bye
 	then
 
@@ -42,8 +42,8 @@ end-struct pipefd%
 	  ." parent speaking now!" cr
 	  0 pipefd writeend @ closeGNU throw
 	  ." parent to read pipe " cr
-		pad 80
-		0 pipefd readend @ read-file throw
+		0 pipefd readend @ pad 80
+		readGNU
 		pad swap type cr 
 		." parent closeing pipe now!" cr
 		0 pipefd readend @ closeGNU throw
