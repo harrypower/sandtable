@@ -21,25 +21,26 @@ end-struct pipefd%
 0 pipefd readend pipe ." this is pipe returned status > " . cr
 
 0 value cpid
-fork to cpid
-cpid -1 = [if] ." fork failed! " cr bye   [else] ." fork worked" cr [then]  \ fork did not work so exit
 
 : dochildparent ( -- ) \ this does not work
-cpid 0 = if
-  ." child speaking now! " cr
-  0 pipefd readend @ closeGNU throw
-  ." child writing to pipe " cr
-  0 pipefd writeend @ closeGNU throw
-  bye
-then
+	fork to cpid
+	cpid -1 = if ." fork failed! " cr bye   else ." fork worked" cr then   \ fork did not work so exit
 
-cpid 0 > if
-  ." parent speaking now!" cr
-  0 pipefd writeend @ closeGNU throw
-  ." parent to read pipe " cr
-  0 pipefd readend @ closeGNU throw
-  bye
-then
+	cpid 0 = if
+	  ." child speaking now! " cr
+	  0 pipefd readend @ closeGNU throw
+	  ." child writing to pipe " cr
+	  0 pipefd writeend @ closeGNU throw
+	  bye
+	then
+
+	cpid 0 > if
+	  ." parent speaking now!" cr
+	  0 pipefd writeend @ closeGNU throw
+	  ." parent to read pipe " cr
+	  0 pipefd readend @ closeGNU throw
+	  bye
+	then
 ;
 
 dochildparent
