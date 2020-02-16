@@ -160,7 +160,7 @@ commands-forked set-current
   sendcurlmessage
   lastresult$ $!
   \ need to add fork stuff here
-  bye \ maybe put here after each command ?
+  \ bye \ maybe put here after each command ?
    ;
 
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs

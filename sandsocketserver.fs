@@ -34,7 +34,9 @@
 require unix/socket.fs
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
-require forkmessaging.fs
+require unix/libc.fs
+\ require forkmessaging.fs
+
 
 only forth also definitions
 
@@ -217,7 +219,7 @@ require sandcommands.fs
     process-recieve \ remember this will have ( -- caddr u ) on stack as string to return
     \ now this string will be the message return from commands-instant via parent process in the socket
     \ or the default message for commands-forked when started
-    \ or i will contain the data from child process about how process finished.
+    \ or it will contain the data from child process about how process finished.
     \ Note if this is the data from child process it is to be deleted here because each commands-forked command sends the message back to this parent via curl
     sandtablePID 0 > if
       usockfd write-socket
