@@ -27,8 +27,8 @@ variable junk$
 variable port#$
 variable server_addres$
 
-\ s" 192.168.0.59" server_addres$ $!
-s" localhost" server_addres$ $!
+s" 192.168.0.59" server_addres$ $!
+\ s" localhost" server_addres$ $!
 s" :52222" port#$ $!
 
 : sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
@@ -166,7 +166,7 @@ commands-forked set-current
   \ need to adjust name of return data command
   \ need to also return the locking data to prevent injection of this return command
   sendcurlmessage
-  lastresult$ $! \ this will return the return message from this command sending stuff to curl to parent 
+  lastresult$ $! \ this will return the return message from this command sending stuff to curl to parent
  ;
 
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
