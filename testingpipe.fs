@@ -21,6 +21,7 @@ end-struct pipefd%
 0 pipefd readend pipe ." this is pipe returned status at its creation time > " . cr
 
 0 value cpid
+variable status
 
 : dochildparent ( -- ) \ this does not work
 	fork to cpid
@@ -46,7 +47,9 @@ end-struct pipefd%
 		pad swap type cr
 		." parent closeing pipe now!" cr
 		0 pipefd readend @ closeGNU throw
-	then
+		status wait
+		. ." < returned from wait! " cr
+ 	then
 ;
 
 dochildparent
