@@ -164,7 +164,7 @@ require sandcommands.fs
     then
     thecommand$ $@ commands-forked search-wordlist 0 <> if
       \ fork logic here
-      fork to sandtablePID
+      (fork) to sandtablePID
       sandtablePID 0 > if
         drop \ removes the xt because this parent process simply returns the following message
         thecommand$ $@ buffer1$ $+! s"  command has been started!" buffer1$ $+! lineending buffer1$ $+!
