@@ -176,7 +176,7 @@ require sandcommands.fs
         thecommand$ $@ buffer1$ $+! s"  command has been started!" buffer1$ $+! lineending buffer1$ $+!
       else
         execute \ this is the child process executing the sandtable code
-        lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
+        lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!  \  this is keep here in case i want to do something with the message in the child process of the command that was executed 
       then
     then
     thecommand$ $@ commands-instant search-wordlist 0 = if

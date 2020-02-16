@@ -152,7 +152,7 @@ commands-instant set-current
   junk$ $@ lastresult$ $! ;
 
 : trywait ( -- ) \ this is called as a command to fininish the commands-forded below
-  \ this command should be configured to only responde to the child sending this message back to the parent to allow parent to do this wait and return information 
+  \ this command should be configured to only responde to the child sending this message back to the parent to allow parent to do this wait and return information
   true to waitflag
   s" got the child message!" lastresult$ $! lineending lastresult$ $+!
 ;
@@ -162,12 +162,12 @@ commands-forked set-current
 
 : teststuff ( -- ) \ just a test without type or . or other like it used
   10000 ms
-  s" command=trywait"
+  s" command=trywait" \ need to put data into command at exit of these commands-forked
+  \ need to adjust name of return data command
+  \ need to also return the locking data to prevent injection of this return command
   sendcurlmessage
-  lastresult$ $!
-  \ need to add fork stuff here
-  \ bye \ maybe put here after each command ?
-   ;
+  lastresult$ $! \ this will return the return message from this command sending stuff to curl to parent 
+ ;
 
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
   configure-stuff false = if
