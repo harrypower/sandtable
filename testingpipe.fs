@@ -35,7 +35,7 @@ end-struct pipefd%
  		writeGNU . ." < how much was writen in chars!" cr
 		." child wrote message and sent it! pipe closing!" cr
 	  0 pipefd writeend @ closeGNU throw
-	  bye
+	  0 exit()
 	then
 
 	cpid 0 > if
