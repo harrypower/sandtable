@@ -45,7 +45,7 @@ s" :52222" port#$ $!
 ;
 
 : makemessage ( -- caddr u )
-  s" The received message is: " buffer$ $!
+  s" command=tryshget" buffer$ $!
   argcommand$ $@ buffer$ $+!
   buffer$ sendcurlmessage 2drop
 ;
