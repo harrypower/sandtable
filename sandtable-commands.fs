@@ -25,14 +25,15 @@
 \ Revisions:
 \ 02/17/2020 started coding
 
-require sandmotorapi.fs
-require Gforth-Objects/stringobj.fs
+\ require sandmotorapi.fs
+\ require Gforth-Objects/stringobj.fs
 
 
 variable argcommand$
 argcommand$ $! \ at this point the string is on the stack so put it here for now!
 argcommand$ $@ \ just so term can see it
 variable buffer$
+variable buffer1$
 variable port#$
 variable server_addres$
 
@@ -46,9 +47,9 @@ s" :52222" port#$ $!
 ;
 
 : makemessage ( -- caddr u )
-  s" command=tryshget" buffer$ $!
-  \ argcommand$ $@ buffer$ $+!
-  buffer$ $@ sendcurlmessage 2drop
+  s" command=tryshget" buffer1$ $!
+  \ argcommand$ $@ buffer1$ $+!
+  buffer1$ $@ sendcurlmessage 2drop
 ;
 
 makemessage
