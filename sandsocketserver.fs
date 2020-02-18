@@ -156,15 +156,14 @@ require sandcommands.fs
   thecommand$ $!
   thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
-        \ note commands-instant are basic data retreval or the command to update the data to this sand server ... the commands are in wordlist commands-instant
-        execute
-        lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
-      then
-      thecommand$ $@ commands-spawned search-wordlist 0 <> if
-        \ note commands-spawned are the sandtable process that take some time to complete.  the commandss are in wordlist commands-spawned.  the commad here will just call the processing program via sh-get shell command
-        execute
-        lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
-      then
+      \ note commands-instant are basic data retreval or the command to update the data to this sand server ... the commands are in wordlist commands-instant
+      execute
+      lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
+    then
+    thecommand$ $@ commands-spawned search-wordlist 0 <> if
+      \ note commands-spawned are the sandtable process that take some time to complete.  the commandss are in wordlist commands-spawned.  the commad here will just call the processing program via sh-get shell command
+      execute
+      lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
     then
     thecommand$ $@ commands-instant search-wordlist 0 = if
       thecommand$ $@ commands-spawned search-wordlist 0 = if
