@@ -63,15 +63,4 @@ sandtable set-current
 
 set-current set-order \ restore order and current from stack
 
-\ put all other words here
-: do-arg-commands ( -- ) \ will take arg from the OS for this program and run it. There will only be one command in arg but commands can have other args
-  next-arg 2dup command$ $!
-  swap drop 0 =  abort" There is no command to process ... exiting now!"
-  command$ $@ sandtable search-wordlist 0 <> if
-    execute \ do the command
-  else
-    true abort" The command does not exist ... exiting now!"
-  then ;
-
-\ do-arg-commands
 bye
