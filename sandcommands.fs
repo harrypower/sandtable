@@ -27,14 +27,6 @@ variable junk$
 variable port#$
 variable server_addres$
 
-s" 192.168.0.59" server_addres$ $!
-\ s" localhost" server_addres$ $!
-s" :52222" port#$ $!
-
-: sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
-  s\" curl \"" buffer$ $! server_addres$ $@ buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
-;
-
 : (get-pairs$) ( -- ) \ extract variable pairs from submessages$ strings
   0 { nqty }
   submessages$ [bind] strings $qty to nqty
@@ -60,7 +52,7 @@ s" :52222" port#$ $!
 
 get-order get-current
 
-wordlist constant commands-forked
+wordlist constant commands-spawned
 wordlist constant commands-instant
 
 commands-instant set-current
@@ -151,22 +143,18 @@ commands-instant set-current
   then
   junk$ $@ lastresult$ $! ;
 
-: trywait ( -- ) \ this is called as a command to fininish the commands-forded below
+: tryshget ( -- ) \ this is called as a command to fininish the commands-forded below
   \ this command should be configured to only responde to the child sending this message back to the parent to allow parent to do this wait and return information
-  true to waitflag
-  s" got the child message!" lastresult$ $! lineending lastresult$ $+!
+  s" got the message from sandtable-commands.fs" lastresult$ $! lineending lastresult$ $+!
 ;
 
-commands-forked set-current
+commands-spawned set-current
 \ place forked sandtable commands here
 
 : teststuff ( -- ) \ just a test without type or . or other like it used
-  10000 ms
-  s" command=trywait" \ need to put data into command at exit of these commands-forked
-  \ need to adjust name of return data command
-  \ need to also return the locking data to prevent injection of this return command
-  sendcurlmessage
-  lastresult$ $! \ this will return the return message from this command sending stuff to curl to parent
+  s\" gforth \"s\\\" testcommand&xnow=234&ynow=3234&x=5&y=10\\\"\" test.fs" sh-get
+
+  lastresult$ $!
  ;
 
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
