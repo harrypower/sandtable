@@ -31,6 +31,7 @@ require Gforth-Objects/stringobj.fs
 
 variable argcommand$
 argcommand$ $! \ at this point the string is on the stack so put it here for now!
+argcommand$ $@ \ just so term can see it
 variable buffer$
 variable port#$
 variable server_addres$
@@ -46,8 +47,8 @@ s" :52222" port#$ $!
 
 : makemessage ( -- caddr u )
   s" command=tryshget" buffer$ $!
-  argcommand$ $@ buffer$ $+!
-  buffer$ sendcurlmessage 2drop
+  \ argcommand$ $@ buffer$ $+!
+  buffer$ $@ sendcurlmessage 2drop
 ;
 
 makemessage
