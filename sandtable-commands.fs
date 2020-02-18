@@ -47,7 +47,7 @@ s" :52222" port#$ $!
 ;
 
 : makemessage ( -- caddr u )
-  1000 ms
+  1000 ms  \ not sure how much time is needed to let the socket server continue before it can recieve messages like the following.. might not even need any time
   s" command=tryshget&" buffer1$ $!
   argcommand$ $@ buffer1$ $+!
   buffer1$ $@ sendcurlmessage 2drop
