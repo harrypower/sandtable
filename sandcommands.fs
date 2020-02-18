@@ -146,6 +146,7 @@ commands-instant set-current
 : tryshget ( -- ) \ this is called as a command to fininish the commands-forded below
   \ this command should be configured to only responde to the child sending this message back to the parent to allow parent to do this wait and return information
   s" got the message from sandtable-commands.fs" lastresult$ $! lineending lastresult$ $+!
+  command$ $@ lastresult$ $+! lineending lastresult$ $+!
 ;
 
 commands-spawned set-current

@@ -47,9 +47,9 @@ s" :52222" port#$ $!
 ;
 
 : makemessage ( -- caddr u )
-  1000 ms 
-  s" command=tryshget" buffer1$ $!
-  \ argcommand$ $@ buffer1$ $+!
+  1000 ms
+  s" command=tryshget&" buffer1$ $!
+  argcommand$ $@ buffer1$ $+!
   buffer1$ $@ sendcurlmessage 2drop
 ;
 
