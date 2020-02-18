@@ -152,7 +152,7 @@ commands-spawned set-current
 \ place forked sandtable commands here
 
 : teststuff ( -- ) \ just a test without type or . or other like it used
-  s\" gforth \"s\\\" testcommand&xnow=234&ynow=3234&x=5&y=10\\\"\" test.fs" sh-get
+  s\" gforth -e \"s\\\" testcommand&xnow=234&ynow=3234&x=5&y=10\\\"\" test.fs" sh-get
 
   lastresult$ $!
  ;
