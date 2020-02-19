@@ -139,7 +139,7 @@ commands-spawned set-current
   key 0= if \ only start new sandtable process if there is no running at moment
     s" testcommand&xnow=234&ynow=3234&x=5&y=10" junk$ $!
     s" &" junk$ $+! \ need to add this to add the following key$
-    keymake junk$ $+!
+    keymake$ junk$ $+!
     junk$ $@ sh-sandtable-command \ ( -- caddr u )
   else
     s" teststuff command not sent because sandtable still processing!"
