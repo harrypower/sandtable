@@ -139,7 +139,8 @@ sandtable set-current
  else
    s" Fast calibration was not performed!" junk$ $+! lineending junk$ $+!
  then
- junk$ $@ lastresult$ $! ;
+ \ junk$ $@ lastresult$ $!
+  ;
 
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
  configure-stuff false = if
@@ -154,7 +155,7 @@ sandtable set-current
 \    s" Sandtable motors not calibrated!"
 \  then
 \  junk$ $+! lineending junk$ $+!
- junk$ $@  lastresult$ $!
+ \ junk$ $@  lastresult$ $!
  \ need to add fork stuff here
 ;
 
@@ -191,7 +192,7 @@ nflag if
 else
   s" Gotoxy was not performed!" junk$ $+! lineending junk$ $+!
 then
-junk$ $@ lastresult$ $!
+\ junk$ $@ lastresult$ $!
 \ need to add fork stuff here
 ;
 
