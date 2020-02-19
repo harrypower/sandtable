@@ -83,7 +83,7 @@ s" http://localhost" server_addres$ $!
 s" :52222" port#$ $!
 
 : sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
-  s\" curl --request --get --data-binary \"" curl$ $! curl$ $+! s\" \"  " curl$ $+! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! curl$ $@ sh-get
+  s\" curl --get --data-binary \"" curl$ $! curl$ $+! s\" \"  " curl$ $+! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! curl$ $@ sh-get
   \ s\" curl --get --data \"" curl$ $! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! s" /?" curl$ $+! curl$ $+! s\" \"" curl$ $+! curl$ $@ sh-get
 ;
 
