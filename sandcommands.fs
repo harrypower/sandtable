@@ -121,7 +121,6 @@ commands-instant set-current
   s" got the message from sandtable-commands.fs" lastresult$ $! lineending lastresult$ $+!
   command$ $@ lastresult$ $+! lineending lastresult$ $+!
   (get-pairs$)
-  (variable-pair-value)
   getkeyfromsubmessage true = if
     key# = if \ kep present and matching
       0 to key# \ reset the key# for next sandtable use
