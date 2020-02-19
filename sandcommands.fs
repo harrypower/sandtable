@@ -125,6 +125,7 @@ commands-instant set-current
   (get-pairs$)
   ." stack after (get-pairs$) in testshget " .s cr
   getkeyfromsubmessage true = if
+    ." stack after getkeyfromsubmessage test in testshget " .s cr  
     key# = if \ key present and matching
       0 to key# \ reset the key# for next sandtable use
       s" key# received and matching and reset!"  lastresult$ $+! lineending lastresult$ $+!
