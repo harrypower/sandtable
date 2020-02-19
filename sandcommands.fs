@@ -22,6 +22,8 @@
 
 \ Revisions:
 \ 01/29/2020 started coding
+\ 02/19/2020 added key stuff
+\ 02/19/2020 using nohup and command line to send message to sandtable command processor
 
 variable junk$
 variable shjunk$

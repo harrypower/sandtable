@@ -30,6 +30,9 @@
 \ 1/28/2019 added sandmotorapi.fs require for later motor control threads
 \ *** note this means bind is redefined in objects.fs from its first use in unix/socket.fs so be aware of this
 \ *** bind can be used for an object and is not needed as a socket item so it is an ok tradeoff
+\ 02/19/2020 note sandmotorapi.fs is only used for some variables and not to process directly the sandtable ... that is done externaly
+\ 02/19/2020 this socket server simply now gets a message and passes it on to sandtable-commands.fs if it is not running currently to process the sandtable command
+\ 02/19/2020 a key# was added to ensure only one sandtable-commands.fs process is running and only that process can return that key# to tell this server it is done! 
 
 require unix/socket.fs
 require sandmotorapi.fs  \ note this sandmotorapi.fs stuff is not executed in this code but is used to get sandtable data sandtable-commands.fs will execute the sandtable motors
@@ -81,7 +84,7 @@ strings heap-new constant get-variable-pairs$
 
 : keymake$ ( -- caddr u  ) \ make a new random key# to use for sandtable execution or return existing key# if it has not been returned
   key# 0<> if
-    rnd to key
+    rnd to key#
     key# s>d udto$
     s" key=" key$ $!
     key$ $+!
