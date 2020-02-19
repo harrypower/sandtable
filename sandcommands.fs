@@ -51,8 +51,16 @@ variable shjunk$
   get-variable-pairs$ [bind] strings $qty 0 ?do \ find x variable
     i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
     if
-      0 0 i 1+ get-variable-pairs$  [bind] strings []@$
-      false = if s>number? true = if d>s to nvalue true to nflag else 2drop false to nvalue false to nflag then else 2drop false to nflag then
+      i 1+ get-variable-pairs$  [bind] strings []@$ ( n n caddr u nflag )
+      false = if ( n n caddr u )
+        s>number? true = if ( n n d )
+          d>s to nvalue true to nflag
+        else ( n n d )
+          2drop false to nvalue false to nflag
+        then
+      else ( n n caddr u )
+        2drop false to nflag
+      then ( n n )
       leave
     then
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
@@ -125,7 +133,7 @@ commands-instant set-current
   (get-pairs$)
   ." stack after (get-pairs$) in testshget " .s cr
   getkeyfromsubmessage true = if
-    ." stack after getkeyfromsubmessage test in testshget " .s cr  
+    ." stack after getkeyfromsubmessage test in testshget " .s cr
     key# = if \ key present and matching
       0 to key# \ reset the key# for next sandtable use
       s" key# received and matching and reset!"  lastresult$ $+! lineending lastresult$ $+!

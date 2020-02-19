@@ -71,7 +71,7 @@ strings heap-new constant get-variable-pairs$
   get-variable-pairs$ [bind] strings $qty 0 ?do \ find x variable
     i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
     if
-      0 0 i 1+ get-variable-pairs$  [bind] strings []@$
+      i 1+ get-variable-pairs$  [bind] strings []@$
       false = if s>number? true = if d>s to nvalue true to nflag else 2drop false to nvalue false to nflag then else 2drop false to nflag then
       leave
     then
