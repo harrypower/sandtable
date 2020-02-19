@@ -177,6 +177,7 @@ require sandcommands.fs
       execute
       lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
     then
+    ." stack in parse-command after commands-instant " .s cr 
     thecommand$ $@ commands-spawned search-wordlist 0 <> if
       \ note commands-spawned are the sandtable process that take some time to complete.  the commads are in wordlist commands-spawned.  the commad here will basically call the sandtable-commands.fs via sh-get shell command with data
       execute
@@ -189,7 +190,7 @@ require sandcommands.fs
       then
     else drop \ not zero so drop xt
     then
-    ." stack in parse-command execute ifs " .s cr 
+    ." stack in parse-command execute ifs " .s cr
   else
     s" No command issued!" buffer1$ $+! lineending buffer1$ $+!
   then ;
