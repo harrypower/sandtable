@@ -173,11 +173,12 @@ require sandcommands.fs
   ." stack in parse-command top " .s cr
   thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
+    ." stack in parse-command before execute of commands-instant " .s cr
       \ note commands-instant are basic data retreval or the command to update the data to this sand server ... the commands are in wordlist commands-instant
       execute
       lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
     then
-    ." stack in parse-command after commands-instant " .s cr 
+    ." stack in parse-command after commands-instant " .s cr
     thecommand$ $@ commands-spawned search-wordlist 0 <> if
       \ note commands-spawned are the sandtable process that take some time to complete.  the commads are in wordlist commands-spawned.  the commad here will basically call the sandtable-commands.fs via sh-get shell command with data
       execute
