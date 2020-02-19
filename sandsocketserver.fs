@@ -226,9 +226,11 @@ require sandcommands.fs
     userver 8 listen
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket \ recived message from web front end or a cdl curl command
+    ." stack before process-recieved in loop " .s cr
     process-recieved \ ( -- caddr u ) this will be the string to return
     usockfd write-socket  \ return the message to calling program
     usockfd close-socket
+    ." stack after close-socket in loop " .s cr
     stopserverflag
   until
   userver close-server
