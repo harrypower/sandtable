@@ -85,7 +85,7 @@ strings heap-new constant get-variable-pairs$
 : keymake$ ( -- caddr u  ) \ make a new random key# to use for sandtable execution or return existing key# if it has not been returned
   key# 0= if
     rnd to key#
-    key# s>d udto$
+    key# s>d dto$
     s" key=" key$ $!
     key$ $+!
   then

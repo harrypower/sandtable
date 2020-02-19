@@ -87,18 +87,23 @@ s" :52222" port#$ $!
 ;
 
 : returnmessage ( -- caddr u )
+  ." started return message " .s cr
   15000 ms  \ time to test if key idea works
   s" command=testshget" buffer$ $!
   (parse-command&submessages)
+  ." after parse-command stuff " .s cr
   (get-pairs$)
+  ." after (get-pairs$) stuff" .s cr
   s" key" (variable-pair-value) true = if \ key present so this came from sandsocketserver so return message to them saying done and received
     s" &" buffer$ $+! \ add this to allow key to be added
-    s" key=" buffer$ $+! buffer$ $+!
+    s" key=" buffer$ $+!
+    s>d dto$ buffer$ $+! \ turn key# into a string again 
     ." the message sent:" cr buffer$ $@ type cr
     buffer$ $@ sendcurlmessage
     ." The sandsocketserver output after sent message:" cr
     type cr \ this will go to stdout and the log file
   else \  no key present so this is from command line so return info at stdout
+    drop \ key# remove from stack
     ." This was received with no key: " cr
     argcommand$ $@ type cr
   then
