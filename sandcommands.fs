@@ -29,7 +29,7 @@ variable junk$
   { caddr u }
   s\" nohup gforth -e \"s\\\" " junk$ $!
   caddr u junk$ $+!
-  s\" \\\"\" sandtable-commands.fs > sandtable-command.data 2>&1 &" junk$ $+!
+  s\" \\\"\" sandtable-commands.fs > sandtable-command.data 2>&1 &" junk$ $+! \ note the last & here is to disconnect this new process from the socketserver process
   junk$ $@ sh-get ;
 
 get-order get-current
