@@ -108,7 +108,7 @@ commands-instant set-current
   true to stopserverflag
   s" Sandserver shutting done now!" junk$ $!
   lineending junk$ $+!
-  junk$ $@  lastresult$ $! 
+  junk$ $@  lastresult$ $!
   ." stack at end of stopsandserver" .s cr
   ;
 
@@ -134,7 +134,7 @@ commands-instant set-current
   else
     s" No key# received message was not from sandtable-commands.fs after all!" lastresult$ $+! lineending lastresult$ $+!
   then
-  ." stack end of testshget " . cr
+  ." stack end of testshget " .s cr
 ;
 
 commands-spawned set-current
