@@ -90,7 +90,7 @@ s" :52222" port#$ $!
 : returnmessage ( -- caddr u )
   2000 ms  \ not sure how much time is needed to let the socket server continue before it can recieve messages like the following.. might not even need any time
   s" command=testshget" buffer$ $!
-  \ argcommand$ $@ buffer$ $+!
+  argcommand$ $@ buffer$ $+!
   ." the sending message" cr buffer$ $@ type cr
   buffer$ $@ sendcurlmessage
   ." The sandsocketserver output:" cr
