@@ -56,7 +56,7 @@ variable shjunk$
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
   nvalue nflag ;
 
-: getkeyfromsubmessage ( -- caddr u nflag )  \ nflag is true if key is present in submessages.. caddr u is the key string and is valid if nflag is true only
+: getkeyfromsubmessage ( -- caddr u nflag )  \ nflag is true if key# is present in submessages.. caddr u is the key# string and is valid if nflag is true only
   s" key" (variable-pair-value) ;
 
 get-order get-current
@@ -121,14 +121,14 @@ commands-instant set-current
   (get-pairs$)
   (variable-pair-value)
   getkeyfromsubmessage true = if
-    key = if \ kep present and matching
-      0 to key \ reset the key for next sandtable use
-      s" key received and matching and reset!"  lastresult$ $+! lineending lastresult$ $+!
+    key# = if \ kep present and matching
+      0 to key# \ reset the key# for next sandtable use
+      s" key# received and matching and reset!"  lastresult$ $+! lineending lastresult$ $+!
     else
-      s" key received but no match!"  lastresult$ $+! lineending lastresult$ $+!
+      s" key# received but no match!"  lastresult$ $+! lineending lastresult$ $+!
     then
   else
-    s" No key received message was not from sandtable-commands.fs after all!" lastresult$ $+! lineending lastresult$ $+!
+    s" No key# received message was not from sandtable-commands.fs after all!" lastresult$ $+! lineending lastresult$ $+!
   then
 ;
 
@@ -136,7 +136,7 @@ commands-spawned set-current
 \ place slower commands-spawned sandtable commands here
 
 : teststuff ( -- ) \ just a test
-  key 0= if \ only start new sandtable process if there is no running at moment
+  key# 0= if \ only start new sandtable process if there is no running at moment
     s" testcommand&xnow=234&ynow=3234&x=5&y=10" junk$ $!
     s" &" junk$ $+! \ need to add this to add the following key$
     keymake$ junk$ $+!

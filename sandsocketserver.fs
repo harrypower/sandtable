@@ -57,7 +57,7 @@ variable thecommand$
 variable User-Agent$
 variable GET$
 variable lastresult$
-0 value key \ 0 means no key issued so no sandtable code running... any other number means santable code is running or has not returned key yet
+0 value key# \ 0 means no key# issued so no sandtable code running... any other number means santable code is running or has not returned key# yet
 variable key$
 seed-init \ start of random stuff
 
@@ -79,10 +79,10 @@ strings heap-new constant get-variable-pairs$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
-: keymake$ ( -- caddr u  ) \ make a new random key to use for sandtable execution or return existing key if it has not been returned
-  key 0<> if
+: keymake$ ( -- caddr u  ) \ make a new random key# to use for sandtable execution or return existing key# if it has not been returned
+  key# 0<> if
     rnd to key
-    key s>d udto$
+    key# s>d udto$
     s" key=" key$ $!
     key$ $+!
   then
