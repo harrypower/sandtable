@@ -132,6 +132,7 @@ commands-instant set-current
       s" key# received but no match!"  lastresult$ $+! lineending lastresult$ $+!
     then
   else
+    drop \ remove the key number from stack Note this key number will be 0 because of above condition for this if then
     s" No key# received message was not from sandtable-commands.fs after all!" lastresult$ $+! lineending lastresult$ $+!
   then
   ." stack end of testshget " .s cr
