@@ -107,6 +107,8 @@ s" :52222" port#$ $!
     ." This was received with no key: " cr
     argcommand$ $@ type cr
   then
+  ." the arguments recieved: " argcommand$ $@ type cr
+  ." stack at end of returnmessage " .s cr
 ;
 
 returnmessage

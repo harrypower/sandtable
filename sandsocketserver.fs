@@ -220,7 +220,9 @@ require sandcommands.fs
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
   userver . ." < server id " cr
+  ." stack before serverloop " .s cr
   begin
+    ." stack begining of serverloop " .s cr
     userver 8 listen
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket \ recived message from web front end or a cdl curl command
