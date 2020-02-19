@@ -97,8 +97,10 @@ commands-spawned set-current
 \ place slower commands-spawned sandtable commands here
 
 : teststuff ( -- ) \ just a test
+  ." got to teststuff before sh-get!" cr
   s" testcommand&xnow=234&ynow=3234&x=5&y=10" sh-sandtable-command
   lastresult$ $!
+  ." after teststuff sh-get!" cr
  ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
