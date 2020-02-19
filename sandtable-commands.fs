@@ -29,7 +29,7 @@
 
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
-
+cr \ to make debugging look better
 
 variable argcommand$
 argcommand$ $! \ at this point the string is on the stack so put it here for now!
@@ -87,9 +87,10 @@ s" :52222" port#$ $!
 ;
 
 : returnmessage ( -- caddr u )
-  1000 ms  \ not sure how much time is needed to let the socket server continue before it can recieve messages like the following.. might not even need any time
+  2000 ms  \ not sure how much time is needed to let the socket server continue before it can recieve messages like the following.. might not even need any time
   s" command=testshget&" buffer$ $!
   argcommand$ $@ buffer$ $+!
+  ." the sending message" cr buffer$ $@ type cr
   buffer$ $@ sendcurlmessage
   ." The sandsocketserver output:" cr
   type cr
