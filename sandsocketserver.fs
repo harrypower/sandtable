@@ -205,7 +205,9 @@ require sandcommands.fs
   command$ $@ buffer1$ $+! lineending buffer1$ $+!
   s" From User-Agent> " buffer1$ $+!
   User-Agent$ $@ buffer1$ $+! lineending buffer1$ $+!
+  ." stack before parse-command in process-recieved " .s cr
   parse-command  \ find and execute commands
+  ." stack after parse-command in process-recieved " .s cr
   curlagent if
     buffer1$ $@ http-response
   else
