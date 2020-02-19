@@ -97,7 +97,7 @@ s" :52222" port#$ $!
   s" key" (variable-pair-value) true = if \ key present so this came from sandsocketserver so return message to them saying done and received
     s" &" buffer$ $+! \ add this to allow key to be added
     s" key=" buffer$ $+!
-    s>d dto$ buffer$ $+! \ turn key# into a string again 
+    s>d udto$ buffer$ $+! \ turn key# into a string again 
     ." the message sent:" cr buffer$ $@ type cr
     buffer$ $@ sendcurlmessage
     ." The sandsocketserver output after sent message:" cr
