@@ -71,13 +71,21 @@ strings heap-new constant get-variable-pairs$
   get-variable-pairs$ [bind] strings $qty 0 ?do \ find x variable
     i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
     if
-      i 1+ get-variable-pairs$  [bind] strings []@$
-      false = if s>number? true = if d>s to nvalue true to nflag else 2drop false to nvalue false to nflag then else 2drop false to nflag then
+      i 1+ get-variable-pairs$  [bind] strings []@$ ( n n caddr u nflag )
+      false = if ( n n caddr u )
+        s>number? true = if ( n n d )
+          d>s to nvalue true to nflag
+        else ( n n d )
+          2drop false to nvalue false to nflag
+        then
+      else ( n n caddr u )
+        2drop false to nflag
+      then ( n n )
       leave
     then
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
   nvalue nflag ;
-
+  
 \ s" http://192.168.0.59" server_addres$ $!
 s" http://localhost" server_addres$ $!
 s" :52222" port#$ $!
@@ -97,7 +105,7 @@ s" :52222" port#$ $!
   s" key" (variable-pair-value) true = if \ key present so this came from sandsocketserver so return message to them saying done and received
     s" &" buffer$ $+! \ add this to allow key to be added
     s" key=" buffer$ $+!
-    s>d udto$ buffer$ $+! \ turn key# into a string again
+    s>d dto$ buffer$ $+! \ turn key# into a string again
     ." the message sent:" cr buffer$ $@ type cr
     buffer$ $@ sendcurlmessage
     ." The sandsocketserver output after sent message:" cr
