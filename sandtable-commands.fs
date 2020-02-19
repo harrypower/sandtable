@@ -38,6 +38,7 @@ variable buffer$
 variable port#$
 variable server_addres$
 variable junk$
+variable convert$
 
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
