@@ -98,7 +98,6 @@ commands-spawned set-current
 
 : teststuff ( -- ) \ just a test
   s" testcommand&xnow=234&ynow=3234&x=5&y=10" sh-sandtable-command
-  \ s\" nohup gforth -e \"s\\\" testcommand&xnow=234&ynow=3234&x=5&y=10\\\"\" sandtable-commands.fs > sandtable-command.data 2>&1" sh-get
   lastresult$ $!
  ;
 
