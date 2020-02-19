@@ -170,6 +170,7 @@ require sandcommands.fs
   parse-command&submessages
   0 submessages$ [bind] strings []@$ drop \ the first string should be the command
   thecommand$ $!
+  ." stack in parse-command top " .s cr
   thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
       \ note commands-instant are basic data retreval or the command to update the data to this sand server ... the commands are in wordlist commands-instant
@@ -188,6 +189,7 @@ require sandcommands.fs
       then
     else drop \ not zero so drop xt
     then
+    ." stack in parse-command execute ifs " .s cr 
   else
     s" No command issued!" buffer1$ $+! lineending buffer1$ $+!
   then ;
