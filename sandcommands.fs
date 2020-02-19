@@ -58,7 +58,7 @@ variable shjunk$
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
   nvalue nflag ;
 
-: getkeyfromsubmessage ( -- caddr u nflag )  \ nflag is true if key# is present in submessages.. caddr u is the key# string and is valid if nflag is true only
+: getkeyfromsubmessage ( -- nkey nflag )  \ nflag is true if key# is present in submessages.. caddr u is the key# string and is valid if nflag is true only
   s" key" (variable-pair-value) ;
 
 get-order get-current
@@ -121,8 +121,9 @@ commands-instant set-current
   s" got the message from sandtable-commands.fs" lastresult$ $! lineending lastresult$ $+!
   command$ $@ lastresult$ $+! lineending lastresult$ $+!
   (get-pairs$)
+  ." stack after (get-pairs$) in testshget " .s cr
   getkeyfromsubmessage true = if
-    key# = if \ kep present and matching
+    key# = if \ key present and matching
       0 to key# \ reset the key# for next sandtable use
       s" key# received and matching and reset!"  lastresult$ $+! lineending lastresult$ $+!
     else
@@ -131,6 +132,7 @@ commands-instant set-current
   else
     s" No key# received message was not from sandtable-commands.fs after all!" lastresult$ $+! lineending lastresult$ $+!
   then
+  ." stack end of testshget " . cr 
 ;
 
 commands-spawned set-current
@@ -145,7 +147,9 @@ commands-spawned set-current
   else
     s" teststuff command not sent because sandtable still processing!"
   then
-    lastresult$ $! ;
+  lastresult$ $!
+  ." current stack end of teststuff " .s cr
+  ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
 ;
