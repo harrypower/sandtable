@@ -29,7 +29,7 @@ variable junk$
   { caddr u }
   s\" nohup gforth -e \"s\\\" " junk$ $!
   caddr u junk$ $+!
-  s\" \\\"\" sandtable-commands.fs > sandtable-command.data 2>&1" junk$ $+!
+  s\" \\\"\" sandtable-commands.fs > sandtable-command.data 2>&1 &" junk$ $+!
   junk$ $@ sh-get ;
 
 get-order get-current
