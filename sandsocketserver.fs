@@ -35,6 +35,7 @@ require unix/socket.fs
 require sandmotorapi.fs  \ note this sandmotorapi.fs stuff is not executed in this code but is used to get sandtable data sandtable-commands.fs will execute the sandtable motors
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
+require random.fs
 
 only forth also definitions
 
@@ -56,6 +57,9 @@ variable thecommand$
 variable User-Agent$
 variable GET$
 variable lastresult$
+0 value key \ 0 means no key issued so no sandtable code running... any other number means santable code is running or has not returned key yet
+variable key$
+seed-init \ start of random stuff
 
 false value stopserverflag \ this is the server loop control itself .. when it is false the loop continues when it is true the loop stops
 false value curlagent \ true means it is a curl agent false means it is a browser based or other agent
@@ -74,6 +78,15 @@ strings heap-new constant get-variable-pairs$
     swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
+
+: keymake$ ( -- caddr u  ) \ make a new random key to use for sandtable execution or return existing key if it has not been returned
+  key 0<> if
+    rnd to key
+    key s>d udto$
+    s" key=" key$ $!
+    key$ $+!
+  then
+  key$ $@ ;
 
 require sandcommands.fs
 

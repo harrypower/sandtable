@@ -87,13 +87,21 @@ s" :52222" port#$ $!
 ;
 
 : returnmessage ( -- caddr u )
-  2000 ms  \ not sure how much time is needed to let the socket server continue before it can recieve messages like the following.. might not even need any time
-  s" command=testshget&" buffer$ $!
-  argcommand$ $@ buffer$ $+!
-  ." the sending message" cr buffer$ $@ type cr
-  buffer$ $@ sendcurlmessage
-  ." The sandsocketserver output:" cr
-  type cr
+  15000 ms  \ time to test if key idea works
+  s" command=testshget" buffer$ $!
+  (parse-command&submessages)
+  (get-pairs$)
+  s" key" (variable-pair-value) true = if \ key present so this came from sandsocketserver so return message to them saying done and received
+    s" &" buffer$ $+! \ add this to allow key to be added
+    s" key=" buffer$ $+! buffer$ $+!
+    ." the message sent:" cr buffer$ $@ type cr
+    buffer$ $@ sendcurlmessage
+    ." The sandsocketserver output after sent message:" cr
+    type cr \ this will go to stdout and the log file
+  else \  no key present so this is from command line so return info at stdout
+    ." This was received with no key: " cr
+    argcommand$ $@ type cr
+  then
 ;
 
 returnmessage

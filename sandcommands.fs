@@ -24,13 +24,40 @@
 \ 01/29/2020 started coding
 
 variable junk$
+variable shjunk$
 
 : sh-sandtable-command ( caddr u -- caddr1 u1)
   { caddr u }
-  s\" nohup gforth -e \"s\\\" " junk$ $!
-  caddr u junk$ $+!
-  s\" \\\"\" sandtable-commands.fs > sandtable-command.data 2>&1 &" junk$ $+! \ note the last & here is to disconnect this new process from the socketserver process
-  junk$ $@ sh-get ;
+  s\" nohup gforth -e \"s\\\" " shjunk$ $!
+  caddr u shjunk$ $+!
+  s\" \\\"\" sandtable-commands.fs > sandtable-command.data 2>&1 &" shjunk$ $+! \ note the last & here is to disconnect this new process from the socketserver process
+  shjunk$ $@ sh-get ;
+
+: (get-pairs$) ( -- ) \ extract variable pairs from submessages$ strings
+  0 { nqty }
+  submessages$ [bind] strings $qty to nqty
+  get-variable-pairs$ [bind] strings destruct
+  get-variable-pairs$ [bind] strings construct
+  nqty 1 > if \ there are some variable pairs to parse
+    nqty 1 do
+      s" =" i submessages$ [bind] strings []@$ drop
+      get-variable-pairs$ [bind] strings split$>$s
+    loop
+  then ;
+: (variable-pair-value) ( caddr u - nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
+  0 false { caddr u nvalue nflag }
+  get-variable-pairs$ [bind] strings $qty 0 ?do \ find x variable
+    i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
+    if
+      0 0 i 1+ get-variable-pairs$  [bind] strings []@$
+      false = if >number swap drop 0 = if d>s to nvalue true to nflag else 2drop 0 to nvalue false to nflag then else 2drop false to nflag then
+      leave
+    then
+  2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
+  nvalue nflag ;
+
+: getkeyfromsubmessage ( -- caddr u nflag )  \ nflag is true if key is present in submessages.. caddr u is the key string and is valid if nflag is true only
+  s" key" (variable-pair-value) ;
 
 get-order get-current
 
@@ -88,20 +115,36 @@ commands-instant set-current
 ;
 
 : testshget ( -- ) \ this is called as a command to fininish the commands-forded below
-  \ this command should be configured to only responde to the child sending this message back to the parent to allow parent to do this wait and return information
+  \ this command should be configured to only respond to the child sending this message back to the parent to allow parent to do this wait and return information
   s" got the message from sandtable-commands.fs" lastresult$ $! lineending lastresult$ $+!
   command$ $@ lastresult$ $+! lineending lastresult$ $+!
+  (get-pairs$)
+  (variable-pair-value)
+  getkeyfromsubmessage true = if
+    key = if \ kep present and matching
+      0 to key \ reset the key for next sandtable use
+      s" key received and matching and reset!"  lastresult$ $+! lineending lastresult$ $+!
+    else
+      s" key received but no match!"  lastresult$ $+! lineending lastresult$ $+!
+    then
+  else
+    s" No key received message was not from sandtable-commands.fs after all!" lastresult$ $+! lineending lastresult$ $+!
+  then
 ;
 
 commands-spawned set-current
 \ place slower commands-spawned sandtable commands here
 
 : teststuff ( -- ) \ just a test
-  ." got to teststuff before sh-get!" cr
-  s" testcommand&xnow=234&ynow=3234&x=5&y=10" sh-sandtable-command
-  lastresult$ $!
-  ." after teststuff sh-get!" cr
- ;
+  key 0= if \ only start new sandtable process if there is no running at moment
+    s" testcommand&xnow=234&ynow=3234&x=5&y=10" junk$ $!
+    s" &" junk$ $+! \ need to add this to add the following key$
+    keymake junk$ $+!
+    junk$ $@ sh-sandtable-command \ ( -- caddr u )
+  else
+    s" teststuff command not sent because sandtable still processing!"
+  then
+    lastresult$ $! ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
 ;
