@@ -177,6 +177,7 @@ require sandcommands.fs
       \ note commands-instant are basic data retreval or the command to update the data to this sand server ... the commands are in wordlist commands-instant
       execute
       lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
+      ." stack in parse-command after exectue of commands-instant " .s cr 
     then
     ." stack in parse-command after commands-instant " .s cr
     thecommand$ $@ commands-spawned search-wordlist 0 <> if
