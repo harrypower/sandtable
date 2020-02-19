@@ -32,7 +32,7 @@
 \ *** bind can be used for an object and is not needed as a socket item so it is an ok tradeoff
 
 require unix/socket.fs
-require sandmotorapi.fs
+require sandmotorapi.fs  \ note this sandmotorapi.fs stuff is not executed in this code but is used to get sandtable data sandtable-commands.fs will execute the sandtable motors
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
 
@@ -68,7 +68,7 @@ strings heap-new constant get-variable-pairs$
   s" &" command$ $@ submessages$ [bind] strings split$>$s
 ;
 
-: udto$ ( ud -- caddr u )  \ convert double to a string
+: udto$ ( ud -- caddr u )  \ convert unsigned double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
 : dto$ ( d -- caddr u )  \ convert double signed to a string
     swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
@@ -161,7 +161,7 @@ require sandcommands.fs
       lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
     then
     thecommand$ $@ commands-spawned search-wordlist 0 <> if
-      \ note commands-spawned are the sandtable process that take some time to complete.  the commandss are in wordlist commands-spawned.  the commad here will just call the processing program via sh-get shell command
+      \ note commands-spawned are the sandtable process that take some time to complete.  the commads are in wordlist commands-spawned.  the commad here will basically call the sandtable-commands.fs via sh-get shell command with data
       execute
       lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
     then
