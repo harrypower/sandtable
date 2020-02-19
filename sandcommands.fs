@@ -94,7 +94,7 @@ commands-instant set-current
 ;
 
 commands-spawned set-current
-\ place forked sandtable commands here
+\ place slower commands-spawned sandtable commands here
 
 : teststuff ( -- ) \ just a test
   s" testcommand&xnow=234&ynow=3234&x=5&y=10" sh-sandtable-command

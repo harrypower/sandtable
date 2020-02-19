@@ -78,18 +78,19 @@ strings heap-new constant get-variable-pairs$
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
   nvalue nflag ;
 
-\ s" 192.168.0.59" server_addres$ $!
-s" localhost" server_addres$ $!
+\ s" http://192.168.0.59" server_addres$ $!
+s" http://localhost" server_addres$ $!
 s" :52222" port#$ $!
 
 : sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
-  s\" curl \"" curl$ $! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! s" /?" curl$ $+! curl$ $+! s\" \"" curl$ $+! curl$ $@ sh-get
+  s\" curl --get --data-ascii \"" curl$ $! curl$ $+! s\" \"" curl$ $+! curl$ server_addres$ $@ curl$ $+! port#$ $@curl$ $+! curl$ $@ sh-get
+  \ s\" curl --get --data \"" curl$ $! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! s" /?" curl$ $+! curl$ $+! s\" \"" curl$ $+! curl$ $@ sh-get
 ;
 
 : returnmessage ( -- caddr u )
-  2000 ms  \ not sure how much time is needed to let the socket server continue before it can recieve messages like the following.. might not even need any time
+  1000 ms  \ not sure how much time is needed to let the socket server continue before it can recieve messages like the following.. might not even need any time
   s" command=testshget&" buffer$ $!
-  \ argcommand$ $@ buffer$ $+!
+  argcommand$ $@ buffer$ $+!
   ." the sending message" cr buffer$ $@ type cr
   buffer$ $@ sendcurlmessage
   ." The sandsocketserver output:" cr
