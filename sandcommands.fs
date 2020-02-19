@@ -52,7 +52,7 @@ variable shjunk$
     i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
     if
       0 0 i 1+ get-variable-pairs$  [bind] strings []@$
-      false = if >number swap drop 0 = if d>s to nvalue true to nflag else 2drop 0 to nvalue false to nflag then else 2drop false to nflag then
+      false = if s>number? true = if d>s to nvalue true to nflag else 2drop false to nvalue false to nflag then else 2drop false to nflag then
       leave
     then
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two

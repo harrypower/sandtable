@@ -72,7 +72,7 @@ strings heap-new constant get-variable-pairs$
     i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
     if
       0 0 i 1+ get-variable-pairs$  [bind] strings []@$
-      false = if >number swap drop 0 = if d>s to nvalue true to nflag else 2drop 0 to nvalue false to nflag then else 2drop false to nflag then
+      false = if s>number? true = if d>s to nvalue true to nflag else 2drop false to nvalue false to nflag then else 2drop false to nflag then
       leave
     then
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
@@ -97,7 +97,7 @@ s" :52222" port#$ $!
   s" key" (variable-pair-value) true = if \ key present so this came from sandsocketserver so return message to them saying done and received
     s" &" buffer$ $+! \ add this to allow key to be added
     s" key=" buffer$ $+!
-    s>d udto$ buffer$ $+! \ turn key# into a string again 
+    s>d udto$ buffer$ $+! \ turn key# into a string again
     ." the message sent:" cr buffer$ $@ type cr
     buffer$ $@ sendcurlmessage
     ." The sandsocketserver output after sent message:" cr
