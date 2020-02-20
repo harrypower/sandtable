@@ -42,7 +42,7 @@ require random.fs
 
 only forth also definitions
 
-1000 value stream-timeout
+2000 value stream-timeout
 52222 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
