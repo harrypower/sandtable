@@ -147,7 +147,7 @@ variable tempresponse$
 
 : parsehttp ( cadrr u -- ) \ get the command and user-agent
   { caddr u }
-  cadr u s" GET " s"  " parse$to$ GET$ $!
+  caddr u s" GET " s"  " parse$to$ GET$ $!
   GET$ $@ s" /?command=" search true = if
     10 - swap 10 + swap command$ $!
   else
