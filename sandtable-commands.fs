@@ -98,8 +98,8 @@ s" :52222" port#$ $!
     port#$ $@ curl$ $+!
     s\" \\?" curl$ $+!
     ucaddr u curl$ $+!
-    s\" \"" curl$ $+! 
-    \ curl$ $@ sh-get
+    s\" \"" curl$ $+!
+    curl$ $@ sh-get
 \  s\" curl --get --data-binary \"" curl$ $! curl$ $+! s\" \"  " curl$ $+! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! curl$ $@ sh-get
 ;
 
