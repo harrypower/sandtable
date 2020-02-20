@@ -98,7 +98,7 @@ s" :52222" port#$ $!
     port#$ $@ curl$ $+!
     s\" /?" curl$ $+!
     ucaddr u curl$ $+!
-    s\" \"" curl$ $+!
+    s\" \" &" curl$ $+!
     ." curl cmd line is: " cr
     curl$ $@ type
     curl$ $@ sh-get
