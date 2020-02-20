@@ -86,8 +86,8 @@ strings heap-new constant get-variable-pairs$
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
   nvalue nflag ;
 
-s" http://192.168.0.59" server_addres$ $!
-\ s" http://localhost" server_addres$ $!
+\ s" http://192.168.0.59" server_addres$ $!
+s" http://localhost" server_addres$ $!
 s" :52222" port#$ $!
 
 : sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
