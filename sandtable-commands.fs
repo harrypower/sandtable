@@ -87,12 +87,20 @@ strings heap-new constant get-variable-pairs$
   nvalue nflag ;
 
 \ s" http://192.168.0.59" server_addres$ $!
-\ s" http://localhost" server_addres$ $!
-s" mysandtable" server_addres$ $!
+s" http://localhost" server_addres$ $!
+\ s" mysandtable" server_addres$ $!
 s" :52222" port#$ $!
 
 : sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
-  s\" curl --get --data-binary \"" curl$ $! curl$ $+! s\" \"  " curl$ $+! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! curl$ $@ sh-get
+  { ucaddr u }
+    s\" curl --get \"" curl$ $!
+    server_addres$ $@ curl$ $+!
+    port#$ $@ curl$ $+!
+    s\" \\?" curl$ $+!
+    ucaddr u curl$ $+!
+    s\" \"" curl$ $+! 
+    \ curl$ $@ sh-get
+\  s\" curl --get --data-binary \"" curl$ $! curl$ $+! s\" \"  " curl$ $+! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! curl$ $@ sh-get
 ;
 
 : returnmessage ( -- caddr u )
