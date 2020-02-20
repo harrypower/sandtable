@@ -93,12 +93,12 @@ s" :52222" port#$ $!
 
 : sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
   { ucaddr u }
-    s\" nohup curl --get \"" curl$ $!
+    s\" curl --get \"" curl$ $!
     server_addres$ $@ curl$ $+!
     port#$ $@ curl$ $+!
     s\" /?" curl$ $+!
     ucaddr u curl$ $+!
-    s\" \" 2>&1 &" curl$ $+!
+    s\" \" " curl$ $+!
     ." curl cmd line is: " cr
     curl$ $@ type
     curl$ $@ sh-get
@@ -117,7 +117,7 @@ s" :52222" port#$ $!
     s" &" buffer$ $+! \ add this to allow key to be added
     s" key=" buffer$ $+!
     s>d dto$ buffer$ $+! \ turn key# into a string again
-    ." the message sent:" cr buffer$ $@ type cr
+    ." the message sent to curl:" cr buffer$ $@ type cr
     buffer$ $@ sendcurlmessage
     ." The sandsocketserver output after sent message:" cr
     type cr \ this will go to stdout and the log file
