@@ -170,17 +170,17 @@ require sandcommands.fs
   parse-command&submessages
   0 submessages$ [bind] strings []@$ drop \ the first string should be the command
   thecommand$ $!
-  ." stack in parse-command top " .s cr
+  \ ." stack in parse-command top " .s cr
   thecommand$ $@ swap drop 0 > if
     thecommand$ $@ commands-instant search-wordlist 0 <> if
-    ." stack in parse-command before execute of commands-instant " .s cr
+    \ ." stack in parse-command before execute of commands-instant " .s cr
       \ note commands-instant are basic data retreval or the command to update the data to this sand server ... the commands are in wordlist commands-instant
       execute
-      ." stack in parse-command after exectue of commands-instant " .s cr
+      \ ." stack in parse-command after exectue of commands-instant " .s cr
       lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
-      ." stack in parse-command after string buffer1$ stuff of commands-instant " .s cr 
+      \ ." stack in parse-command after string buffer1$ stuff of commands-instant " .s cr
     then
-    ." stack in parse-command after commands-instant " .s cr
+    \ ." stack in parse-command after commands-instant " .s cr
     thecommand$ $@ commands-spawned search-wordlist 0 <> if
       \ note commands-spawned are the sandtable process that take some time to complete.  the commads are in wordlist commands-spawned.  the commad here will basically call the sandtable-commands.fs via sh-get shell command with data
       execute
@@ -193,7 +193,7 @@ require sandcommands.fs
       then
     else drop \ not zero so drop xt
     then
-    ." stack in parse-command execute ifs " .s cr
+    \ ." stack in parse-command execute ifs " .s cr
   else
     s" No command issued!" buffer1$ $+! lineending buffer1$ $+!
   then ;
@@ -211,9 +211,9 @@ require sandcommands.fs
   command$ $@ buffer1$ $+! lineending buffer1$ $+!
   s" From User-Agent> " buffer1$ $+!
   User-Agent$ $@ buffer1$ $+! lineending buffer1$ $+!
-  ." stack before parse-command in process-recieved " .s cr
+  \ ." stack before parse-command in process-recieved " .s cr
   parse-command  \ find and execute commands
-  ." stack after parse-command in process-recieved " .s cr
+  \ ." stack after parse-command in process-recieved " .s cr
   curlagent if
     buffer1$ $@ http-response
   else
@@ -228,18 +228,18 @@ require sandcommands.fs
   stream-timeout set-socket-timeout
   sandtable-port# create-server to userver
   userver . ." < server id " cr
-  ." stack before serverloop " .s cr
+  \ ." stack before serverloop " .s cr
   begin
-    ." stack begining of serverloop " .s cr
+    \ ." stack begining of serverloop " .s cr
     userver 8 listen
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket \ recived message from web front end or a cdl curl command
-    ." stack before process-recieved in loop " .s cr
+    \ ." stack before process-recieved in loop " .s cr
     process-recieved \ ( -- caddr u ) this will be the string to return
-    ." stack after process-recieved in loop " .s cr
+    \ ." stack after process-recieved in loop " .s cr
     usockfd write-socket  \ return the message to calling program
     usockfd close-socket
-    ." stack after close-socket in loop " .s cr
+    \ ." stack after close-socket in loop " .s cr
     stopserverflag
   until
   userver close-server

@@ -117,7 +117,7 @@ commands-instant set-current
   s" Sandserver shutting done now!" junk$ $!
   lineending junk$ $+!
   junk$ $@  lastresult$ $!
-  ." stack at end of stopsandserver" .s cr
+  \ ." stack at end of stopsandserver" .s cr
   ;
 
 : lastresult ( -- )  \ this does nothing and does not change the lastresult$
@@ -131,9 +131,9 @@ commands-instant set-current
   s" got the message from sandtable-commands.fs" lastresult$ $! lineending lastresult$ $+!
   command$ $@ lastresult$ $+! lineending lastresult$ $+!
   (get-pairs$)
-  ." stack after (get-pairs$) in testshget " .s cr
+  \ ." stack after (get-pairs$) in testshget " .s cr
   getkeyfromsubmessage true = if
-    ." stack after getkeyfromsubmessage test in testshget " .s cr
+    \ ." stack after getkeyfromsubmessage test in testshget " .s cr
     key# = if \ key present and matching
       0 to key# \ reset the key# for next sandtable use
       s" key# received and matching and reset!"  lastresult$ $+! lineending lastresult$ $+!
@@ -144,7 +144,7 @@ commands-instant set-current
     drop \ remove the key number from stack Note this key number will be 0 because of above condition for this if then
     s" No key# received message was not from sandtable-commands.fs after all!" lastresult$ $+! lineending lastresult$ $+!
   then
-  ." stack end of testshget " .s cr
+  \ ." stack end of testshget " .s cr
 ;
 
 commands-spawned set-current
@@ -160,7 +160,7 @@ commands-spawned set-current
     s" teststuff command not sent because sandtable still processing!"
   then
   lastresult$ $!
-  ." current stack end of teststuff " .s cr
+  \ ." current stack end of teststuff " .s cr
   ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs

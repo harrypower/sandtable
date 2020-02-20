@@ -95,13 +95,13 @@ s" :52222" port#$ $!
 ;
 
 : returnmessage ( -- caddr u )
-  ." started return message " .s cr
+  \ ." started return message " .s cr
   15000 ms  \ time to test if key idea works
   s" command=testshget" buffer$ $!
   (parse-command&submessages)
-  ." after parse-command stuff " .s cr
+  \ ." after parse-command stuff " .s cr
   (get-pairs$)
-  ." after (get-pairs$) stuff" .s cr
+  \ ." after (get-pairs$) stuff" .s cr
   s" key" (variable-pair-value) true = if \ key present so this came from sandsocketserver so return message to them saying done and received
     s" &" buffer$ $+! \ add this to allow key to be added
     s" key=" buffer$ $+!
@@ -116,7 +116,7 @@ s" :52222" port#$ $!
     argcommand$ $@ type cr
   then
   ." the arguments recieved: " argcommand$ $@ type cr
-  ." stack at end of returnmessage " .s cr
+  \ ." stack at end of returnmessage " .s cr
 ;
 
 returnmessage
