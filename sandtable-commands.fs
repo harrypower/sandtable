@@ -93,12 +93,12 @@ s" :52222" port#$ $!
 
 : sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
   { ucaddr u }
-    s\" curl --get \"" curl$ $!
+    s\" curl " curl$ $!
     server_addres$ $@ curl$ $+!
     port#$ $@ curl$ $+!
     s\" /?" curl$ $+!
     ucaddr u curl$ $+!
-    s\" \" " curl$ $+!
+    s\"  " curl$ $+!
     ." curl cmd line is: " cr
     curl$ $@ type
     curl$ $@ sh-get
