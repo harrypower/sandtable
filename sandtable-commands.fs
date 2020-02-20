@@ -96,11 +96,11 @@ s" :52222" port#$ $!
     s\" curl --get \"" curl$ $!
     server_addres$ $@ curl$ $+!
     port#$ $@ curl$ $+!
-    s\" \\?" curl$ $+!
+    s\" /?" curl$ $+!
     ucaddr u curl$ $+!
     s\" \"" curl$ $+!
     ." curl cmd line is: " cr
-    curl$ $@ type 
+    curl$ $@ type
     curl$ $@ sh-get
 \  s\" curl --get --data-binary \"" curl$ $! curl$ $+! s\" \"  " curl$ $+! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! curl$ $@ sh-get
 ;
