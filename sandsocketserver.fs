@@ -202,7 +202,7 @@ require sandcommands.fs
   recieve-buffer$ $!
   recieve-buffer$ $@ addtolog
   recieve-buffer$ $@ dump ." ^ message ^" cr
-  hostname dump ." ^ hostname ^" cr
+  \ hostname dump ." ^ hostname ^" cr
   usockfd . ." < socket fd" cr
   parsehttp
   s" Message $ is > " buffer1$ $!
