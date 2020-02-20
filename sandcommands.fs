@@ -26,8 +26,8 @@
 \ 02/19/2020 using nohup and command line to send message to sandtable command processor
 
 variable junk$
-variable shjunk$
 
+variable shjunk$
 : sh-sandtable-command ( caddr u -- caddr1 u1)
   { caddr u }
   s\" nohup gforth -e \"s\\\" " shjunk$ $!
@@ -107,7 +107,7 @@ commands-instant set-current
   junk$ $@  lastresult$ $! ;
 
 : status ( -- )
-  homedone? true = if s" Sandtable has been sent to home succesfully!" junk$ $+! then
+  homedone? true = if s" Sandtable has been sent to home succesfully!" junk$ $! then
   homedone? false = if s" Sandtable has not been sent to home succesfully yet!" junk$ $+! then
   lineending junk$ $+!
   junk$ $@  lastresult$ $! ;

@@ -50,18 +50,12 @@ mb-maxsize allocate throw message-buffer !
 0 value userver
 0 value usockfd
 0 value logfid
-variable buffer$
-variable convert$
-variable buffer1$
-variable buffer2$
-variable recieve-buffer$
 variable command$
 variable thecommand$
 variable User-Agent$
 variable GET$
 variable lastresult$
-0 value key# \ 0 means no key# issued so no sandtable code running... any other number means santable code is running or has not returned key# yet
-variable key$
+
 seed-init \ start of random stuff
 
 false value stopserverflag \ this is the server loop control itself .. when it is false the loop continues when it is true the loop stops
@@ -75,6 +69,7 @@ strings heap-new constant get-variable-pairs$
   s" &" command$ $@ submessages$ [bind] strings split$>$s
 ;
 
+variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
 : dto$ ( d -- caddr u )  \ convert double signed to a string
@@ -82,6 +77,8 @@ strings heap-new constant get-variable-pairs$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
+0 value key# \ 0 means no key# issued so no sandtable code running... any other number means santable code is running or has not returned key# yet
+variable key$
 : keymake$ ( -- caddr u  ) \ make a new random key# to use for sandtable execution or return existing key# if it has not been returned
   key# 0= if
     rnd  to key#
@@ -111,26 +108,28 @@ require sandcommands.fs
   logfid flush-file throw
   logfid close-file throw ;
 
+variable tempheader$
 : http-header ( -- caddr u )
-  s\" HTTP/1.1 200 OK\r\n" buffer$ $!
-  s\" Connection: close\r\n" buffer$ $+!
-  s\" Server: Sandserver0.1\r\n" buffer$ $+!
-  s\" Accept-Ranges: bytes\r\n" buffer$ $+!
-  s\" Content-type: text/html; charset=utf-8\r\n" buffer$ $+!
-  buffer$ $@ ;
+  s\" HTTP/1.1 200 OK\r\n" tempheader$ $!
+  s\" Connection: close\r\n" tempheader$ $+!
+  s\" Server: Sandserver0.1\r\n" tempheader$ $+!
+  s\" Accept-Ranges: bytes\r\n" tempheader$ $+!
+  s\" Content-type: text/html; charset=utf-8\r\n" tempheader$ $+!
+  tempheader$ $@ ;
 
+variable tempresponse$
 : http-response ( caddr u -- caddr' u' ) \ caddr u is the message string to send
   { caddr u }
-  http-header buffer$ $!
-  s\" Content-Length: " buffer$ $+!
-  u s>d udto$ buffer$ $+!
-  s\" \r\n" buffer$ $+!
-  s\" \r\n" buffer$ $+!
+  http-header tempresponse$ $!
+  s\" Content-Length: " tempresponse$ $+!
+  u s>d udto$ tempresponse$ $+!
+  s\" \r\n" tempresponse$ $+!
+  s\" \r\n" tempresponse$ $+!
 
-  caddr u buffer$ $+!
-  s\" \r\n" buffer$ $+!
-  s\" \r\n\r\n" buffer$ $+!
-  buffer$ $@ ;
+  caddr u tempresponse$ $+!
+  s\" \r\n" tempresponse$ $+!
+  s\" \r\n\r\n" tempresponse$ $+!
+  tempresponse$ $@ ;
 
 : parse$to$ ( caddr u start$addr ustart end$addr uend -- caddr1 u1 )
 \ find start$ in caddr string then look for end$ .. if found return the string between start$ and end$ only or return 0 0 if start$ and end$ not found
@@ -146,26 +145,30 @@ require sandcommands.fs
     2drop 0 0
   then ;
 
-: parsehttp ( -- ) \ get the command and user-agent
-  recieve-buffer$ $@ s" GET " s"  " parse$to$ GET$ $!
+: parsehttp ( cadrr u -- ) \ get the command and user-agent
+  { caddr u }
+  cadr u s" GET " s"  " parse$to$ GET$ $!
   GET$ $@ s" /?command=" search true = if
     10 - swap 10 + swap command$ $!
   else
     2drop 0 0 command$ $!
   then
-  recieve-buffer$ $@ s" User-Agent: " s\" \r\n" parse$to$ User-Agent$ $!
+  caddr u s" User-Agent: " s\" \r\n" parse$to$ User-Agent$ $!
   User-Agent$ $@ s" curl/" search to curlagent 2drop
 ;
 
+variable tmphtmlheader$
 : html-header ( -- caddr u )
-  s\" <!DOCTYTPE html>" buffer$ $!
-  s\" <html>" buffer$ $+!
-  s\" <head><title>Sandtable Message return</title></head>" buffer$ $+!
-  s\" <body>" buffer$ $+!
-  buffer$ $@ ;
+  s\" <!DOCTYTPE html>" tmphtmlheader$ $!
+  s\" <html>" tmphtmlheader$ $+!
+  s\" <head><title>Sandtable Message return</title></head>" tmphtmlheader$ $+!
+  s\" <body>" tmphtmlheader$ $+!
+  tmphtmlheader$ $@ ;
+
 : html-footer ( -- caddr u )
   s\" </body></html>" ;
 
+variable junk-buffer$
 : parse-command ( -- )  \ parse the command from the command$ and break it up into submessages the execute the command if it exists as a command
   parse-command&submessages
   0 submessages$ [bind] strings []@$ drop \ the first string should be the command
@@ -177,50 +180,51 @@ require sandcommands.fs
       \ note commands-instant are basic data retreval or the command to update the data to this sand server ... the commands are in wordlist commands-instant
       execute
       \ ." stack in parse-command after exectue of commands-instant " .s cr
-      lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
-      \ ." stack in parse-command after string buffer1$ stuff of commands-instant " .s cr
+      lastresult$ $@ junk-buffer$ $+! lineending junk-buffer$ $+!
+      \ ." stack in parse-command after string junk-buffer$ stuff of commands-instant " .s cr
     then
     \ ." stack in parse-command after commands-instant " .s cr
     thecommand$ $@ commands-spawned search-wordlist 0 <> if
       \ note commands-spawned are the sandtable process that take some time to complete.  the commads are in wordlist commands-spawned.  the commad here will basically call the sandtable-commands.fs via sh-get shell command with data
       execute
-      lastresult$ $@ buffer1$ $+! lineending buffer1$ $+!
+      lastresult$ $@ junk-buffer$ $+! lineending junk-buffer$ $+!
     then
     thecommand$ $@ commands-instant search-wordlist 0 = if
       thecommand$ $@ commands-spawned search-wordlist 0 = if
-        thecommand$ $@ buffer1$ $+! s"  command not found!" buffer1$ $+! lineending buffer1$ $+!
+        thecommand$ $@ junk-buffer$ $+! s"  command not found!" junk-buffer$ $+! lineending junk-buffer$ $+!
       else drop \ not zero so drop xt
       then
     else drop \ not zero so drop xt
     then
     \ ." stack in parse-command execute ifs " .s cr
   else
-    s" No command issued!" buffer1$ $+! lineending buffer1$ $+!
+    s" No command issued!" junk-buffer$ $+! lineending junk-buffer$ $+!
   then ;
 
-: process-recieved ( caddr u -- caddr1 u1 )
-  recieve-buffer$ $!
-  recieve-buffer$ $@ addtolog
-  recieve-buffer$ $@ dump ." ^ message ^" cr
-  \ hostname dump ." ^ hostname ^" cr
+variable tmphtmlresponse$
+variable receive-buffer$
+: process-received ( caddr u -- caddr1 u1 )
+  receive-buffer$ $!
+  receive-buffer$ $@ addtolog
+  receive-buffer$ $@ dump ." ^ message ^" cr
   usockfd . ." < socket fd" cr
-  parsehttp
-  s" Message $ is > " buffer1$ $!
-  GET$ $@ buffer1$ $+! lineending buffer1$ $+!
-  s" Command $ is > " buffer1$ $+!
-  command$ $@ buffer1$ $+! lineending buffer1$ $+!
-  s" From User-Agent> " buffer1$ $+!
-  User-Agent$ $@ buffer1$ $+! lineending buffer1$ $+!
-  \ ." stack before parse-command in process-recieved " .s cr
+  receive-buffer$ $@ parsehttp
+  s" Message $ is > " junk-buffer$ $!
+  GET$ $@ junk-buffer$ $+! lineending junk-buffer$ $+!
+  s" Command $ is > " junk-buffer$ $+!
+  command$ $@ junk-buffer$ $+! lineending junk-buffer$ $+!
+  s" From User-Agent> " junk-buffer$ $+!
+  User-Agent$ $@ junk-buffer$ $+! lineending junk-buffer$ $+!
+  \ ." stack before parse-command in process-received " .s cr
   parse-command  \ find and execute commands
-  \ ." stack after parse-command in process-recieved " .s cr
+  \ ." stack after parse-command in process-received " .s cr
   curlagent if
-    buffer1$ $@ http-response
+    junk-buffer$ $@ http-response
   else
-    html-header buffer2$ $!
-    buffer1$ $@ buffer2$ $+! \ this is message returned in socket call
-    html-footer buffer2$ $+!
-    buffer2$ $@ http-response
+    html-header tmphtmlresponse$ $!
+    junk-buffer$ $@ tmphtmlresponse$ $+! \ this is message returned in socket call
+    html-footer tmphtmlresponse$ $+!
+    tmphtmlresponse$ $@ http-response
   then ;
 
 \ variable wstatus
@@ -234,9 +238,9 @@ require sandcommands.fs
     userver 8 listen
     userver accept-socket to usockfd
     usockfd message-buffer @ mb-maxsize read-socket \ recived message from web front end or a cdl curl command
-    \ ." stack before process-recieved in loop " .s cr
-    process-recieved \ ( -- caddr u ) this will be the string to return
-    \ ." stack after process-recieved in loop " .s cr
+    \ ." stack before process-received in loop " .s cr
+    process-received \ ( -- caddr u ) this will be the string to return
+    \ ." stack after process-received in loop " .s cr
     usockfd write-socket  \ return the message to calling program
     usockfd close-socket
     \ ." stack after close-socket in loop " .s cr
