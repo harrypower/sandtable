@@ -42,7 +42,7 @@ require random.fs
 
 only forth also definitions
 
-2000 value stream-timeout
+1000 value stream-timeout
 52222 value sandtable-port#
 1024 value mb-maxsize
 variable message-buffer
@@ -217,14 +217,14 @@ variable receive-buffer$
   \ ." stack before parse-command in process-received " .s cr
   parse-command  \ find and execute commands
   \ ." stack after parse-command in process-received " .s cr
-\  curlagent if
-\   junk-buffer$ $@ http-response
-\  else
+  curlagent if
+    junk-buffer$ $@ http-response
+  else
     html-header tmphtmlresponse$ $!
     junk-buffer$ $@ tmphtmlresponse$ $+! \ this is message returned in socket call
     html-footer tmphtmlresponse$ $+!
     tmphtmlresponse$ $@ http-response
-\  then
+  then
 ;
 
 \ variable wstatus
