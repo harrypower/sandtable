@@ -108,6 +108,8 @@ s" :52222/" port#$ $! \ note the ':' and the '/' in this string
   s\" \" " curl$ $+! \ note the space after the last " is needed to separate
   server_addres$ $@ curl$ $+!
   port#$ $@ curl$ $+!
+  curl$ $@ type cr \ for debugging 
+  curl$ $@ sh-get
 ;
 
 : returnmessage ( -- caddr u )
