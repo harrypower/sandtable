@@ -90,20 +90,24 @@ strings heap-new constant get-variable-pairs$
 s" http://192.168.0.59" server_addres$ $!
 \ s" http://localhost" server_addres$ $!
 \ s" mysandtable" server_addres$ $!
-s" :52222" port#$ $!
+s" :52222/" port#$ $! \ note the ':' and the '/' in this string
 
 : sendcurlmessage ( ucaddr u -- ucaddr1 u1 )
   { ucaddr u }
-    s\" curl \"" curl$ $!
-    server_addres$ $@ curl$ $+!
-    port#$ $@ curl$ $+!
-    s\" /?" curl$ $+!
-    ucaddr u curl$ $+!
-    s\" \" " curl$ $+!
-    ." curl cmd line is: " cr
-    curl$ $@ type
-    curl$ $@ sh-get
-\  s\" curl --get --data-binary \"" curl$ $! curl$ $+! s\" \"  " curl$ $+! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! curl$ $@ sh-get
+\    s\" curl \"" curl$ $!
+\    server_addres$ $@ curl$ $+!
+\    port#$ $@ curl$ $+!
+\    s\" /?" curl$ $+!
+\    ucaddr u curl$ $+!
+\    s\" \" " curl$ $+!
+\    ." curl cmd line is: " cr
+\    curl$ $@ type
+\    curl$ $@ sh-get
+  s\" curl --get --data \"" curl$ $!
+  ucaddr u curl$ $+!
+  s\" \" " curl$ $+! \ note the space after the last " is needed to separate
+  server_addres$ $@ curl$ $+!
+  port#$ $@ curl$ $+!
 ;
 
 : returnmessage ( -- caddr u )
