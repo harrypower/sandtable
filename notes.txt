@@ -3,7 +3,19 @@ Notes
   - playing with the idea of not even using the cgi stuff and just processing the get response directly in my own socket server.
   - need to play with threads in socket server to break up tasks to do
   - need to come up with a parsing method really simple but yet basic to be secure from obvious stuff
-  - more thought on draying letters.. basic idea is to use a linked list for each ascii letter to impliment then
+  - more thought on drawing letters.. basic idea is to use a linked list for each ascii letter to impliment then
   the link will have another level of linked lists for all the move commands to make the letter.   Also will need words to implement this letter drawing
   maybe make it an object but not really any reason do to that other then encapsulating all the stuff in bit.
-  
+02/21/2020
+  - new idea as follows:
+    - apache will server front end web pages for sandtable
+    - web pages will send form messages to cgi code in gforth
+    - cgi code will simply send messages via curl to a port on BBB
+    - this port will be recieved and buffered with inetd service
+    - inetd service will be confiured to simply start the sandtable command processor as root and send the messages it recieved to this sandtable command processor
+    - sandtable command processor will first check if it is the only one running and shutdown if it is not the only one running with message returned saying it shutdown due to being busy
+      - if sandtable command processor is the only one running it will configure sandtable last know x and y data if valid and execute the command it recieved from inetd service
+        - sandtable command procesor will return a message saying that it is starting the command it recieved.
+        - when sandtable command processor is done with command it recieved then it will save the current x and y data and will also save the result of this last command
+      - if sandtable command processor is the only one running and its last know x and y data is  not valid it will return a message saying that calibration is needed to process further commands
+  - so that is the plan now to test some of the parts to confirm this will work! 

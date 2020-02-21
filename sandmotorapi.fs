@@ -880,6 +880,8 @@ true value yposition  \ is the real location of y motor .. note if value is true
   restore
   endtry ;
 : quickstart ( ux uy -- nflag ) \ start up sandtable assuming the physical table is at ux and uy location
+  \ nflag is false if this quickstart is done and sandtable is ready for use
+  \ nflag anyother number if sandtable is not ready fo use 
   0 { ux uy nconfig }
   configure-stuff dup to nconfig false = if
     uy to yposition

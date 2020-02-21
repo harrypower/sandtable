@@ -67,10 +67,6 @@
   127.0.1.1     sandtable.localdomain    sandtable
   ```
   * Reboot the beaglebone black to finish setup!
-## 3.C Add some services to get hostname to work
-  ```
-  sudo apt-get install samba
-  ```
 ## 4. Remove some services on BBB
   ```
   sudo systemctl disable cloud9.service
@@ -79,8 +75,6 @@
   sudo systemctl disable bonescript-autorun.service
   sudo apt-get remove npm
   sudo apt-get remove node*
-  sudo apt-get remove --auto-remove avahi-daemon
-  sudo apt-get purge --auto-remove avahi-daemon
   sudo apt-get autoremove
   sudo apt-get autoclean
   ```
@@ -153,3 +147,30 @@ wget localhost
 ```
 
 Each of the above lines will give different information but they should all show the system working!
+
+## 7. Confiuure INetd services for sandtable command processing
+Install the inetd stuff ( note this need to be confirmed if this is the one i want to use )
+```
+sudo apt-get install inetutils-inetd
+```
+Use nano as follows to enter inetd.conf file:
+```
+sudo nano /etc/inetd.conf
+```
+```
+gforth stream tcp nowait.100 root /home/debian/sandtable/xxxxxxx.fs  ( note this name at end of line is to be determined )
+```
+Use nano as follow to add to /etc/services file:
+```
+sudo nano /etc/services
+```
+Move to the bottom of the document and add the following line:
+```
+gforth  52222/tcp
+```
+Now restart the BBB and this service should be working on port 52222
+Testing if it is running at command line can be done with a curl statement like follows:
+```
+curl --get --data "command=status" http://mysandtable.local:52222/
+```
+( note this has to be set up yet so may change )
