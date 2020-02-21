@@ -121,8 +121,8 @@ variable tempresponse$
 : http-response ( caddr u -- caddr' u' ) \ caddr u is the message string to send
   { caddr u }
   http-header tempresponse$ $!
-  s\" Content-Length: " tempresponse$ $+!
-  u s>d udto$ tempresponse$ $+!
+\  s\" Content-Length: " tempresponse$ $+!
+\  u s>d udto$ tempresponse$ $+!
   s\" \r\n" tempresponse$ $+!
   s\" \r\n" tempresponse$ $+!
 
