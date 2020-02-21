@@ -19,7 +19,7 @@
 
 \ Requires:
 \ script.fs
-\ curl to be installed on BBB 
+\ curl to be installed on BBB
 
 \ Revisions:
 \ 1/26/2019 changes from fifo to socket coding started
@@ -35,7 +35,6 @@ variable message-buffer
 mb-maxsize allocate throw message-buffer !
 0 value userver
 0 value usockfd
-variable buffer$
 
 variable query$
 variable thequery$
@@ -45,17 +44,27 @@ variable http_host$
 variable port#$
 variable server_addres$
 
+variable tmpmake$
 : udto$ ( ud -- caddr u )  \ convert double to a string
-    <<# #s  #> #>> buffer$ $! buffer$ $@ ;
+    <<# #s  #> #>> tmpmake$ $! tmpmake$ $@ ;
 
-s" 192.168.0.59" server_addres$ $!
-s" :52222" port#$ $!
+s" http://mysandtable.local" server_addres$ $!  \ not sure need to test if this will work
+\s" 192.168.0.59" server_addres$ $!
+s" :52222/" port#$ $!  \ i think the / is need at end of port number
 
 : getmessage ( -- ucaddr u )
 ;
 
+variable curl$
 : sendmessage ( ucaddr u -- ucaddr1 u1 )
-  s\" curl \"" buffer$ $! server_addres$ $@ buffer$ $+! port#$ $@ buffer$ $+! s" /?" buffer$ $+! buffer$ $+! s\" \"" buffer$ $+! buffer$ $@ sh-get
+{ ucaddr u }
+s\" curl --get --data \"" curl$ $!
+ucaddr u curl$ $+!
+s\" \" " curl$ $+! \ note the space after the last " is needed to separate
+server_addres$ $@ curl$ $+!
+port#$ $@ curl$ $+!
+curl$ $@ sh-get
+\  s\" curl \"" curl$ $! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! s" /?" curl$ $+! curl$ $+! s\" \"" curl$ $+! curl$ $@ sh-get
 ;
 
 : lineending ( -- caddr u )
