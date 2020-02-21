@@ -158,8 +158,9 @@ Use nano as follows to enter inetd.conf file:
 sudo nano /etc/inetd.conf
 ```
 ```
-gforth stream tcp nowait.100 root /home/debian/sandtable/xxxxxxx.fs  ( note this name at end of line is to be determined )
+gforth stream tcp nowait.100 root /home/debian/sandtable/xxxxxxx.fs
 ```
+( note this name at end of line is to be determined )
 Use nano as follow to add to /etc/services file:
 ```
 sudo nano /etc/services
