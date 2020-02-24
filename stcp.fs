@@ -4,7 +4,7 @@
 
 0 value datafid
 variable httpinput$
-
+>in @ . ." input >in" cr
 : getinput source httpinput$ $! ; \ store current input stream to eof i think
 
 : opendata ( -- )
@@ -47,7 +47,7 @@ variable tempresponse$
 
 : alltogether
   getinput
-  >in @ . ." >in value " cr 
+  >in @ . ." >in value " cr
   0 >in !
   putstdin-out
   s" should have worked" http-response type
