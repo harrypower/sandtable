@@ -4,7 +4,7 @@
 
 0 value datafid
 variable httpinput$
-source dump cr 
+source dump cr
 >in @ . ." input >in" cr
 : getinput source httpinput$ $! ; \ store current input stream to eof i think
 
@@ -52,6 +52,12 @@ variable tempresponse$
   0 >in !
   putstdin-out
   s" should have worked" http-response type
-  bye ;
+  ;
 
 alltogether
+
+>in @ . ." >in at end" cr
+source dump cr
+
+ bye
+  
