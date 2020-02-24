@@ -1,3 +1,4 @@
+#! /usr/local/bin/gforth
 \ stcp.fs
 \ sandtable command processor  or stcp
 
