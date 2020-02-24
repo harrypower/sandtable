@@ -45,8 +45,8 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-\ getinput
-\ putstdin-out
-\ http-response type
+getinput
+putstdin-out
+http-response type
 
-\ bye
+bye
