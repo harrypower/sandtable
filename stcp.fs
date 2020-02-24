@@ -47,8 +47,9 @@ variable tempresponse$
 
 : alltogether
   getinput
+  0 >in !
   putstdin-out
   s" should have worked" http-response type
   bye ;
 
-\ alltogether
+alltogether
