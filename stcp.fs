@@ -2,7 +2,7 @@
 \ stcp.fs
 \ sandtable command processor  or stcp
 
-0 value logfid
+0 value datafid
 variable httpinput$
 
 : getinput source httpinput$ $! ; \ store current input stream to eof i think
@@ -10,18 +10,18 @@ variable httpinput$
 : opendata ( -- )
   s" stcptest.data" file-status swap drop false = if
     s" stcptest.data" r/w open-file throw
-    to logfid
+    to datafid
   else
     s" stcptest.data" r/w create-file throw
-    to logfid
+    to datafid
   then ;
 
-: addtolog ( caddr u -- )
-  openlog
-  logfid file-size throw
-  logfid write-line throw
-  logfid flush-file throw
-  logfid close-file throw ;
+: addtodata ( caddr u -- )
+  opendata
+  datafid file-size throw
+  datafid write-line throw
+  datafid flush-file throw
+  datafid close-file throw ;
 
 : putstdin-out
   opendata
