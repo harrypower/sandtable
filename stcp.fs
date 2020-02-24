@@ -5,7 +5,7 @@
 0 value logfid
 variable httpinput$
 
-: getinput source httpinput$ $! \ store current input stream to eof i think ;
+: getinput source httpinput$ $! ; \ store current input stream to eof i think
 
 : opendata ( -- )
   s" stcptest.data" file-status swap drop false = if
