@@ -47,6 +47,6 @@ variable tempresponse$
 
 getinput
 putstdin-out
-http-response type
+s" should have worked" http-response type
 
 bye
