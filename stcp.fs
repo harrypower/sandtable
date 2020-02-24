@@ -45,8 +45,10 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-getinput
-putstdin-out
-s" should have worked" http-response type
+: alltogether
+  getinput
+  putstdin-out
+  s" should have worked" http-response type
+  bye ;
 
-bye
+alltogether
