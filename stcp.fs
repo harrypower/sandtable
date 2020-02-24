@@ -5,9 +5,7 @@
 0 value logfid
 variable httpinput$
 
-stdin slurp-fid
-
-httpinput$ $! \ store current input stream to eof i think
+source httpinput$ $! \ store current input stream to eof i think
 
 : openlog ( -- )
   s" stcptest.data" file-status swap drop false = if
