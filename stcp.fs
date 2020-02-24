@@ -5,9 +5,9 @@
 0 value logfid
 variable httpinput$
 
-source httpinput$ $! \ store current input stream to eof i think
+: getinput source httpinput$ $! \ store current input stream to eof i think ;
 
-: openlog ( -- )
+: opendata ( -- )
   s" stcptest.data" file-status swap drop false = if
     s" stcptest.data" r/w open-file throw
     to logfid
@@ -19,13 +19,13 @@ source httpinput$ $! \ store current input stream to eof i think
 : addtolog ( caddr u -- )
   openlog
   logfid file-size throw
-\  logfid reposition-file throw
   logfid write-line throw
   logfid flush-file throw
   logfid close-file throw ;
 
-openlog
-httpinput$ $@ addtolog
+: putstdin-out
+  opendata
+  httpinput$ $@ addtolog ;
 
 variable tempheader$
 : http-header ( -- caddr u )
@@ -46,6 +46,7 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
+putstdin-out
 http-response type
 
 bye
