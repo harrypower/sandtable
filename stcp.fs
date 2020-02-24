@@ -18,7 +18,6 @@ variable httpinput$
 
 : addtodata ( caddr u -- )
   opendata
-  datafid file-size throw
   datafid write-line throw
   datafid flush-file throw
   datafid close-file throw ;
