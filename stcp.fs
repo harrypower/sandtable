@@ -49,7 +49,7 @@ variable tempresponse$
 : alltogether
   getinput
   >in @ . ." >in value " cr
-  0 >in !
+  1 >in !
   putstdin-out
   s" should have worked" http-response type
   ;
@@ -60,4 +60,3 @@ alltogether
 source dump cr
 
  bye
-  
