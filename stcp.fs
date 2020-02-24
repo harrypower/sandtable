@@ -25,7 +25,7 @@ variable httpinput$
 
 : putstdin-out
   opendata
-  httpinput$ $@ addtolog ;
+  httpinput$ $@ addtodata ;
 
 variable tempheader$
 : http-header ( -- caddr u )
