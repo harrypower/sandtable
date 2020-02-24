@@ -4,6 +4,7 @@
 
 0 value datafid
 variable httpinput$
+source dump cr 
 >in @ . ." input >in" cr
 : getinput source httpinput$ $! ; \ store current input stream to eof i think
 
