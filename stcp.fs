@@ -90,4 +90,4 @@ variable tempresponse$
   s" done" type cr
   bye ;
 
-\ (doinputread)
+(doinputread)
