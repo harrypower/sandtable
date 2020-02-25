@@ -18,7 +18,7 @@ variable convert$
 
 : refill-loop ( -- flag ) \ this refills the input from source and interprets the words it finds or throws
   base @ >r base off
-  BEGIN  refill ?cr  WHILE  ( ['] interpret catch drop ) ( >in @ 0= ) true  UNTIL
+  BEGIN  refill ?cr  WHILE   ['] interpret catch drop  >in @ 0=   UNTIL
   true  ELSE  false  THEN  r> base ! ;
 
 : getinput ( -- flag ior )  \ need to ajdust some words in here and test it
@@ -73,10 +73,13 @@ variable tempresponse$
 
 : (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
   >in @ . ." >in #1" cr
+  source-id . ." sorce-id #1" cr
   getinput
   >in @ . ." >in #2" cr
+  source-id . ." sorce-id #2" cr
   getinput
   >in @ . ." >in #3" cr
+  source-id . ." sorce-id #3" cr
   source httpinput$ $!
   httpinput$ $@ dump cr
   s" done" type
