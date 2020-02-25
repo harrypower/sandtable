@@ -23,7 +23,7 @@ variable convert$
 
 : getinput ( -- flag ior )  \ need to ajdust some words in here and test it
   infile-id push-file loadfile !
-\  loadline off  
+\  loadline off
   blk off
   ( commands 1 set-order  command? on )  \ this would need to be set up to have a GET command in a wordlist
   \ ['] refill-loop catch
@@ -83,7 +83,7 @@ variable tempresponse$
   \ getinput
   \ >in @ . ." >in #3" cr
   \ source-id . ." sorce-id #3" cr
-  s" after getinput" cr
+  s" after getinput" type cr
   source httpinput$ $!
   httpinput$ $@ dump cr
   s" done" type cr
