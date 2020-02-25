@@ -22,14 +22,15 @@ variable convert$
   true  ELSE  false  THEN  r> base ! ;
 
 : getinput ( -- flag ior )  \ need to ajdust some words in here and test it
-  infile-id push-file loadfile !
-\  loadline off
+\  infile-id push-file loadfile !
+  stdin push-file loadfile !
+  loadline off
   blk off
   ( commands 1 set-order  command? on )  \ this would need to be set up to have a GET command in a wordlist
   \ ['] refill-loop catch
   \ 0 >in !
   ( only forth also )
-\  0 pop-file
+  0 pop-file
 ;
 
 : opendata ( -- )
