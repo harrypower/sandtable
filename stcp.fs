@@ -28,7 +28,7 @@ variable convert$
   \ ['] refill-loop catch
   \ 0 >in !
   ( only forth also )
-  0 pop-file
+\  0 pop-file
 ;
 
 : opendata ( -- )
