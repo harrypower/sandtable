@@ -4,9 +4,33 @@
 
 0 value datafid
 variable httpinput$
-source dump cr
->in @ . ." input >in" cr
-: getinput source httpinput$ $! ; \ store current input stream to eof i think
+
+: ?cr ( -- ) \ i think this looks for a cr in the input stream to allow refill-loop below to find the exit
+  #tib @ 1 >= IF  source 1- + c@ #cr = #tib +!  THEN ;
+
+: refill-loop ( -- flag ) \ this refills the input from source and interprets the words it finds or throws
+  base @ >r base off
+  BEGIN  refill ?cr  WHILE  ['] interpret catch drop  >in @ 0=  UNTIL
+  true  ELSE  false  THEN  r> base ! ;
+
+: getinput ( -- flag ior )  \ need to ajdust some words in here and test it
+  infile-id push-file loadfile !
+  loadline off  blk off
+  ( commands 1 set-order  command? on )  \ this would need to be set up to have a GET command in a wordlist
+  ['] refill-loop catch
+  ( only forth also )
+  pop-file
+;
+
+: (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
+  >in @ . ." >in before" cr
+  getinput
+  >in @ . ." >in after" cr
+  source httpinput$ $!
+  httpinput$ $@ dump cr
+  s" done" type
+  bye ;
+
 
 : opendata ( -- )
   s" stcptest.data" file-status swap drop false = if
@@ -45,18 +69,3 @@ variable tempresponse$
   caddr u tempresponse$ $+!
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
-
-: alltogether
-  getinput
-  >in @ . ." >in value " cr
-  putstdin-out
-  s" should have worked" http-response type
-  ;
-
-alltogether
-
->in @ . ." >in at end" cr
-source dump cr
-
-
- bye
