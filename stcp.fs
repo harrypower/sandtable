@@ -31,7 +31,7 @@ variable httpinput$
   s" done" type
   bye ;
 
-(doinputread)
+\ (doinputread)
 
 
 : opendata ( -- )
