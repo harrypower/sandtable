@@ -72,9 +72,11 @@ variable tempresponse$
   tempresponse$ $@ ;
 
 : (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
-  >in @ . ." >in before" cr
+  >in @ . ." >in #1" cr
   getinput
-  >in @ . ." >in after" cr
+  >in @ . ." >in #2" cr
+  getinput
+  >in @ . ." >in #3" cr
   source httpinput$ $!
   httpinput$ $@ dump cr
   s" done" type
