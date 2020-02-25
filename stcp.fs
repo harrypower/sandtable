@@ -13,8 +13,8 @@ variable convert$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
-: ?cr ( -- ) \ i think this looks for a cr in the input stream to allow refill-loop below to find the exit
-  #tib @ 1 >= IF  source 1- + c@ #cr = #tib +!  THEN ;
+\ : ?cr ( -- ) \ i think this looks for a cr in the input stream to allow refill-loop below to look at source without a cr at end
+\  #tib @ 1 >= IF  source 1- + c@ #cr = #tib +!  THEN ;
 
 : refill-loop ( -- flag ) \ this refills the input from source and interprets the words it finds or throws
   base @ >r base off
@@ -72,6 +72,7 @@ variable tempresponse$
   tempresponse$ $@ ;
 
 : (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
+  begin refill until
   >in @ . ." >in #1" cr
   source-id . ." sorce-id #1" cr
   getinput
