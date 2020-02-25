@@ -13,26 +13,6 @@ variable convert$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
-\ : ?cr ( -- ) \ i think this looks for a cr in the input stream to allow refill-loop below to look at source without a cr at end
-\  #tib @ 1 >= IF  source 1- + c@ #cr = #tib +!  THEN ;
-
-: refill-loop ( -- flag ) \ this refills the input from source and interprets the words it finds or throws
-  base @ >r base off
-  BEGIN  refill ( ?cr )  WHILE   ['] interpret catch drop  >in @ 0=   UNTIL
-  true  ELSE  false  THEN  r> base ! ;
-
-: getinput ( -- flag ior )  \ need to ajdust some words in here and test it
-\  infile-id push-file loadfile !
-  stdin push-file loadfile !
-  loadline off
-  blk off
-  ( commands 1 set-order  command? on )  \ this would need to be set up to have a GET command in a wordlist
-  ['] refill-loop catch
-  \ 0 >in !
-  ( only forth also )
-  pop-file
-;
-
 : opendata ( -- )
   s" stcptest.data" file-status swap drop false = if
     s" stcptest.data" r/w open-file throw
@@ -76,18 +56,9 @@ variable tempresponse$
 
 : (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
   >in @ . ." >in #1" cr
-  source-id . ." sorce-id #1" cr
-  source dump cr
-  getinput
-  \ >in @ . ." >in #2" cr
-  \ source-id . ." sorce-id #2" cr
-  \ getinput
-  \ >in @ . ." >in #3" cr
-  \ source-id . ." sorce-id #3" cr
-  s" after getinput" type cr
+  source-id . ." source-id #1" cr
   source httpinput$ $!
   httpinput$ $@ dump cr
+  source swap drop >in !
   s" done" type cr
   bye ;
-
-\ (doinputread)
