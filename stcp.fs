@@ -23,7 +23,8 @@ variable convert$
 
 : getinput ( -- flag ior )  \ need to ajdust some words in here and test it
   infile-id push-file loadfile !
-  loadline off  blk off
+\  loadline off  
+  blk off
   ( commands 1 set-order  command? on )  \ this would need to be set up to have a GET command in a wordlist
   \ ['] refill-loop catch
   \ 0 >in !
@@ -75,16 +76,17 @@ variable tempresponse$
 : (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
   >in @ . ." >in #1" cr
   source-id . ." sorce-id #1" cr
-  source dump cr 
+  source dump cr
   getinput
   \ >in @ . ." >in #2" cr
   \ source-id . ." sorce-id #2" cr
   \ getinput
   \ >in @ . ." >in #3" cr
   \ source-id . ." sorce-id #3" cr
+  s" after getinput" cr
   source httpinput$ $!
   httpinput$ $@ dump cr
-  s" done" type
+  s" done" type cr
   bye ;
 
 \ (doinputread)
