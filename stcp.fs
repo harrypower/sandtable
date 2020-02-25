@@ -5,6 +5,14 @@
 0 value datafid
 variable httpinput$
 
+variable convert$
+: udto$ ( ud -- caddr u )  \ convert unsigned double to a string
+    <<# #s  #> #>> convert$ $! convert$ $@ ;
+: dto$ ( d -- caddr u )  \ convert double signed to a string
+    swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
+: lineending ( -- caddr u ) \ return a string to produce a line end in html
+  s\" <br>\n" ;
+
 : ?cr ( -- ) \ i think this looks for a cr in the input stream to allow refill-loop below to find the exit
   #tib @ 1 >= IF  source 1- + c@ #cr = #tib +!  THEN ;
 
