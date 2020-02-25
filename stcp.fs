@@ -30,18 +30,6 @@ variable convert$
   pop-file
 ;
 
-: (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
-  >in @ . ." >in before" cr
-  getinput
-  >in @ . ." >in after" cr
-  source httpinput$ $!
-  httpinput$ $@ dump cr
-  s" done" type
-  bye ;
-
-\ (doinputread)
-
-
 : opendata ( -- )
   s" stcptest.data" file-status swap drop false = if
     s" stcptest.data" r/w open-file throw
@@ -82,3 +70,14 @@ variable tempresponse$
   caddr u tempresponse$ $+!
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
+
+: (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
+  >in @ . ." >in before" cr
+  getinput
+  >in @ . ." >in after" cr
+  source httpinput$ $!
+  httpinput$ $@ dump cr
+  s" done" type
+  bye ;
+
+\ (doinputread)
