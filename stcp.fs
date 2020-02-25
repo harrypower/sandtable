@@ -10,7 +10,7 @@ variable httpinput$
 
 : refill-loop ( -- flag ) \ this refills the input from source and interprets the words it finds or throws
   base @ >r base off
-  BEGIN  refill ?cr  WHILE  ['] interpret catch drop  >in @ 0=  UNTIL
+  BEGIN  refill ?cr  WHILE  ( ['] interpret catch drop ) ( >in @ 0= ) true  UNTIL
   true  ELSE  false  THEN  r> base ! ;
 
 : getinput ( -- flag ior )  \ need to ajdust some words in here and test it
@@ -31,6 +31,8 @@ variable httpinput$
   s" done" type
   bye ;
 
+(doinputread)
+
 
 : opendata ( -- )
   s" stcptest.data" file-status swap drop false = if
@@ -43,6 +45,9 @@ variable httpinput$
 
 : addtodata ( caddr u -- )
   opendata
+  datafid file-size throw
+  datafid reposition-file throw
+  utime udto$ datafid write-line throw
   datafid write-line throw
   datafid flush-file throw
   datafid close-file throw ;
