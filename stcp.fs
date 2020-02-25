@@ -75,6 +75,7 @@ variable tempresponse$
 : (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
   >in @ . ." >in #1" cr
   source-id . ." sorce-id #1" cr
+  source dump cr 
   getinput
   \ >in @ . ." >in #2" cr
   \ source-id . ." sorce-id #2" cr
