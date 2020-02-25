@@ -26,7 +26,7 @@ variable convert$
   loadline off  blk off
   ( commands 1 set-order  command? on )  \ this would need to be set up to have a GET command in a wordlist
   \ ['] refill-loop catch
-  0 >in ! 
+  \ 0 >in ! 
   ( only forth also )
   pop-file
 ;
