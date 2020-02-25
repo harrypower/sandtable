@@ -18,7 +18,7 @@ variable convert$
 
 : refill-loop ( -- flag ) \ this refills the input from source and interprets the words it finds or throws
   base @ >r base off
-  BEGIN  refill ?cr  WHILE   ['] interpret catch drop  >in @ 0=   UNTIL
+  BEGIN  refill ( ?cr )  WHILE   ['] interpret catch drop  >in @ 0=   UNTIL
   true  ELSE  false  THEN  r> base ! ;
 
 : getinput ( -- flag ior )  \ need to ajdust some words in here and test it
