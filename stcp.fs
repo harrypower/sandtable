@@ -26,7 +26,7 @@ variable convert$
   loadline off  blk off
   ( commands 1 set-order  command? on )  \ this would need to be set up to have a GET command in a wordlist
   \ ['] refill-loop catch
-  \ 0 >in ! 
+  \ 0 >in !
   ( only forth also )
   pop-file
 ;
@@ -76,11 +76,11 @@ variable tempresponse$
   >in @ . ." >in #1" cr
   source-id . ." sorce-id #1" cr
   getinput
-  >in @ . ." >in #2" cr
-  source-id . ." sorce-id #2" cr
-  getinput
-  >in @ . ." >in #3" cr
-  source-id . ." sorce-id #3" cr
+  \ >in @ . ." >in #2" cr
+  \ source-id . ." sorce-id #2" cr
+  \ getinput
+  \ >in @ . ." >in #3" cr
+  \ source-id . ." sorce-id #3" cr
   source httpinput$ $!
   httpinput$ $@ dump cr
   s" done" type
