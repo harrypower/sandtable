@@ -25,7 +25,8 @@ variable convert$
   infile-id push-file loadfile !
   loadline off  blk off
   ( commands 1 set-order  command? on )  \ this would need to be set up to have a GET command in a wordlist
-  ['] refill-loop catch
+  \ ['] refill-loop catch
+  0 >in ! 
   ( only forth also )
   pop-file
 ;
