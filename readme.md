@@ -158,7 +158,7 @@ Use nano as follows to enter inetd.conf file:
 sudo nano /etc/inetd.conf
 ```
 ```
-gforth stream tcp nowait.100 root /home/debian/sandtable/xxxxxxx.fs
+sandtable stream tcp nowait.100 root /home/pks/sandtable/stcp.fs stcp.fs -e "processhttp"
 ```
 ( note this name at end of line is to be determined )
 Use nano as follow to add to /etc/services file:
@@ -167,9 +167,9 @@ sudo nano /etc/services
 ```
 Move to the bottom of the document and add the following line:
 ```
-gforth  52222/tcp
+sandtable  52222/tcp
 ```
-Now restart the BBB and this service should be working on port 52222
+Now restart the BBB and this service should be working on port 5222
 Testing if it is running at command line can be done with a curl statement like follows:
 ```
 curl --get --data "command=status" http://mysandtable.local:52222/

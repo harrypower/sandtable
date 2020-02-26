@@ -30,6 +30,7 @@ variable convert$
   datafid reposition-file throw
   utime udto$ datafid write-line throw
   datafid write-line throw
+  s\" \r" datafid write-line throw
   datafid flush-file throw
   datafid close-file throw ;
 
@@ -47,8 +48,7 @@ variable tempresponse$
   \ caddr' u' is the complete http-response string to return
   { caddr u }
   http-header tempresponse$ $!
-  s\" \r\n" tempresponse$ $+!
-  s\" \r\n" tempresponse$ $+!
+  s\" \r\n\r\n" tempresponse$ $+!
   caddr u tempresponse$ $+!
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
