@@ -64,6 +64,7 @@ variable tempresponse$
   stdin slurp-fid httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
+  outfile-id flush-file throw
   ;
 
 :noname processhttp bye ; is bootmessage
