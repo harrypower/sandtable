@@ -65,6 +65,8 @@ variable tempresponse$
   source httpinput$ $!
   source swap drop >in !
   refill drop
+  refill drop
+  refill drop 
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
