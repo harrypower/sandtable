@@ -51,8 +51,8 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-: (processhttp) \ this is the main word to start the command parsing, interpreting, executing and message returning
+: processhttp \ this is the main word to start the command parsing, interpreting, executing and message returning
   stdin slurp-fid httpinput$ $!
   httpinput$ $@ addtodata
-  httpinput$ $@ http-response type 
+  httpinput$ $@ http-response type
   bye ;
