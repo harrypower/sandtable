@@ -68,6 +68,7 @@ variable tempresponse$
   s" sent recept message" addtodata
   stdout flush-file throw
   s" after stdout flush" addtodata
+  bye
   ;
 
 :noname ['] processhttp catch bye ; is bootmessage
