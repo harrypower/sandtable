@@ -54,12 +54,13 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-: GET \ this is the main word to start the command parsing, interpreting, executing and message returning
-  source swap drop >in !
-  s" got message!" http-response type
-  bye ;
+\ : GET \ this is the main word to start the command parsing, interpreting, executing and message returning
+\   source swap drop >in !
+\   s" got message!" http-response type
+\   bye ;
 
-\  stdin slurp-fid httpinput$ $!
-\  httpinput$ $@ addtodata
-\  httpinput$ $@ http-response type
-\  bye ;
+: processhttp
+  stdin slurp-fid httpinput$ $!
+  httpinput$ $@ addtodata
+  httpinput$ $@ http-response type
+  bye ;
