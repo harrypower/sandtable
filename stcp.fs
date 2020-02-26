@@ -63,7 +63,7 @@ variable tempresponse$
 : processhttp
 \  stdin slurp-fid httpinput$ $!
   source httpinput$ $!
-\  source swap drop >in !
+  source swap drop >in !
   begin refill false = until
   httpinput$ $@ addtodata
   s" got the message" http-response type
