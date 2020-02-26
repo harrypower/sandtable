@@ -17,11 +17,11 @@ variable convert$
   s\" <br>\n" ;
 
 : opendata ( -- )
-  s" stcptest.data" file-status swap drop false = if
-    s" stcptest.data" r/w open-file throw
+  s" /home/pks/sandtable/stcptest.data" file-status swap drop false = if
+    s" /home/pks/sandtable/stcptest.data" r/w open-file throw
     to datafid
   else
-    s" stcptest.data" r/w create-file throw
+    s" /home/pks/sandtable/stcptest.data" r/w create-file throw
     to datafid
   then ;
 
@@ -54,15 +54,17 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-: GET \ this is the main word to start the command parsing, interpreting, executing and message returning
-   source swap drop >in !
-   source httpinput$ $!
-   httpinput$ $@ addtodata
-   s" Command received" http-response type
-   bye ;
+\ : GET \ this is the main word to start the command parsing, interpreting, executing and message returning
+\   source swap drop >in !
+\   source httpinput$ $!
+\   httpinput$ $@ addtodata
+\   s" Command received" http-response type
+\   bye ;
 
-\ : processhttp
-\  stdin slurp-fid httpinput$ $!
-\  httpinput$ $@ addtodata
-\  httpinput$ $@ http-response type
-\  bye ;
+: processhttp
+  stdin slurp-fid httpinput$ $!
+  httpinput$ $@ addtodata
+  httpinput$ $@ http-response type
+  ;
+
+processhttp
