@@ -64,11 +64,11 @@ variable tempresponse$
 \  stdin slurp-fid httpinput$ $!
   source httpinput$ $!
   source swap drop >in !
-  begin refill false = until
+\  begin refill false = until
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
-  stdout flush-file throw
+\  stdout flush-file throw
   s" after stdout flush" addtodata
   bye
   ;
