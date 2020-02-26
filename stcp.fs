@@ -31,10 +31,6 @@ variable convert$
   datafid flush-file throw
   datafid close-file throw ;
 
-: putstdin-out
-  opendata
-  httpinput$ $@ addtodata ;
-
 variable tempheader$
 : http-header ( -- caddr u ) \ http header string return
   s\" HTTP/1.1 200 OK\r\n" tempheader$ $!
