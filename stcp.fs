@@ -64,6 +64,7 @@ variable tempresponse$
   stdin slurp-fid httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
+  s" sent recept message" addtodata
   outfile-id flush-file throw
   ;
 
