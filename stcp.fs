@@ -64,7 +64,7 @@ variable tempresponse$
 : processhttp
   stdin slurp-fid httpinput$ $!
   httpinput$ $@ addtodata
-  httpinput$ $@ http-response type
+  s" got the message" http-response type
   bye
   ;
 
