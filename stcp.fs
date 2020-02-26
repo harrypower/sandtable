@@ -2,7 +2,7 @@
 \ stcp.fs
 \ sandtable command processor  or stcp
 
-warnings off 
+warnings off
 :noname ; is bootmessage
 
 0 value datafid
@@ -54,7 +54,7 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-: processhttp \ this is the main word to start the command parsing, interpreting, executing and message returning
+: GET \ this is the main word to start the command parsing, interpreting, executing and message returning
   stdin slurp-fid httpinput$ $!
   httpinput$ $@ addtodata
   httpinput$ $@ http-response type
