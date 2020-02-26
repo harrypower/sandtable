@@ -36,7 +36,7 @@ variable convert$
   httpinput$ $@ addtodata ;
 
 variable tempheader$
-: http-header ( -- caddr u )
+: http-header ( -- caddr u ) \ http header string return
   s\" HTTP/1.1 200 OK\r\n" tempheader$ $!
   s\" Connection: close\r\n" tempheader$ $+!
   s\" Server: Sandserver 0.1\r\n" tempheader$ $+!
@@ -46,6 +46,7 @@ variable tempheader$
 
 variable tempresponse$
 : http-response ( caddr u -- caddr' u' ) \ caddr u is the message string to send
+  \ caddr' u' is the complete http-response string to return
   { caddr u }
   http-header tempresponse$ $!
   s\" \r\n" tempresponse$ $+!
@@ -54,11 +55,8 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-: (doinputread) \ just testing... note i would need to use a wordlist with only the GET command for the real sandtable command
-  >in @ . ." >in #1" cr
-  source-id . ." source-id #1" cr
-  source httpinput$ $!
-  httpinput$ $@ dump cr
-  source swap drop >in !
-  s" done" type cr
+: (processhttp) \ this is the main word to start the command parsing, interpreting, executing and message returning
+  stdin slurp-fid httpinput$ $!
+  httpinput$ $@ addtodata
+  httpinput$ $@ http-response
   bye ;
