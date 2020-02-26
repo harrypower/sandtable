@@ -53,12 +53,12 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-\ : GET \ this is the main word to start the command parsing, interpreting, executing and message returning
-\   source swap drop >in !
-\   source httpinput$ $!
-\   httpinput$ $@ addtodata
-\   s" Command received" http-response type
-\   bye ;
+: ?cr ( -- )
+  #tib @ 1 >= IF  source 1- + c@ #cr = #tib +!  THEN ;
+: refill-loop ( -- flag )
+  base @ >r base off
+  BEGIN  refill ?cr  WHILE  ['] interpret catch drop  >in @ 0=  UNTIL
+  true  ELSE  false  THEN  r> base ! ;
 
 variable junk$
 : processhttp
@@ -67,7 +67,11 @@ variable junk$
 \  s" started processhttp" addtodata
 \  refill s>d dto$ junk$ $! s"  < refill" junk$ $+!
 \  junk$ $@ addtodata
-  0 pop-file
+  infile-id push-file loadfile ! loadline off blk off
+  ( need some wordlist stuff here )
+  ['] refill-loop catch
+  ( then use only forth also here )
+  pop-file
   source httpinput$ $!
   source swap drop >in !
 \  begin stdin key?-file until
