@@ -63,6 +63,11 @@ variable tempresponse$
 : processhttp
   source httpinput$ $!
   source swap drop >in !
+  s" started processhttp" addtodata
+  refill drop
+  s" after refill" addtodata
+  source httpinput$ $!
+  source swap drop >in !
 \  begin stdin key?-file until
 \  stdin slurp-fid httpinput$ $!
   httpinput$ $@ addtodata
