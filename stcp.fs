@@ -2,6 +2,9 @@
 \ stcp.fs
 \ sandtable command processor  or stcp
 
+warnings off 
+:noname ; is bootmessage
+
 0 value datafid
 variable httpinput$
 
