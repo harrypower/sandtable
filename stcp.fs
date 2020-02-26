@@ -3,7 +3,6 @@
 \ sandtable command processor  or stcp
 
 warnings off
-:noname ; is bootmessage
 
 0 value datafid
 variable httpinput$
@@ -65,7 +64,6 @@ variable tempresponse$
   stdin slurp-fid httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
-  bye
   ;
 
-processhttp
+:noname processhttp bye ; is bootmessage
