@@ -60,12 +60,13 @@ variable tempresponse$
 \   s" Command received" http-response type
 \   bye ;
 
+variable junk$ 
 : processhttp
   source httpinput$ $!
   source swap drop >in !
   s" started processhttp" addtodata
-  refill drop
-  s" after refill" addtodata
+  refill s>d dto$ junk$ $! s"  < refill" junk$ $+!
+  junk$ $@ addtodata
   source httpinput$ $!
   source swap drop >in !
 \  begin stdin key?-file until
