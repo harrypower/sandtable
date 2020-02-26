@@ -65,7 +65,8 @@ variable tempresponse$
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
-  outfile-id flush-file throw
+  stdout flush-file throw
+  s" after stdout flush" addtodata
   ;
 
-:noname processhttp bye ; is bootmessage
+:noname ['] processhttp catch bye ; is bootmessage
