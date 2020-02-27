@@ -4,7 +4,7 @@
 
 warnings off
 \ defer startitup
-\:noname startitup bye ; is bootmessage
+\ :noname startitup bye ; is bootmessage
 :noname ; is bootmessage
 
 0 value datafid
