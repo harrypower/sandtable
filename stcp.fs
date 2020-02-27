@@ -7,8 +7,13 @@ warnings off
 
 0 value datafid
 variable httpinput$
+variable stdinbuffer
+1024 allocate throw stdinbuffer !
+s" " httpinput$ $!
+: getstdin
+  begin stdinbuffer @ 1024 stdin read-file throw dup stdinbuffer @ swap httpinput$ $+!  until  ;
 
-:noname stdin slurp-fid httpinput$ $! ; is bootmessage
+:noname getstdin ; is bootmessage
 
 
 variable convert$
