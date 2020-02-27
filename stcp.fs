@@ -3,6 +3,7 @@
 \ sandtable command processor  or stcp
 
 warnings off
+:noname ; is bootmessage
 
 0 value datafid
 variable httpinput$
@@ -83,5 +84,3 @@ variable junk$
   s" sent recept message" addtodata
   bye
   ;
-
-:noname ; is bootmessage
