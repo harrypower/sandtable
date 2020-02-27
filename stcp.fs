@@ -68,6 +68,8 @@ variable tempresponse$
 \  source swap drop >in !
   s" source now in processhttp" addtodata
   httpinput$ $@ addtodata
+  s" indata$ from cmdline" addtodata
+  indata$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
   bye
