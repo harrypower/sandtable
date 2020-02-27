@@ -7,14 +7,8 @@ warnings off
 
 0 value datafid
 variable httpinput$
-variable stdinbuffer
-1024 allocate throw stdinbuffer !
-s" " httpinput$ $!
-: getstdin
-  begin stdinbuffer @ 1024 stdin read-file throw dup stdinbuffer @ swap httpinput$ $+!  until  ;
 
-:noname getstdin ; is bootmessage
-
+:noname ; is bootmessage
 
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
@@ -61,15 +55,15 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-: processhttp
-  s" entry to processhttp" addtodata
+: processhttp ( caddr u -- )
+  .s s" < stack entry to processhttp" addtodata
+  httpinput$ $!
   httpinput$ $@ addtodata
   source httpinput$ $!
 \  source swap drop >in !
   s" source now in processhttp" addtodata
   httpinput$ $@ addtodata
-  s" indata$ from cmdline" addtodata
-  indata$ $@ addtodata
+
   s" got the message" http-response type
   s" sent recept message" addtodata
   bye
