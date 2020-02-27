@@ -75,10 +75,10 @@ variable junk$
 \  s" after refill-loop" addtodata
   ( then use only forth also here )
 \  pop-file
-  source httpinput$ $!
+\  source httpinput$ $!
 \  source swap drop >in !
 \  begin stdin key?-file until
-\  stdin slurp-fid httpinput$ $!
+  stdin slurp-fid httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
