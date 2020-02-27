@@ -3,8 +3,6 @@
 \ sandtable command processor  or stcp
 
 warnings off
-\ defer startitup
-\ :noname startitup bye ; is bootmessage
 :noname ; is bootmessage
 
 0 value datafid
@@ -33,7 +31,6 @@ variable convert$
   datafid reposition-file throw
   utime udto$ datafid write-line throw
   datafid write-line throw
-  s\" \r" datafid write-line throw
   datafid flush-file throw
   datafid close-file throw ;
 
@@ -64,30 +61,25 @@ variable tempresponse$
   true  ELSE  false  THEN  r> base ! ;
 
 variable junk$
-: processhttp
+: GET
 \  source httpinput$ $!
 \  source swap drop >in !
 \  s" started processhttp" addtodata
 \  refill s>d dto$ junk$ $! s"  < refill" junk$ $+!
 \  junk$ $@ addtodata
-  stdin push-file loadfile ! loadline off blk off
+\  stdin push-file loadfile ! loadline off blk off
   ( need some wordlist stuff here )
-  s" after infile-id" addtodata
-  ['] refill-loop catch
-  s" after refill-loop" addtodata
+\  s" after infile-id" addtodata
+\  ['] refill-loop catch
+\  s" after refill-loop" addtodata
   ( then use only forth also here )
-  pop-file
-  source httpinput$ $!
+\  pop-file
+\  source httpinput$ $!
 \  source swap drop >in !
 \  begin stdin key?-file until
-\  stdin slurp-fid httpinput$ $!
+  stdin slurp-fid httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
   bye
   ;
-
-: startprocessing
-  ['] processhttp stdin infile-execute ;
-
-\  ' processhttp is startitup
