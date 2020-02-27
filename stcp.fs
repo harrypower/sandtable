@@ -57,7 +57,7 @@ variable tempresponse$
 
 variable junk$
 : processhttp ( caddr u -- )
-  depth s>d dto$  junk$ !$ s" < stack entry to processhttp" junk$ $+! junk$ $@ addtodata
+  depth s>d dto$  junk$ $! s" < stack entry to processhttp" junk$ $+! junk$ $@ addtodata
   httpinput$ $!
   httpinput$ $@ addtodata
   source httpinput$ $!
