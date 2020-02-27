@@ -63,7 +63,7 @@ variable tempresponse$
 variable junk$
 variable inbuffer
 1024 allocate throw inbuffer !
-: GET
+: processhttp
 \  source httpinput$ $!
 \  source swap drop >in !
 \  s" started processhttp" addtodata
