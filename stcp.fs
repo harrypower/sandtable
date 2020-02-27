@@ -61,23 +61,26 @@ variable tempresponse$
   true  ELSE  false  THEN  r> base ! ;
 
 variable junk$
+variable inbuffer
+1024 allocate throw inbuffer !
 : GET
 \  source httpinput$ $!
 \  source swap drop >in !
 \  s" started processhttp" addtodata
 \  refill s>d dto$ junk$ $! s"  < refill" junk$ $+!
 \  junk$ $@ addtodata
-\  stdin push-file loadfile ! loadline off blk off
+  infile-id push-file loadfile ! loadline off blk off
   ( need some wordlist stuff here )
-\  s" after infile-id" addtodata
-\  ['] refill-loop catch
-\  s" after refill-loop" addtodata
+  s" after infile-id" addtodata
+  ['] refill-loop catch
+  s" after refill-loop" addtodata
   ( then use only forth also here )
-\  pop-file
-  source httpinput$ $!
+  \ pop-file
+\  source httpinput$ $!
 \  source swap drop >in !
 \  begin stdin key?-file until
 \  stdin slurp-fid httpinput$ $!
+  inbuffer @ 1024 stdin read-file throw inbuffer @ swap httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
