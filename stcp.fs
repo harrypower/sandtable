@@ -56,15 +56,10 @@ variable tempresponse$
   tempresponse$ $@ ;
 
 variable junk$
-: processhttp ( caddr u -- )
+: processhttp ( caddr u -- ) \ this is called from inetd only with code that produces the caddr u string for this word to process
   depth s>d dto$  junk$ $! s" < stack entry to processhttp" junk$ $+! junk$ $@ addtodata
   httpinput$ $!
   httpinput$ $@ addtodata
-  source httpinput$ $!
-\  source swap drop >in !
-  s" source now in processhttp" addtodata
-  httpinput$ $@ addtodata
-
   s" got the message" http-response type
   s" sent recept message" addtodata
   bye
