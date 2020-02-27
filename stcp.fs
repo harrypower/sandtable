@@ -4,12 +4,12 @@
 
 
 warnings off
-:noname ; is bootmessage
 
 0 value datafid
 variable httpinput$
 
-httpinput$ $!
+:noname stdin slurp-fid httpinput$ $! ; is bootmessage
+
 
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
@@ -64,5 +64,3 @@ variable tempresponse$
   s" sent recept message" addtodata
   bye
   ;
-
-processhttp
