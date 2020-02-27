@@ -2,14 +2,14 @@
 \ stcp.fs
 \ sandtable command processor  or stcp
 
+
 warnings off
 :noname ; is bootmessage
 
-only forth also 
-wordlist constant httpcommands
-
 0 value datafid
 variable httpinput$
+
+httpinput$ $!
 
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
@@ -56,13 +56,13 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-\ httpcommands set-current
-
-: GET
-  source httpinput$ $!
-  source swap drop >in !
+: processhttp
+\  source httpinput$ $!
+\  source swap drop >in !
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
   bye
   ;
+
+processhttp
