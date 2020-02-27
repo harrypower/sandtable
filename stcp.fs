@@ -57,8 +57,11 @@ variable tempresponse$
   tempresponse$ $@ ;
 
 : processhttp
-\  source httpinput$ $!
+  s" entry to processhttp" addtodata
+  httpinput$ $@ addtodata
+  source httpinput$ $!
 \  source swap drop >in !
+  s" source now in processhttp" addtodata
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
