@@ -3,8 +3,9 @@
 \ sandtable command processor  or stcp
 
 warnings off
-defer startitup
-:noname startitup bye ; is bootmessage
+\ defer startitup
+\:noname startitup bye ; is bootmessage
+:noname ; is bootmessage
 
 0 value datafid
 variable httpinput$
@@ -83,8 +84,10 @@ variable junk$
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
-\  bye
+  bye
   ;
 
+: startprocessing
+  ['] processhttp stdin infile-execute ;
 
-  ' processhttp is startitup
+\  ' processhttp is startitup
