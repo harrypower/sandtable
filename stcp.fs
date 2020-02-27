@@ -5,6 +5,9 @@
 warnings off
 :noname ; is bootmessage
 
+only forth also 
+wordlist constant httpcommands
+
 0 value datafid
 variable httpinput$
 
@@ -53,34 +56,11 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-: ?cr ( -- )
-  #tib @ 1 >= IF  source 1- + c@ #cr = #tib +!  THEN ;
-: refill-loop ( -- flag )
-  base @ >r base off
-  BEGIN  refill ?cr  WHILE  ['] interpret catch drop  >in @ 0=  UNTIL
-  true  ELSE  false  THEN  r> base ! ;
+\ httpcommands set-current
 
-variable junk$
-variable inbuffer
-1024 allocate throw inbuffer !
-: processhttp
-\  source httpinput$ $!
-\  source swap drop >in !
-\  s" started processhttp" addtodata
-\  refill s>d dto$ junk$ $! s"  < refill" junk$ $+!
-\  junk$ $@ addtodata
-  infile-id push-file loadfile ! loadline off blk off
-  ( need some wordlist stuff here )
-  s" after infile-id" addtodata
-  ['] refill-loop catch
-  s" after refill-loop" addtodata
-  ( then use only forth also here )
-  \ pop-file
-\  source httpinput$ $!
-\  source swap drop >in !
-\  begin stdin key?-file until
-\  stdin slurp-fid httpinput$ $!
-  inbuffer @ 1024 stdin read-file throw inbuffer @ swap httpinput$ $!
+: GET
+  source httpinput$ $!
+  source swap drop >in !
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent recept message" addtodata
