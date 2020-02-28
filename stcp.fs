@@ -56,8 +56,6 @@ variable tempresponse$
   tempresponse$ $@ ;
 
 variable junk$
-variable buffer
-150 allocate throw buffer !
 
 : getstdin  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
   stdin key?-file true = if
@@ -66,9 +64,7 @@ variable buffer
     pad 0 false
   then ;
 
-: processhttp ( -- ) \ this is called from inetd only with code that produces the caddr u string for this word to process
-\  800 ms
-\  buffer @ 110 stdin read-file throw buffer @ swap
+: processhttp ( -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   junk$ $init
   500 0 do 1 ms getstdin true = if junk$ $+! else 2drop then loop
   junk$ $@
