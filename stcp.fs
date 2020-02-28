@@ -60,7 +60,7 @@ variable buffer
 500 allocate throw buffer !
 : processhttp ( caddr u -- ) \ this is called from inetd only with code that produces the caddr u string for this word to process
 \  depth s>d dto$  junk$ $! s" < stack entry to processhttp" junk$ $+! junk$ $@ addtodata
-  600 ms buffer @ 100 stdin read-file throw buffer @ swap 
+  600 ms buffer @ 200 stdin read-file throw buffer @ swap 
   httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
