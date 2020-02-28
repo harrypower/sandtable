@@ -60,18 +60,18 @@ variable buffer
 150 allocate throw buffer !
 
 : getstdin  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
-  stdin key?-key true = if
+  stdin key?-file true = if
     pad 1 stdin read-file throw pad swap true
   else
     pad 0 false
   then ;
 
-: processhttp ( caddr u -- ) \ this is called from inetd only with code that produces the caddr u string for this word to process
+: processhttp ( -- ) \ this is called from inetd only with code that produces the caddr u string for this word to process
 \  800 ms
 \  buffer @ 110 stdin read-file throw buffer @ swap
   junk$ $init
   500 0 do 1 ms getstdin true = if junk$ $+! else 2drop then loop
-  junk$ $@   
+  junk$ $@
   httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
