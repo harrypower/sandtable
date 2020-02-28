@@ -19,11 +19,11 @@ variable convert$
   s\" <br>\n" ;
 
 : opendata ( -- )
-  s" /home/pks/sandtable/stcptest.data" file-status swap drop false = if
-    s" /home/pks/sandtable/stcptest.data" r/w open-file throw
+  s" /home/debian/sandtable/stcptest.data" file-status swap drop false = if
+    s" /home/debian/sandtable/stcptest.data" r/w open-file throw
     to datafid
   else
-    s" /home/pks/sandtable/stcptest.data" r/w create-file throw
+    s" /home/debian/sandtable/stcptest.data" r/w create-file throw
     to datafid
   then ;
 
