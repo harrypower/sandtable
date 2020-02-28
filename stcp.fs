@@ -56,17 +56,14 @@ variable tempresponse$
   tempresponse$ $@ ;
 
 variable junk$
-variable buffer
-500 allocate throw buffer !
 : processhttp ( caddr u -- ) \ this is called from inetd only with code that produces the caddr u string for this word to process
-\  depth s>d dto$  junk$ $! s" < stack entry to processhttp" junk$ $+! junk$ $@ addtodata
-\  1000 ms
-\ stdin key?-file s>d dto$ junk$ $! s"  < key?-file flag" junk$ $+! junk$ $@ addtodata
   junk$ $init
-  begin
-    10 ms pad dup 5 stdin read-file throw dup while
-    junk$ $!
-  repeat
+  500 0 do
+    3 ms
+    stdin key?-file true = if
+      pad 2 stdin read-file throw pad swap junk$ $+!
+    then
+  loop
   junk$ $@
   httpinput$ $!
   httpinput$ $@ addtodata
