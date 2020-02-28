@@ -158,7 +158,7 @@ Use nano as follows to enter inetd.conf file:
 sudo nano /etc/inetd.conf
 ```
 ```
-sandtable stream tcp nowait.100 root /home/pks/sandtable/stcp.fs stcp.fs -e "processhttp"
+sandtable stream tcp nowait root /home/pks/sandtable/stcp.fs stcp.fs -e "processhttp"
 ```
 ( note this name at end of line is to be determined )
 Use nano as follow to add to /etc/services file:
