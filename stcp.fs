@@ -95,6 +95,7 @@ variable junk$
   httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
+  30000 ms \ just await simulating other processes
   s" sent recept message" addtodata
   bye
   ;
