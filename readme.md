@@ -51,7 +51,7 @@
     systemctl disable wifi-reset.service
     ```
 ## 3.B configure hostname
-  * log into beaglebone and change the name in /etc/hostname to sandtable
+  * log into beaglebone and change the name in /etc/hostname to mysandtable
   ```
   sudo nano /etc/hostname
   ```
@@ -62,9 +62,10 @@
   ```
   127.0.1.1     beaglebone.localdomain   beaglebone
   ```
-  change this to bellow
+  change this to below
   ```
-  127.0.1.1     sandtable.localdomain    sandtable
+  127.0.1.1     mysandtable
+  127.0.1.1     mysandtable.localdomain    mysandtable
   ```
   * Reboot the beaglebone black to finish setup!
 ## 4. Remove some services on BBB
@@ -160,7 +161,7 @@ sudo nano /etc/inetd.conf
 ```
 sandtable stream tcp nowait root /home/pks/sandtable/stcp.fs stcp.fs -e "processhttp"
 ```
-( note this name at end of line is to be determined )
+
 Use nano as follow to add to /etc/services file:
 ```
 sudo nano /etc/services
@@ -174,4 +175,3 @@ Testing if it is running at command line can be done with a curl statement like 
 ```
 curl --get --data "command=status" http://mysandtable.local:52222/
 ```
-( note this has to be set up yet so may change )
