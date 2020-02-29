@@ -23,7 +23,7 @@ variable pathfile$
   else
     bbbdatapath file-status swap drop false = if
       bbbdatapath pathfile$ $!
-      dataoutfile$ $@ pathfile$ $+! pathfile$ $@ true 
+      dataoutfile$ $@ pathfile$ $+! pathfile$ $@ true
     else
       0 0 false
     then
@@ -38,13 +38,17 @@ variable convert$
   s\" <br>\n" ;
 
 : opendata ( -- )
-
-  s" /home/debian/sandtable/stcptest.data" file-status swap drop false = if
-    s" /home/debian/sandtable/stcptest.data" r/w open-file throw
-    to datafid
+  datapath { caddr u nflag }
+  nflag true = if
+    caddr u file-status swap drop false = if
+      caddr u r/w open-file throw
+      to datafid
+    else
+      caddr u r/w create-file throw
+      to datafid
+    then
   else
-    s" /home/debian/sandtable/stcptest.data" r/w create-file throw
-    to datafid
+    210 abort" the bbbdatapath or the pcdatapath are not present to store the stcp data"
   then ;
 
 : addtodata ( caddr u -- )
