@@ -6,7 +6,7 @@
 warnings off
 :noname ; is bootmessage
 
-0 value datafid
+0 value dataoutfid
 variable httpinput$
 variable dataoutfile$
 s" stcptest.data" dataoutfile$ $!
@@ -42,10 +42,10 @@ variable convert$
   nflag true = if
     caddr u file-status swap drop false = if
       caddr u r/w open-file throw
-      to datafid
+      to dataoutfid
     else
       caddr u r/w create-file throw
-      to datafid
+      to dataoutfid
     then
   else
     210 abort" the bbbdatapath or the pcdatapath are not present to store the stcp data"
@@ -53,12 +53,12 @@ variable convert$
 
 : addtodata ( caddr u -- )
   opendata
-  datafid file-size throw
-  datafid reposition-file throw
-  utime udto$ datafid write-line throw
-  datafid write-line throw
-  datafid flush-file throw
-  datafid close-file throw ;
+  dataoutfid file-size throw
+  dataoutfid reposition-file throw
+  utime udto$ dataoutfid write-line throw
+  dataoutfid write-line throw
+  dataoutfid flush-file throw
+  dataoutfid close-file throw ;
 
 variable tempheader$
 : http-header ( -- caddr u ) \ http header string return
@@ -90,18 +90,19 @@ variable junk$
 : getstdin ( -- caddr u )
   junk$ $init
   500 0 do
-    1 ms (getstdin) true = if junk$ $+! else 2drop then
+    1 ms
+    begin
+      (getstdin) while
+      junk$ $+!
+    repeat
+    2drop
   loop
   junk$ $@ ;
 
 : processhttp ( -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
-\  junk$ $init
-\  500 0 do 1 ms getstdin true = if junk$ $+! else 2drop then loop
-\  junk$ $@
-  getstdin
-  httpinput$ $!
+  getstdin httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
-  s" sent recept message" addtodata
+  s" sent receipt message" addtodata
   bye
   ;
