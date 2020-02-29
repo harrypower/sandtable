@@ -79,23 +79,29 @@ variable tempresponse$
   s\" \r\n\r\n" tempresponse$ $+!
   tempresponse$ $@ ;
 
-variable junk$
-
-: getstdin  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
+: (getstdin)  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
   stdin key?-file true = if
     pad 1 stdin read-file throw pad swap true
   else
     pad 0 false
   then ;
 
-: processhttp ( -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
+variable junk$
+: getstdin ( -- caddr u )
   junk$ $init
-  500 0 do 1 ms getstdin true = if junk$ $+! else 2drop then loop
-  junk$ $@
+  500 0 do
+    1 ms (getstdin) true = if junk$ $+! else 2drop then
+  loop
+  junk$ $@ ;
+
+: processhttp ( -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
+\  junk$ $init
+\  500 0 do 1 ms getstdin true = if junk$ $+! else 2drop then loop
+\  junk$ $@
+  getstdin
   httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
-  30000 ms \ just await simulating other processes
   s" sent recept message" addtodata
   bye
   ;
