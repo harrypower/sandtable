@@ -47,10 +47,10 @@ variable tmpmake$
 
 s" http://mysandtable.local" server_addres$ $!  \ not sure need to test if this will work
 \s" 192.168.0.59" server_addres$ $!
-s" :52222/" port#$ $!  \ i think the / is need at end of port number
+s" :52222/" port#$ $!  \ the / is need at end of port number
 
 variable curl$
-: sandtablemessage ( ucaddr u -- ucaddr1 u1 ) \ send ucaddr u string to sandtable via curl in cmd line and return caddr1 u1 from the sandtable 
+: sandtablemessage ( ucaddr u -- ucaddr1 u1 ) \ send ucaddr u string to sandtable via curl in cmd line and return caddr1 u1 from the sandtable
 { ucaddr u }
 s\" curl --get --data \"" curl$ $!
 ucaddr u curl$ $+!
