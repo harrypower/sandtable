@@ -30,9 +30,6 @@ warnings off
 
 require script.fs
 
-1024 value mb-maxsize
-variable message-buffer
-mb-maxsize allocate throw message-buffer !
 0 value userver
 0 value usockfd
 
@@ -52,33 +49,29 @@ s" http://mysandtable.local" server_addres$ $!  \ not sure need to test if this 
 \s" 192.168.0.59" server_addres$ $!
 s" :52222/" port#$ $!  \ i think the / is need at end of port number
 
-: getmessage ( -- ucaddr u )
-;
-
 variable curl$
-: sendmessage ( ucaddr u -- ucaddr1 u1 )
+: sandtablemessage ( ucaddr u -- ucaddr1 u1 ) \ send ucaddr u string to sandtable via curl in cmd line and return caddr1 u1 from the sandtable 
 { ucaddr u }
 s\" curl --get --data \"" curl$ $!
 ucaddr u curl$ $+!
 s\" \" " curl$ $+! \ note the space after the last " is needed to separate
 server_addres$ $@ curl$ $+!
 port#$ $@ curl$ $+!
-curl$ $@ sh-get
-\  s\" curl \"" curl$ $! server_addres$ $@ curl$ $+! port#$ $@ curl$ $+! s" /?" curl$ $+! curl$ $+! s\" \"" curl$ $+! curl$ $@ sh-get
-;
+curl$ $@ sh-get ;
 
 : lineending ( -- caddr u )
   s\" <br>\n" ;
 
 : return-message ( -- )
   s\" Content-type: text/html; charset=utf-8\n\n" type
+  s\" <!DOCTYPE html>\n" type
   s\" <html>\n" type
   s\" <head><title>CGI return</title></head>\n" type
   s\" <body>\n" type
   query$ $@ type
   apache$s $@ type
   s" CGI got this message: " type thequery$ $@ type lineending type
-  thequery$ $@ sendmessage
+  thequery$ $@ sandtablemessage
   s" Server message recieved is: " type type lineending type
   s\" </body></html>\n" type
 ;
@@ -103,5 +96,4 @@ curl$ $@ sh-get
 prep-message
 
 return-message
-message-buffer @ free throw
 bye
