@@ -7,6 +7,7 @@ warnings off
 :noname ; is bootmessage
 
 0 value dataoutfid
+200 value stdinwaittime
 variable httpinput$
 variable dataoutfile$
 s" stcptest.data" dataoutfile$ $!
@@ -89,7 +90,7 @@ variable tempresponse$
 variable junk$
 : getstdin ( -- caddr u )
   junk$ $init
-  500 0 do
+  stdinwaittime 0 do
     1 ms
     begin
       (getstdin) while
