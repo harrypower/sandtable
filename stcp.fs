@@ -4,11 +4,30 @@
 
 
 warnings off
+:noname ; is bootmessage
 
 0 value datafid
 variable httpinput$
+variable dataoutfile$
+s" stcptest.data" dataoutfile$ $!
 
-:noname ; is bootmessage
+variable pathfile$
+: pcdatapath ( -- cadd u ) \ return path file string to output data for pc testing
+  s" /home/pks/sandtable/" ;
+: bbbdatapath ( -- cadd u ) \ return path file string to output data for BBB sandtable
+  s" /home/debian/sandtable/" ;
+: datapath ( -- caddr u nflag ) \ caddr u is the correct path to use if nflag is true.... if nflag is false caddr u is 0 0
+  pcdatapath file-status swap drop false = if
+    pcdatapath pathfile$ $!
+    dataoutfile$ $@ pathfile$ $+! pathfile$ $@ true
+  else
+    bbbdatapath file-status swap drop false = if
+      bbbdatapath pathfile$ $!
+      dataoutfile$ $@ pathfile$ $+! pathfile$ $@ true 
+    else
+      0 0 false
+    then
+  then ;
 
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
@@ -19,6 +38,7 @@ variable convert$
   s\" <br>\n" ;
 
 : opendata ( -- )
+
   s" /home/debian/sandtable/stcptest.data" file-status swap drop false = if
     s" /home/debian/sandtable/stcptest.data" r/w open-file throw
     to datafid
