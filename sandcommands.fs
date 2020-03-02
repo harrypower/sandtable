@@ -122,7 +122,7 @@ commands-instant set-current
 : sandtable-message ( -- ) \ this will be the only used by sandtable-commands.fs to return messages
 ;
 
-commands-spawned set-current
+commands-slow set-current
 \ place slower commands-spawned sandtable commands here
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
