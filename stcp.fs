@@ -100,10 +100,16 @@ variable junk$
   loop
   junk$ $@ ;
 
-: processhttp ( -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
+: processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   getstdin httpinput$ $!
   httpinput$ $@ addtodata
   s" got the message" http-response type
   s" sent receipt message" addtodata
-  bye
-  ;
+  bye ;
+
+: processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
+\ this word will take the command from the stdin and process it !
+  getstdin httpinput$ $!
+  httpinput$ $@ addtodata
+  s\" Message received\r\n" type
+  bye ;
