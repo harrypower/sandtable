@@ -110,7 +110,6 @@ commands-instant set-current
   oneuse$ $@  instantresult$ $! ;
 
 : stopsandserver ( -- ) \ stop the sand server loop
-  true to stopserverflag
   s" Sandserver shutting done now!" oneuse$ $!
   lineending oneuse$ $+!
   oneuse$ $@  instantresult$ $!
