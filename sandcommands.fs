@@ -25,7 +25,7 @@
 \ 02/19/2020 added key stuff
 \ 02/19/2020 using nohup and command line to send message to sandtable command processor
 
-variable junk$
+variable oneuse$
 
 variable shjunk$
 : sh-sandtable-command ( caddr u -- caddr1 u1)
@@ -66,57 +66,54 @@ variable shjunk$
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
   nvalue nflag ;
 
-: getkeyfromsubmessage ( -- nkey nflag )  \ nflag is true if key# is present in submessages.. caddr u is the key# string and is valid if nflag is true only
-  s" key" (variable-pair-value) ;
-
 get-order get-current
 
-wordlist constant commands-spawned
+wordlist constant commands-slow
 wordlist constant commands-instant
 
 commands-instant set-current
 \ place instant commands there
 : xmin ( -- )
-  s" xmin value is " junk$ $!
-  xm-min 0 udto$ junk$ $+!
-  junk$ $@ lastresult$ $! ;
+  s" xmin value is " oneuse$ $!
+  xm-min 0 udto$ oneuse$ $+!
+  oneuse$ $@ lastresult$ $! ;
 
 : ymin ( -- )
-  s" ymin value is " junk$ $!
-  ym-min 0 udto$ junk$ $+!
-  junk$ $@  lastresult$ $! ;
+  s" ymin value is " oneuse$ $!
+  ym-min 0 udto$ oneuse$ $+!
+  oneuse$ $@  lastresult$ $! ;
 
 : xmax ( -- )
-  s" xmax value is " junk$ $!
-  xm-max 0 udto$ junk$ $+!
-  junk$ $@  lastresult$ $! ;
+  s" xmax value is " oneuse$ $!
+  xm-max 0 udto$ oneuse$ $+!
+  oneuse$ $@  lastresult$ $! ;
 
 : ymax ( -- )
-  s" ymax value is " junk$ $!
-  ym-max 0 udto$ junk$ $+!
-  junk$ $@  lastresult$ $! ;
+  s" ymax value is " oneuse$ $!
+  ym-max 0 udto$ oneuse$ $+!
+  oneuse$ $@  lastresult$ $! ;
 
 : xnow ( -- )
-  s" Current x value is " junk$ $!
-  xposition 0 udto$ junk$ $+!
-  junk$ $@  lastresult$ $! ;
+  s" Current x value is " oneuse$ $!
+  xposition 0 udto$ oneuse$ $+!
+  oneuse$ $@  lastresult$ $! ;
 
 : ynow ( -- )
-  s" Current y value is " junk$ $!
-  yposition 0 udto$ junk$ $+!
-  junk$ $@  lastresult$ $! ;
+  s" Current y value is " oneuse$ $!
+  yposition 0 udto$ oneuse$ $+!
+  oneuse$ $@  lastresult$ $! ;
 
 : status ( -- )
-  homedone? true = if s" Sandtable has been sent to home succesfully!" junk$ $! then
-  homedone? false = if s" Sandtable has not been sent to home succesfully yet!" junk$ $+! then
-  lineending junk$ $+!
-  junk$ $@  lastresult$ $! ;
+  homedone? true = if s" Sandtable has been sent to home succesfully!" oneuse$ $! then
+  homedone? false = if s" Sandtable has not been sent to home succesfully yet!" oneuse$ $+! then
+  lineending oneuse$ $+!
+  oneuse$ $@  lastresult$ $! ;
 
 : stopsandserver ( -- ) \ stop the sand server loop
   true to stopserverflag
-  s" Sandserver shutting done now!" junk$ $!
-  lineending junk$ $+!
-  junk$ $@  lastresult$ $!
+  s" Sandserver shutting done now!" oneuse$ $!
+  lineending oneuse$ $+!
+  oneuse$ $@  lastresult$ $!
   \ ." stack at end of stopsandserver" .s cr
   ;
 
@@ -126,42 +123,8 @@ commands-instant set-current
 : sandtable-message ( -- ) \ this will be the only used by sandtable-commands.fs to return messages
 ;
 
-: testshget ( -- ) \ this is called as a command to fininish the commands-forded below
-  \ this command should be configured to only respond to the child sending this message back to the parent to allow parent to do this wait and return information
-  s" got the message from sandtable-commands.fs" lastresult$ $! lineending lastresult$ $+!
-  command$ $@ lastresult$ $+! lineending lastresult$ $+!
-  (get-pairs$)
-  \ ." stack after (get-pairs$) in testshget " .s cr
-  getkeyfromsubmessage true = if
-    \ ." stack after getkeyfromsubmessage test in testshget " .s cr
-    key# = if \ key present and matching
-      0 to key# \ reset the key# for next sandtable use
-      s" key# received and matching and reset!"  lastresult$ $+! lineending lastresult$ $+!
-    else
-      s" key# received but no match!"  lastresult$ $+! lineending lastresult$ $+!
-    then
-  else
-    drop \ remove the key number from stack Note this key number will be 0 because of above condition for this if then
-    s" No key# received message was not from sandtable-commands.fs after all!" lastresult$ $+! lineending lastresult$ $+!
-  then
-  \ ." stack end of testshget " .s cr
-;
-
 commands-spawned set-current
 \ place slower commands-spawned sandtable commands here
-
-: teststuff ( -- ) \ just a test
-  key# 0= if \ only start new sandtable process if there is no running at moment
-    s" testcommand&xnow=234&ynow=3234&x=5&y=10" junk$ $!
-    s" &" junk$ $+! \ need to add this to add the following key$
-    keymake$ junk$ $+!
-    junk$ $@ sh-sandtable-command \ ( -- caddr u )
-  else
-    s" teststuff command not sent because sandtable still processing!"
-  then
-  lastresult$ $!
-  \ ." current stack end of teststuff " .s cr
-  ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
 ;

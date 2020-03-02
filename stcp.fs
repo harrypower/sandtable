@@ -4,6 +4,11 @@
 
 
 warnings off
+
+require sandmotorapi.fs  \ note this sandmotorapi.fs stuff is not executed in this code but is used to get sandtable data sandtable-commands.fs will execute the sandtable motors
+require Gforth-Objects/stringobj.fs
+require unix/libc.fs
+
 :noname ; is bootmessage
 
 0 value dataoutfid
@@ -11,6 +16,8 @@ warnings off
 variable httpinput$
 variable dataoutfile$
 s" stcptest.data" dataoutfile$ $!
+strings heap-new constant submessages$
+strings heap-new constant get-variable-pairs$
 
 variable pathfile$
 : pcdatapath ( -- cadd u ) \ return path file string to output data for pc testing
@@ -29,6 +36,11 @@ variable pathfile$
       0 0 false
     then
   then ;
+
+: parse-command&submessages ( -- ) \ take command$ and parse command and submessages out of it
+  submessages$ [bind] strings destruct
+  submessages$ [bind] strings construct
+  s" &" command$ $@ submessages$ [bind] strings split$>$s ;
 
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
@@ -61,6 +73,8 @@ variable convert$
   dataoutfid flush-file throw
   dataoutfid close-file throw ;
 
+require sandcommands.fs
+
 variable tempheader$
 : http-header ( -- caddr u ) \ http header string return
   s\" HTTP/1.1 200 OK\r\n" tempheader$ $!
@@ -87,18 +101,18 @@ variable tempresponse$
     pad 0 false
   then ;
 
-variable junk$
+variable sdtin$
 : getstdin ( -- caddr u )
-  junk$ $init
+  sdtin$ $init
   stdinwaittime 0 do
     1 ms
     begin
       (getstdin) while
-      junk$ $+!
+      sdtin$ $+!
     repeat
     2drop
   loop
-  junk$ $@ ;
+  sdtin$ $@ ;
 
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   getstdin httpinput$ $!
