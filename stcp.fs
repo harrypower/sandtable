@@ -19,6 +19,7 @@ s" stcptest.data" dataoutfile$ $!
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
 variable command$
+variable instantresult$
 
 variable pathfile$
 : pcdatapath ( -- cadd u ) \ return path file string to output data for pc testing

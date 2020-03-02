@@ -76,48 +76,48 @@ commands-instant set-current
 : xmin ( -- )
   s" xmin value is " oneuse$ $!
   xm-min 0 udto$ oneuse$ $+!
-  oneuse$ $@ lastresult$ $! ;
+  oneuse$ $@ instantresult$ $! ;
 
 : ymin ( -- )
   s" ymin value is " oneuse$ $!
   ym-min 0 udto$ oneuse$ $+!
-  oneuse$ $@  lastresult$ $! ;
+  oneuse$ $@  instantresult$ $! ;
 
 : xmax ( -- )
   s" xmax value is " oneuse$ $!
   xm-max 0 udto$ oneuse$ $+!
-  oneuse$ $@  lastresult$ $! ;
+  oneuse$ $@  instantresult$ $! ;
 
 : ymax ( -- )
   s" ymax value is " oneuse$ $!
   ym-max 0 udto$ oneuse$ $+!
-  oneuse$ $@  lastresult$ $! ;
+  oneuse$ $@  instantresult$ $! ;
 
 : xnow ( -- )
   s" Current x value is " oneuse$ $!
   xposition 0 udto$ oneuse$ $+!
-  oneuse$ $@  lastresult$ $! ;
+  oneuse$ $@  instantresult$ $! ;
 
 : ynow ( -- )
   s" Current y value is " oneuse$ $!
   yposition 0 udto$ oneuse$ $+!
-  oneuse$ $@  lastresult$ $! ;
+  oneuse$ $@  instantresult$ $! ;
 
 : status ( -- )
   homedone? true = if s" Sandtable has been sent to home succesfully!" oneuse$ $! then
   homedone? false = if s" Sandtable has not been sent to home succesfully yet!" oneuse$ $+! then
   lineending oneuse$ $+!
-  oneuse$ $@  lastresult$ $! ;
+  oneuse$ $@  instantresult$ $! ;
 
 : stopsandserver ( -- ) \ stop the sand server loop
   true to stopserverflag
   s" Sandserver shutting done now!" oneuse$ $!
   lineending oneuse$ $+!
-  oneuse$ $@  lastresult$ $!
+  oneuse$ $@  instantresult$ $!
   \ ." stack at end of stopsandserver" .s cr
   ;
 
-: lastresult ( -- )  \ this does nothing and does not change the lastresult$
+: lastresult ( -- )  \ this does nothing and does not change the instantresult$
   ;
 
 : sandtable-message ( -- ) \ this will be the only used by sandtable-commands.fs to return messages
