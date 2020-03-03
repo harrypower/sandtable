@@ -26,7 +26,7 @@
 variable oneuse$
 
 variable shjunk$
-: sh-sandtable-command ( caddr u -- caddr1 u1)
+: sh-stcp ( caddr u -- caddr1 u1)
   { caddr u }
   s\" nohup gforth -e \"s\\\" " shjunk$ $!
   caddr u shjunk$ $+!
@@ -36,7 +36,7 @@ variable shjunk$
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
 
-: parse-command&submessages ( -- ) \ take command$ and parse command and submessages out of it
+: (parse-command&submessages) ( -- ) \ take command$ and parse command and submessages out of it
   submessages$ [bind] strings destruct
   submessages$ [bind] strings construct
   s" &" command$ $@ submessages$ [bind] strings split$>$s ;
