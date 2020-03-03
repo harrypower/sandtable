@@ -158,7 +158,7 @@ variable sdtin$
 \ this word will take the command from the stdin and process it !
   getstdin command$ $!
   command$ $@ testdataout
-  command$ $@ remove\r\n 0 junk-buffer$ [bind] []@$ drop command$ $! \ removes the \r\n from command$ recieved and puts first string back to command$ 
+  command$ $@ remove\r\n 0 junk-buffer$ [bind] strings []@$ drop command$ $! \ removes the \r\n from command$ recieved and puts first string back to command$
   (parse-command&submessages)
   (command$@?) if
     type s\"  < This Command received\r\n" type
