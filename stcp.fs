@@ -161,9 +161,10 @@ variable sdtin$
   command$ $@ remove\r\n 0 junk-buffer$ [bind] strings []@$ drop command$ $! \ removes the \r\n from command$ recieved and puts first string back to command$
   (parse-command&submessages)
   (command$@?) if
-    type s\"  < This Command received\r\n" type
+    type s"  < This Command received" type cr
+    (command$@?) drop swap . ." < command$ is this long!" type cr
   else
-    s\" Message received but there was no command present in it!\r\n" type
+    s" Message received but there was no command present in it!" type cr
     bye
   then
   *cmdline* to http?cmdline?
