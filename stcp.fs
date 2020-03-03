@@ -163,10 +163,11 @@ variable sdtin$
   (command$@?) if
     type ."  < This Command received" cr
     (command$@?) drop . drop ."  < command$ is this long!" cr
+    *cmdline* to http?cmdline?
+    1 submessages$ [bind] strings []@$ drop 2dup type cr
+    . ."  < first submessge length" cr drop
+    bye
   else
     ." Message received but there was no command present in it!"  cr
     bye
-  then
-  *cmdline* to http?cmdline?
-
-  bye ;
+  then ;
