@@ -41,25 +41,8 @@ variable dataoutfile$
 s" stcptest.data" dataoutfile$ $!
 variable command$
 variable instantresult$
-
-variable pathfile$
-: pcdatapath ( -- cadd u ) \ return path file string to output data for pc testing
-  s" /home/pks/sandtable/" ;
-: bbbdatapath ( -- cadd u ) \ return path file string to output data for BBB sandtable
-  s" /home/debian/sandtable/" ;
-: datapath ( -- caddr u nflag ) \ caddr u is the correct path to use if nflag is true.... if nflag is false caddr u is 0 0
-  pcdatapath file-status swap drop false = if
-    pcdatapath pathfile$ $!
-    dataoutfile$ $@ pathfile$ $+! pathfile$ $@ true
-  else
-    bbbdatapath file-status swap drop false = if
-      bbbdatapath pathfile$ $!
-      dataoutfile$ $@ pathfile$ $+! pathfile$ $@ true
-    else
-      0 0 false
-    then
-  then ;
-
+\ error constants
+s" bbbdatapath or pcdatapath do not exist cannot proceed!" exception constant nopath
 
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
@@ -69,8 +52,25 @@ variable convert$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
-: opendata ( -- )
-  datapath { caddr u nflag }
+: pcdatapath$@ ( -- cadd u ) \ return path string to output data for pc testing
+  s" /home/pks/sandtable/" ;
+: bbbdatapath$@ ( -- cadd u ) \ return path string to output data for BBB sandtable
+  s" /home/debian/sandtable/" ;
+: testoutfile$@ ( -- cadd u ) \ the file name for test output info
+  s" stcptest.data" ;
+: datapath? ( -- caddr u nflag ) \ caddr u is the correct path to use if nflag is true.... if nflag is false caddr u is 0 0
+  pcdatapath$@ file-status swap drop false = if
+    pcdatapath$@ true
+  else
+    bbbdatapath$@ file-status swap drop false = if
+      bbbdatapath$@ true
+    else
+      0 0 false
+    then
+  then ;
+: opendata ( caddr u nflag -- ) \ caddr u is a string for path of file to be opened for writing to .. if it is not present then create that file
+\ this tcan throw nopath
+  { caddr u nflag }
   nflag true = if
     caddr u file-status swap drop false = if
       caddr u r/w open-file throw
@@ -80,11 +80,11 @@ variable convert$
       to dataoutfid
     then
   else
-    210 abort" the bbbdatapath or the pcdatapath are not present to store the stcp data"
+    nopath throw
   then ;
-
-: addtodata ( caddr u -- )
-  opendata
+variable pathfile$
+: addtodata ( caddr u -- ) \ append caddr u string to the test data file
+  datapath? >r pathfile$ $! testoutfile$@ pathfile$ $+! pathfile$ $@ r> opendata
   dataoutfid file-size throw
   dataoutfid reposition-file throw
   utime udto$ dataoutfid write-line throw

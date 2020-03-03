@@ -124,8 +124,6 @@ commands-instant set-current
 : lastresult ( -- )  \ this does nothing and does not change the instantresult$
   ;
 
-: sandtable-message ( -- ) \ this will be the only used by sandtable-commands.fs to return messages
-;
 
 commands-slow set-current
 \ place slower commands-spawned sandtable commands here
