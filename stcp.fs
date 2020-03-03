@@ -1,11 +1,34 @@
 #! /usr/local/bin/gforth
 \ stcp.fs
-\ sandtable command processor  or stcp
+\    Copyright (C) 2019  Philip King Smith
 
+\    This program is free software: you can redistribute it and/or modify
+\    it under the terms of the GNU General Public License as published by
+\    the Free Software Foundation, either version 3 of the License, or
+\    (at your option) any later version.
+
+\    This program is distributed in the hope that it will be useful,
+\    but WITHOUT ANY WARRANTY; without even the implied warranty of
+\    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+\    GNU General Public License for more details.
+
+\    You should have received a copy of the GNU General Public License
+\    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+\ socket server for sandtable
+\ the sandtable cgi will talk to this server and other code that wishes to make the sand table do things
+
+\ Requires:
+\ sandmotorapi.fs
+\ Gforth-Objects/stringobj.fs
+\ unix/libc.fs
+\
+\ Revisions:
+\ 03/02/2020 started coding
 
 warnings off
 
-require sandmotorapi.fs  \ note this sandmotorapi.fs stuff is not executed in this code but is used to get sandtable data sandtable-commands.fs will execute the sandtable motors
+require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
 
@@ -16,8 +39,6 @@ require unix/libc.fs
 variable httpinput$
 variable dataoutfile$
 s" stcptest.data" dataoutfile$ $!
-strings heap-new constant submessages$
-strings heap-new constant get-variable-pairs$
 variable command$
 variable instantresult$
 
@@ -39,10 +60,6 @@ variable pathfile$
     then
   then ;
 
-: parse-command&submessages ( -- ) \ take command$ and parse command and submessages out of it
-  submessages$ [bind] strings destruct
-  submessages$ [bind] strings construct
-  s" &" command$ $@ submessages$ [bind] strings split$>$s ;
 
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string

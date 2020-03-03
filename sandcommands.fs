@@ -18,12 +18,10 @@
 \ commands used by socket server to control sandtable
 
 \ Requires:
-\ will be included by socksandserver.fs and not to be used on its own
+\ will be included by stcp.fs and not to be used on its own
 
 \ Revisions:
-\ 01/29/2020 started coding
-\ 02/19/2020 added key stuff
-\ 02/19/2020 using nohup and command line to send message to sandtable command processor
+\ 03/02/2020 started coding
 
 variable oneuse$
 
@@ -35,6 +33,13 @@ variable shjunk$
   s\" \\\"\" sandtable-commands.fs > sandtable-command.data 2>&1 &" shjunk$ $+! \ note the last & here is to disconnect this new process from the socketserver process
   shjunk$ $@ sh-get ;
 
+strings heap-new constant submessages$
+strings heap-new constant get-variable-pairs$
+
+: parse-command&submessages ( -- ) \ take command$ and parse command and submessages out of it
+  submessages$ [bind] strings destruct
+  submessages$ [bind] strings construct
+  s" &" command$ $@ submessages$ [bind] strings split$>$s ;
 : (get-pairs$) ( -- ) \ extract variable pairs from submessages$ strings
   0 { nqty }
   submessages$ [bind] strings $qty to nqty
