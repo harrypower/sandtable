@@ -40,6 +40,16 @@ strings heap-new constant get-variable-pairs$
   submessages$ [bind] strings destruct
   submessages$ [bind] strings construct
   s" &" command$ $@ submessages$ [bind] strings split$>$s ;
+: (command$@?) ( -- caddr u nflag ) \ get the command from submessages... nflag is true if command found... nflag is false if no command found
+  0 submessages$ [bind] strings []@$ false = if
+  s" command=" search true = if
+      8 - swap 8 + swap true \ this is the command ... ***note it still can be a null string ***
+    else
+      false \ no command
+    then
+  else
+    false \ no command
+  then ;
 : (get-pairs$) ( -- ) \ extract variable pairs from submessages$ strings
   0 { nqty }
   submessages$ [bind] strings $qty to nqty
