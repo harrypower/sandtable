@@ -83,7 +83,7 @@ variable convert$
     nopath throw
   then ;
 variable pathfile$
-: addtodata ( caddr u -- ) \ append caddr u string to the test data file
+: testdataout ( caddr u -- ) \ append caddr u string to the test data file
   datapath? >r pathfile$ $! testoutfile$@ pathfile$ $+! pathfile$ $@ r> opendata
   dataoutfid file-size throw
   dataoutfid reposition-file throw
@@ -119,7 +119,6 @@ variable tempresponse$
   else
     pad 0 false
   then ;
-
 variable sdtin$
 : getstdin ( -- caddr u )
   sdtin$ $init
@@ -135,14 +134,14 @@ variable sdtin$
 
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   getstdin httpinput$ $!
-  httpinput$ $@ addtodata
+  httpinput$ $@ testdataout
   s" got the message" http-response type
-  s" sent receipt message" addtodata
+  s" sent receipt message" testdataout
   bye ;
 
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
   getstdin httpinput$ $!
-  httpinput$ $@ addtodata
+  httpinput$ $@ testdataout
   s\" Message received\r\n" type
   bye ;
