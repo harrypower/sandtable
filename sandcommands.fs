@@ -35,7 +35,15 @@ variable shjunk$
 
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
-
+strings heap-new constant junk-buffer$
+: remove\r\n ( caddr u -- ) \ remove carrage return and linefeed from caddr u string
+\ the output is in junk-buffer$ and is a strings object
+\ the junk-buffer$ object can contain all the strings that were split when \r\n was found
+\ note the last string in this junk-buffer$ could be a null string or string of zero size
+  junk-buffer$ [bind] strings destruct
+  junk-buffer$ [bind] strings construct
+  s\" \r\n" 2swap
+  junk-buffer$ [bind] strings split$>$s ;
 : (parse-command&submessages) ( -- ) \ take command$ and parse command and submessages out of it
   submessages$ [bind] strings destruct
   submessages$ [bind] strings construct
