@@ -134,7 +134,8 @@ variable tempresponse$
     pad 0 false
   then ;
 variable sdtin$
-: getstdin ( -- caddr u )
+: getstdin ( -- caddr u ) \ recieve the stdin to this code
+\ note this will have a terminator in this returned string at the end of the string ... remove this if not used
   sdtin$ $init
   stdinwaittime 0 do
     1 ms
@@ -156,9 +157,8 @@ variable sdtin$
 
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
-  getstdin command$ $!
+  getstdin 1 - command$ $! \ note remove the terminator from string before putting in into command$
   command$ $@ testdataout
-  command$ $@ remove\r\n 0 junk-buffer$ [bind] strings []@$ drop command$ $! \ removes the \r\n from command$ recieved and puts first string back to command$
   (parse-command&submessages)
   (command$@?) if
     type ."  < This Command received" cr
