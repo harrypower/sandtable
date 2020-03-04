@@ -107,7 +107,7 @@ variable pathfile$
   lastoutfid close-file throw ;
 : stlastresultin ( -- caddr u nflag ) \ read last result data and place in caddr u string ... nflag is true if last result is present .. nflag is false if not present
   datapath? if pathfile$ $! stlastresultfile$@ pathfile$ $+! else nopath throw then
-  pathfile$ $@ file-status swap drop false = pathfile$ $@ r/o open-file throw to lastoutfid else 0 0 false exit then
+  pathfile$ $@ file-status swap drop false = if pathfile$ $@ r/o open-file throw to lastoutfid else 0 0 false exit then
   lastoutfid slurp-fid true
   lastoutfid close-file throw ;
 : stcalibrationout ( ux uy -- ) \ save the calibration data to file
