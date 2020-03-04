@@ -203,6 +203,10 @@ variable messagebuffer$
     *cmdline* to http?cmdline?
     1 submessages$ [bind] strings []@$ drop 2dup type cr
     . ."  < first submessge length" cr drop
+    pidstore
+    pidretrieve drop . ." < this is pid" cr
+    30000 ms
+    pidfiledelete
     bye
   else
     ." Message received but there was no command present in it!"  cr
