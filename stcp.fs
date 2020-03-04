@@ -37,6 +37,7 @@ require unix/libc.fs
 0 value dataoutfid
 0 value lastoutfid
 0 value calibratefid
+0 value pidfid
 200 value stdinwaittime
 variable httpinput$
 variable command$
@@ -55,6 +56,8 @@ variable convert$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
+: pidfilepath$@ ( -- caddr u ) \ caddr u is string for the file name and path to store programs pid
+  s" /run/stcp.fs.pid" ;
 : pcdatapath$@ ( -- caddr u ) \ return path string to output data for pc testing
   s" /home/pks/sandtable/" ;
 : bbbdatapath$@ ( -- caddr u ) \ return path string to output data for BBB sandtable
@@ -127,6 +130,17 @@ variable pathfile$
   pad 20 calibratefid read-line throw drop pad swap s>unumber? if d>s to uy else 0 0 false exit then
   calibratefid close-file throw
   ux uy true ;
+: pidretrieve ( -- upid nflag ) \ get the pid number of the potential copy of this program running
+    pidfilepath$@ file-status swap drop false = if pidfilepath$@ slurp-file else 0 false exit then
+    s>unumber? if d>s true else 0 false then ;
+: pidstore ( -- ) \ store the pid of this current running program
+  pidfilepath$@ w/o create-file throw to pidfid
+  (getpid) s>d udto$
+  pidfid write-file throw
+  pidfid flush-file throw
+  pidfid close-file throw ;
+: pidfiledelete ( -- ) \ delete the file that stores the pid for this running program
+  pidfilepath$@ delete-file throw ;
 
 require sandcommands.fs
 
