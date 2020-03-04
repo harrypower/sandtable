@@ -36,10 +36,9 @@ require unix/libc.fs
 
 0 value dataoutfid
 0 value lastoutfid
+0 value calibratefid
 200 value stdinwaittime
 variable httpinput$
-variable dataoutfile$
-s" stcptest.data" dataoutfile$ $!
 variable command$
 variable instantresult$
 false value http?cmdline?
@@ -64,6 +63,8 @@ variable convert$
   s" stcptest.data" ;
 : stlastresultfile$@ ( -- caddr u ) \ the file name for the sandtable last result info.
   s" stcplastresult.data" ;
+: stcalibration$@ ( -- caddr u ) \ the file where the calibration data is
+  s" stcalibration.data" ;
 : datapath? ( -- caddr u nflag ) \ caddr u is the correct path to use if nflag is true.... if nflag is false caddr u is 0 0
   pcdatapath$@ file-status swap drop false = if
     pcdatapath$@ true
@@ -98,13 +99,34 @@ variable pathfile$
   dataoutfid flush-file throw
   dataoutfid close-file throw ;
 : stlastresultout ( caddr u -- ) \ create last result file using caddr u string
-  { caddr u }
   datapath? if pathfile$ $! stlastresultfile$@ pathfile$ $+! else nopath throw then
   pathfile$ $@ file-status swap drop false = if pathfile$ $@ delete-file throw then
   pathfile$ $@ w/o create-file throw to lastoutfid
-  caddr u lastoutfid write-file throw
+  lastoutfid write-file throw
   lastoutfid flush-file throw
   lastoutfid close-file throw ;
+: stlastresultin ( -- caddr u nflag ) \ read last result data and place in caddr u string ... nflag is true if last result is present .. nflag is false if not present
+  datapath? if pathfile$ $! stlastresultfile$@ pathfile$ $+! else nopath throw then
+  pathfile$ $@ file-status swap drop false = pathfile$ $@ r/o open-file throw to lastoutfid else 0 0 false exit then
+  lastoutfid slurp-fid true
+  lastoutfid close-file throw ;
+: stcalibrationout ( ux uy -- ) \ save the calibration data to file
+  datapath? if pathfile$ $! stcalibration$@ pathfile$ $+! else nopath throw then
+  pathfile$ $@ file-status swap drop false = if pathfile$ $@ delete-file throw then
+  pathfile$ $@ w/o create-file throw to calibratefid
+  swap s>d udto$ calibratefid write-line throw \ write x
+  s>d udto$ calibratefid write-line throw \ write y
+  calibratefid flush-file throw
+  calibratefid close-file throw ;
+: stcalibrationin ( -- ux uy nflag ) \ retreive calibration data from file
+  \ nflag is true if calibration data is present and false if there is no calibartion data
+  0 0 { ux uy }
+  datapath? if pathfile$ $! stcalibration$@ pathfile$ $+! else nopath throw then
+  pathfile$ $@ file-status swap drop false = if pathfile$ $@ r/o open-file throw to calibratefid else 0 0 false exit then
+  pad 20 calibratefid read-line throw drop pad swap s>unumber? if d>s to ux else 0 0 false exit then
+  pad 20 calibratefid read-line throw drop pas swap s>unumber? if d>s to uy else 0 0 false exit then
+  calibratefid close-file throw
+  ux uy true ;
 
 require sandcommands.fs
 
@@ -147,6 +169,7 @@ variable sdtin$
   loop
   sdtin$ $@ ;
 
+variable messagebuffer$
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   getstdin httpinput$ $!
   httpinput$ $@ testdataout
@@ -158,7 +181,7 @@ variable sdtin$
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
   getstdin 1 - command$ $! \ note remove the terminator from string before putting in into command$
-  command$ $@ testdataout
+  command$ $@ messagebuffer$ $! s" < this was recieved at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
   (parse-command&submessages)
   (command$@?) if
     type ."  < This Command received" cr
