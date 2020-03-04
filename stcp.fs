@@ -124,7 +124,7 @@ variable pathfile$
   datapath? if pathfile$ $! stcalibration$@ pathfile$ $+! else nopath throw then
   pathfile$ $@ file-status swap drop false = if pathfile$ $@ r/o open-file throw to calibratefid else 0 0 false exit then
   pad 20 calibratefid read-line throw drop pad swap s>unumber? if d>s to ux else 0 0 false exit then
-  pad 20 calibratefid read-line throw drop pas swap s>unumber? if d>s to uy else 0 0 false exit then
+  pad 20 calibratefid read-line throw drop pad swap s>unumber? if d>s to uy else 0 0 false exit then
   calibratefid close-file throw
   ux uy true ;
 
