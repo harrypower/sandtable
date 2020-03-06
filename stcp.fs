@@ -132,6 +132,8 @@ variable pathfile$
   calibratefid close-file throw
   ux uy true ;
 : pidretrieve ( -- upid nflag ) \ get the pid number of the potential copy of this program running
+  \ nflag is true only if upid is the retrieved pid number from saved file .
+  \ nflag is false if this saved pid file does not exist or some other error happened in retreiveing it
     pidfilepath$@ file-status swap drop false = if pidfilepath$@ slurp-file else 0 false exit then
     s>unumber? if d>s true else 0 false then ;
 : pidstore ( -- ) \ store the pid of this current running program
@@ -195,22 +197,32 @@ variable messagebuffer$
 
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
-  getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
-  command$ $!
-  command$ $@ messagebuffer$ $! s" < this was recieved at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
-  (parse-command&submessages)
-  (command$@?) if
-    type ."  < This Command received" cr
-    (command$@?) drop . drop ."  < command$ is this long!" cr
-    *cmdline* to http?cmdline?
-    1 submessages$ [bind] strings []@$ drop 2dup type cr
-    . ."  < first submessge length" cr drop
-    pidstore
-\    pidretrieve drop . ." < this is pid" cr
+  try
+    getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
+    command$ $!
+    command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
+    (parse-command&submessages)
+    (command$@?) if
+      type ."  < This Command received to processcmdline!" cr
+      (command$@?) drop . drop ."  < command$ is this long to processcmdline!" cr
+      *cmdline* to http?cmdline?
+      1 submessages$ [bind] strings []@$ drop 2dup type cr
+      . ."  < first submessge length" cr drop
+      (getpid) s>d udto$ messagebuffer$ $! s"  < this is the pid that will be stored now during processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
+      pidstore
 
-    pidfiledelete
+
+      pidfiledelete
+    else
+      ." Message received but there was no command present in it!"  cr
+    then
+    false
+  restore
+    dup false <> if
+    s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
+    pidretrieve swap drop swap drop true = if pidfiledelete then \ clean up pid if it is still there
+    else drop \ remove the extra false on stack
+    then
     bye
-  else
-    ." Message received but there was no command present in it!"  cr
-    bye
-  then ;
+  endtry
+;
