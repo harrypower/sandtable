@@ -47,7 +47,7 @@ false value http?cmdline?
 2 constant *cmdline* \ this is used in http?cmdline? to indicate cmd line has started this code
 \ error constants
 s" bbbdatapath or pcdatapath do not exist cannot proceed!" exception constant nopath
-s" no terminator found in stdin!" execption constant noterm
+s" no terminator found in stdin!" exception constant noterm
 
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
