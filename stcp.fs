@@ -194,7 +194,9 @@ variable messagebuffer$
 
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
-  getstdin 1 - command$ $! \ note remove the terminator from string before putting in into command$
+  \ getstdin 1 - command$ $! \ note remove the terminator from string before putting in into command$
+  getstdin command$ $!
+  command$ $@ dump cr 
   command$ $@ messagebuffer$ $! s" < this was recieved at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
   (parse-command&submessages)
   (command$@?) if
