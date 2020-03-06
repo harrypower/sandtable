@@ -47,6 +47,7 @@ false value http?cmdline?
 2 constant *cmdline* \ this is used in http?cmdline? to indicate cmd line has started this code
 \ error constants
 s" bbbdatapath or pcdatapath do not exist cannot proceed!" exception constant nopath
+s" no terminator found in stdin!" execption constant noterm
 
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
@@ -194,9 +195,8 @@ variable messagebuffer$
 
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
-  \ getstdin 1 - command$ $! \ note remove the terminator from string before putting in into command$
-  getstdin command$ $!
-  command$ $@ dump cr 
+  getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
+  command$ $!
   command$ $@ messagebuffer$ $! s" < this was recieved at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
   (parse-command&submessages)
   (command$@?) if
@@ -206,8 +206,8 @@ variable messagebuffer$
     1 submessages$ [bind] strings []@$ drop 2dup type cr
     . ."  < first submessge length" cr drop
     pidstore
-    pidretrieve drop . ." < this is pid" cr
-    30000 ms
+\    pidretrieve drop . ." < this is pid" cr
+
     pidfiledelete
     bye
   else
