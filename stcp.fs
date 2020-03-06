@@ -202,26 +202,51 @@ variable messagebuffer$
     command$ $!
     command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
     (parse-command&submessages)
-    (command$@?) if
+    (command$@?) if \ true condition means there is a command now process it!
       type ."  < This Command received to processcmdline!" cr
-      (command$@?) drop . drop ."  < command$ is this long to processcmdline!" cr
+      (command$@?) drop . drop ."  < command$ is this long in processcmdline!" cr
       *cmdline* to http?cmdline?
       1 submessages$ [bind] strings []@$ drop 2dup type cr
       . ."  < first submessge length" cr drop
-      (getpid) s>d udto$ messagebuffer$ $! s"  < this is the pid that will be stored now during processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
-      pidstore
-
-
-      pidfiledelete
+      (command$@?) drop 2dup swap drop 0 <> if \ command is not null so try and do the command
+        2dup commands-instant search-wordlist false <> if \ command is a instant one ... pid saving is not needed
+        swap drop swap drop \ remove command string  ( xt )
+        \ now execute the command
+        (command$@?) drop messagebuffer$ $! s" < this instant command will be executed in processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
+        (command$@?) drop type ." < this instant command will be executed" cr
+        else \ test for slow command
+          commands-slow search-wordlist false <> if \ command is a slow one ... pid checking and saving needed
+          \ test for running process via pid and only run if nothing else is running
+            pidretrieve swap drop false = if \ no other pid running so execute the command
+              (getpid) s>d udto$ messagebuffer$ $! s"  < this is the pid that will be stored now during processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
+              pidstore
+              (command$@?) drop messagebuffer$ $! s" < this slow command will be executed in processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
+              \ execute command here
+              pidfiledelete   \ clean up the pid file that was stored before command to allow other commands to be executed
+            else \ another command running so message that info
+              ." Sandtable is currently busy please wait for it to finish!" cr
+            then
+          else \ the command is not found
+            ." Message recieved but the command is not valid!" cr
+          then
+        then
+      else \ command is a null string
+        2drop \ removed null command string
+        ." Message recieved but the command is a null string!" cr
+      then
     else
       ." Message received but there was no command present in it!"  cr
     then
     false
   restore
     dup false <> if
-    s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
-    pidretrieve swap drop swap drop true = if pidfiledelete then \ clean up pid if it is still there
-    else drop \ remove the extra false on stack
+    dup s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
+    s>d dto$ type ." <this error occured!" cr
+    pidretrieve true = if
+        (getpid) = if pidfiledelete then  \ clean up pid if it is the same as this running code
+      then
+    else
+      drop \ remove the extra false on stack
     then
     bye
   endtry

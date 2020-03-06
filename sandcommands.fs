@@ -58,7 +58,7 @@ strings heap-new constant junk-buffer$
   else
     false \ no command
   then ;
-: (get-pairs$) ( -- ) \ extract variable pairs from submessages$ strings
+: (find-variable-pair$) ( -- ) \ extract variable pairs from submessages$ strings
   0 { nqty }
   submessages$ [bind] strings $qty to nqty
   get-variable-pairs$ [bind] strings destruct
@@ -69,7 +69,7 @@ strings heap-new constant junk-buffer$
       get-variable-pairs$ [bind] strings split$>$s
     loop
   then ;
-: (variable-pair-value) ( caddr u - nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
+: (variable-pair-value@) ( caddr u - nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
   0 false { caddr u nvalue nflag }
   get-variable-pairs$ [bind] strings $qty 0 ?do \ find x variable
     i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
@@ -86,7 +86,7 @@ strings heap-new constant junk-buffer$
       then ( n n )
       leave
     then
-  2 +loop \ note variable value pairs are put into get-variable-pairs$ by (get-pairs$) word so they should be in groups of two
+  2 +loop \ note variable value pairs are put into get-variable-pairs$ by (find-variable-pair$) word so they should be in groups of two
   nvalue nflag ;
 
 get-order get-current
@@ -95,7 +95,8 @@ wordlist constant commands-slow
 wordlist constant commands-instant
 
 commands-instant set-current
-\ place instant commands there
+\ place instant commands here
+\ instant commands are commands that can be run at the same time as sandtable motor commands because they will not only return information 
 : xmin ( -- )
   s" xmin value is " oneuse$ $!
   xm-min 0 udto$ oneuse$ $+!
@@ -144,7 +145,7 @@ commands-instant set-current
 
 
 commands-slow set-current
-\ place slower commands-spawned sandtable commands here
+\ place slower commands-slow sandtable commands here
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
 ;
