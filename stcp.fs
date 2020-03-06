@@ -41,7 +41,6 @@ require unix/libc.fs
 200 value stdinwaittime
 variable httpinput$
 variable command$
-variable instantresult$
 false value http?cmdline?
 1 constant *http* \ this is used in http?cmdline? to indicate http has started this code
 2 constant *cmdline* \ this is used in http?cmdline? to indicate cmd line has started this code
@@ -211,9 +210,9 @@ variable messagebuffer$
       (command$@?) drop 2dup swap drop 0 <> if \ command is not null so try and do the command
         2dup commands-instant search-wordlist false <> if \ command is a instant one ... pid saving is not needed
         swap drop swap drop \ remove command string  ( xt )
-        \ now execute the command
         (command$@?) drop messagebuffer$ $! s" < this instant command will be executed in processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
         (command$@?) drop type ." < this instant command will be executed" cr
+        execute \ do the command
         else \ test for slow command
           commands-slow search-wordlist false <> if \ command is a slow one ... pid checking and saving needed
           \ test for running process via pid and only run if nothing else is running

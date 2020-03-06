@@ -23,7 +23,6 @@
 \ Revisions:
 \ 03/02/2020 started coding
 
-variable oneuse$
 
 variable shjunk$
 : sh-stcp ( caddr u -- caddr1 u1)
@@ -96,51 +95,36 @@ wordlist constant commands-instant
 
 commands-instant set-current
 \ place instant commands here
-\ instant commands are commands that can be run at the same time as sandtable motor commands because they will not only return information 
-: xmin ( -- )
-  s" xmin value is " oneuse$ $!
-  xm-min 0 udto$ oneuse$ $+!
-  oneuse$ $@ instantresult$ $! ;
+\ instant commands are commands that can be run at the same time as sandtable motor commands because they will not only return information
+: xmin ( -- ) \ output xm-min
+  ." xmin value is "
+  xm-min 0 udto$ type cr ;
 
-: ymin ( -- )
-  s" ymin value is " oneuse$ $!
-  ym-min 0 udto$ oneuse$ $+!
-  oneuse$ $@  instantresult$ $! ;
+: ymin ( -- ) \ output ym-min
+  ." ymin value is "
+  ym-min 0 udto$ type cr ;
 
-: xmax ( -- )
-  s" xmax value is " oneuse$ $!
-  xm-max 0 udto$ oneuse$ $+!
-  oneuse$ $@  instantresult$ $! ;
+: xmax ( -- ) \ output xm-max
+  ." xmax value is "
+  xm-max 0 udto$ type cr ;
 
-: ymax ( -- )
-  s" ymax value is " oneuse$ $!
-  ym-max 0 udto$ oneuse$ $+!
-  oneuse$ $@  instantresult$ $! ;
+: ymax ( -- ) \ output ym-max
+  ." ymax value is "
+  ym-max 0 udto$ type cr ;
 
 : xnow ( -- )
-  s" Current x value is " oneuse$ $!
-  xposition 0 udto$ oneuse$ $+!
-  oneuse$ $@  instantresult$ $! ;
+;
 
 : ynow ( -- )
-  s" Current y value is " oneuse$ $!
-  yposition 0 udto$ oneuse$ $+!
-  oneuse$ $@  instantresult$ $! ;
+;
 
 : status ( -- )
-  homedone? true = if s" Sandtable has been sent to home succesfully!" oneuse$ $! then
-  homedone? false = if s" Sandtable has not been sent to home succesfully yet!" oneuse$ $+! then
-  lineending oneuse$ $+!
-  oneuse$ $@  instantresult$ $! ;
+;
 
 : stopsandserver ( -- ) \ stop the sand server loop
-  s" Sandserver shutting done now!" oneuse$ $!
-  lineending oneuse$ $+!
-  oneuse$ $@  instantresult$ $!
-  \ ." stack at end of stopsandserver" .s cr
   ;
 
-: lastresult ( -- )  \ this does nothing and does not change the instantresult$
+: lastresult ( -- )  \ 
   ;
 
 
