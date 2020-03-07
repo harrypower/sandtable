@@ -126,10 +126,26 @@ commands-instant set-current
   temp$ $@ stlastresultout ;
 
 : xnow ( -- )
-;
+  stcalibrationin swap drop true = if
+    s>d dto$ temp$ $!
+    s"  < x is at this value now!" temp$ $+! lineending temp$ $+!
+  else
+    drop
+    s" No x value because calibration not done yet!" temp$ $! lineending temp$ $+!
+  then
+  temp$ $@ type
+  temp$ $@ stlastresultout ;
 
 : ynow ( -- )
-;
+  stcalibrationin rot drop true = if
+    s>d dto$ temp$ $!
+    s"  < y is at this value now!" temp$ $+! lineending temp$ $+!
+  else
+    drop
+    s" No y value because calibration not done yet!" temp$ $! lineending temp$ $+!
+  then
+  temp$ $@ type
+  temp$ $@ stlastresultout ;
 
 : status ( -- )
 ;
@@ -141,7 +157,7 @@ commands-instant set-current
   stlastresultin true = if
     type
   else
-    s" There was no last result to display!" type lineending type 
+    s" There was no last result to display!" type lineending type
   then ;
 
 
@@ -149,7 +165,32 @@ commands-slow set-current
 \ place slower commands-slow sandtable commands here
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
-;
+http?cmdline? *http* = if
+then
+http?cmdline? *cmdline* = if
+  (find-variable-pair$)
+  s" xquick" (variable-pair-value@)
+  s" yquick" (variable-pair-value@)
+  rot and true = if
+    quickstart false = if
+        s" Found xquick and yquick for fastcalibration" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+        s" xquick" (variable-pair-value@)
+        s" yquick" (variable-pair-value@)
+        rot 2drop
+        stcalibrationout
+        s" Fastcalibration done... x & y calibartion data saved" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+      else
+        s" Fastcalibration failed at quickstart for some reason!" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+      then
+  else
+    s" xquick or yquick values missing!" temp$ $!
+    lineending temp$ $+!
+    s" fastcalibration not completed!" temp$ $+!
+    lineending temp$ $+!
+  then
+  temp$ $@ type
+  temp$ $@ stlastresultout
+then ;
 
 : configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
 ;
