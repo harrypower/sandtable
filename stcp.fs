@@ -1,4 +1,4 @@
-#! /usr/local/bin/gforth
+#! /usr/local/bin/gforth-arm
 \ stcp.fs
 \    Copyright (C) 2019  Philip King Smith
 
@@ -224,7 +224,7 @@ variable messagebuffer$
               execute
               pidfiledelete   \ clean up the pid file that was stored before command to allow other commands to be executed
             else \ another command running so message that info
-              drop \ remove the xt found above and on stack 
+              drop \ remove the xt found above and on stack
               ." Sandtable is currently busy please wait for it to finish!" lineending type
             then
           else \ the command is not found
