@@ -192,7 +192,7 @@ http?cmdline? *cmdline* = if
   temp$ $@ stlastresultout
 then ;
 
-: configuresandtable ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
+: fullcalibration ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
 ;
 
 : gotoxy ( -- ) \ perform the movetoxy word from
