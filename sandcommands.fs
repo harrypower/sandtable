@@ -100,24 +100,28 @@ commands-instant set-current
 : xmin ( -- ) \ output xm-min
   s" xmin value is " temp$ $!
   xm-min 0 udto$ temp$ $+!
+  lineending temp$ $+!
   temp$ $@ type
   temp$ $@ stlastresultout ;
 
 : ymin ( -- ) \ output ym-min
   s" ymin value is " temp$ $!
   ym-min 0 udto$ temp$ $+!
+  lineending temp$ $+!
   temp$ $@ type
   temp$ $@ stlastresultout ;
 
 : xmax ( -- ) \ output xm-max
   s" xmax value is " temp$ $!
   xm-max 0 udto$ temp$ $+!
+  lineending temp$ $+!
   temp$ $@ type
   temp$ $@ stlastresultout ;
 
 : ymax ( -- ) \ output ym-max
   s" ymax value is " temp$ $!
   ym-max 0 udto$ temp$ $+!
+  lineending temp$ $+!
   temp$ $@ type
   temp$ $@ stlastresultout ;
 
@@ -130,14 +134,14 @@ commands-instant set-current
 : status ( -- )
 ;
 
-: stopsandserver ( -- ) \ stop the sand server loop
+: stopsandserver ( -- )
   ;
 
-: lastresult ( -- )  \
+: lastresult ( -- )  \ output the last result string
   stlastresultin true = if
     type
   else
-    s" There was no last result to display!" type
+    s" There was no last result to display!" type lineending type 
   then ;
 
 

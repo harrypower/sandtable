@@ -202,16 +202,16 @@ variable messagebuffer$
     command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
     (parse-command&submessages)
     (command$@?) if \ true condition means there is a command now process it!
-      type ."  < This Command received to processcmdline!" cr
-      (command$@?) drop . drop ."  < command$ is this long in processcmdline!" cr
+      type ."  < This Command received to processcmdline!" lineending type
+      (command$@?) drop . drop ."  < command$ is this long in processcmdline!" lineending type
       *cmdline* to http?cmdline?
       1 submessages$ [bind] strings []@$ drop 2dup type cr
-      . ."  < first submessge length" cr drop
+      . ."  < first submessge length" lineending type drop
       (command$@?) drop 2dup swap drop 0 <> if \ command is not null so try and do the command
         2dup commands-instant search-wordlist false <> if \ command is a instant one ... pid saving is not needed
         swap drop swap drop \ remove command string  ( xt )
         (command$@?) drop messagebuffer$ $! s" < this instant command will be executed in processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
-        (command$@?) drop type ." < this instant command will be executed" cr
+        (command$@?) drop type ." < this instant command will be executed" lineending type 
         execute \ do the command
         else \ test for slow command
           commands-slow search-wordlist false <> if \ command is a slow one ... pid checking and saving needed
@@ -223,25 +223,25 @@ variable messagebuffer$
               \ execute command here
               pidfiledelete   \ clean up the pid file that was stored before command to allow other commands to be executed
             else \ another command running so message that info
-              ." Sandtable is currently busy please wait for it to finish!" cr
+              ." Sandtable is currently busy please wait for it to finish!" lineending type
             then
           else \ the command is not found
-            ." Message recieved but the command is not valid!" cr
+            ." Message recieved but the command is not valid!" lineending type
           then
         then
       else \ command is a null string
         2drop \ removed null command string
-        ." Message recieved but the command is a null string!" cr
+        ." Message recieved but the command is a null string!" lineending type
       then
     else
-      ." Message received but there was no command present in it!"  cr
+      ." Message received but there was no command present in it!"  lineending type
     then
     false
   restore
     dup false <> if
-    dup s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
-    s>d dto$ type ." <this error occured!" cr
-    pidretrieve true = if
+      dup s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
+      s>d dto$ type ." <this error occured!" lineending type
+      pidretrieve true = if
         (getpid) = if pidfiledelete then  \ clean up pid if it is the same as this running code
       then
     else
