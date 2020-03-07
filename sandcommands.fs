@@ -172,8 +172,8 @@ http?cmdline? *cmdline* = if
   s" xquick" (variable-pair-value@)
   s" yquick" (variable-pair-value@)
   rot and true = if
+    s" Found xquick and yquick for fastcalibration" temp$ $! lineending temp$ $+! temp$ $@ testdataout
     quickstart false = if
-        s" Found xquick and yquick for fastcalibration" temp$ $! lineending temp$ $+! temp$ $@ testdataout
         s" xquick" (variable-pair-value@)
         s" yquick" (variable-pair-value@)
         rot 2drop

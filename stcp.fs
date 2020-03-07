@@ -211,7 +211,7 @@ variable messagebuffer$
         2dup commands-instant search-wordlist false <> if \ command is a instant one ... pid saving is not needed
         swap drop swap drop \ remove command string  ( xt )
         (command$@?) drop messagebuffer$ $! s" < this instant command will be executed in processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
-        (command$@?) drop type ." < this instant command will be executed" lineending type 
+        (command$@?) drop type ." < this instant command will be executed" lineending type
         execute \ do the command
         else \ test for slow command
           commands-slow search-wordlist false <> if \ command is a slow one ... pid checking and saving needed
@@ -221,8 +221,10 @@ variable messagebuffer$
               pidstore
               (command$@?) drop messagebuffer$ $! s" < this slow command will be executed in processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
               \ execute command here
+              execute
               pidfiledelete   \ clean up the pid file that was stored before command to allow other commands to be executed
             else \ another command running so message that info
+              drop \ remove the xt found above and on stack 
               ." Sandtable is currently busy please wait for it to finish!" lineending type
             then
           else \ the command is not found
