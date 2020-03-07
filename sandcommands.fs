@@ -134,7 +134,11 @@ commands-instant set-current
   ;
 
 : lastresult ( -- )  \
-  ;
+  stlastresultin true = if
+    type
+  else
+    s" There was no last result to display!" type
+  then ;
 
 
 commands-slow set-current
