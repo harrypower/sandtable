@@ -46,7 +46,8 @@ variable tmpmake$
     <<# #s  #> #>> tmpmake$ $! tmpmake$ $@ ;
 
 \ s" http://mysandtable.local" server_addres$ $!  \ this works if the BBB has host setup and is called mysandtable
-s" http://192.168.0.59" server_addres$ $!
+s" http://mysandtable" server_addres$ $!
+\ s" http://192.168.0.59" server_addres$ $!
 s" :52222/" port#$ $!  \ the / is need at end of port number
 
 variable curl$
