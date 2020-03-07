@@ -93,24 +93,33 @@ get-order get-current
 wordlist constant commands-slow
 wordlist constant commands-instant
 
+variable  temp$
 commands-instant set-current
 \ place instant commands here
 \ instant commands are commands that can be run at the same time as sandtable motor commands because they will not only return information
 : xmin ( -- ) \ output xm-min
-  ." xmin value is "
-  xm-min 0 udto$ type cr ;
+  s" xmin value is " temp$ $!
+  xm-min 0 udto$ temp$ $+!
+  temp$ $@ type
+  temp$ $@ stlastresultout ;
 
 : ymin ( -- ) \ output ym-min
-  ." ymin value is "
-  ym-min 0 udto$ type cr ;
+  s" ymin value is " temp$ $!
+  ym-min 0 udto$ temp$ $+!
+  temp$ $@ type
+  temp$ $@ stlastresultout ;
 
 : xmax ( -- ) \ output xm-max
-  ." xmax value is "
-  xm-max 0 udto$ type cr ;
+  s" xmax value is " temp$ $!
+  xm-max 0 udto$ temp$ $+!
+  temp$ $@ type
+  temp$ $@ stlastresultout ;
 
 : ymax ( -- ) \ output ym-max
-  ." ymax value is "
-  ym-max 0 udto$ type cr ;
+  s" ymax value is " temp$ $!
+  ym-max 0 udto$ temp$ $+!
+  temp$ $@ type
+  temp$ $@ stlastresultout ;
 
 : xnow ( -- )
 ;
@@ -124,7 +133,7 @@ commands-instant set-current
 : stopsandserver ( -- ) \ stop the sand server loop
   ;
 
-: lastresult ( -- )  \ 
+: lastresult ( -- )  \
   ;
 
 
