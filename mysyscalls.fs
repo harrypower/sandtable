@@ -1,7 +1,7 @@
 \ mysyscalls.fs
 
 
-c-library mysyscalls \ GNU
+c-library mysyscallss \ GNU
 
 \c #include <sys/types.h>
 \c #include <sys/stat.h>
