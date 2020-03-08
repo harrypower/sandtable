@@ -28,7 +28,7 @@
 \ requires pauses.fs but may not use this addition
 \ 01/28/2019 remove syscalls38f.fs and put needed calls directly in below code
 
-c-library mysyscallsGNU
+c-library mysyscalls \ GNU
 
 \c #include <sys/types.h>
 \c #include <sys/stat.h>
