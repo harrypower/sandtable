@@ -28,29 +28,30 @@
 \ requires pauses.fs but may not use this addition
 \ 01/28/2019 remove syscalls38f.fs and put needed calls directly in below code
 
-c-library mysyscalls \ GNU
+\ c-library mysyscalls \ GNU
 
-\c #include <sys/types.h>
-\c #include <sys/stat.h>
-\c #include <fcntl.h>
-\c #include <unistd.h>
-\c #include <sys/ioctl.h>
+\ \c #include <sys/types.h>
+\ \c #include <sys/stat.h>
+\ \c #include <fcntl.h>
+\ \c #include <unistd.h>
+\ \c #include <sys/ioctl.h>
 
-c-function openGNU open a n -- n  ( ^zaddr  flags -- fd )
+\ c-function openGNU open a n -- n  ( ^zaddr  flags -- fd )
 \   file descriptor is returned
 \   Note zaddr points to a buffer containing the filename
 \   string terminated with a null character.
-c-function closeGNU close n -- n ( fd -- flag )
-c-function readGNU read n a n -- n ( fd  buf  count --  n )
+\ c-function closeGNU close n -- n ( fd -- flag )
+\ c-function readGNU read n a n -- n ( fd  buf  count --  n )
 \ read count byes into buf from file
-c-function writeGNU write n a n -- n ( fd  buf  count  --  n )
+\ c-function writeGNU write n a n -- n ( fd  buf  count  --  n )
 \ write count bytes from buf to file
-c-function lseekGNU lseek n n n -- n ( fd  offset  type  --  offs )
+\ c-function lseekGNU lseek n n n -- n ( fd  offset  type  --  offs )
 \ reposition the file ptr
-c-function ioctlGNU ioctl n n a -- n ( fd  request argp -- error )
+\ c-function ioctlGNU ioctl n n a -- n ( fd  request argp -- error )
 
-end-c-library
+\ end-c-library
 
+require mysyscalls.fs
 require Gforth-Objects/objects.fs
 require BBB_Gforth_gpio/BBB_GPIO_lib.fs
 require Gforth-Objects/mdca-obj.fs
