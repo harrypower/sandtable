@@ -1,4 +1,4 @@
-#! /usr/local/bin/gforth-arm
+#! /usr/local/bin/gforth
 \ stcp.fs
 \    Copyright (C) 2019  Philip King Smith
 
