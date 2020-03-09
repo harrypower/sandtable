@@ -61,7 +61,8 @@ port#$ $@ curl$ $+!
 curl$ $@ sh-get ;
 
 : sandtablemessagecmdline ( ucaddr u -- caddr1 u1 )
-  s\" echo \"command=fromcgi\" | /home/debian/sandtable/stcp.fs -e \"processhttp\""
+  2drop \ just testing now
+  s\" echo \"command=fromcgi\" | /home/debian/sandtable/stcp.fs -e \"processhttp\"" sh-get
 ;
 
 : lineending ( -- caddr u )
