@@ -60,6 +60,10 @@ server_addres$ $@ curl$ $+!
 port#$ $@ curl$ $+!
 curl$ $@ sh-get ;
 
+: sandtablemessagecmdline ( ucaddr u -- caddr1 u1 )
+  s\" echo \"command=fromcgi\" | /home/debian/sandtable/stcp.fs -e \"processhttp\""
+;
+
 : lineending ( -- caddr u )
   s\" <br>\n" ;
 
@@ -72,7 +76,8 @@ curl$ $@ sh-get ;
   query$ $@ type
   apache$s $@ type
   s" CGI got this message: " type thequery$ $@ type lineending type
-  thequery$ $@ sandtablemessage
+\  thequery$ $@ sandtablemessage
+  thequery$ $@ sandtablemessagecmdline
   s" Server message recieved is: " type type lineending type
   s\" </body></html>\n" type
 ;
