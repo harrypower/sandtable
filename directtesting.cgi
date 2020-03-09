@@ -69,7 +69,7 @@ curl$ $@ sh-get ;
   s\" <br>\n" ;
 
 : return-message ( -- )
-  \ s\" Content-type: text/html; charset=utf-8\n\n" type
+  s\" Content-type: text/html; charset=utf-8\n\n" type
   s\" <!DOCTYPE html>\n" type
   s\" <html>\n" type
   s\" <head><title>CGI return</title></head>\n" type
