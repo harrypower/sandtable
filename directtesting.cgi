@@ -77,8 +77,8 @@ curl$ $@ sh-get ;
   query$ $@ type
   apache$s $@ type
   s" CGI got this message: " type thequery$ $@ type lineending type
-\  thequery$ $@ sandtablemessage
-  thequery$ $@ sandtablemessagecmdline
+  thequery$ $@ sandtablemessage
+\  thequery$ $@ sandtablemessagecmdline
   s" Server message recieved is: " type type lineending type
   s\" </body></html>\n" type
 ;
