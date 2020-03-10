@@ -27,19 +27,9 @@
 \ 03/02/2020 started coding
 
 warnings off
-
-\ get-order get-current
-\ c-lib
-\ lib-modulename $@ dump cr
-\ set-current set-order
+s" echo $HOME" system
 
 require sandmotorapi.fs
-
-\ get-order get-current
-\ c-lib
-\ lib-modulename $@ dump cr
-\ set-current set-order
-
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
 
