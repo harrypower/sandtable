@@ -153,6 +153,8 @@ variable pathfile$
 : pidfiledelete ( -- ) \ delete the file that stores the pid for this running program
   pidfilepath$@ delete-file throw ;
 
+s" printenv GFORTHCCPATH" sh-get testdataout
+
 require sandcommands.fs
 
 variable tempheader$
