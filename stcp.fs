@@ -29,11 +29,13 @@
 warnings off
 variable tmppath$
 s" echo $HOME" system
-s" echo $HOME" sh-get
-s\" GFORTHCCPATH=\'" tmppath$ $!
-tmppath$ $+! s\" \'" tmppath$ $+!
-tmppath$ $@ system
+\ s" echo $HOME" sh-get
+\ s\" GFORTHCCPATH=\'" tmppath$ $!
+\ tmppath$ $+! s\" \'" tmppath$ $+!
+\ tmppath$ $@ system
+s\" GFORTHCCPATH=\'/root\'" system
 s" export GFORTHCCPATH" system
+s" printenv GFORTHCCPATH" system
 
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
