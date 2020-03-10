@@ -152,7 +152,7 @@ Each of the above lines will give different information but they should all show
 ## 7. Configure INetd services for sandtable command processing
 Install the inetd stuff ( note this need to be confirmed if this is the one i want to use )
 ```
-sudo apt-get install inetutils-inetd
+sudo apt-get install openbsd-inetd
 ```
 Use nano as follows to enter inetd.conf file:
 ```
