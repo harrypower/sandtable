@@ -27,15 +27,15 @@
 \ 03/02/2020 started coding
 
 warnings off
-variable tmppath$
-s" echo $HOME" sh-get type cr
+\ variable tmppath$
+\ s" echo $HOME" sh-get type cr
 \ s" echo $HOME" sh-get
 \ s\" GFORTHCCPATH=\'" tmppath$ $!
 \ tmppath$ $+! s\" \'" tmppath$ $+!
 \ tmppath$ $@ system
-s\" GFORTHCCPATH=\'/root\'" sh-get 2drop
-s" export GFORTHCCPATH" sh-get 2drop
-s" printenv GFORTHCCPATH" sh-get type cr
+\ s\" GFORTHCCPATH=\'/root\'" sh-get 2drop
+\ s" export GFORTHCCPATH" sh-get 2drop
+\ s" printenv GFORTHCCPATH" sh-get type cr
 
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
