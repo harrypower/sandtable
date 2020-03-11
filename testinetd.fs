@@ -1,4 +1,4 @@
-#! /usr/local/bin/gforth-arm
+#! /usr/local/bin/gforth
 \ testinetd.fs
 
 warnings off
