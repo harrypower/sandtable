@@ -2,6 +2,9 @@
 \ testinetd.fs
 
 warnings off
+
+:noname ; is bootmessage
+
 variable tmppath$
 s" echo $HOME" sh-get type cr
 \ s" echo $HOME" sh-get
@@ -11,7 +14,7 @@ s" echo $HOME" sh-get type cr
 s\" GFORTHCCPATH=\'/root\'" sh-get 2drop
 s" export GFORTHCCPATH" sh-get 2drop
 s" printenv GFORTHCCPATH" sh-get type cr
-s" GFORTHCCPATH" getenv dump cr 
+s" GFORTHCCPATH" getenv dump cr
 
 variable tempheader$
 : http-header ( -- caddr u ) \ http header string return
