@@ -1,4 +1,4 @@
-#! /usr/local/bin/gforth
+#! /usr/local/bin/gforth-arm 
 \ testinetd.fs
 
 warnings off
@@ -63,6 +63,6 @@ variable messagebuffer$
     s" got the message" http-response type
     bye
   restore
-    s" here with some error" http-response type 
+    s" here with some error" http-response type
   endtry
    ;
