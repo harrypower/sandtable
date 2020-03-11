@@ -1,4 +1,4 @@
-#! /usr/local/bin/gforth-arm
+#! /usr/local/bin/gforth
 \ stcp.fs
 \    Copyright (C) 2019  Philip King Smith
 
@@ -35,7 +35,7 @@ s" echo $HOME" sh-get type cr
 \ tmppath$ $@ system
 s\" GFORTHCCPATH=\'/root\'" sh-get 2drop
 s" export GFORTHCCPATH" sh-get 2drop
-s" printenv GFORTHCCPATH" sh-get type cr 
+s" printenv GFORTHCCPATH" sh-get type cr
 
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
