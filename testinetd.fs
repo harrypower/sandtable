@@ -58,6 +58,11 @@ variable sdtin$
 variable httpinput$
 variable messagebuffer$
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
-  getstdin 1- httpinput$ $!
-  s" got the message" http-response type
-  bye ;
+  try
+    getstdin 1- httpinput$ $!
+    s" got the message" http-response type
+    bye
+  restore
+    s" here with some error" http-response type 
+  endtry
+   ;
