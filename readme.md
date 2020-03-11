@@ -1,10 +1,29 @@
-# Steps to use UART on Beaglebone black
-## 1. Edit /boot/uEnv.txt
-  * `sudo nano /boot/uEnv.txt `
-  * add `cape_enable=bone_capemgr.enable_partno=BB-UART1,BB-UART2`
-    * note this is turning on /dev/ttyo1 and /dev/ttyo2
-    * note this now will turn the uart back on at reboot
-  * after you reboot you can test uart with `ls -l /dev/ttyo*` and you should get a list of the devices present.
+# Steps to install new image on BBB
+## 1. Get image from here: https://beagleboard.org/latest-images
+## 2. Follow this page here: https://beagleboard.org/getting-started#update
+  * summarized below!
+  * place the above image onto sd card with balenaEtcher imager software from here: https://www.balena.io/etcher/
+  * place sd card into BBB sd card slot.
+  * Hold User/Boot button and then plug in power to BBB.
+  * Once BBB is powered up plug in a eithernet cable from router.
+  * Log into BBB with putty.  Debian is user and password is temppwd ... the root user is does not work from putty!
+  * Use nano to edit file as per Flashing eMMC instructions on this page: https://elinux.org/Beagleboard:BeagleBoneBlack_Debian#Flashing_eMMC
+    * the file is called /boot/uEnv.txt
+    * This line is changed :
+    ```
+    ##enable BBB: eMMC Flasher:
+    #cmdline=init=/opt/scripts/tools/eMMC/init-eMMC-flasher-v3.sh
+    ```
+    * To this line:
+    ```
+    ##enable BBB: eMMC Flasher:
+    cmdline=init=/opt/scripts/tools/eMMC/init-eMMC-flasher-v3.sh
+    ```
+      * note the difference here is the # removed from second line.
+    * Issue Reboot command from command line.   
+    * Device will reboot and the 4 leds will start to blink in a repeating patten.
+    * eMMC is programed when the 4 leds turn off and the power led turns off.
+    * Now remove the SD card.  The device is now ready to use!
 
 ## 2. Update beaglebone black debian image  
     ```
@@ -13,6 +32,15 @@
         sudo apt-get update
         sudo reboot
     ```
+
+# Steps to setup UART on Beaglebone black
+## 1. Edit /boot/uEnv.txt
+  * `sudo nano /boot/uEnv.txt `
+  * add `cape_enable=bone_capemgr.enable_partno=BB-UART1,BB-UART2`
+    * note this is turning on /dev/ttyo1 and /dev/ttyo2
+    * note this now will turn the uart back on at reboot
+  * after you reboot you can test uart with `ls -l /dev/ttyo*` and you should get a list of the devices present.
+
 ## 3. Wifi setup using connmanctl
   * configure connmanctl
     ```
@@ -50,7 +78,18 @@
     ```
     systemctl disable wifi-reset.service
     ```
-## 3.B configure hostname
+## 4. Remove some services on BBB
+  ```
+  sudo systemctl disable cloud9.service
+  sudo systemctl disable bonescript.service
+  sudo systemctl disable bonescript.socket
+  sudo systemctl disable bonescript-autorun.service
+  sudo apt-get remove npm
+  sudo apt-get remove node*
+  sudo apt-get autoremove
+  sudo apt-get autoclean
+  ```
+## 5 configure hostname
   * log into beaglebone and change the name in /etc/hostname to mysandtable
   ```
   sudo nano /etc/hostname
@@ -64,22 +103,11 @@
   ```
   change this to below
   ```
-  127.0.1.1     mysandtable
   127.0.1.1     mysandtable.localdomain    mysandtable
   ```
   * Reboot the beaglebone black to finish setup!
-## 4. Remove some services on BBB
-  ```
-  sudo systemctl disable cloud9.service
-  sudo systemctl disable bonescript.service
-  sudo systemctl disable bonescript.socket
-  sudo systemctl disable bonescript-autorun.service
-  sudo apt-get remove npm
-  sudo apt-get remove node*
-  sudo apt-get autoremove
-  sudo apt-get autoclean
-  ```
-## 5. Reconfigure Apache for port 80
+
+## 6. Reconfigure Apache for port 80
   * Edit `/etc/apache2/sites-enabled/000-default.conf` as follows:
   ```
   <VirtualHost*:8080>
@@ -97,7 +125,7 @@
   Listen 80
   ```
 
-## 6. Configure Apache cgi stuff
+## 7. Configure Apache cgi stuff
 
 [CHIP Apache setup information](http://www.chip-community.org/index.php/CGI_program_on_CHIP)
 I have summarized the information here from the link with some changes. Note the information is for the CHIP machine but it works for BBB also!  
@@ -149,7 +177,7 @@ wget localhost
 
 Each of the above lines will give different information but they should all show the system working!
 
-## 7. Configure INetd services for sandtable command processing
+## 8. Configure INetd services for sandtable command processing
 Install the inetd stuff ( note this need to be confirmed if this is the one i want to use )
 ```
 sudo apt-get install openbsd-inetd
