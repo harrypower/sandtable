@@ -47,7 +47,7 @@ require unix/libc.fs
 0 value lastoutfid
 0 value calibratefid
 0 value pidfid
-200 value stdinwaittime
+300 value stdinwaittime
 variable httpinput$
 variable command$
 false value http?cmdline?
