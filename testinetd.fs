@@ -45,7 +45,7 @@ variable sdtin$
 : getstdin ( -- caddr u ) \ recieve the stdin to this code
 \ note this will have a terminator in this returned string at the end of the string ... remove this if not used
   sdtin$ $init
-  200 0 do
+  400 0 do
     1 ms
     begin
       (getstdin) while
@@ -58,6 +58,6 @@ variable sdtin$
 variable httpinput$
 variable messagebuffer$
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
-  getstdin httpinput$ $!
+  getstdin 1- httpinput$ $!
   s" got the message" http-response type
   bye ;
