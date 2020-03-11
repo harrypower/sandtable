@@ -89,6 +89,25 @@
   sudo apt-get autoremove
   sudo apt-get autoclean
   ```
+## 4.2 Add some stuff
+```
+  sudo apt-get install apache2
+  sudo apt-get install git git-core
+  sudo apt-get install libtool libtool-bin libltdl-dev libffi-dev autoconf m4 gforth
+  sudo apt-get install openbsd-inetd
+
+```
+## 4.3 Update Gforth
+``
+  cd ~/
+  sudo wget http://www.complang.tuwien.ac.at/forth/gforth/Snapshots/0.7.9_20200116/gforth-0.7.9_20200116.tar.xz
+  sudo tar -xf gforth-0.7.9_20200116.tar.xz
+  cd gforth-0.7.9_20200116/
+  sudo ./BUILD-FROM-SCRATCH --host=arm --build=arm
+  sudo make
+  sudo make install
+```
+
 ## 5 configure hostname
   * log into beaglebone and change the name in /etc/hostname to mysandtable
   ```
