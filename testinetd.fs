@@ -1,4 +1,4 @@
-#! /usr/local/bin/gforth-arm 
+#! /usr/local/bin/gforth-arm
 \ testinetd.fs
 
 warnings off
@@ -15,6 +15,8 @@ variable tmppath$
 \ s" export GFORTHCCPATH" sh-get 2drop
 \ s" printenv GFORTHCCPATH" sh-get type cr
 \ s" GFORTHCCPATH" getenv dump cr
+: lineending ( -- caddr u ) \ return a string to produce a line end in html
+  s\" <br>\n" ;
 
 variable tempheader$
 : http-header ( -- caddr u ) \ http header string return
@@ -60,7 +62,10 @@ variable messagebuffer$
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   try
     getstdin 1- httpinput$ $!
-    s" got the message" http-response type
+    s" < this message was received!" httpinput$ $+! lineending httpinput$ $+!
+    s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! 
+    httpinput$ $@ type
+    \ http-response type
     bye
   restore
     s" here with some error" http-response type
