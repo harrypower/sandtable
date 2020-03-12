@@ -42,23 +42,8 @@ variable tmpmake$
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> tmpmake$ $! tmpmake$ $@ ;
 
-\ s" http://mysandtable.local" server_addres$ $!  \ this works if the BBB has host setup and is called mysandtable
-s" http://mysandtable" server_addres$ $!
-\ s" http://192.168.0.59" server_addres$ $!
-s" :52222/" port#$ $!  \ the / is need at end of port number
-
-variable curl$
-: sandtablemessage ( ucaddr u -- ucaddr1 u1 ) \ send ucaddr u string to sandtable via curl in cmd line and return caddr1 u1 from the sandtable
-{ ucaddr u }
-s\" curl --get --data \"" curl$ $!
-ucaddr u curl$ $+!
-s\" \" " curl$ $+! \ note the space after the last " is needed to separate
-server_addres$ $@ curl$ $+!
-port#$ $@ curl$ $+!
-curl$ $@ sh-get ;
-
 : sandtablemessagecmdline ( ucaddr u -- caddr1 u1 )
-  2drop \ just testing now
+  { caddr u } \ command to be transfered to sandtable
   s\" echo \"command=fromcgi\" | sudo --user=debian --group=debian  /home/debian/sandtable/stcp.fs -e \"processhttp\"" sh-get
 ;
 
@@ -71,12 +56,10 @@ curl$ $@ sh-get ;
   s\" <html>\n" type
   s\" <head><title>CGI return</title></head>\n" type
   s\" <body>\n" type
-  \ s" HOME" getenv type lineending type
-  s" printenv" sh-get type lineending type
+\  s" printenv" sh-get type lineending type
   query$ $@ type
   apache$s $@ type
   s" CGI got this message: " type thequery$ $@ type lineending type
-\  thequery$ $@ sandtablemessage
   thequery$ $@ sandtablemessagecmdline
   s" Server message recieved is: " type type lineending type
   s\" </body>\n" type

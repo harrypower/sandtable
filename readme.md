@@ -95,7 +95,6 @@
   sudo apt-get install apache2
   sudo apt-get install git git-core
   sudo apt-get install libtool libtool-bin libltdl-dev libffi-dev autoconf m4 gforth
-  sudo apt-get install openbsd-inetd
 
 ```
 ## 4.3 Update Gforth
@@ -197,29 +196,21 @@ wget localhost
 
 Each of the above lines will give different information but they should all show the system working!
 
-## 8. Configure INetd services for sandtable command processing
-Install the inetd stuff ( note this need to be confirmed if this is the one i want to use )
+## 8. Adjust visudo
+* Ensure this step is done properly!
+* Issue the following Command:
 ```
-sudo apt-get install openbsd-inetd
+sudo visudo
 ```
-Use nano as follows to enter inetd.conf file:
+* Now add the following to the bottom of the document 
 ```
-sudo nano /etc/inetd.conf
+debian ALL=(ALL:ALL) NOPASSWD:ALL
+www-data ALL=(ALL) NOPASSWD:ALL
 ```
+* Now check after saving the above with this Command:
 ```
-sandtable stream tcp nowait root /home/pks/sandtable/stcp.fs stcp.fs -e "processhttp"
+sudo visudo -c
 ```
-
-Use nano as follow to add to /etc/services file:
-```
-sudo nano /etc/services
-```
-Move to the bottom of the document and add the following line:
-```
-sandtable  52222/tcp
-```
-Now restart the BBB and this service should be working on port 5222
-Testing if it is running at command line can be done with a curl statement like follows:
-```
-curl --get --data "command=status" http://mysandtable.local:52222/
-```
+* There should be no errors at this stage ... fix them if this last step says there are errors.
+* Note this adds two things to the sudoers list and adds some security issues so be aware this is not secure in any definition but it works for the intended purpose here!
+* Also note these changes just done do not take affect untill the system is rebooted again so do that now!
