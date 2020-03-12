@@ -36,6 +36,8 @@ warnings off
 \ s\" GFORTHCCPATH=\'/root\'" sh-get 2drop
 \ s" export GFORTHCCPATH" sh-get 2drop
 \ s" printenv GFORTHCCPATH" sh-get type cr
+s" GFORTHCCPATH='/home/debian'" system
+s" export GFORTHCCPATH" system 
 
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
