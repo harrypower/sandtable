@@ -203,6 +203,9 @@ variable messagebuffer$
   s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! lineending httpinput$ $+!
   httpinput$ $@ type
   s" got the message" http-response type
+  s\" echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo --user=root --group=debian /home/debian/sandtable/stcp.fs -e \"processcmdline\"" sh-get httpinput$ $!
+  lineending httpinput$ $+!
+  httpinput$ $@ type
   s" sent receipt message" testdataout
   *http* to http?cmdline?
   bye ;
