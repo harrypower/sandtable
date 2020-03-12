@@ -83,7 +83,7 @@ curl$ $@ sh-get ;
   thequery$ $@ sandtablemessagecmdline
   s" Server message recieved is: " type type lineending type
   s\" </body></html>\n" type
-  s\" \n\n" type 
+  s\" \n" type
 ;
 
 : get-get-message ( -- )
