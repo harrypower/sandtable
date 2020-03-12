@@ -63,7 +63,7 @@ variable messagebuffer$
   try
     getstdin 1- httpinput$ $!
     s" < this message was received!" httpinput$ $+! lineending httpinput$ $+!
-    s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! 
+    s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! lineending httpinput$ $+!
     httpinput$ $@ type
     \ http-response type
     bye
