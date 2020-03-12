@@ -199,7 +199,8 @@ variable sdtin$
 variable messagebuffer$
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   getstdin  httpinput$ $!
-  httpinput$ $@ testdataout
+  httpinput$ $@ testdataout lineending httpinput$ $+!
+  s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! lineending httpinput$ $+!
   s" got the message" http-response type
   s" sent receipt message" testdataout
   *http* to http?cmdline?
