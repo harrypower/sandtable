@@ -30,9 +30,6 @@ warnings off
 
 require script.fs
 
-0 value userver
-0 value usockfd
-
 variable query$
 variable thequery$
 variable apache$s
@@ -82,8 +79,8 @@ curl$ $@ sh-get ;
 \  thequery$ $@ sandtablemessage
   thequery$ $@ sandtablemessagecmdline
   s" Server message recieved is: " type type lineending type
-  s\" </body></html>\n" type
-  s\" \n" type
+  s\" </body>\n" type
+  s\" </html>\n" type
 ;
 
 : get-get-message ( -- )
