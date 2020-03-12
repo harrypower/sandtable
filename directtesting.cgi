@@ -74,7 +74,8 @@ curl$ $@ sh-get ;
   s\" <html>\n" type
   s\" <head><title>CGI return</title></head>\n" type
   s\" <body>\n" type
-  s" HOME" getenv type lineending type
+  \ s" HOME" getenv type lineending type
+  s" printenv" sh-get type lineending type 
   query$ $@ type
   apache$s $@ type
   s" CGI got this message: " type thequery$ $@ type lineending type
