@@ -41,7 +41,7 @@ require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
 
-:noname ; is bootmessage
+:noname processhttp ; is bootmessage
 
 0 value dataoutfid
 0 value lastoutfid
