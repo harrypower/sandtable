@@ -62,7 +62,7 @@ curl$ $@ sh-get ;
 
 : sandtablemessagecmdline ( ucaddr u -- caddr1 u1 )
   2drop \ just testing now
-  s\" echo \"command=fromcgi\" | sudo --user=root --preserve-env /home/debian/sandtable/stcp.fs -e \"processhttp\"" sh-get
+  s\" echo \"command=fromcgi\" | sudo --user=root  /home/debian/sandtable/stcp.fs -e \"processhttp\"" sh-get
 ;
 
 : lineending ( -- caddr u )
