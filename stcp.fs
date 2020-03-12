@@ -201,6 +201,7 @@ variable messagebuffer$
   getstdin  httpinput$ $!
   httpinput$ $@ testdataout lineending httpinput$ $+!
   s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! lineending httpinput$ $+!
+  httpinput$ $@ type
   s" got the message" http-response type
   s" sent receipt message" testdataout
   *http* to http?cmdline?
