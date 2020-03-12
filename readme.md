@@ -84,6 +84,7 @@
   sudo systemctl disable bonescript.service
   sudo systemctl disable bonescript.socket
   sudo systemctl disable bonescript-autorun.service
+  sudo apt-get remove c9-core-installer
   sudo apt-get remove npm
   sudo apt-get remove node*
   sudo apt-get autoremove
