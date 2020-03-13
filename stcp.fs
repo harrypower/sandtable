@@ -212,7 +212,7 @@ variable messagebuffer$
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
   try
-    getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
+    getstdin 2dup + 1- @ 255 and 10 = if 1- ( else  noterm throw ) then \ remove terminator or throw noterm error
     command$ $!
     command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
     (parse-command&submessages)
