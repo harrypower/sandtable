@@ -190,7 +190,7 @@ variable messagebuffer$
     \ note instant commands simply return a string of info
     \ and slow commands simply issue a command to this same code but calling the processcmdline with the command recieved here ... and return a message saying command is sent
     *http* to http?cmdline?
-    s\" nohup { echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo --user=root --group=debian /home/debian/sandtable/stcp.fs -e \"processcmdline\" } & "
+    s\" nohup ( echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo --user=root --group=debian /home/debian/sandtable/stcp.fs -e \"processcmdline\" ) & "
     \ sh-get messagebuffer$ $+!
     system
     \ lineending messagebuffer$ $+!
@@ -212,7 +212,7 @@ variable messagebuffer$
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
   try
-    getstdin 2dup + 1- @ 255 and 10 = if 1- ( else  noterm throw ) then \ remove terminator or throw noterm error
+    getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
     command$ $!
     command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
     (parse-command&submessages)
