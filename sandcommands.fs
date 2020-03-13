@@ -23,15 +23,6 @@
 \ Revisions:
 \ 03/02/2020 started coding
 
-
-variable shjunk$
-: sh-stcp ( caddr u -- caddr1 u1)
-  { caddr u }
-  s\" nohup gforth -e \"s\\\" " shjunk$ $!
-  caddr u shjunk$ $+!
-  s\" \\\"\" sandtable-commands.fs > sandtable-command.data 2>&1 &" shjunk$ $+! \ note the last & here is to disconnect this new process from the socketserver process
-  shjunk$ $@ sh-get ;
-
 strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
 strings heap-new constant junk-buffer$
