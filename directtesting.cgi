@@ -47,8 +47,8 @@ variable cmd$
 \  s\" echo \"command=fromcgi\" | sudo --user=debian --group=debian  /home/debian/sandtable/stcp.fs -e \"processhttp\"" sh-get
   s\" echo \"" cmd$ $!
   caddr u cmd$ $+!
-  s\" \" | sudo --user=debian --group=debian /home/debian/sandtable/stcp.fs -e \"processhttp\"" sh-get
-;
+  s\" \" | sudo --user=debian --group=debian /home/debian/sandtable/stcp.fs -e \"processhttp\"" cmd$ $+!
+  cmd$ $@  sh-get ;
 
 : lineending ( -- caddr u )
   s\" <br>\n" ;
