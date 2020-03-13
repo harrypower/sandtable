@@ -190,7 +190,7 @@ variable messagebuffer$
     \ note instant commands simply return a string of info
     \ and slow commands simply issue a command to this same code but calling the processcmdline with the command recieved here ... and return a message saying command is sent
     *http* to http?cmdline?
-    s\"  echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo --user=root --group=debian /home/debian/sandtable/stcp.fs -e \"processcmdline\"" sh-get messagebuffer$ $+!
+    s\"  ( echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo --user=root --group=debian /home/debian/sandtable/stcp.fs -e \"processcmdline\")" sh-get messagebuffer$ $+!
     lineending messagebuffer$ $+!
     messagebuffer$ $@ type
     s" sent return message" testdataout
