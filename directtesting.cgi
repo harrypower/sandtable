@@ -35,16 +35,19 @@ variable thequery$
 variable apache$s
 variable output$
 variable http_host$
-variable port#$
-variable server_addres$
+
 
 variable tmpmake$
 : udto$ ( ud -- caddr u )  \ convert double to a string
     <<# #s  #> #>> tmpmake$ $! tmpmake$ $@ ;
 
+variable cmd$
 : sandtablemessagecmdline ( ucaddr u -- caddr1 u1 )
   { caddr u } \ command to be transfered to sandtable
-  s\" echo \"command=fromcgi\" | sudo --user=debian --group=debian  /home/debian/sandtable/stcp.fs -e \"processhttp\"" sh-get
+\  s\" echo \"command=fromcgi\" | sudo --user=debian --group=debian  /home/debian/sandtable/stcp.fs -e \"processhttp\"" sh-get
+  s\" echo \"" cmd$ $!
+  caddr u cmd$ $+!
+  s\" \" | sudo --user=debian --group=debian /home/debian/sandtable/stcp.fs -e \"processhttp\"" sh-get
 ;
 
 : lineending ( -- caddr u )
@@ -61,7 +64,7 @@ variable tmpmake$
   apache$s $@ type
   s" CGI got this message: " type thequery$ $@ type lineending type
   thequery$ $@ sandtablemessagecmdline
-  s" Server message recieved is: " type type lineending type
+  s" Sandtable message recieved is: " type type lineending type
   s\" </body>\n" type
   s\" </html>\n" type
 ;
