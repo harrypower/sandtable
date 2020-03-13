@@ -49,7 +49,7 @@ require unix/libc.fs
 0 value lastoutfid
 0 value calibratefid
 0 value pidfid
-300 value stdinwaittime
+100 value stdinwaittime
 variable httpinput$
 variable command$
 false value http?cmdline?
@@ -157,25 +157,6 @@ variable pathfile$
 
 require sandcommands.fs
 
-variable tempheader$
-: http-header ( -- caddr u ) \ http header string return
-  s\" HTTP/1.1 200 OK\r\n" tempheader$ $!
-  s\" Connection: close\r\n" tempheader$ $+!
-  s\" Server: Sandserver 0.1\r\n" tempheader$ $+!
-  s\" Accept-Ranges: bytes\r\n" tempheader$ $+!
-  s\" Content-type: text/html; charset=utf-8\r\n" tempheader$ $+!
-  tempheader$ $@ ;
-
-variable tempresponse$
-: http-response ( caddr u -- caddr' u' ) \ caddr u is the message string to send
-  \ caddr' u' is the complete http-response string to return
-  { caddr u }
-  http-header tempresponse$ $!
-  s\" \r\n\r\n" tempresponse$ $+!
-  caddr u tempresponse$ $+!
-  s\" \r\n\r\n" tempresponse$ $+!
-  tempresponse$ $@ ;
-
 : (getstdin)  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
   stdin key?-file true = if
     pad 1 stdin read-file throw pad swap true
@@ -198,17 +179,31 @@ variable sdtin$
 
 variable messagebuffer$
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
-  getstdin  httpinput$ $!
-  httpinput$ $@ testdataout lineending httpinput$ $+!
-  s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! lineending httpinput$ $+!
-  httpinput$ $@ type
-  s" got the message" http-response type
-  s\" echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo --user=root --group=debian /home/debian/sandtable/stcp.fs -e \"processcmdline\"" sh-get httpinput$ $!
-  lineending httpinput$ $+!
-  httpinput$ $@ type
-  s" sent receipt message" testdataout
-  *http* to http?cmdline?
-  bye ;
+  try
+    getstdin  httpinput$ $!
+    httpinput$ $@ messagebuffer$ $! s" < received string" messagebuffer$ $+! messagebuffer$ $@ testdataout
+    httpinput$ $@ messagebuffer$ $! lineending messagebuffer$ $+!
+    s" HOME" getenv messagebuffer$ $+! s" < HOME env " messagebuffer$ $+! lineending messagebuffer$ $+!
+    s" got the message" messagebuffer$ $+! lineending messagebuffer$ $+!
+    \ need to finish this...
+    \ here the command is parsed and execution of instant or slow commands is executed
+    \ note instant commands simply return a string of info
+    \ and slow commands simply issue a command to this same code but calling the processcmdline with the command recieved here ... and return a message saying command is sent
+    *http* to http?cmdline?
+    s\" ( echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo --user=root --group=debian /home/debian/sandtable/stcp.fs -e \"processcmdline\")" sh-get messagebuffer$ $+!
+    lineending messagebuffer$ $+!
+    messagebuffer$ $@ type
+    s" sent return message" testdataout
+    false
+  restore
+    dup false <> if
+      dup s>d dto$ messagebuffer$ $! s" <this is error on output of processhttp!" messagebuffer$ $+! messagebuffer$ $@ testdataout
+      s>d dto$ messagebuffer$ $! s" <this error occured in processhttp!" messagebuffer$ $+! lineending messagebuffer$ $+! messagebuffer$ $@ type
+    else
+      drop \ remove the extra false on stack
+    then
+    bye
+  endtry ;
 
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
@@ -258,7 +253,7 @@ variable messagebuffer$
   restore
     dup false <> if
       dup s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
-      s>d dto$ type ." <this error occured!" lineending type
+      s>d dto$ messagebuffer$ $! s" <this error occured!" messagebuffer$ $+! lineending messagebuffer$ $+! messagebuffer$ $@ type
       pidretrieve true = if
         (getpid) = if pidfiledelete then  \ clean up pid if it is the same as this running code
       then
@@ -266,5 +261,4 @@ variable messagebuffer$
       drop \ remove the extra false on stack
     then
     bye
-  endtry
-;
+  endtry ;
