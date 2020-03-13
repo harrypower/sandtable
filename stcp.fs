@@ -193,8 +193,8 @@ variable messagebuffer$
     s\" echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo --user=root --group=debian /home/debian/sandtable/stcp.fs -e \"processcmdline\""
     sh-get messagebuffer$ $+! \ note because of the nohup above there should be no string here so maybe chnage this
     lineending messagebuffer$ $+!
-    messagebuffer$ $@ type
-    s" sent return message" testdataout
+    \ messagebuffer$ $@ type
+    \ s" sent return message" testdataout
     false
   restore
     dup false <> if
@@ -202,6 +202,8 @@ variable messagebuffer$
       s>d dto$ messagebuffer$ $! s" <this error occured in processhttp!" messagebuffer$ $+! lineending messagebuffer$ $+! messagebuffer$ $@ type
     else
       drop \ remove the extra false on stack
+      messagebuffer$ $@ type
+      s" Sent the return message" testdataout
     then
     bye
   endtry ;
