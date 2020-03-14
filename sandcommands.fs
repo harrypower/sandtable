@@ -156,7 +156,8 @@ commands-slow set-current
 \ place slower commands-slow sandtable commands here
 : testcgi ( -- ) \ for testing cgi stuff
 s" at testcgi" temp$! lineending temp$ $+! temp$ $@ testdataout
-temp$ $@
+temp$ $@ type
+temp$ $@ stlastresultout
 ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
