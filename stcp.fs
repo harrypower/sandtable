@@ -190,7 +190,8 @@ variable messagebuffer$
     \ note instant commands simply return a string of info
     \ and slow commands simply issue a command to this same code but calling the processcmdline with the command recieved here ... and return a message saying command is sent
     *http* to http?cmdline?
-    s\" nohup echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo -E /home/debian/sandtable/stcp.fs -e \"processcmdline\" &> /home/debian/sandtable/stcpcmdline.data & disown"
+    s\" nohup echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo -E /home/debian/sandtable/stcp.fs -e \"processcmdline\" &> /home/debian/sandtable/stcpcmdline.data & "
+    \ the above command works at the command line but here in this code it does not work the same way... the stdout goes instead to the code that calls this running gforth
     \ sh-get messagebuffer$ $+!
     system
     \ lineending messagebuffer$ $+!
