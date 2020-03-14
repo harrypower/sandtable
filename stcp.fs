@@ -181,7 +181,7 @@ variable messagebuffer$
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   try
     getstdin  httpinput$ $!
-    httpinput$ $@ messagebuffer$ $! s" < received string" messagebuffer$ $+! messagebuffer$ $@ testdataout
+    httpinput$ $@ messagebuffer$ $! s" < received string in processhttp" messagebuffer$ $+! messagebuffer$ $@ testdataout
     httpinput$ $@ messagebuffer$ $! lineending messagebuffer$ $+!
     s" HOME" getenv messagebuffer$ $+! s" < HOME env " messagebuffer$ $+! lineending messagebuffer$ $+!
     s" got the message" messagebuffer$ $+! lineending messagebuffer$ $+!
@@ -204,7 +204,7 @@ variable messagebuffer$
     else
       drop \ remove the extra false on stack
       messagebuffer$ $@ type
-      s" Sent the return message" testdataout
+      s" Sent the return message in processhttp" testdataout
     then
     bye
   endtry ;
@@ -212,6 +212,7 @@ variable messagebuffer$
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
   try
+    10000 ms 
     getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
     command$ $!
     command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
