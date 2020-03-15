@@ -98,7 +98,7 @@
 
 ```
 ## 4.3 Update Gforth
-``
+```
   cd ~/
   sudo wget http://www.complang.tuwien.ac.at/forth/gforth/Snapshots/0.7.9_20200116/gforth-0.7.9_20200116.tar.xz
   sudo tar -xf gforth-0.7.9_20200116.tar.xz
@@ -202,7 +202,7 @@ Each of the above lines will give different information but they should all show
 ```
 sudo visudo
 ```
-* Now add the following to the bottom of the document 
+* Now add the following to the bottom of the document
 ```
 debian ALL=(ALL:ALL) NOPASSWD:ALL
 www-data ALL=(ALL) NOPASSWD:ALL
