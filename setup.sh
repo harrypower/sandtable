@@ -12,4 +12,4 @@ sudo cp sandtablestyle.css /var/www/html/sandtablestyle.css
 sudo cp directtesting.cgi /usr/lib/cgi-bin/directtesting.cgi
 sudo cp favicon.ico /var/www/html/favicon.ico
 
-sudo chmod 755 /usr/lib/cgi-bin/directtesting.cgi
+sudo chmod 777 /usr/lib/cgi-bin/directtesting.cgi
