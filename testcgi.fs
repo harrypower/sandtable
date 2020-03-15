@@ -18,7 +18,7 @@ variable sdtin$
 : getstdin ( -- caddr u ) \ recieve the stdin to this code
 \ note this will have a terminator in this returned string at the end of the string ... remove this if not used
   sdtin$ $init
-  400 0 do
+  200 0 do
     1 ms
     begin
       (getstdin) while
