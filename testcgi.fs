@@ -38,6 +38,6 @@ variable messagebuffer$
     httpinput$ $@ type
     bye
   restore
-    s" here with some error" http-response type
+    s" here with some error" type
   endtry
    ;
