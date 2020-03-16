@@ -35,9 +35,9 @@ variable temppath$
 : ststatusfile$@ ( -- caddr u ) \ will have the current status of the sandtable
   s" stcurrentstatus.data" path+name ;
 : stcmdinfile$@ ( -- caddr u ) \ sandtable commands to be performed
-  s" stcmdin" path+name ;
+  s" stcmdin.data" path+name ;
 : stcmdoutfile$@ ( -- caddr u ) \ sandtable result of command received via stcmdin
-  s" stcmdout" path+name ;
+  s" stcmdout.data" path+name ;
 : opendata ( caddr u -- ufid ) \ caddr u is a string for path of file to be opened for writing to .. if it is not present then create that file
   2dup file-status swap drop false = if
     r/w open-file throw
