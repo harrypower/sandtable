@@ -19,7 +19,7 @@ variable convert$
     pcdatapath$@ to u to caddr then
   bbbdatapath$@ file-status swap drop false = if
     bbbdatapath$@ to u to caddr then
-    u 0> = if caddr u else nopath throw then ;
+    u 0> if caddr u else nopath throw then ;
 variable temppath$
 : path+name ( caddr u -- caddr1 u1 ) \ return the full path and file name
 \ caddr u is the file name to add to the path
