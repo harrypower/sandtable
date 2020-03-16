@@ -1,6 +1,28 @@
 #! /usr/local/bin/gforth-arm
-\ testcgi.fs
+\ getcgi.fs
+\ Copyright (C) 2019  Philip King Smith
 
+\    This program is free software: you can redistribute it and/or modify
+\    it under the terms of the GNU General Public License as published by
+\    the Free Software Foundation, either version 3 of the License, or
+\    (at your option) any later version.
+
+\    This program is distributed in the hope that it will be useful,
+\    but WITHOUT ANY WARRANTY; without even the implied warranty of
+\    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+\    GNU General Public License for more details.
+
+\    You should have received a copy of the GNU General Public License
+\    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+\ socket server for sandtable
+\ the sandtable cgi will talk to this code to leave a command for sandtable to do
+
+\ Requires:
+\ plain Gforth
+
+\ Revisions:
+\ 03/15/2020 started coding
 warnings off
 
 :noname ; is bootmessage
@@ -59,10 +81,11 @@ variable messagebuffer$
     getstdin 1- httpinput$ $!
     httpinput$ $@ dataout
     s" < this message was received!" httpinput$ $+! lineending httpinput$ $+!
-    s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! lineending httpinput$ $+!
+    \ s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! lineending httpinput$ $+!
     httpinput$ $@ type
     bye
+    false
   restore
-    s" here with some error" type
+    s>d dto$ type s" < this error happened !" type
   endtry
    ;
