@@ -39,6 +39,19 @@ variable temppath$
     r/w create-file throw
   then ;
 0 value datafid
+: shrink-write-file ( caddr u ufid -- ) \ ufid should be valid file that will get resized to 0 size and then caddr u string placed in it and then file is closed
+  >r 0 s>d r@ resize-file throw
+  r@ write-file throw
+  r@ flush-file throw
+  r> close-file throw ;
+: cmddatarecieve ( caddr u -- ) \ put caddr u string into stcmdinfile$@ file
+  stcmdinfile$@ opendata
+  shrink-write-file ;
+: cmddatasend ( -- caddr u nflag ) \ get message from sandtable via stcmoutfile$@ and put that in string caddr u
+\ nflag is true if the message from sandtable is present only
+\ nflag is false if there is no message yet from sandtable
+  stcmdoutfile$@  file-status swap drop false =
+  if stcmdoutfile$@ slurp-file true else 0 0 false then ;
 : testdataout ( caddr u -- ) \ append caddr u string to the testoutfile and put a time stamp with string
   testoutfile$@ opendata to datafid
   datafid file-size throw
@@ -48,32 +61,31 @@ variable temppath$
   datafid flush-file throw
   datafid close-file throw ;
 : stlastresultout ( caddr u -- ) \ create last result file using caddr u string
-  stlastresultfile$@ file-status swap drop false = if
-    stlastresultfile$@ w/o open-file throw to datafid
-    0 0 datafid resize-file throw
-  else
-    pathfile$ $@ w/o create-file throw to datafid
-  then
-  datafid write-file throw
-  datafid flush-file throw
-  datafid close-file throw ;
+  stlastresultfile$@ opendata
+  shrink-write-file ;
 : stlastresultin ( -- caddr u nflag ) \ read last result data and place in caddr u string ... nflag is true if last result is present .. nflag is false if not present
   stlastresultfile$@ file-status swap drop false =
     if stlastresultfile$@ slurp-file else 0 0 false exit then ;
 : stcalibrationout ( ux uy -- ) \ save the calibration data to file
-  datapath? if pathfile$ $! stcalibration$@ pathfile$ $+! else nopath throw then
-  pathfile$ $@ file-status swap drop false = if pathfile$ $@ delete-file throw then
-  pathfile$ $@ w/o create-file throw to calibratefid
-  swap s>d udto$ calibratefid write-line throw \ write x
-  s>d udto$ calibratefid write-line throw \ write y
-  calibratefid flush-file throw
-  calibratefid close-file throw ;
+  stcalfile$@ open-data to datafid
+  0 s>d datafid resize-file throw
+  swap s>d udto$ datafid write-line throw \ write x
+  s>d udto$ datafid write-line throw \ write y
+  datafid flush-file throw
+  datafid close-file throw ;
 : stcalibrationin ( -- ux uy nflag ) \ retreive calibration data from file
   \ nflag is true if calibration data is present and false if there is no calibartion data
   0 0 { ux uy }
-  datapath? if pathfile$ $! stcalibration$@ pathfile$ $+! else nopath throw then
-  pathfile$ $@ file-status swap drop false = if pathfile$ $@ r/o open-file throw to calibratefid else 0 0 false exit then
-  pad 20 calibratefid read-line throw drop pad swap s>unumber? if d>s to ux else 0 0 false exit then
-  pad 20 calibratefid read-line throw drop pad swap s>unumber? if d>s to uy else 0 0 false exit then
+  stcalfile$@ open-data to datafid
+  pad 30 datafid read-line throw drop pad swap s>unumber? if d>s to ux else 0 0 false exit then
+  pad 30 datafid read-line throw drop pad swap s>unumber? if d>s to uy else 0 0 false exit then
   calibratefid close-file throw
   ux uy true ;
+: getstatus ( -- caddr u nflag ) \ get the status info from sandtable
+\ nflag is true if status info file exists
+\ nflag is false if no file
+  ststatusfile$@ file-status swap drop false =
+  if ststatusfile$@ slurp-file true else 0 0 false then ;
+: putstatus ( caddr u -- ) \ put the status message caddr u string out to ststatusfile$@
+  ststatusfile$@ open-data
+  shrink-write-file ;

@@ -25,7 +25,6 @@
 \ 03/15/2020 started coding
 warnings off
 
-
 :noname ; is bootmessage
 
 s" no terminator found in stdin!" exception constant noterm
@@ -40,26 +39,6 @@ variable convert$
 
 require stdatafiles.fs
 
-: dataout ( caddr u -- ) \ put caddr u string into stcmdinfile$@ file
-  stcmdinfile$@ opendata to datafid
-  0 s>d datafid resize-file throw
-  datafid write-file throw
-  datafid flush-file throw
-  datafid close-file throw ;
-: datain ( -- caddr u nflag ) \ get message from sandtable and put that in string caddr u
-\ nflag is true if the message from sandtable is present only
-\ nflag is false if there is no message yet from sandtable
-  stcmdoutfile$@  file-status swap drop false =
-  if stcmdoutfile$@ slurp-file true else 0 0 false then ;
-
-: getstatus ( -- caddr u nflag ) \ get the status info from sandtable
-\ nflag is true if status info file exists
-\ nflag is false if no file
-  ststatusfile$@ file-status swap drop false = if
-    ststatusfile$@ slurp-file true
-  else
-    0 0 false
-  then ;
 : (getstdin)  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
   stdin key?-file true = if
     pad 1 stdin read-file throw pad swap true
@@ -89,13 +68,13 @@ variable messagebuff$
     s" < this message was received!" type lineending type
     getstatus true = if
       s" ready" search swap drop swap drop true = if
-        messagebuff$ $@ dataout
+        messagebuff$ $@ cmddatarecieve
         s" The command has been sent to sandtable!" type lineending type
         50 ms
         utime 2000 s>d d+
         begin
           10 ms
-          datain true = if
+          cmddatasend true = if
             2swap 2drop true
           else
             2drop 2dup utime d> true = if
