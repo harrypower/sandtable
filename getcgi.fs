@@ -92,6 +92,21 @@ variable messagebuff$
       s" ready" search swap drop swap drop true = if
         messagebuff$ $@ dataout
         s" The command has been sent to sandtable!" type
+        50 ms
+        utime 2000 s>d d+ 
+        begin
+          10 ms
+          datain true = if
+            2swap 2drop true
+          else
+            2drop 2dup utime d> true = if
+              2drop 0 0
+            else
+              false
+            then
+          then
+        until
+      type s" < sandtable response to the received command!" type
       else
         s" Sandtable is currently busy with other commands!" type
       then
