@@ -45,7 +45,22 @@ variable convert$
   datafid write-file throw
   datafid flush-file throw
   datafid close-file throw ;
-
+: datain ( -- caddr u nflag ) \ get message from sandtable and put that in string caddr u
+\ nflag is true if the message from sandtable is present only
+\ nflag is false if there is no message yet from sandtable
+  stcmdoutfile$@  file-status swap drop false = if
+    stcmdoutfile$@ slurp-file true
+  else
+    0 0 false
+  then ;
+: getstatus ( -- caddr u nflag ) \ get the status info from sandtable
+\ nflag is true if status info file exists
+\ nflag is false if no file
+  ststatusfile$@ file-status swap drop false = if
+    ststatusfile$@ slurp-file true
+  else
+    0 0 false
+  then ;
 : (getstdin)  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
   stdin key?-file true = if
     pad 1 stdin read-file throw pad swap true
@@ -67,15 +82,23 @@ variable sdtin$
   sdtin$ $@ ;
 
 variable httpinput$
-variable messagebuffer$
-: processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
+: processcmdline  ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   try
     getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
-    httpinput$ $!
-    httpinput$ $@ dataout
-    s" < this message was received!" httpinput$ $+! lineending httpinput$ $+!
-    \ s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! lineending httpinput$ $+!
-    httpinput$ $@ type
+    messagebuff$ $!
+    messagebuff$ $@ type
+    s" < this message was received!" type lineending type
+    getstatus true = if
+      s" ready" search swap drop swap drop true = if
+        messagebuff$ $@ dataout
+        s" The command has been sent to sandtable!" type
+      else 
+        s" Sandtable is currently busy with other commands!" type
+      then
+    else
+      2drop
+      s" Sandtable is currently not running!"  type
+    then
     bye
     false
   restore
