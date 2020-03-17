@@ -79,7 +79,7 @@ variable temppath$
   stcalfile$@ opendata to datafid
   pad 30 datafid read-line throw drop pad swap s>unumber? if d>s to ux else 0 0 false exit then
   pad 30 datafid read-line throw drop pad swap s>unumber? if d>s to uy else 0 0 false exit then
-  calibratefid close-file throw
+  datafid close-file throw
   ux uy true ;
 : getstatus ( -- caddr u nflag ) \ get the status info from sandtable
 \ nflag is true if status info file exists
