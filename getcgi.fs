@@ -29,6 +29,8 @@ require stdatafiles.fs
 
 :noname ; is bootmessage
 
+s" no terminator found in stdin!" exception constant noterm
+
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
