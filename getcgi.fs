@@ -60,6 +60,7 @@ variable sdtin$
   sdtin$ $@ ;
 
 variable messagebuff$
+2variable timeout
 : processcmdline  ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   try
     getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
@@ -71,20 +72,20 @@ variable messagebuff$
         messagebuff$ $@ cmddatarecieve
         s" The command has been sent to sandtable!" type lineending type
         50 ms
-        utime 2000 s>d d+
+        utime 2000 s>d d+ timeout 2!
         begin
-          10 ms
+          10 ms 
           cmddatasend true = if
-            2swap 2drop true
+            2drop true
           else
-            2drop 2dup utime d> true = if
-              2drop 0 0
-            else
-              false
-            then
+            2drop timeout 2@ utime d>
           then
         until
-      type s" < sandtable response to the received command!" type lineending type
+        cmddatasend true = if
+          type s" < sandtable response to the received command!" type lineending type
+        else
+          2drop s" Sandtable has not responded to command!"  type lineending type
+        then
       else
         s" Sandtable is currently busy with other commands!" type lineending type
       then
