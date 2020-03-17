@@ -67,7 +67,7 @@ variable temppath$
   stlastresultfile$@ file-status swap drop false =
     if stlastresultfile$@ slurp-file else 0 0 false exit then ;
 : stcalibrationout ( ux uy -- ) \ save the calibration data to file
-  stcalfile$@ open-data to datafid
+  stcalfile$@ opendata to datafid
   0 s>d datafid resize-file throw
   swap s>d udto$ datafid write-line throw \ write x
   s>d udto$ datafid write-line throw \ write y
@@ -76,7 +76,7 @@ variable temppath$
 : stcalibrationin ( -- ux uy nflag ) \ retreive calibration data from file
   \ nflag is true if calibration data is present and false if there is no calibartion data
   0 0 { ux uy }
-  stcalfile$@ open-data to datafid
+  stcalfile$@ opendata to datafid
   pad 30 datafid read-line throw drop pad swap s>unumber? if d>s to ux else 0 0 false exit then
   pad 30 datafid read-line throw drop pad swap s>unumber? if d>s to uy else 0 0 false exit then
   calibratefid close-file throw
@@ -87,5 +87,5 @@ variable temppath$
   ststatusfile$@ file-status swap drop false =
   if ststatusfile$@ slurp-file true else 0 0 false then ;
 : putstatus ( caddr u -- ) \ put the status message caddr u string out to ststatusfile$@
-  ststatusfile$@ open-data
+  ststatusfile$@ opendata
   shrink-write-file ;
