@@ -81,7 +81,7 @@ variable sdtin$
   loop
   sdtin$ $@ ;
 
-variable httpinput$
+variable messagebuff$
 : processcmdline  ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   try
     getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
@@ -92,7 +92,7 @@ variable httpinput$
       s" ready" search swap drop swap drop true = if
         messagebuff$ $@ dataout
         s" The command has been sent to sandtable!" type
-      else 
+      else
         s" Sandtable is currently busy with other commands!" type
       then
     else
