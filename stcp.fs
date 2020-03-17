@@ -27,21 +27,11 @@
 \ 03/02/2020 started coding
 
 warnings off
-\ variable tmppath$
-\ s" echo $HOME" sh-get type cr
-\ s" echo $HOME" sh-get
-\ s\" GFORTHCCPATH=\'" tmppath$ $!
-\ tmppath$ $+! s\" \'" tmppath$ $+!
-\ tmppath$ $@ system
-\ s\" GFORTHCCPATH=\'/root\'" sh-get 2drop
-\ s" export GFORTHCCPATH" sh-get 2drop
-\ s" printenv GFORTHCCPATH" sh-get type cr
-\ s" GFORTHCCPATH='/home/debian/.cache/gforth/arm/libcc-tmp'" system
-\ s" export GFORTHCCPATH" system
 
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
+require stdatafiles.fs
 
 :noname ; is bootmessage
 
@@ -52,11 +42,7 @@ require unix/libc.fs
 100 value stdinwaittime
 variable httpinput$
 variable command$
-false value http?cmdline?
-1 constant *http* \ this is used in http?cmdline? to indicate http has started this code
-2 constant *cmdline* \ this is used in http?cmdline? to indicate cmd line has started this code
 \ error constants
-s" bbbdatapath or pcdatapath do not exist cannot proceed!" exception constant nopath
 s" no terminator found in stdin!" exception constant noterm
 
 variable convert$
@@ -67,51 +53,7 @@ variable convert$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
-: pidfilepath$@ ( -- caddr u ) \ caddr u is string for the file name and path to store programs pid
-  s" /run/stcp.fs.pid" ;
-: pcdatapath$@ ( -- caddr u ) \ return path string to output data for pc testing
-  s" /home/pks/sandtable/" ;
-: bbbdatapath$@ ( -- caddr u ) \ return path string to output data for BBB sandtable
-  s" /home/debian/sandtable/" ;
-: testoutfile$@ ( -- caddr u ) \ the file name for test output info
-  s" stcptest.data" ;
-: stlastresultfile$@ ( -- caddr u ) \ the file name for the sandtable last result info.
-  s" stcplastresult.data" ;
-: stcalibration$@ ( -- caddr u ) \ the file where the calibration data is
-  s" stcalibration.data" ;
-: datapath? ( -- caddr u nflag ) \ caddr u is the correct path to use if nflag is true.... if nflag is false caddr u is 0 0
-  pcdatapath$@ file-status swap drop false = if
-    pcdatapath$@ true
-  else
-    bbbdatapath$@ file-status swap drop false = if
-      bbbdatapath$@ true
-    else
-      0 0 false
-    then
-  then ;
-: opendata ( caddr u nflag -- ) \ caddr u is a string for path of file to be opened for writing to .. if it is not present then create that file
-\ this tcan throw nopath
-  { caddr u nflag }
-  nflag true = if
-    caddr u file-status swap drop false = if
-      caddr u r/w open-file throw
-      to dataoutfid
-    else
-      caddr u r/w create-file throw
-      to dataoutfid
-    then
-  else
-    nopath throw
-  then ;
-variable pathfile$
-: testdataout ( caddr u -- ) \ append caddr u string to the test data file
-  datapath? >r pathfile$ $! testoutfile$@ pathfile$ $+! pathfile$ $@ r> opendata
-  dataoutfid file-size throw
-  dataoutfid reposition-file throw
-  utime udto$ dataoutfid write-line throw
-  dataoutfid write-line throw
-  dataoutfid flush-file throw
-  dataoutfid close-file throw ;
+\ ******** this needs to be rewriten to the next *** line
 : stlastresultout ( caddr u -- ) \ create last result file using caddr u string
   datapath? if pathfile$ $! stlastresultfile$@ pathfile$ $+! else nopath throw then
   pathfile$ $@ file-status swap drop false = if pathfile$ $@ delete-file throw then
@@ -141,108 +83,36 @@ variable pathfile$
   pad 20 calibratefid read-line throw drop pad swap s>unumber? if d>s to uy else 0 0 false exit then
   calibratefid close-file throw
   ux uy true ;
-: pidretrieve ( -- upid nflag ) \ get the pid number of the potential copy of this program running
-  \ nflag is true only if upid is the retrieved pid number from saved file .
-  \ nflag is false if this saved pid file does not exist or some other error happened in retreiveing it
-    pidfilepath$@ file-status swap drop false = if pidfilepath$@ slurp-file else 0 false exit then
-    s>unumber? if d>s true else 0 false then ;
-: pidstore ( -- ) \ store the pid of this current running program
-  pidfilepath$@ w/o create-file throw to pidfid
-  (getpid) s>d udto$
-  pidfid write-file throw
-  pidfid flush-file throw
-  pidfid close-file throw ;
-: pidfiledelete ( -- ) \ delete the file that stores the pid for this running program
-  pidfilepath$@ delete-file throw ;
+\ ****************
 
 require sandcommands.fs
 
-: (getstdin)  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
-  stdin key?-file true = if
-    pad 1 stdin read-file throw pad swap true
-  else
-    pad 0 false
-  then ;
-variable sdtin$
-: getstdin ( -- caddr u ) \ recieve the stdin to this code
-\ note this will have a terminator in this returned string at the end of the string ... remove this if not used
-  sdtin$ $init
-  stdinwaittime 0 do
-    1 ms
-    begin
-      (getstdin) while
-      sdtin$ $+!
-    repeat
-    2drop
-  loop
-  sdtin$ $@ ;
-
 variable messagebuffer$
-: processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
-  try
-    getstdin  httpinput$ $!
-    httpinput$ $@ messagebuffer$ $! s" < received string in processhttp" messagebuffer$ $+! messagebuffer$ $@ testdataout
-    httpinput$ $@ messagebuffer$ $! lineending messagebuffer$ $+!
-    s" HOME" getenv messagebuffer$ $+! s" < HOME env " messagebuffer$ $+! lineending messagebuffer$ $+!
-    s" got the message" messagebuffer$ $+! lineending messagebuffer$ $+!
-    \ need to finish this...
-    \ here the command is parsed and execution of instant or slow commands is executed
-    \ note instant commands simply return a string of info
-    \ and slow commands simply issue a command to this same code but calling the processcmdline with the command recieved here ... and return a message saying command is sent
-    *http* to http?cmdline?
-    s\" nohup \"echo \"command=fastcalibration&xquick=0&yquick=0\" | sudo -E /home/debian/sandtable/stcp.fs -e \"processcmdline\" \" &> /home/debian/sandtable/stcpcmdline.data & "
-    \ the above command works at the command line but here in this code it does not work the same way... the stdout goes instead to the code that calls this running gforth
-    \ sh-get messagebuffer$ $+!
-    system
-    \ lineending messagebuffer$ $+!
-    \ messagebuffer$ $@ type
-    \ s" sent return message" testdataout
-    false
-  restore
-    dup false <> if
-      dup s>d dto$ messagebuffer$ $! s" <this is error on output of processhttp!" messagebuffer$ $+! messagebuffer$ $@ testdataout
-      s>d dto$ messagebuffer$ $! s" <this error occured in processhttp!" messagebuffer$ $+! lineending messagebuffer$ $+! messagebuffer$ $@ type
-    else
-      drop \ remove the extra false on stack
-      messagebuffer$ $@ type
-      s" Sent the return message in processhttp" testdataout
-    then
-    bye
-  endtry ;
 
 : processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
 \ this word will take the command from the stdin and process it !
   try
     getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
     command$ $!
-    command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
+    command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline in stcp.fs" messagebuffer$ $+! messagebuffer$ $@ testdataout
     (parse-command&submessages)
     (command$@?) if \ true condition means there is a command now process it!
       type ."  < This Command received to processcmdline!" lineending type
-      (command$@?) drop . drop ."  < command$ is this long in processcmdline!" lineending type
-      *cmdline* to http?cmdline?
+      (command$@?) drop . drop ."  < command$ is this long in processcmdline of stcp.fs!" lineending type
       1 submessages$ [bind] strings []@$ drop 2dup type cr
       . ."  < first submessge length" lineending type drop
       (command$@?) drop 2dup swap drop 0 <> if \ command is not null so try and do the command
-        2dup commands-instant search-wordlist false <> if \ command is a instant one ... pid saving is not needed
+        2dup commands-instant search-wordlist false <> if \ command is a instant one ...
         swap drop swap drop \ remove command string  ( xt )
-        (command$@?) drop messagebuffer$ $! s" < this instant command will be executed in processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
+        (command$@?) drop messagebuffer$ $! s" < this instant command will be executed in processcmdline of stcp.fs" messagebuffer$ $+! messagebuffer$ $@ testdataout
         (command$@?) drop type ." < this instant command will be executed" lineending type
         execute \ do the command
         else \ test for slow command
-          commands-slow search-wordlist false <> if \ command is a slow one ... pid checking and saving needed
-          \ test for running process via pid and only run if nothing else is running
-            pidretrieve swap drop false = if \ no other pid running so execute the command
-              (getpid) s>d udto$ messagebuffer$ $! s"  < this is the pid that will be stored now during processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
-              pidstore
-              (command$@?) drop messagebuffer$ $! s" < this slow command will be executed in processcmdline" messagebuffer$ $+! messagebuffer$ $@ testdataout
-              \ execute command here
-              execute
-              pidfiledelete   \ clean up the pid file that was stored before command to allow other commands to be executed
-            else \ another command running so message that info
-              drop \ remove the xt found above and on stack
-              ." Sandtable is currently busy please wait for it to finish!" lineending type
-            then
+          commands-slow search-wordlist false <> if \ command is a slow one ...
+            (command$@?) drop messagebuffer$ $! s" < this slow command will be executed in processcmdline of stcp.fs" messagebuffer$ $+! messagebuffer$ $@ testdataout
+            \ execute command here
+            execute
+            pidfiledelete   \ clean up the pid file that was stored before command to allow other commands to be executed
           else \ the command is not found
             ." Message recieved but the command is not valid!" lineending type
           then
@@ -257,11 +127,8 @@ variable messagebuffer$
     false
   restore
     dup false <> if
-      dup s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline!" messagebuffer$ $+! messagebuffer$ $@ testdataout
+      dup s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline of stcp.fs!" messagebuffer$ $+! messagebuffer$ $@ testdataout
       s>d dto$ messagebuffer$ $! s" <this error occured!" messagebuffer$ $+! lineending messagebuffer$ $+! messagebuffer$ $@ type
-      pidretrieve true = if
-        (getpid) = if pidfiledelete then  \ clean up pid if it is the same as this running code
-      then
     else
       drop \ remove the extra false on stack
     then

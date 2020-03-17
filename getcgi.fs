@@ -114,9 +114,8 @@ variable messagebuff$
       2drop
       s" Sandtable is currently not running!"  type lineending type
     then
-    bye
     false
   restore
-    s>d dto$ type s" < this error happened !" type lineending type 
+    dup false <> if s>d dto$ type s" < this error happened !" type lineending type else drop then 
   endtry
-   ;
+  bye ;
