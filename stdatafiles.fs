@@ -44,12 +44,12 @@ variable temppath$
   else
     r/w create-file throw
   then ;
-0 value dataoutfid
+0 value datafid
 : testdataout ( caddr u -- ) \ append caddr u string to the testoutfile and put a time stamp with string
-  testoutfile$@ opendata to dataoutfid
-  dataoutfid file-size throw
-  dataoutfid reposition-file throw
-  utime udto$ dataoutfid write-line throw
-  dataoutfid write-line throw
-  dataoutfid flush-file throw
-  dataoutfid close-file throw ;
+  testoutfile$@ opendata to datafid
+  datafid file-size throw
+  datafid reposition-file throw
+  utime udto$ datafid write-line throw
+  datafid write-line throw
+  datafid flush-file throw
+  datafid close-file throw ;

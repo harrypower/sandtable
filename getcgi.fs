@@ -19,11 +19,13 @@
 \ the sandtable cgi will talk to this code to leave a command for sandtable to do
 
 \ Requires:
-\ plain Gforth
+\ stdatafiles.fs
 
 \ Revisions:
 \ 03/15/2020 started coding
 warnings off
+
+require stdatafiles.fs
 
 :noname ; is bootmessage
 
@@ -35,24 +37,12 @@ variable convert$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
-: dataout$@ ( - caddr u )
-  s" /home/debian/sandtable/stcmdin.data" ;
-
-0 value dataoutfid
-: dataout ( caddr u --  ) \ put caddr u string into a file
-  { caddr u }
-  dataout$@ file-status swap drop false = if
-    dataout$@ r/w open-file throw
-    to dataoutfid
-  else
-    dataout$@ r/w create-file throw
-    to dataoutfid
-  then
-  0 s>d dataoutfid resize-file throw
-  caddr u dataoutfid write-file throw
-  dataoutfid flush-file throw
-  dataoutfid close-file throw
-  ;
+: dataout ( caddr u -- ) \ put caddr u string into stcmdinfile$@ file
+  stcmdinfile$@ opendata to datafid
+  0 s>d datafid resize-file throw
+  datafid write-file throw
+  datafid flush-file throw
+  datafid close-file throw ;
 
 : (getstdin)  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
   stdin key?-file true = if
@@ -78,7 +68,8 @@ variable httpinput$
 variable messagebuffer$
 : processhttp ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
   try
-    getstdin 1- httpinput$ $!
+    getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
+    httpinput$ $!
     httpinput$ $@ dataout
     s" < this message was received!" httpinput$ $+! lineending httpinput$ $+!
     \ s" HOME" getenv httpinput$ $+! s" < HOME env " httpinput$ $+! lineending httpinput$ $+!
