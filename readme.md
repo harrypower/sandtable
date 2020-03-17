@@ -164,7 +164,7 @@ AddHandler cgi-script .cgi
 </Directory>
 ```
 
-This makes the `/usr/lib/cgi-bin/` directory the place to put cgi code and this code should have an extention of .cgi and the privileges on these codes should be changed to 755 or higher!
+This makes the `/usr/lib/cgi-bin/` directory the place to put cgi code and this code should have an extention of .cgi and the privileges on these codes should be changed to 777!
 Now the `.html` files and the `index.html` file can be placed in this directory `/var/www/html/`.
 So basically these two directory's are the places to put stuff to be accessed remotely on the network.
 
@@ -173,7 +173,7 @@ So basically these two directory's are the places to put stuff to be accessed re
 sudo service apache2 restart
 ```
 
-Gforth script can be in a simple file that has .cgi extension with a privilage of 755.  The file needs the following in its first line:
+Gforth script can be in a simple file that has .cgi extension with a privilage of 777.  The file needs the following in its first line:
 
 ```
 #! /usr/local/bin/gforth-arm
