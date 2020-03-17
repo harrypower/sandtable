@@ -31,16 +31,9 @@ warnings off
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
-require stdatafiles.fs
 
 :noname ; is bootmessage
 
-0 value dataoutfid
-0 value lastoutfid
-0 value calibratefid
-0 value pidfid
-100 value stdinwaittime
-variable httpinput$
 variable command$
 \ error constants
 s" no terminator found in stdin!" exception constant noterm
@@ -53,38 +46,7 @@ variable convert$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
-\ ******** this needs to be rewriten to the next *** line
-: stlastresultout ( caddr u -- ) \ create last result file using caddr u string
-  datapath? if pathfile$ $! stlastresultfile$@ pathfile$ $+! else nopath throw then
-  pathfile$ $@ file-status swap drop false = if pathfile$ $@ delete-file throw then
-  pathfile$ $@ w/o create-file throw to lastoutfid
-  lastoutfid write-file throw
-  lastoutfid flush-file throw
-  lastoutfid close-file throw ;
-: stlastresultin ( -- caddr u nflag ) \ read last result data and place in caddr u string ... nflag is true if last result is present .. nflag is false if not present
-  datapath? if pathfile$ $! stlastresultfile$@ pathfile$ $+! else nopath throw then
-  pathfile$ $@ file-status swap drop false = if pathfile$ $@ r/o open-file throw to lastoutfid else 0 0 false exit then
-  lastoutfid slurp-fid true
-  lastoutfid close-file throw ;
-: stcalibrationout ( ux uy -- ) \ save the calibration data to file
-  datapath? if pathfile$ $! stcalibration$@ pathfile$ $+! else nopath throw then
-  pathfile$ $@ file-status swap drop false = if pathfile$ $@ delete-file throw then
-  pathfile$ $@ w/o create-file throw to calibratefid
-  swap s>d udto$ calibratefid write-line throw \ write x
-  s>d udto$ calibratefid write-line throw \ write y
-  calibratefid flush-file throw
-  calibratefid close-file throw ;
-: stcalibrationin ( -- ux uy nflag ) \ retreive calibration data from file
-  \ nflag is true if calibration data is present and false if there is no calibartion data
-  0 0 { ux uy }
-  datapath? if pathfile$ $! stcalibration$@ pathfile$ $+! else nopath throw then
-  pathfile$ $@ file-status swap drop false = if pathfile$ $@ r/o open-file throw to calibratefid else 0 0 false exit then
-  pad 20 calibratefid read-line throw drop pad swap s>unumber? if d>s to ux else 0 0 false exit then
-  pad 20 calibratefid read-line throw drop pad swap s>unumber? if d>s to uy else 0 0 false exit then
-  calibratefid close-file throw
-  ux uy true ;
-\ ****************
-
+require stdatafiles.fs
 require sandcommands.fs
 
 variable messagebuffer$

@@ -25,7 +25,6 @@
 \ 03/15/2020 started coding
 warnings off
 
-require stdatafiles.fs
 
 :noname ; is bootmessage
 
@@ -39,6 +38,8 @@ variable convert$
 : lineending ( -- caddr u ) \ return a string to produce a line end in html
   s\" <br>\n" ;
 
+require stdatafiles.fs
+
 : dataout ( caddr u -- ) \ put caddr u string into stcmdinfile$@ file
   stcmdinfile$@ opendata to datafid
   0 s>d datafid resize-file throw
@@ -48,11 +49,9 @@ variable convert$
 : datain ( -- caddr u nflag ) \ get message from sandtable and put that in string caddr u
 \ nflag is true if the message from sandtable is present only
 \ nflag is false if there is no message yet from sandtable
-  stcmdoutfile$@  file-status swap drop false = if
-    stcmdoutfile$@ slurp-file true
-  else
-    0 0 false
-  then ;
+  stcmdoutfile$@  file-status swap drop false =
+  if stcmdoutfile$@ slurp-file true else 0 0 false then ;
+
 : getstatus ( -- caddr u nflag ) \ get the status info from sandtable
 \ nflag is true if status info file exists
 \ nflag is false if no file
@@ -116,6 +115,6 @@ variable messagebuff$
     then
     false
   restore
-    dup false <> if s>d dto$ type s" < this error happened !" type lineending type else drop then 
+    dup false <> if s>d dto$ type s" < this error happened !" type lineending type else drop then
   endtry
   bye ;
