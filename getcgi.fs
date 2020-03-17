@@ -91,9 +91,9 @@ variable messagebuff$
     getstatus true = if
       s" ready" search swap drop swap drop true = if
         messagebuff$ $@ dataout
-        s" The command has been sent to sandtable!" type
+        s" The command has been sent to sandtable!" type lineending type
         50 ms
-        utime 2000 s>d d+ 
+        utime 2000 s>d d+
         begin
           10 ms
           datain true = if
@@ -106,17 +106,17 @@ variable messagebuff$
             then
           then
         until
-      type s" < sandtable response to the received command!" type
+      type s" < sandtable response to the received command!" type lineending type
       else
-        s" Sandtable is currently busy with other commands!" type
+        s" Sandtable is currently busy with other commands!" type lineending type
       then
     else
       2drop
-      s" Sandtable is currently not running!"  type
+      s" Sandtable is currently not running!"  type lineending type
     then
     bye
     false
   restore
-    s>d dto$ type s" < this error happened !" type
+    s>d dto$ type s" < this error happened !" type lineending type 
   endtry
    ;
