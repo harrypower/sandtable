@@ -70,20 +70,22 @@ variable messagebuff$
     s" < this message was received!" type lineending type
     getstatus true = if
       s" ready" search swap drop swap drop true = if
-        messagebuff$ $@ cmddatarecieve
+        messagebuff$ $@ cmddatarecieve!
         s" The command has been sent to sandtable!" type lineending type
         100 ms
         utime cmdtimeout s>d d+ timeout 2!
         begin
           100 ms
-          cmddatasend true = if
+          cmddatasend@ true = if
             2drop true
           else
             2drop utime timeout 2@  d>
           then
         until
-        cmddatasend true = if
+        cmddatasend@ true = if
           type s" < sandtable response to the received command!" type lineending type
+          stcmdoutfile$@ file-status swap drop false =
+          if stcmdoutfile$@ delete-file throw then
         else
           2drop s" Sandtable has not responded to command!"  type lineending type
         then

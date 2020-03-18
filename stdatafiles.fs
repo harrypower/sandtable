@@ -44,14 +44,20 @@ variable temppath$
   r@ write-file throw
   r@ flush-file throw
   r> close-file throw ;
-: cmddatarecieve ( caddr u -- ) \ put caddr u string into stcmdinfile$@ file
+: cmddatarecieve! ( caddr u -- ) \ put caddr u string into stcmdinfile$@ file
   stcmdinfile$@ opendata
   shrink-write-file ;
-: cmddatasend ( -- caddr u nflag ) \ get message from sandtable via stcmoutfile$@ and put that in string caddr u
+: cmddatarecieve@ ( -- caddr u nflag ) \ get caddr u string from stcmdinfile$@ file
+  stcmdinfile$@ file-status swap drop false =
+  if stcmdinfile$@ slurp-file true else 0 0 false then ;
+: cmddatasend@ ( -- caddr u nflag ) \ get message from sandtable via stcmoutfile$@ and put that in string caddr u
 \ nflag is true if the message from sandtable is present only
 \ nflag is false if there is no message yet from sandtable
   stcmdoutfile$@  file-status swap drop false =
   if stcmdoutfile$@ slurp-file true else 0 0 false then ;
+: cmddatasend! ( caddr u -- ) \ put caddr u string into stcmdoutfile$@
+  stcmdoutfile$@ opendata
+  shrink-write-file ;
 : testdataout ( caddr u -- ) \ append caddr u string to the testoutfile and put a time stamp with string
   testoutfile$@ opendata to datafid
   datafid file-size throw

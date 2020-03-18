@@ -64,10 +64,10 @@ variable messagebuffer$
       . ."  < first submessge length" lineending type drop
       (command$@?) drop 2dup swap drop 0 <> if \ command is not null so try and do the command
         2dup commands-instant search-wordlist false <> if \ command is a instant one ...
-        swap drop swap drop \ remove command string  ( xt )
-        (command$@?) drop messagebuffer$ $! s" < this instant command will be executed in processcmdline of stcp.fs" messagebuffer$ $+! messagebuffer$ $@ testdataout
-        (command$@?) drop type ." < this instant command will be executed" lineending type
-        execute \ do the command
+          swap drop swap drop \ remove command string  ( xt )
+          (command$@?) drop messagebuffer$ $! s" < this instant command will be executed in processcmdline of stcp.fs" messagebuffer$ $+! messagebuffer$ $@ testdataout
+          (command$@?) drop type ." < this instant command will be executed" lineending type
+          execute \ do the command
         else \ test for slow command
           commands-slow search-wordlist false <> if \ command is a slow one ...
             (command$@?) drop messagebuffer$ $! s" < this slow command will be executed in processcmdline of stcp.fs" messagebuffer$ $+! messagebuffer$ $@ testdataout
@@ -93,3 +93,28 @@ variable messagebuffer$
       drop \ remove the extra false on stack
     then
   endtry ;
+: startcmdreception ( -- ) \ set up conditions for recieving commands
+  s" starting" putstatus
+  stcmdinfile$@ file-status swap drop false =
+  if stcmdinfile$@ delete-file throw then
+;
+
+: cmdloop ( -- ) \ wait for commands then get them then process them then repeat
+  startcmdreception
+  stcmdoutfile$@ file-status swap drop false =
+  if stcmdoutfile$@ delete-file throw then
+  begin
+      startcmdreception
+      s" ready" putstatus
+      begin
+        cmddatarecieve@ true = if
+          true
+        else
+          2drop false
+        then
+      until
+      2dup messagebuff$ $!
+      s" < this command was recieved and is processing" messagebuff$ $+!
+      messagebuff$ $@ cmddatasend!
+  again
+;
