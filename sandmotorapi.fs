@@ -75,6 +75,11 @@ true value yposition  \ is the real location of y motor .. note if value is true
 200 value calwait
 32 value max-cal-test
 
+: sandtableready? ( -- nflag ) \ nflag is true is configured? is false and homedone? is true
+\ can be used to test if the sandtable is ready to use or used to see if the xposition or yposition values are current 
+  configured? false =
+  homedone? true = and ;
+
 \ ************ configure-stuff needs to be used first and return false to allow other operations with sandtable
 : configure-stuff ( -- nflag ) \ nflag is false if configuration happened other value if some problems
   configured? true = if \ only construct motor objects if they are not currently constructed!
@@ -881,7 +886,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
   endtry ;
 : quickstart ( ux uy -- nflag ) \ start up sandtable assuming the physical table is at ux and uy location
   \ nflag is false if this quickstart is done and sandtable is ready for use
-  \ nflag anyother number if sandtable is not ready fo use 
+  \ nflag anyother number if sandtable is not ready fo use
   0 { ux uy nconfig }
   configure-stuff dup to nconfig false = if
     uy to yposition

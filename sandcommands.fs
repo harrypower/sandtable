@@ -92,50 +92,42 @@ commands-instant set-current
   s" xmin value is " temp$ $!
   xm-min 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ type
   temp$ $@ stlastresultout ;
 
 : ymin ( -- ) \ output ym-min
   s" ymin value is " temp$ $!
   ym-min 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ type
   temp$ $@ stlastresultout ;
 
 : xmax ( -- ) \ output xm-max
   s" xmax value is " temp$ $!
   xm-max 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ type
   temp$ $@ stlastresultout ;
 
 : ymax ( -- ) \ output ym-max
   s" ymax value is " temp$ $!
   ym-max 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ type
   temp$ $@ stlastresultout ;
 
 : xnow ( -- )
-  stcalibrationin swap drop true = if
-    s>d dto$ temp$ $!
+  sandtableready? true = if
+    xposition s>d dto$ temp$ $!
     s"  < x is at this value now!" temp$ $+! lineending temp$ $+!
   else
-    drop
     s" No x value because calibration not done yet!" temp$ $! lineending temp$ $+!
   then
-  temp$ $@ type
   temp$ $@ stlastresultout ;
 
 : ynow ( -- )
-  stcalibrationin rot drop true = if
-    s>d dto$ temp$ $!
+  sandtableready? true = if
+    yposition s>d dto$ temp$ $!
     s"  < y is at this value now!" temp$ $+! lineending temp$ $+!
   else
-    drop
     s" No y value because calibration not done yet!" temp$ $! lineending temp$ $+!
   then
-  temp$ $@ type
   temp$ $@ stlastresultout ;
 
 : status ( -- )
@@ -146,17 +138,18 @@ commands-instant set-current
 
 : lastresult ( -- )  \ output the last result string
   stlastresultin true = if
-    type
+    temp$ $! lineending temp$ $+!
   else
-    s" There was no last result to display!" type lineending type
-  then ;
+    2drop
+    s" There was no last result to display!" temp$ $! lineending temp$ $+!
+  then
+  temp$ $@ stlastresultout ;
 
 
 commands-slow set-current
 \ place slower commands-slow sandtable commands here
-: testcgi ( -- ) \ for testing cgi stuff
-  s" at testcgi" temp$ $! lineending temp$ $+! temp$ $@ testdataout
-  temp$ $@ type
+: testslowcmd ( -- ) \ for testing slow commands
+  s" at testslowcmd" temp$ $! lineending temp$ $+! temp$ $@ testdataout
   temp$ $@ stlastresultout ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
@@ -180,9 +173,7 @@ commands-slow set-current
     s" fastcalibration not completed!" temp$ $+!
     lineending temp$ $+!
   then
-  temp$ $@ type
-  temp$ $@ stlastresultout
-;
+  temp$ $@ stlastresultout ;
 
 : fullcalibration ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
 ;
