@@ -72,13 +72,13 @@ variable messagebuff$
         messagebuff$ $@ cmddatarecieve
         s" The command has been sent to sandtable!" type lineending type
         50 ms
-        utime 2000 s>d d+ timeout 2!
+        utime 20000 s>d d+ timeout 2!
         begin
-          10 ms 
+          10 ms
           cmddatasend true = if
             2drop true
           else
-            2drop timeout 2@ utime d>
+            2drop utime timeout 2@  d>
           then
         until
         cmddatasend true = if
