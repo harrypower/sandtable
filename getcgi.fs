@@ -29,7 +29,7 @@ warnings off
 
 s" no terminator found in stdin!" exception constant noterm
 
-5000000 value cmdtimeout
+5000000 value cmdtimeout \ this is about 5 seconds to wait for message to show up
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
