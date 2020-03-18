@@ -155,15 +155,11 @@ commands-instant set-current
 commands-slow set-current
 \ place slower commands-slow sandtable commands here
 : testcgi ( -- ) \ for testing cgi stuff
-s" at testcgi" temp$ $! lineending temp$ $+! temp$ $@ testdataout
-temp$ $@ type
-temp$ $@ stlastresultout
-;
+  s" at testcgi" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+  temp$ $@ type
+  temp$ $@ stlastresultout ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
-http?cmdline? *http* = if
-then
-http?cmdline? *cmdline* = if
   (find-variable-pair$)
   s" xquick" (variable-pair-value@)
   s" yquick" (variable-pair-value@)
@@ -186,7 +182,7 @@ http?cmdline? *cmdline* = if
   then
   temp$ $@ type
   temp$ $@ stlastresultout
-then ;
+;
 
 : fullcalibration ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
 ;

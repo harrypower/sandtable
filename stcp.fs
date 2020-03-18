@@ -51,10 +51,9 @@ require sandcommands.fs
 
 variable messagebuffer$
 
-: processcmdline ( "ccc" -- ) \ this is called from the command line at time of this code being executed
-\ this word will take the command from the stdin and process it !
+: processcmdline ( caddr u  -- ) \ caddr u is the string containing the command and possible variables to be processed
+\ The command is parsed and other variables parsed then executed if it is a valid command
   try
-    getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
     command$ $!
     command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline in stcp.fs" messagebuffer$ $+! messagebuffer$ $@ testdataout
     (parse-command&submessages)
