@@ -92,5 +92,4 @@ variable messagebuffer$
     else
       drop \ remove the extra false on stack
     then
-    bye
   endtry ;
