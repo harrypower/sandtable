@@ -113,8 +113,8 @@ variable messagebuffer$
           2drop false
         then
       until
-      2dup messagebuff$ $!
-      s" < this command was recieved and is processing" messagebuff$ $+!
-      messagebuff$ $@ cmddatasend!
+      2dup messagebuffer$ $!
+      s" < this command was recieved and is processing" messagebuffer$ $+!
+      messagebuffer$ $@ cmddatasend!
   again
 ;
