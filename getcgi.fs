@@ -29,6 +29,7 @@ warnings off
 
 s" no terminator found in stdin!" exception constant noterm
 
+50000 value cmdtimeout
 variable convert$
 : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
     <<# #s  #> #>> convert$ $! convert$ $@ ;
@@ -72,7 +73,7 @@ variable messagebuff$
         messagebuff$ $@ cmddatarecieve
         s" The command has been sent to sandtable!" type lineending type
         50 ms
-        utime 20000 s>d d+ timeout 2!
+        utime cmdtimeout s>d d+ timeout 2!
         begin
           10 ms
           cmddatasend true = if
