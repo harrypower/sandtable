@@ -73,7 +73,6 @@ variable messagebuffer$
             (command$@?) drop messagebuffer$ $! s" < this slow command will be executed in processcmdline of stcp.fs" messagebuffer$ $+! messagebuffer$ $@ testdataout
             \ execute command here
             execute
-            pidfiledelete   \ clean up the pid file that was stored before command to allow other commands to be executed
           else \ the command is not found
             ." Message recieved but the command is not valid!" lineending type
           then
