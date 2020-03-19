@@ -7,6 +7,13 @@ s" bbbdatapath or pcdatapath do not exist cannot proceed!" exception constant no
   s" /home/pks/sandtable/" ;
 : bbbdatapath$@ ( -- caddr u ) \ return path string to output data for BBB sandtable
   s" /home/debian/sandtable/" ;
+: pc?bbb? ( -- nflag ) \ test if code running on pc or bbb ... nflag is true if on bbb ... nflag is false if on pc
+  \ nflag is 1 if niether pc or bbb test works out
+  pcdatapath$@ file-status swap drop false = if
+    false
+  else
+    bbbdatapath$@ file-status swap drop false = if true else 1 then
+  then ;
 : fullpath$@ ( -- caddr u ) \ return either pc or bbb path
   0 0 { caddr u }
   pcdatapath$@ file-status swap drop false = if
@@ -38,6 +45,28 @@ variable temppath$
   else
     r/w create-file throw
   then ;
+variable tmpname$
+: statuschgowner ( -- ) \ make status file debian:debian
+  0 { ntest }
+  ststatusfile$@ file-status swap drop false = if
+    pc?bbb? to ntest
+    ntest true = if s" sudo chown debian:debian " tmpname$ $! then
+    ntest false = if s" sudo chown pks:pks " tmpname$ $! then
+    ntest 1 = if nopath throw then
+    ststatusfile$@ tmpname$ $+!
+    tmpname$ $@ system
+    \ sudo chown debian:debian filenamepath.data
+  then ;
+: stcmdoutchgowner ( -- ) \ make stcmdout file debian:debian
+  0 { ntest }
+  stcmdoutfile$@ file-status swap drop false = if
+     pc?bbb? to ntest
+     ntest true = if s" sudo chown debian:debian " tmpname$ $! then
+     ntest false = if s" sudo chown pks:pks " tmpname$ $! then
+     ntest 1 = if nopath throw then
+     stcmdoutfile$@ tmpname$ $+!
+     tmpname$ $@ system
+  then ;
 0 value datafid
 : shrink-write-file ( caddr u ufid -- ) \ ufid should be valid file that will get resized to 0 size and then caddr u string placed in it and then file is closed
   >r 0 s>d r@ resize-file throw
@@ -57,7 +86,8 @@ variable temppath$
   if stcmdoutfile$@ slurp-file true else 0 0 false then ;
 : cmddatasend! ( caddr u -- ) \ put caddr u string into stcmdoutfile$@
   stcmdoutfile$@ opendata
-  shrink-write-file ;
+  shrink-write-file
+  stcmdoutchgowner ;
 : testdataout ( caddr u -- ) \ append caddr u string to the testoutfile and put a time stamp with string
   testoutfile$@ opendata to datafid
   datafid file-size throw
@@ -94,4 +124,5 @@ variable temppath$
   if ststatusfile$@ slurp-file true else 0 0 false then ;
 : putstatus ( caddr u -- ) \ put the status message caddr u string out to ststatusfile$@
   ststatusfile$@ opendata
-  shrink-write-file ;
+  shrink-write-file
+  statuschgowner ;

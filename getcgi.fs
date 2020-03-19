@@ -84,8 +84,6 @@ variable messagebuff$
         until
         cmddatasend@ true = if
           type s" < sandtable response to the received command!" type lineending type
-          stcmdoutfile$@ file-status swap drop false =
-          if stcmdoutfile$@ delete-file throw then
         else
           2drop s" Sandtable has not responded to command!"  type lineending type
         then
