@@ -107,14 +107,22 @@ variable messagebuffer$
       startcmdreception
       s" ready" putstatus
       begin
+        100 ms
         cmddatarecieve@ true = if
           true
         else
           2drop false
         then
       until
-      2dup messagebuffer$ $!
-      s" < this command was recieved and is processing" messagebuffer$ $+!
-      messagebuffer$ $@ cmddatasend!
+      2drop
+      200 ms
+      cmddatarecieve@ true = if
+        messagebuffer$ $!
+        s" < this command was recieved and is processing" messagebuffer$ $+!
+        messagebuffer$ $@ cmddatasend!
+        messagebuffer$ $@ testdataout
+      else
+        2drop
+      then
   again
 ;

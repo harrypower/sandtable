@@ -82,6 +82,7 @@ variable messagebuff$
             2drop utime timeout 2@  d>
           then
         until
+        200 ms
         cmddatasend@ true = if
           type s" < sandtable response to the received command!" type lineending type
         else
