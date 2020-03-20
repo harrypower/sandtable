@@ -69,7 +69,9 @@ variable messagebuff$
     messagebuff$ $@ type
     s" < this message was received!" type lineending type
     getstatus true = if
-      s" ready" search swap drop swap drop true = if
+      s" ready" search swap drop swap drop true = \ status file is present and contains ready
+      cmddatarecieve@ swap drop swap drop false = and \ and cmd data recieve file is not present currently 
+      if
         messagebuff$ $@ cmddatarecieve!
         s" The command has been sent to sandtable!" type lineending type
         100 ms
@@ -82,7 +84,7 @@ variable messagebuff$
             2drop utime timeout 2@  d>
           then
         until
-        200 ms
+        300 ms
         cmddatasend@ true = if
           type s" < sandtable response to the received command!" type lineending type
         else
