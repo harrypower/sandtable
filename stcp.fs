@@ -96,8 +96,11 @@ variable messagebuffer$
 : startcmdreception ( -- ) \ set up conditions for recieving commands
   s" starting" putstatus
   stcmdinfile$@ file-status swap drop false =
-  if stcmdinfile$@ delete-file throw then
-;
+  if stcmdinfile$@ delete-file throw then ;
+: busycmdstatus ( -- ) \ set status to busy
+  s" busy" putstatus ;
+: readycmdstatus ( -- ) \ set status to ready to recieve
+  s" ready" putstatus ;
 
 : cmdloop ( -- ) \ wait for commands then get them then process them then repeat
   startcmdreception
@@ -105,10 +108,11 @@ variable messagebuffer$
   if stcmdoutfile$@ delete-file throw then
   begin
       startcmdreception
-      s" ready" putstatus
+      readycmdstatus
       begin
         100 ms
         cmddatarecieve@ true = if
+          busycmdstatus
           true
         else
           2drop false
@@ -121,6 +125,9 @@ variable messagebuffer$
         s" < this command was recieved and is processing" messagebuffer$ $+!
         messagebuffer$ $@ cmddatasend!
         messagebuffer$ $@ testdataout
+        3000 ms \ pause to allow cgi to get the info
+        stcmdoutfile$@ file-status swap drop false =
+        if stcmdoutfile$@ delete-file throw then \ now remove the message to restart the loop 
       else
         2drop
       then
