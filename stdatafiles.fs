@@ -104,7 +104,7 @@ variable tmpname$
   shrink-write-file ;
 : stlastresultin ( -- caddr u nflag ) \ read last result data and place in caddr u string ... nflag is true if last result is present .. nflag is false if not present
   stlastresultfile$@ file-status swap drop false =
-    if stlastresultfile$@ slurp-file else 0 0 false then ;
+  if stlastresultfile$@ slurp-file else 0 0 false then ;
 : stcalibrationout ( ux uy -- ) \ save the calibration data to file
   stcalfile$@ opendata to datafid
   0 s>d datafid resize-file throw

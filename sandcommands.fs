@@ -152,7 +152,7 @@ commands-instant set-current
     2drop
     s" There was no last result to display!" temp$ $! lineending temp$ $+!
   then
-  temp$ $@ stlastresultout
+\  temp$ $@ stlastresultout
   temp$ $@ cmddatasend! ;
 
 
