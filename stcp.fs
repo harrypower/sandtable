@@ -88,7 +88,7 @@ variable messagebuffer$
   restore
     dup false <> if
       dup s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline of stcp.fs!" messagebuffer$ $+! messagebuffer$ $@ testdataout
-      s>d dto$ messagebuffer$ $! s" <this error occured!" messagebuffer$ $+! lineending messagebuffer$ $+! messagebuffer$ $@ type
+      s>d dto$ messagebuffer$ $! s" <this error occured in processcmdline of stcp.fs!" messagebuffer$ $+! lineending messagebuffer$ $+! messagebuffer$ $@ type
     else
       drop \ remove the extra false on stack
     then
@@ -104,8 +104,7 @@ variable messagebuffer$
 
 : cmdloop ( -- ) \ wait for commands then get them then process them then repeat
   startcmdreception
-  stcmdoutfile$@ file-status swap drop false =
-  if stcmdoutfile$@ delete-file throw then
+  cmddatasenddelete
   begin
       startcmdreception
       readycmdstatus
@@ -126,8 +125,7 @@ variable messagebuffer$
         messagebuffer$ $@ cmddatasend!
         messagebuffer$ $@ testdataout
         3000 ms \ pause to allow cgi to get the info
-        stcmdoutfile$@ file-status swap drop false =
-        if stcmdoutfile$@ delete-file throw then \ now remove the message to restart the loop 
+        cmddatasenddelete
       else
         2drop
       then
