@@ -88,9 +88,9 @@ variable tmpname$
   stcmdoutfile$@ opendata
   shrink-write-file
   stcmdoutchgowner ;
-: cmddatasenddelete ( -- ) \ delete stcmdoutfile 
+: cmddatasenddelete ( -- ) \ delete stcmdoutfile
   stcmdoutfile$@ file-status swap drop false =
-  if stcmdoutfile$@ delete-file throw then \ delete file if it is present ;
+  if stcmdoutfile$@ delete-file throw then ; \ delete file if it is present.
 : testdataout ( caddr u -- ) \ append caddr u string to the testoutfile and put a time stamp with string
   testoutfile$@ opendata to datafid
   datafid file-size throw
