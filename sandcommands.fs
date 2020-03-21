@@ -141,7 +141,7 @@ commands-instant set-current
 ;
 
 : stopsandserver ( -- )
-  s" stopsandserver command not impemented yet!"  temp$ lineending temp$ $+!
+  s" stopsandserver command not impemented yet!"  temp$ $! lineending temp$ $+!
   temp$ $@ stlastresultout
   temp$ $@ cmddatasend! ;
 
