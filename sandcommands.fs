@@ -92,25 +92,29 @@ commands-instant set-current
   s" xmin value is " temp$ $!
   xm-min 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ stlastresultout ;
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
 
 : ymin ( -- ) \ output ym-min
   s" ymin value is " temp$ $!
   ym-min 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ stlastresultout ;
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
 
 : xmax ( -- ) \ output xm-max
   s" xmax value is " temp$ $!
   xm-max 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ stlastresultout ;
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
 
 : ymax ( -- ) \ output ym-max
   s" ymax value is " temp$ $!
   ym-max 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ stlastresultout ;
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
 
 : xnow ( -- )
   sandtableready? true = if
@@ -119,7 +123,8 @@ commands-instant set-current
   else
     s" No x value because calibration not done yet!" temp$ $! lineending temp$ $+!
   then
-  temp$ $@ stlastresultout ;
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
 
 : ynow ( -- )
   sandtableready? true = if
@@ -128,13 +133,17 @@ commands-instant set-current
   else
     s" No y value because calibration not done yet!" temp$ $! lineending temp$ $+!
   then
-  temp$ $@ stlastresultout ;
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
 
 : status ( -- )
+
 ;
 
 : stopsandserver ( -- )
-  ;
+  s" stopsandserver command not impemented yet!"  temp$ lineending temp$ $+!
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
 
 : lastresult ( -- )  \ output the last result string
   stlastresultin true = if
@@ -143,14 +152,17 @@ commands-instant set-current
     2drop
     s" There was no last result to display!" temp$ $! lineending temp$ $+!
   then
-  temp$ $@ stlastresultout ;
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
+
 
 
 commands-slow set-current
 \ place slower commands-slow sandtable commands here
 : testslowcmd ( -- ) \ for testing slow commands
   s" at testslowcmd" temp$ $! lineending temp$ $+! temp$ $@ testdataout
-  temp$ $@ stlastresultout ;
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
   (find-variable-pair$)
@@ -173,7 +185,8 @@ commands-slow set-current
     s" fastcalibration not completed!" temp$ $+!
     lineending temp$ $+!
   then
-  temp$ $@ stlastresultout ;
+  temp$ $@ stlastresultout
+  temp$ $@ cmddatasend! ;
 
 : fullcalibration ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
 ;

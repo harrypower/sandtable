@@ -51,9 +51,10 @@ require sandcommands.fs
 
 variable messagebuffer$
 
-: processcmdline ( caddr u  -- ) \ caddr u is the string containing the command and possible variables to be processed
+: processcmd ( -- ) \ caddr u is the string containing the command and possible variables to be processed
 \ The command is parsed and other variables parsed then executed if it is a valid command
   try
+    cmddatarecieve@ drop
     command$ $!
     command$ $@ messagebuffer$ $! s" < this was received at entry to processcmdline in stcp.fs" messagebuffer$ $+! messagebuffer$ $@ testdataout
     (parse-command&submessages)
@@ -74,21 +75,29 @@ variable messagebuffer$
             \ execute command here
             execute
           else \ the command is not found
-            ." Message recieved but the command is not valid!" lineending type
+            s" Message recieved but the command is not valid!" messagebuffer$ $! lineending messagebuffer$ $+! messagebuffer$ $@ type
+            messagebuffer$ $@ stlastresultout
+            messagebuffer$ $@ cmddatasend!
           then
         then
       else \ command is a null string
         2drop \ removed null command string
-        ." Message recieved but the command is a null string!" lineending type
+        s" Message recieved but the command is a null string!" messagebuffer$ $! lineending messagebuffer$ $+! messagebuffer$ $@ type
+        messagebuffer$ $@ stlastresultout
+        messagebuffer$ $@ cmddatasend!
       then
     else
-      ." Message received but there was no command present in it!"  lineending type
+      ." Message received but there was no command present in it!" messagebuffer$ $! lineending messagebuffer$ $+! messagebuffer$ $@ type
+      messagebuffer$ $@ stlastresultout
+      messagebuffer$ $@ cmddatasend!
     then
     false
   restore
     dup false <> if
-      dup s>d dto$ messagebuffer$ $! s" <this is error on output of processcmdline of stcp.fs!" messagebuffer$ $+! messagebuffer$ $@ testdataout
-      s>d dto$ messagebuffer$ $! s" <this error occured in processcmdline of stcp.fs!" messagebuffer$ $+! lineending messagebuffer$ $+! messagebuffer$ $@ type
+      s>d dto$ messagebuffer$ $! s" <this is error in processcmdline of stcp.fs!" messagebuffer$ $+! messagebuffer$ $@ testdataout
+      lineending messagebuffer$ $+! messagebuffer$ $@ type
+      messagebuffer$ $@ stlastresultout
+      messagebuffer$ $@ cmddatasend!          
     else
       drop \ remove the extra false on stack
     then
@@ -119,15 +128,16 @@ variable messagebuffer$
       until
       2drop
       200 ms
-      cmddatarecieve@ true = if
-        messagebuffer$ $!
-        s" < this command was recieved and is processing" messagebuffer$ $+!
-        messagebuffer$ $@ cmddatasend!
-        messagebuffer$ $@ testdataout
+\      cmddatarecieve@ true = if
+      \  messagebuffer$ $!
+      \  s" < this command was recieved and is processing" messagebuffer$ $+!
+      \  messagebuffer$ $@ cmddatasend!
+      \  messagebuffer$ $@ testdataout
+        processcmd
         3000 ms \ pause to allow cgi to get the info
         cmddatasenddelete
-      else
-        2drop
-      then
+\      else
+\        2drop
+\      then
   again
 ;
