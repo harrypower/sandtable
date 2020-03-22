@@ -191,8 +191,35 @@ commands-slow set-current
 : fullcalibration ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
 ;
 
-: gotoxy ( -- ) \ perform the movetoxy word from
-;
+: gotoxy ( -- ) \ perform the movetoxy word on sandtable
+  (find-variable-pair$)
+  s" x" (variable-pair-value@)
+  s" y" (variable-pair-value@)
+  rot and true = if
+    s" Received x and y values.... performing gotoxy now!" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+    temp$ $@ stlastresultout
+    temp$ $@ cmddatasend!
+    movetoxy
+    case
+      200 of s" Gotoxy performed correctly without any errors!" temp$ $+! lineending temp$ $+!
+        temp$ $@ testdataout
+        temp$ $@ stlastresultout
+      endof
+      201 of  s" X or Y values are not on the sandtable so sandtable did nothing!" temp$ $+! lineending temp$ $+!
+        temp$ $@ testdataout
+        temp$ $@ stlastresultout
+      endof
+      202 of s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+! lineending temp$ $+!
+        temp$ $@ testdataout
+        temp$ $@ stlastresultout
+      endof
+    endcase
+  else
+    2drop
+    s" Did not receive x or y value with gotoxy command! Sandtable will stay put for now!" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+    temp$ $@ stlastresultout
+    temp$ $@ cmddatasend!
+  then ;
 
 
 set-current set-order
