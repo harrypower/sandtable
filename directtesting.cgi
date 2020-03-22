@@ -24,6 +24,7 @@
 \ Revisions:
 \ 1/26/2019 changes from fifo to socket coding started
 \ 2/1/2019 using curl to send message to server
+\ 3/22/2020 passing data to gforth code via stdout and getting stdin for return message
 
 warnings off
 :noname ; is bootmessage

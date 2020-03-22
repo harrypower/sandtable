@@ -79,6 +79,11 @@ strings heap-new constant junk-buffer$
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (find-variable-pair$) word so they should be in groups of two
   nvalue nflag ;
 
+: lastresultdatasend ( caddr u -- ) \ takes string caddr u and sends it to stlastresultout and cmddatasend!
+  2dup stlastresultout cmddatasend! ;
+: lastresulttestsend ( caddr u -- ) \ send string caddr u to stlastresultout and testdataout
+  2dup stlastresultout testdataout ;
+
 get-order get-current
 
 wordlist constant commands-slow
@@ -92,29 +97,25 @@ commands-instant set-current
   s" xmin value is " temp$ $!
   xm-min 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ stlastresultout
-  temp$ $@ cmddatasend! ;
+  temp$ $@ lastresultdatasend ;
 
 : ymin ( -- ) \ output ym-min
   s" ymin value is " temp$ $!
   ym-min 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ stlastresultout
-  temp$ $@ cmddatasend! ;
+  temp$ $@ lastresultdatasend ;
 
 : xmax ( -- ) \ output xm-max
   s" xmax value is " temp$ $!
   xm-max 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ stlastresultout
-  temp$ $@ cmddatasend! ;
+  temp$ $@ lastresultdatasend ;
 
 : ymax ( -- ) \ output ym-max
   s" ymax value is " temp$ $!
   ym-max 0 udto$ temp$ $+!
   lineending temp$ $+!
-  temp$ $@ stlastresultout
-  temp$ $@ cmddatasend! ;
+  temp$ $@ lastresultdatasend ;
 
 : xnow ( -- )
   sandtableready? true = if
@@ -123,8 +124,7 @@ commands-instant set-current
   else
     s" No x value because calibration not done yet!" temp$ $! lineending temp$ $+!
   then
-  temp$ $@ stlastresultout
-  temp$ $@ cmddatasend! ;
+  temp$ $@ lastresultdatasend ;
 
 : ynow ( -- )
   sandtableready? true = if
@@ -133,8 +133,7 @@ commands-instant set-current
   else
     s" No y value because calibration not done yet!" temp$ $! lineending temp$ $+!
   then
-  temp$ $@ stlastresultout
-  temp$ $@ cmddatasend! ;
+  temp$ $@ lastresultdatasend ;
 
 : status ( -- )
 
@@ -142,8 +141,7 @@ commands-instant set-current
 
 : stopsandserver ( -- )
   s" stopsandserver command not impemented yet!"  temp$ $! lineending temp$ $+!
-  temp$ $@ stlastresultout
-  temp$ $@ cmddatasend! ;
+  temp$ $@ lastresultdatasend ;
 
 : lastresult ( -- )  \ output the last result string
   stlastresultin true = if
@@ -152,7 +150,6 @@ commands-instant set-current
     2drop
     s" There was no last result to display!" temp$ $! lineending temp$ $+!
   then
-\  temp$ $@ stlastresultout
   temp$ $@ cmddatasend! ;
 
 
@@ -161,8 +158,7 @@ commands-slow set-current
 \ place slower commands-slow sandtable commands here
 : testslowcmd ( -- ) \ for testing slow commands
   s" at testslowcmd" temp$ $! lineending temp$ $+! temp$ $@ testdataout
-  temp$ $@ stlastresultout
-  temp$ $@ cmddatasend! ;
+  temp$ $@ lastresultdatasend ;
 
 : fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
   (find-variable-pair$)
@@ -185,8 +181,7 @@ commands-slow set-current
     s" fastcalibration not completed!" temp$ $+!
     lineending temp$ $+!
   then
-  temp$ $@ stlastresultout
-  temp$ $@ cmddatasend! ;
+  temp$ $@ lastresultdatasend ;
 
 : fullcalibration ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
 ;
@@ -196,29 +191,25 @@ commands-slow set-current
   s" x" (variable-pair-value@)
   s" y" (variable-pair-value@)
   rot and true = if
-    s" Received x and y values.... performing gotoxy now!" temp$ $! lineending temp$ $+! temp$ $@ testdataout
-    temp$ $@ stlastresultout
-    temp$ $@ cmddatasend!
+    s" Received x and y values.... performing gotoxy now!" temp$ $! lineending temp$ $+!
+    temp$ $@ testdataout
+    temp$ $@ lastresultdatasend
     movetoxy
     case
       200 of s" Gotoxy performed correctly without any errors!" temp$ $+! lineending temp$ $+!
-        temp$ $@ testdataout
-        temp$ $@ stlastresultout
+        temp$ $@ lastresulttestsend
       endof
       201 of  s" X or Y values are not on the sandtable so sandtable did nothing!" temp$ $+! lineending temp$ $+!
-        temp$ $@ testdataout
-        temp$ $@ stlastresultout
+        temp$ $@ lastresulttestsend
       endof
       202 of s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+! lineending temp$ $+!
-        temp$ $@ testdataout
-        temp$ $@ stlastresultout
+        temp$ $@ lastresulttestsend
       endof
     endcase
   else
     2drop
     s" Did not receive x or y value with gotoxy command! Sandtable will stay put for now!" temp$ $! lineending temp$ $+! temp$ $@ testdataout
-    temp$ $@ stlastresultout
-    temp$ $@ cmddatasend!
+    temp$ $@ lastresultdatasend
   then ;
 
 

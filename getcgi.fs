@@ -69,12 +69,9 @@ variable messagebuff$
     messagebuff$ $@ type
     s" < this message was received!" type lineending type
     getstatus true = if
-\      ." at ready test" cr
       s" ready" search swap drop swap drop true = \ status file is present and contains ready
       cmddatarecieve@ swap drop swap drop false = and \ and cmd data recieve file is not present currently
-\      .s ." < stack of ready test!" cr
       if
-\        ." before cmddatarecieve!" cr 
         messagebuff$ $@ cmddatarecieve!
         s" The command has been sent to sandtable!" type lineending type
         100 ms

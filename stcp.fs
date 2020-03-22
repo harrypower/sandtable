@@ -97,7 +97,7 @@ variable messagebuffer$
       s>d dto$ messagebuffer$ $! s" <this is error in processcmdline of stcp.fs!" messagebuffer$ $+! messagebuffer$ $@ testdataout
       lineending messagebuffer$ $+! messagebuffer$ $@ type
       messagebuffer$ $@ stlastresultout
-      messagebuffer$ $@ cmddatasend!          
+      messagebuffer$ $@ cmddatasend!
     else
       drop \ remove the extra false on stack
     then
@@ -128,16 +128,8 @@ variable messagebuffer$
       until
       2drop
       200 ms
-\      cmddatarecieve@ true = if
-      \  messagebuffer$ $!
-      \  s" < this command was recieved and is processing" messagebuffer$ $+!
-      \  messagebuffer$ $@ cmddatasend!
-      \  messagebuffer$ $@ testdataout
-        processcmd
-        3000 ms \ pause to allow cgi to get the info
-        cmddatasenddelete
-\      else
-\        2drop
-\      then
+      processcmd
+      3000 ms \ pause to allow cgi to get the info
+      cmddatasenddelete
   again
 ;
