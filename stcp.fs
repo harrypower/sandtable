@@ -129,7 +129,7 @@ variable messagebuffer$
       2drop
       200 ms
       processcmd
-      3000 ms \ pause to allow cgi to get the info
+      5000 ms \ pause to allow cgi to get the info
       cmddatasenddelete
   again
 ;
