@@ -87,7 +87,7 @@ variable messagebuffer$
         messagebuffer$ $@ cmddatasend!
       then
     else
-      ." Message received but there was no command present in it!" messagebuffer$ $! lineending messagebuffer$ $+! messagebuffer$ $@ type
+      s" Message received but there was no command present in it!" messagebuffer$ $! lineending messagebuffer$ $+! messagebuffer$ $@ type
       messagebuffer$ $@ stlastresultout
       messagebuffer$ $@ cmddatasend!
     then
