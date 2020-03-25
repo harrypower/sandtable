@@ -195,7 +195,21 @@ commands-slow set-current
   temp$ $@ lastresultdatasend ;
 
 : fullcalibration ( -- ) \ perform the configure-stuff and dohome words from sandtableapi.fs
-;
+  s" Sandtable will be configured now please observer the table for correct operation!"  temp$ $! lineending temp$ $+!
+  s" Note this may take several minutes!" temp$ $+! lineending temp$ $+!
+  temp$ $@ lastresultdatasend
+  configure-stuff false = if
+    s" Configuration done and ok" temp$ $! lineending temp$ $+!
+    dohome true = if
+      0 0 stcalibrationout 
+      s" Home finding routine dohome finished and sandtable is now ready to use!" temp$ $+! lineending temp$ $+!
+    else
+      s" dohome home finding routine failed for some reason!" temp$ $+! lineending temp$ $+!
+    then
+  else
+    s" Configuration failed for some reason during fullcalibration!" temp$ $!
+  then
+  temp$ $@ lastresultdatasend ;
 
 : gotoxy ( -- ) \ perform the movetoxy word on sandtable
   (find-variable-pair$)
