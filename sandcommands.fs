@@ -201,7 +201,7 @@ commands-slow set-current
   configure-stuff false = if
     s" Configuration done and ok" temp$ $! lineending temp$ $+!
     dohome true = if
-      0 0 stcalibrationout 
+      0 0 stcalibrationout
       s" Home finding routine dohome finished and sandtable is now ready to use!" temp$ $+! lineending temp$ $+!
     else
       s" dohome home finding routine failed for some reason!" temp$ $+! lineending temp$ $+!
@@ -222,20 +222,37 @@ commands-slow set-current
     movetoxy
     case
       200 of s" Gotoxy performed correctly without any errors!" temp$ $+! lineending temp$ $+!
-        temp$ $@ lastresulttestsend
       endof
       201 of  s" X or Y values are not on the sandtable so sandtable did nothing!" temp$ $+! lineending temp$ $+!
-        temp$ $@ lastresulttestsend
       endof
       202 of s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+! lineending temp$ $+!
-        temp$ $@ lastresulttestsend
       endof
     endcase
   else
     2drop
     s" Did not receive x or y value with gotoxy command! Sandtable will stay put for now!" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+  then
+  temp$ $@ lastresultdatasend ;
+
+: gotox ( -- ) \ perform the movetox word on sandtable
+  (find-variable-pair$)
+  s" x" (variable-pair-value@)
+  true = if
+    s" Recieved the x value and will now move the sandtable to the absolute x location now!" temp$ $! lineending temp$ $+!
     temp$ $@ lastresultdatasend
-  then ;
-
-
+    movetox
+    case
+      200 of s" Gotox performed correctly without any errors!" temp$ $+! lineending temp$ $+!
+      endof
+      201 of  s" X value not on the sandtable so sandtable did nothing!" temp$ $+! lineending temp$ $+!
+      endof
+      202 of s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+! lineending temp$ $+!
+      endof
+    endcase
+  else
+    drop
+    s" Did not receive x value so sandtable will stay put for now!" temp$ $! lineending temp$ $+!
+  then
+  temp$ $@ lastresultdatasend ;
+  
 set-current set-order
