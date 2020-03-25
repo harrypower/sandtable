@@ -223,10 +223,10 @@ crontab -e
 ```
 * Now place the following line at the bottom of the list
 ```
-@reboot sleep 30 /home/debian/sandtable/start_stcp.sh
+@reboot /home/debian/sandtable/start_stcp.sh &
 ```
 * After saving this cron job see if all set up ok
 ```
 crontab -l
 ```
-* This should list the file you just edited and have the line you added at the bottom ... If it is there then all good. Now you can reboot the machine and see the standtable process running! 
+* This should list the file you just edited and have the line you added at the bottom ... If it is there then all good. Now you can reboot the machine and see the standtable process running!

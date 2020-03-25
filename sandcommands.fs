@@ -136,13 +136,20 @@ commands-instant set-current
   temp$ $@ lastresultdatasend ;
 
 : status ( -- )
+  sandtableready? true = if
+    xposition S>d dto$ temp$ $!
+    s" < x current location!" temp$ $+! lineending temp$ $+!
+    yposition s>d dto$ temp$ $+!
+    s" < y current location!" temp$ $+! lineending temp$ $+!
+    s" Sandtable is calibrated and is ready to receive commands!" temp$ $+! lineending temp$ $+!
+  else
+    s" Sandtable is not calibrated yet but is ready to receive commands!" temp$ $+! lineending temp$ $+!
+  then
+  temp$ $@ lastresultdatasend ;
 
-;
-
-: stopsandserver ( -- ) \ this will simply stop the this sand command processing service
+: stopsandserver ( -- ) \ this will simply stop this sand command processing service
   s" the sandtable command processor will now be terminated!"  temp$ $! lineending temp$ $+!
   temp$ $@ lastresultdatasend
-  temp$ $@ cmddatasend!
   5000 ms \ pause to allow cgi to get the info
   cmddatasenddelete
   bye ;
