@@ -210,6 +210,10 @@ commands-slow set-current
     s" Configuration failed for some reason during fullcalibration!" temp$ $!
   then
   temp$ $@ lastresultdatasend ;
+  
+: drawaline ( -- ) \ perform the drawline word on sandtable
+  s" at drawaline word" lastresultdatasend
+;
 
 : gotoxy ( -- ) \ perform the movetoxy word on sandtable
   (find-variable-pair$)
