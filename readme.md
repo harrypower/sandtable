@@ -214,3 +214,19 @@ sudo visudo -c
 * There should be no errors at this stage ... fix them if this last step says there are errors.
 * Note this adds two things to the sudoers list and adds some security issues so be aware this is not secure in any definition but it works for the intended purpose here!
 * Also note these changes just done do not take affect untill the system is rebooted again so do that now!
+
+## 9. Set up a cron job for sandtable server starting
+* Use the root crontab -e command as follows
+```
+sudo su
+crontab -e
+```
+* Now place the following line at the bottom of the list
+```
+@reboot sleep 30 /home/debian/sandtable/start_stcp.sh
+```
+* After saving this cron job see if all set up ok
+```
+crontab -l
+```
+* This should list the file you just edited and have the line you added at the bottom ... If it is there then all good. Now you can reboot the machine and see the standtable process running! 
