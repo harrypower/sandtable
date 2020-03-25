@@ -238,7 +238,7 @@ commands-slow set-current
   (find-variable-pair$)
   s" x" (variable-pair-value@)
   true = if
-    s" Recieved the x value and will now move the sandtable to the absolute x location now!" temp$ $! lineending temp$ $+!
+    s" Recieved the X value and will now move the sandtable to the absolute X location now!" temp$ $! lineending temp$ $+!
     temp$ $@ lastresultdatasend
     movetox
     case
@@ -254,5 +254,26 @@ commands-slow set-current
     s" Did not receive x value so sandtable will stay put for now!" temp$ $! lineending temp$ $+!
   then
   temp$ $@ lastresultdatasend ;
-  
+
+: gotoy ( -- ) \ perform the movetoy word on sandtable
+  (find-variable-pair$)
+  s" y" (variable-pair-value@)
+  true = if
+    s" Recieved the y value and will now move the sandtable to the absolute Y location now!" temp$ $! lineending temp$ $+!
+    temp$ $@ lastresultdatasend
+    movetox
+    case
+      200 of s" GotoY performed correctly without any errors!" temp$ $+! lineending temp$ $+!
+      endof
+      201 of  s" Y value not on the sandtable so sandtable did nothing!" temp$ $+! lineending temp$ $+!
+      endof
+      202 of s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+! lineending temp$ $+!
+      endof
+    endcase
+  else
+    drop
+    s" Did not receive Y value so sandtable will stay put for now!" temp$ $! lineending temp$ $+!
+  then
+  temp$ $@ lastresultdatasend ;
+
 set-current set-order
