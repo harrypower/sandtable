@@ -212,8 +212,30 @@ commands-slow set-current
   temp$ $@ lastresultdatasend ;
 
 : drawaline ( -- ) \ perform the drawline word on sandtable
-  s" at drawaline word" lastresultdatasend
-;
+  0 0 0 0 0 { x1 y1 x2 y2 nflag }
+  (find-variable-pair$)
+  s" x1" (variable-pair-value@) to nflag to x1
+  s" y1" (variable-pair-value@) nflag and to nflag to y1
+  s" x2" (variable-pair-value@) nflag and to nflag to x2
+  s" y2" (variable-pair-value@) nflag and to nflag to y2
+  nflag true = if
+    s" X1,Y1 X2,Y2 received so drawaline will procede with drawing!" temp$ $! lineending temp$ $+!
+    temp$ $@ testdataout
+    temp$ $@ lastresultdatasend
+    x1 y1 x2 y2 drawline
+    case
+      200 of s" Gotoxy performed correctly without any errors!" temp$ $+! lineending temp$ $+!
+      endof
+      201 of  s" drawline has calculated sandtable quardinates incorrectly so error 201 was issued at movetoxy when it normaly never will throw this error!" temp$ $+! lineending temp$ $+!
+      endof
+      202 of s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+! lineending temp$ $+!
+      endof
+    endcase
+  else 
+    s" A variable missing so drawaline will do nothing at this time!" temp$ $+! lineending temp$ $+!
+  then
+  temp$ $@ lastresultdatasend ;
+
 : manylines ( -- ) \ perform the lines word on sandtable
   s" at manylines word" lastresultdatasend
 ;
