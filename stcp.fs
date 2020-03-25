@@ -133,3 +133,5 @@ variable messagebuffer$
       cmddatasenddelete
   again
 ;
+
+cmdloop 
