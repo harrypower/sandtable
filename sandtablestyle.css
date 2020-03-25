@@ -15,6 +15,7 @@ div.form-a {
 label, input {
     display: table-cell;
     margin-bottom: 10px;
+    font-size: xx-large;
 }
 
 label {
