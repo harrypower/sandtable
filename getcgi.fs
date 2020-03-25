@@ -62,7 +62,7 @@ variable sdtin$
 
 variable messagebuff$
 2variable timeout
-: processcmdline  ( "ccc" -- ) \ this is called from inetd and will simply get the stdin message sent from inetd and return a message
+: processcmdline  ( "ccc" -- ) \ this is called from cgi code and will simply get the stdin message sent from cgi and return a message
   try
     getstdin 2dup + 1- @ 255 and 10 = if 1- else  noterm throw then \ remove terminator or throw noterm error
     messagebuff$ $!

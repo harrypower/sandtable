@@ -139,9 +139,13 @@ commands-instant set-current
 
 ;
 
-: stopsandserver ( -- )
-  s" stopsandserver command not impemented yet!"  temp$ $! lineending temp$ $+!
-  temp$ $@ lastresultdatasend ;
+: stopsandserver ( -- ) \ this will simply stop the this sand command processing service
+  s" the sandtable command processor will now be terminated!"  temp$ $! lineending temp$ $+!
+  temp$ $@ lastresultdatasend
+  temp$ $@ cmddatasend!
+  5000 ms \ pause to allow cgi to get the info
+  cmddatasenddelete
+  bye ;
 
 : lastresult ( -- )  \ output the last result string
   stlastresultin true = if
