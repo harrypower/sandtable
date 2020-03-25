@@ -1,25 +1,31 @@
 body {
-    background-color: lightblue;
+  background-color: lightblue;
 }
 
 form.form-a {
-    display: table;
-    font-size: xx-large;
+  display: table;
+  font-size: xx-large;
 }
 
 div.form-a {
-    display: table-row;
-    font-size: xx-large;
+  display: table-row;
+  font-size: xx-large;
 }
 
 label, input {
-    display: table-cell;
-    margin-bottom: 10px;
-    font-size: xx-large;
+  display: table-cell;
+  margin-bottom: 10px;
+  font-size: xx-large;
+}
+
+select, input {
+  display: table-cell;
+  margin-bottom: 10px;
+  font-size: xx-large;
 }
 
 label {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 input.form-b {

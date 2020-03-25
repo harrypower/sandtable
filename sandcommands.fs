@@ -215,7 +215,7 @@ commands-slow set-current
   s" at drawaline word" lastresultdatasend
 ;
 : manylines ( -- ) \ perform the lines word on sandtable
-
+  s" at manylines word" lastresultdatasend
 ;
 
 : gotoxy ( -- ) \ perform the movetoxy word on sandtable
