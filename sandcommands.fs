@@ -261,7 +261,7 @@ commands-slow set-current
   true = if
     s" Recieved the y value and will now move the sandtable to the absolute Y location now!" temp$ $! lineending temp$ $+!
     temp$ $@ lastresultdatasend
-    movetox
+    movetoy
     case
       200 of s" GotoY performed correctly without any errors!" temp$ $+! lineending temp$ $+!
       endof
