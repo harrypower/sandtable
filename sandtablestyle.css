@@ -4,12 +4,12 @@ body {
 
 form.form-a {
     display: table;
-    font-size: large;
+    font-size: xxx-large;
 }
 
 div.form-a {
     display: table-row;
-    font-size: large;
+    font-size: xxx-large;
 }
 
 label, input {
@@ -30,5 +30,5 @@ input.form-b {
 div {
   padding-top: 10px ;
   padding-bottom: 10px ;
-  font-size: large;
+  font-size: xxx-large;
 }
