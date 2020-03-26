@@ -28,11 +28,14 @@ form.form-a {
 }
 
 form.form-b {
-  display: table;
+  display: table-cell;
   font-size: 30px;
   border: 2px solid blue;
   background-color: red;
-  padding: 40px ;
+  padding-top: 10px ;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 label, input {
