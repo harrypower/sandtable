@@ -38,6 +38,13 @@ form.form-b {
   padding-right: 5px;
 }
 
+input {
+  display: table-cell;
+  background-color: red;
+  margin-bottom: 30px;
+  font-size: 30px;
+}
+
 label, input {
   display: table-cell;
   margin-bottom: 30px;
