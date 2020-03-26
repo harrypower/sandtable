@@ -28,24 +28,6 @@ form.form-a {
 }
 
 form.form-b {
-  display: table;
-  font-size: 30px;
-}
-
-
-label, input {
-  display: table-cell;
-  margin-bottom: 30px;
-  font-size: 30px;
-}
-
-select, input {
-  display: table-cell;
-  margin-bottom: 30px;
-  font-size: 30px;
-}
-
-input.form-b {
   border: 2px solid blue;
   background-color: red;
   padding: 40px ;
