@@ -224,21 +224,35 @@ commands-slow set-current
     temp$ $@ lastresultdatasend
     x1 y1 x2 y2 drawline
     case
-      200 of s" Gotoxy performed correctly without any errors!" temp$ $+! lineending temp$ $+!
+      200 of s" drawline performed correctly without any errors!" temp$ $+! lineending temp$ $+!
       endof
       201 of  s" drawline has calculated sandtable quardinates incorrectly so error 201 was issued at movetoxy when it normaly never will throw this error!" temp$ $+! lineending temp$ $+!
       endof
       202 of s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+! lineending temp$ $+!
       endof
     endcase
-  else 
-    s" A variable missing so drawaline will do nothing at this time!" temp$ $+! lineending temp$ $+!
+  else
+    s" A variable missing so drawaline will do nothing at this time!" temp$ $! lineending temp$ $+!
   then
   temp$ $@ lastresultdatasend ;
 
 : manylines ( -- ) \ perform the lines word on sandtable
-  s" at manylines word" lastresultdatasend
-;
+0 0 0 0 0 { x y angle quantity nflag }
+(find-variable-pair$)
+s" x" (variable-pair-value@) to nflag to x
+s" y" (variable-pair-value@) nflag and to nflag to y
+s" angle" (variable-pair-value@) nflag and to nflag to angle 
+s" quantity" (variable-pair-value@) nflag and to nflag to quantity
+nflag true = if
+  s" X,Y,Angle,Quantity received so manylines will procede with drawing!" temp$ $! lineending temp$ $+!
+  temp$ $@ testdataout
+  temp$ $@ lastresultdatasend
+  x y angle quantity lines
+  s" lines performed correctly without any errors!" temp$ $+! lineending temp$ $+!
+else
+  s" A variable missing so manylines will do nothing at this time!" temp$ $! lineending temp$ $+!
+then
+temp$ $@ lastresultdatasend ;
 
 : gotoxy ( -- ) \ perform the movetoxy word on sandtable
   (find-variable-pair$)

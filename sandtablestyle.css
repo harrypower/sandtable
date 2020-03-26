@@ -1,41 +1,49 @@
+h1 {
+  font-size: 45px;
+}
+
+h2 {
+  font-size: 37px;
+}
+
 body {
   background-color: lightblue;
 }
 
-form.form-a {
-  display: table;
-  font-size: xx-large;
-}
-
-div.form-a {
-  display: table-row;
-  font-size: xx-large;
-}
-
-label, input {
-  display: table-cell;
-  margin-bottom: 10px;
-  font-size: xx-large;
-}
-
-select, input {
-  display: table-cell;
-  margin-bottom: 10px;
-  font-size: xx-large;
+div {
+  padding-top: 10px ;
+  padding-bottom: 10px ;
+  font-size: 30px;
 }
 
 label {
   padding-right: 10px;
 }
 
+form.form-a {
+  display: table;
+  font-size: 30px;
+}
+
+div.form-a {
+  display: table-row;
+  font-size: 30px;
+}
+
+label, input {
+  display: table-cell;
+  margin-bottom: 10px;
+  font-size: 30px;
+}
+
+select, input {
+  display: table-cell;
+  margin-bottom: 10px;
+  font-size: 30px;
+}
+
 input.form-b {
   border: 1px solid blue;
   background-color: red;
   padding: 20px ;
-}
-
-div {
-  padding-top: 10px ;
-  padding-bottom: 10px ;
-  font-size: xx-large;
 }
