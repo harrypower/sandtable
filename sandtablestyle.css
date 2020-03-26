@@ -42,6 +42,7 @@ label, input {
   display: table-cell;
   margin-bottom: 30px;
   font-size: 30px;
+  background-color: lightred;
 }
 
 select, input {
