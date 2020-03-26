@@ -11,6 +11,7 @@ body {
 }
 
 div {
+  display: table-row;
   padding-top: 40px ;
   padding-bottom: 40px ;
   font-size: 30px;
@@ -31,10 +32,6 @@ form.form-b {
   font-size: 30px;
 }
 
-div.form-a {
-  display: table-row;
-  font-size: 30px;
-}
 
 label, input {
   display: table-cell;
