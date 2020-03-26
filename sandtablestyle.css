@@ -14,6 +14,7 @@ div {
   display: table-row;
   padding-top: 40px ;
   padding-bottom: 40px ;
+  padding-left: 40px;
   font-size: 30px;
 }
 
@@ -40,18 +41,12 @@ form.form-b {
 
 input {
   display: table-cell;
-  background-color: red;
+  background-color: lightred;
   margin-bottom: 30px;
   font-size: 30px;
 }
 
-label, input {
-  display: table-cell;
-  margin-bottom: 30px;
-  font-size: 30px;
-}
-
-select, input {
+select {
   display: table-cell;
   margin-bottom: 30px;
   font-size: 30px;
