@@ -26,6 +26,11 @@ form.form-a {
   font-size: 30px;
 }
 
+form.form-b {
+  display: table;
+  font-size: 30px;
+}
+
 div.form-a {
   display: table-row;
   font-size: 30px;
