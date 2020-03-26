@@ -237,22 +237,26 @@ commands-slow set-current
   temp$ $@ lastresultdatasend ;
 
 : manylines ( -- ) \ perform the lines word on sandtable
-0 0 0 0 0 { x y angle quantity nflag }
-(find-variable-pair$)
-s" x" (variable-pair-value@) to nflag to x
-s" y" (variable-pair-value@) nflag and to nflag to y
-s" angle" (variable-pair-value@) nflag and to nflag to angle 
-s" quantity" (variable-pair-value@) nflag and to nflag to quantity
-nflag true = if
-  s" X,Y,Angle,Quantity received so manylines will procede with drawing!" temp$ $! lineending temp$ $+!
-  temp$ $@ testdataout
-  temp$ $@ lastresultdatasend
-  x y angle quantity lines
-  s" lines performed correctly without any errors!" temp$ $+! lineending temp$ $+!
-else
-  s" A variable missing so manylines will do nothing at this time!" temp$ $! lineending temp$ $+!
-then
-temp$ $@ lastresultdatasend ;
+  0 0 0 0 0 { x y angle quantity nflag }
+  (find-variable-pair$)
+  s" x" (variable-pair-value@) to nflag to x
+  s" y" (variable-pair-value@) nflag and to nflag to y
+  s" angle" (variable-pair-value@) nflag and to nflag to angle
+  s" quantity" (variable-pair-value@) nflag and to nflag to quantity
+  sandtableready? true = if
+    nflag true = if
+      s" X,Y,Angle,Quantity received so manylines will procede with drawing!" temp$ $! lineending temp$ $+!
+      temp$ $@ testdataout
+      temp$ $@ lastresultdatasend
+      x y angle quantity lines
+      s" lines performed correctly without any errors!" temp$ $+! lineending temp$ $+!
+    else
+      s" A variable missing so manylines will do nothing at this time!" temp$ $! lineending temp$ $+!
+    then
+  else
+    s" Sandtable not calibrated yet so manylines will not execute!" temp$ $! lineending temp$ $+! 
+  then
+  temp$ $@ lastresultdatasend ;
 
 : gotoxy ( -- ) \ perform the movetoxy word on sandtable
   (find-variable-pair$)
