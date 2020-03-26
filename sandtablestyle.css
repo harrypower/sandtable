@@ -32,10 +32,10 @@ form.form-b {
   font-size: 30px;
   border: 2px solid blue;
   background-color: red;
-  padding-top: 10px ;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-top: 30px ;
+  padding-bottom: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 label, input {
