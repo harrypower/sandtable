@@ -62,5 +62,26 @@
     <input type="submit" value="Draw Parallel lines">
   </div>
 </form>
+
+<h2>Horizontal/Vertical ZigZag lines</h2>
+<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
+  Draw Zig Zag lines either horizontal or vertical<br>
+  Steps is how many zig and then zag steps to draw<br>
+  0 or 1 for horizontal or vertical<br>
+  <div>
+    <input type="hidden" name="command" value="zigzag" readonly>
+  </div>
+  <div>
+    <lable for="name">steps: </lable>
+    <input type="number" name="steps" required>
+  </div>
+  <div>
+    <lable for="name">Horizontal or Vertical: </lable>
+    <input type="number" name="hv" min="0" max="1" required>
+  </div>
+  <div>
+    <input type="submit" value="Draw ZigZag lines">
+  </div>
+</form>
 </body>
 </html>

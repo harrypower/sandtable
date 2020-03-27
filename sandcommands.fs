@@ -254,7 +254,45 @@ commands-slow set-current
       s" A variable missing so manylines will do nothing at this time!" temp$ $! lineending temp$ $+!
     then
   else
-    s" Sandtable not calibrated yet so manylines will not execute!" temp$ $! lineending temp$ $+! 
+    s" Sandtable not calibrated yet so manylines will not execute!" temp$ $! lineending temp$ $+!
+  then
+  temp$ $@ lastresultdatasend ;
+
+: zigzag ( -- ) \ perform zigzag-line
+  0 0 0 { steps hv nflag }
+  (find-variable-pair$)
+  s" steps" (variable-pair-value@) to nflag to steps
+  s" hv" (variable-pair-value@) nflag and to nflag to hv
+  sandtableready? true = if
+    nflag true = if
+      s" steps and hv variables received so zigzag will procede with drawing!" temp$ $! lineending temp$ $+!
+      temp$ $@ testdataout
+      temp$ $@ lastresultdatasend
+      hv 0 >= hv 1 <= and if
+        steps hv zigzag-line
+      else
+        304
+      then
+      case
+        300 of s" zigzag performed correctly without any errors!" temp$ $+! lineending temp$ $+!
+        endof
+        301 of  s" zigzag failed drawing at first part of drawing loop!" temp$ $+! lineending temp$ $+!
+          closedown
+        endof
+        302 of s" zigzag failed drawing at second part of drawing loop!" temp$ $+! lineending temp$ $+!
+          closedown
+        endof
+        303 of s" zigzag had some error with border word and as a result bailed at some unknow part of the drawing" temp$ $+! lineending temp$ $+!
+          closedown
+        endof
+        304 of s" Only 0 or 1 values can be used for hv! Sandtable will not draw anything!" temp$ $+! lineending temp$ $+!
+        endof
+      endcase
+    else
+      s" A variable missing so zigzag will do nothing at this time!" temp$ $! lineending temp$ $+!
+    then
+  else
+    s" Sandtable not calibrated yet so zigzag will not execute!" temp$ $! lineending temp$ $+!
   then
   temp$ $@ lastresultdatasend ;
 
