@@ -31,6 +31,7 @@ warnings off
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
+require vectordraw.fs
 
 :noname ; is bootmessage
 
@@ -134,4 +135,4 @@ variable messagebuffer$
   again
 ;
 
-cmdloop 
+cmdloop

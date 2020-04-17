@@ -361,4 +361,39 @@ commands-slow set-current
   then
   temp$ $@ lastresultdatasend ;
 
+: drawavector ( -- ) \ perform the drawvector word on sandtable
+  0 0 0 0 0 0 0 { x y angle distance x1 y1 nflag }
+  (find-variable-pair$)
+  s" x" (variable-pair-value@) to nflag to x
+  s" y" (variable-pair-value@) nflag and to nflag to y
+  s" angle" (variable-pair-value@) nflag and to nflag to angle
+  s" distance" (variable-pair-value@) nflag and to nflag to distance
+  sandtableready? true = if
+    nflag true = if
+      s" Drawing vector starting at x y with angle and distance given!" temp$ $! lineending temp$ $+!
+      temp$ $@ lastresultdatasend
+      x y angle distance drawvector to nflag to y1 to x1
+      nflag
+      case
+        200 of s" Drawvector performed correctly without any errors!" temp$ $+! lineending temp$ $+!
+          s" Current x is " temp$ $+! x1 s>d dto$ temp$ $+! lineending temp$ $+!
+          s" Current y is " temp$ $+! y1 s>d dto$ temp$ $+! lineending temp$ $+!
+        endof
+        201 of  s" drawline has calculated sandtable quardinates incorrectly at drawvector command so error 201 was issued at movetoxy when it normaly never will throw this error!" temp$ $+! lineending temp$ $+!
+        endof
+        202 of s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+! lineending temp$ $+!
+        endof
+      endcase
+    else
+      s" x,y,angle,distance values missing!" temp$ $!
+      lineending temp$ $+!
+      s" Sandtable will do nothing!" temp$ $+!
+      lineending temp$ $+!
+    then
+  else
+    s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+!
+    lineending temp$ $+!
+  then
+  temp$ $@ lastresultdatasend ;
+
 set-current set-order
