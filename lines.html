@@ -10,15 +10,25 @@
 <form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
   Draw a line given x1,y1 x2,y2<br>
     <input type="hidden" name="command" value="drawaline" readonly>
+  <div>
     <lable for="name">X1: </lable>
     <input type="number" name="x1" required>
+  </div>
+  <div>
     <lable for="name">Y1: </lable>
     <input type="number" name="y1" required>
+  </div>
+  <div>
     <lable for="name">X2: </lable>
     <input type="number" name="x2" required>
+  </div>
+  <div>
     <lable for="name">Y2: </lable>
     <input type="number" name="y2" required>
+  </div>
+  <div>
     <input type="submit" value="Draw the Line">
+  </div>
 </form>
 
 <h2>Draw many parallel lines</h2>

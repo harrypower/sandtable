@@ -9,6 +9,7 @@
 
 * {
     font-size: 20px;
+    text-align: center;
 }
 
 h1 {
@@ -19,11 +20,19 @@ h2 {
   font-size: 130%;
 }
 
-body{
+body {
   background-color: lightblue;
 }
 
 
 label {
   padding-right: 40px;
+}
+
+input {
+  width 95%;
+}
+
+select {
+  width 95%;
 }
