@@ -9,28 +9,16 @@
 <h2>Draw one line </h2>
 <form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
   Draw a line given x1,y1 x2,y2<br>
-  <div>
     <input type="hidden" name="command" value="drawaline" readonly>
-  </div>
-  <div>
     <lable for="name">X1: </lable>
     <input type="number" name="x1" required>
-  </div>
-  <div>
     <lable for="name">Y1: </lable>
     <input type="number" name="y1" required>
-  </div>
-  <div>
     <lable for="name">X2: </lable>
     <input type="number" name="x2" required>
-  </div>
-  <div>
     <lable for="name">Y2: </lable>
     <input type="number" name="y2" required>
-  </div>
-  <div>
     <input type="submit" value="Draw the Line">
-  </div>
 </form>
 
 <h2>Draw many parallel lines</h2>
@@ -39,28 +27,16 @@
   The Angle is in degrees where 0 deg is the 3:00 o'clock position and increases clockwise to 359 deg!<br>
   The Quantity is how many parallel lines will be drawn on the sandtable!<br>
   Note if the x,y location is not on the sandtable the drawing results will be unpredicatale!<br>
-  <div>
     <input type="hidden" name="command" value="manylines" readonly>
-  </div>
-  <div>
     <lable for="name">X: </lable>
     <input type="number" name="x" required>
-  </div>
-  <div>
     <lable for="name">Y: </lable>
     <input type="number" name="y" required>
-  </div>
-  <div>
     <lable for="name">Angle: </lable>
     <input type="number" name="angle" required>
-  </div>
-  <div>
     <lable for="name">Quantity: </lable>
     <input type="number" name="quantity" required>
-  </div>
-  <div>
     <input type="submit" value="Draw Parallel lines">
-  </div>
 </form>
 
 <h2>Horizontal/Vertical ZigZag lines</h2>
@@ -68,20 +44,12 @@
   Draw Zig Zag lines either horizontal or vertical<br>
   Steps is how many zig and then zag steps to draw<br>
   0 or 1 for horizontal or vertical<br>
-  <div>
     <input type="hidden" name="command" value="zigzag" readonly>
-  </div>
-  <div>
     <lable for="name">steps: </lable>
     <input type="number" name="steps" required>
-  </div>
-  <div>
     <lable for="name">Horizontal or Vertical: </lable>
     <input type="number" name="hv" min="0" max="1" required>
-  </div>
-  <div>
     <input type="submit" value="Draw ZigZag lines">
-  </div>
 </form>
 </body>
 </html>
