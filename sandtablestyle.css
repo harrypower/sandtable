@@ -11,6 +11,10 @@ h2 {
   font-size: 200%;
 }
 
+P {
+  text-align: left;
+}
+
 body {
   background-color: lightblue;
 }
