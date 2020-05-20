@@ -2,12 +2,12 @@
 <html>
 <head>
 <title>Sandtable Testing </title>
-<link rel="stylesheet" href="http://192.168.0.59/sandtablestyle.css">
+<link rel="stylesheet" href="sandtablestyle.css">
 </head>
 <body>
 <h1>Sandtable Testing</h1>
 
-<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
   Issue a command to SandTable <br>
   <div>
     <label for="name">Command:</label>
@@ -30,7 +30,7 @@
   </div>
 </form>
 
-<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
   Move to absolute X,Y location (0 to 274000 for x & y)<br>
   <div>
     <input type="hidden" name="command" value="gotoxy" readonly>
@@ -48,7 +48,7 @@
   </div>
 </form>
 
-<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
   Move to absolute X location (0 to 274000)<br>
   <div>
     <input type="hidden" name="command" value="gotox" readonly>
@@ -62,7 +62,7 @@
   </div>
 </form>
 
-<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
   Move to absolute Y location (0 to 274000)<br>
   <div>
     <input type="hidden" name="command" value="gotoy" readonly>
@@ -76,7 +76,7 @@
   </div>
 </form>
 
-<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-a">
+<form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
   Perform fast calibration of sandtable with the given x and y values! (0 to 274000 for x & y)<br>
   Note the x and y values should be the real current location of the x and y motors!<br>
   <div>
@@ -95,7 +95,7 @@
   </div>
 </form>
 
-<form action="http://192.168.0.59/cgi-bin/directtesting.cgi" method="get" class="form-b">
+<form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
   <input type="hidden" name="command" value="stopsandserver" readonly>
   <input type="submit" value="STOP table now">
 </form>
