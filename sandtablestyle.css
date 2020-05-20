@@ -16,7 +16,7 @@ h2 {
   font-size: 37px;
 }
 
-body {
+body{
   background-color: lightblue;
 }
 
@@ -30,35 +30,4 @@ body {
 
 label {
   padding-right: 40px;
-}
-
-form.form-a {
-  border: 2px solid blue;
-  display: table;
-  font-size: 30px;
-}
-
-form.form-b {
-  display: table-cell;
-  font-size: 30px;
-  border: 2px solid blue;
-  background-color: red;
-  padding-top: 30px ;
-  padding-bottom: 1px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-input {
-  display: table-cell;
-  background-color: lightred;
-  margin-bottom: 30px;
-  font-size: 30px;
-}
-
-select {
-  display: table-cell;
-  margin-bottom: 30px;
-  font-size: 30px;
-  background-color: lightred;
 }
