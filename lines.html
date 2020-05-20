@@ -8,7 +8,7 @@
 <h1>Line Drawing</h1>
 <h2>Draw one line </h2>
 <form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
-  Draw a line given x1,y1 x2,y2<br>
+  <p>Draw a line given x1,y1 x2,y2<br></p>
     <input type="hidden" name="command" value="drawaline" readonly>
     <lable for="name">X1: </lable>
     <input type="number" name="x1" required> <br>
@@ -23,10 +23,10 @@
 
 <h2>Draw many parallel lines</h2>
 <form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
-  Draw many parallel lines given the end location for drawing tool to be x,y.<br>
+  <p>Draw many parallel lines given the end location for drawing tool to be x,y.<br>
   The Angle is in degrees where 0 deg is the 3:00 o'clock position and increases clockwise to 359 deg!<br>
   The Quantity is how many parallel lines will be drawn on the sandtable!<br>
-  Note if the x,y location is not on the sandtable the drawing results will be unpredicatale!<br>
+  Note if the x,y location is not on the sandtable the drawing results will be unpredicatale!<br></p>
     <input type="hidden" name="command" value="manylines" readonly>
     <lable for="name">X: </lable>
     <input type="number" name="x" required> <br>
@@ -54,8 +54,8 @@
 
 <h2>Angle Length line</h2>
 <form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
-  Draw a line of given length and angle<br>
-  Note x and y are the starting position of where this vector will be drawn<br>
+  <p>Draw a line of given length and angle<br>
+  Note x and y are the starting position of where this vector will be drawn<br></p>
     <input type="hidden" name="command" value="drawavector" readonly>
     <lable for="name">X: </lable>
     <input type="number" name="x" required> <br>
