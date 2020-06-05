@@ -34,6 +34,10 @@
     <input type="number" name="s8" > <br>
     <lable for="name">s9: </lable>
     <input type="number" name="s9" > <br>
+    <lable for="name">s10: </lable>
+    <input type="number" name="s10" > <br>
+    <lable for="name">s11: </lable>
+    <input type="number" name="s11" > <br>
     <input type="submit" value="Execute this Command"> <br>
 </form>
 <h3>The list of named commands to use above and infomation for stack elements</h3>
@@ -42,7 +46,12 @@
   <li>rndstar2 ( uamount nx ny -- )</li>
   <li>triangle ( nxstart nystart udist1 uangle1 udist2 uangle2 -- ) \ draw triangle starting at nxstart nystart<br>
   note uangle1 and uangle2 are angles relative to drawing coordinates not triangle angles<br></li>
-
+  <li>triangle2 ( udist1 uangle1 udist2 uangle2 -- ) \ draw trangle starting at current xposition and yposition<br>
+  note uangle1 and uangle2 are not triangle angles but drawing angles relative to drawing coordinates<br></li>
+  <li>trianglecenter ( nx ny udist1 uangle1 udist2 uangle2 udist3 uangle3 -- ) \ draw triangle from center defined by nx ny<br>
+  udist1 uangle1 define first leg from nx ny<br>
+  udist2 uangle2 define second leg from nx ny<br>
+  udist3 uangle3 define third leg from nx ny<br></li>
 </ul>
 
 </body>
