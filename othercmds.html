@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Execute Commands</title>
+<link rel="stylesheet" href="sandtablestyle.css">
+</head>
+<body>
+<h1>Exeucte Named Commands</h1>
+
+<h2>Named Commands</h2>
+<form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
+  <p>thecmd is the command to execute<br></p>
+  <p>s0-s9 are stack elements needed for some commands<br></p>
+    <input type="hidden" name="command" value="othercmds" readonly>
+    <lable for="name">thecmd: </lable>
+    <input type="text" name="thecmd" required> <br>
+    <lable for="name">s0: </lable>
+    <input type="number" name="s0" > <br>
+    <lable for="name">s1: </lable>
+    <input type="number" name="s1" > <br>
+    <lable for="name">s2: </lable>
+    <input type="number" name="s2" > <br>
+    <lable for="name">s3: </lable>
+    <input type="number" name="s3" > <br>
+    <lable for="name">s4: </lable>
+    <input type="number" name="s4" > <br>
+    <lable for="name">s5: </lable>
+    <input type="number" name="s5" > <br>
+    <lable for="name">s6: </lable>
+    <input type="number" name="s6" > <br>
+    <lable for="name">s7: </lable>
+    <input type="number" name="s7" > <br>
+    <lable for="name">s8: </lable>
+    <input type="number" name="s8" > <br>
+    <lable for="name">s9: </lable>
+    <input type="number" name="s9" > <br>
+    <input type="submit" value="Execute this Command"> <br>
+</form>
+<h3>The list of named commands to use above and infomation for stack elements</h3>
+<ul>
+  <li>rndstar ( uamount -- ) \ will start at a random board location and draw random length lines from that start point radiating out </li>
+  <li>rndstar2 ( uamount nx ny -- )</li>
+  <li>triangle ( nxstart nystart udist1 uangle1 udist2 uangle2 -- ) \ draw triangle starting at nxstart nystart<br>
+  note uangle1 and uangle2 are angles relative to drawing coordinates not triangle angles<br><li>
+
+</ul>
+
+</body>
+</html>
