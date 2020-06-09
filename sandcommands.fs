@@ -59,25 +59,6 @@ strings heap-new constant junk-buffer$
       get-variable-pairs$ [bind] strings split$>$s
     loop
   then ;
-: (variable-pair-value@) ( caddr u -- nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
-  0 false { caddr u nvalue nflag }
-  get-variable-pairs$ [bind] strings $qty 0 ?do \ find x variable
-    i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
-    if
-      i 1+ get-variable-pairs$  [bind] strings []@$ ( n n caddr u nflag )
-      false = if ( n n caddr u )
-        s>number? true = if ( n n d )
-          d>s to nvalue true to nflag
-        else ( n n d )
-          2drop false to nvalue false to nflag
-        then
-      else ( n n caddr u )
-        2drop false to nflag
-      then ( n n )
-      leave
-    then
-  2 +loop \ note variable value pairs are put into get-variable-pairs$ by (find-variable-pair$) word so they should be in groups of two
-  nvalue nflag ;
 
 : (variable-pair-string@) ( caddr u -- caddr1 u1 nflag ) \ look for string caddr u in get-variable-pairs$ and return the string that is paired with it ... nflag is true if caddr u string found and caddr1 u1 is string returned
   \ note caddr1 u1 can still be a null string or empty string if nflag is true
@@ -93,7 +74,7 @@ strings heap-new constant junk-buffer$
   0 0 false \ no string pair found
 ;
 
-: (newvariable-pair-value@) ( caddr u -- nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
+: (variable-pair-value@) ( caddr u -- nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
   0 0 { caddr u caddr1 u1 }
   caddr u (variable-pair-string@) swap to u1 swap to caddr1
   true = if
@@ -438,7 +419,7 @@ commands-slow set-current
     s" thecmd not found" temp$ $! lineending temp$ $+!
     2drop
   then
-  s" s0" (newvariable-pair-value@)
+  s" s0" (variable-pair-value@)
   true = if
     s" s0 is " temp$ $+! s>d dto$ temp$ $+! lineending temp$ $+!
   else
