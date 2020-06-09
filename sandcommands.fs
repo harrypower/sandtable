@@ -87,7 +87,7 @@ strings heap-new constant junk-buffer$
     i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
     if
       i 1+ get-variable-pairs$  [bind] strings []@$ ( caddr u nflag )
-      unloop exit \ string pair found and exiting
+      invert unloop exit \ string pair found and exiting
     then
   2 +loop \ note variable string or value pairs are put into get-variable-pairs$ by (find-variable-pair$) word so they are in groups of two
   0 0 false \ no string pair found
@@ -431,7 +431,7 @@ commands-slow set-current
 : othercmds ( -- ) \ this will parse thecmd for a sub command to execute.  s0 to s11 are passed with this command for stack values that this sub command needs
   (find-variable-pair$)
   s" thecmd" (variable-pair-string@)
-  false = if
+  true = if
     s" thecmd is " temp$ $!
     temp$ $+! lineending temp$ $+!
   else
@@ -445,7 +445,7 @@ commands-slow set-current
     drop s" s0 is null!" temp$ $+! lineending temp$ $+!
   then
   s" s0" (variable-pair-string@)
-  false = if
+  true = if
     s" s0 as string is " temp$ $+!
     temp$ $+! lineending temp$ $+!
   else
