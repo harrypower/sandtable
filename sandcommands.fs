@@ -59,7 +59,7 @@ strings heap-new constant junk-buffer$
       get-variable-pairs$ [bind] strings split$>$s
     loop
   then ;
-: (variable-pair-value@) ( caddr u - nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
+: (variable-pair-value@) ( caddr u -- nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
   0 false { caddr u nvalue nflag }
   get-variable-pairs$ [bind] strings $qty 0 ?do \ find x variable
     i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
@@ -79,8 +79,8 @@ strings heap-new constant junk-buffer$
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (find-variable-pair$) word so they should be in groups of two
   nvalue nflag ;
 
-: (variable-pair-string@) ( caddr u - caddr1 u1 nflag ) \ look for string caddr u in get-variable-pairs$ and return the string that is paired with it ... nflag is true if caddr u string found and caddr1 u1 is string returned
-  \ not caddr1 u1 can still be a null string or empty string if nflag is true
+: (variable-pair-string@) ( caddr u -- caddr1 u1 nflag ) \ look for string caddr u in get-variable-pairs$ and return the string that is paired with it ... nflag is true if caddr u string found and caddr1 u1 is string returned
+  \ note caddr1 u1 can still be a null string or empty string if nflag is true
   \ nflag is false if caddr u string is not found in get-variable-pairs$
   0 0 false { caddr u caddr1 u1 nflag }
   get-variable-pairs$ [bind] strings $qty 0 ?do \ find caddr1 u1 string that goes with caddr u pair name
@@ -90,6 +90,24 @@ strings heap-new constant junk-buffer$
       leave
     then
   2 +loop \ note variable string or value pairs are put into get-variable-pairs$ by (find-variable-pair$) word so they are in groups of two
+;
+
+: (newvariable-pair-value@) ( caddr u -- nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
+  0 0 { caddr u caddr1 u1 }
+  caddr u (variable-pair-string@) rot to caddr1 swap to u1
+  true = if
+    u1 0 <> if
+      caddr1 u1 s>number? if \ caddr u found and its number pair is returned!
+        d>s true
+      else \ caddr u found but its number pair is not understandable as a number!
+        2drop false
+      then
+    else \ caddr u found but its number pair is null or empty!
+      0 false
+    then
+  else
+    0 false \ caddr u  string not found so no number to get from it !
+  then
 ;
 
 : lastresultdatasend ( caddr u -- ) \ takes string caddr u and sends it to stlastresultout and cmddatasend!
@@ -419,7 +437,7 @@ commands-slow set-current
     s" thecmd not found" temp$ $! lineending temp$ $+!
     drop drop
   then
-  s" s0" (variable-pair-value@)
+  s" s0" (newvariable-pair-value@)
   true = if
     s" s0 is " temp$ $+! s>d dto$ temp$ $+! lineending temp$ $+!
   else
