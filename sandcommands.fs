@@ -420,9 +420,9 @@ commands-slow set-current
     drop drop
   then
   s" s0" (variable-pair-value@)
-  false = if
+  true = if
     s" s0 is " temp$ $+! d>s dto$ temp$ $+! lineending temp$ $+!
-  else 
+  else
     s" s0 is null!" temp$ $+! lineending temp$ $+!
   then
 
