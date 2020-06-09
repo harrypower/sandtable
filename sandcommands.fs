@@ -94,13 +94,13 @@ strings heap-new constant junk-buffer$
 
 : (newvariable-pair-value@) ( caddr u -- nvalue nflag ) \ look for string caddr u in get-variable-pairs$ and return its value if it is valid ... nflag is true if valid value ... nflag is false if not found or invalid
   0 0 { caddr u caddr1 u1 }
-  caddr u (variable-pair-string@) rot to caddr1 swap to u1
+  caddr u (variable-pair-string@) swap to u1 swap to caddr1
   true = if
-    u1 0 <> if
-      caddr1 u1 s>number? if \ caddr u found and its number pair is returned!
+    u1 0 > if
+      caddr1 u1 s>number? true = if \ caddr u found and its number pair is returned!
         d>s true
       else \ caddr u found but its number pair is not understandable as a number!
-        2drop false
+        2drop 0 false
       then
     else \ caddr u found but its number pair is null or empty!
       0 false
