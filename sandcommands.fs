@@ -79,6 +79,19 @@ strings heap-new constant junk-buffer$
   2 +loop \ note variable value pairs are put into get-variable-pairs$ by (find-variable-pair$) word so they should be in groups of two
   nvalue nflag ;
 
+: (variable-pair-string@) ( caddr u - caddr1 u1 nflag ) \ look for string caddr u in get-variable-pairs$ and return the string that is paired with it ... nflag is true if caddr u string found and caddr1 u1 is string returned
+  \ not caddr1 u1 can still be a null string or empty string if nflag is true
+  \ nflag is false if caddr u string is not found in get-variable-pairs$
+  0 0 false { caddr u caddr1 u1 nflag }
+  get-variable-pairs$ [bind] strings $qty 0 ?do \ find caddr1 u1 string that goes with caddr u pair name
+    i get-variable-pairs$ [bind] strings []@$ drop caddr u compare false = \ caddr u string is the same as found in get-variable-pairs$ string at index i
+    if
+      i 1+ get-variable-pairs$  [bind] strings []@$ ( caddr u nflag )
+      leave
+    then
+  2 +loop \ note variable string or value pairs are put into get-variable-pairs$ by (find-variable-pair$) word so they are in groups of two
+;
+
 : lastresultdatasend ( caddr u -- ) \ takes string caddr u and sends it to stlastresultout and cmddatasend!
   2dup stlastresultout cmddatasend! ;
 : lastresulttestsend ( caddr u -- ) \ send string caddr u to stlastresultout and testdataout
@@ -394,6 +407,19 @@ commands-slow set-current
     s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+!
     lineending temp$ $+!
   then
+  temp$ $@ lastresultdatasend ;
+
+: othercmds ( -- ) \ this will parse thecmd for a sub command to execute.  s0 to s11 are passed with this command for stack values that this sub command needs
+  (find-variable-pair$)
+  s" thecmd" (variable-pair-string@)
+  false = if
+    s" thecmd is " temp$ $!
+    temp$ $+! lineending temp$ $+!
+  else
+    s" thecmd not found" temp$ $! lineending temp$ $+!
+    drop drop
+  then
+
   temp$ $@ lastresultdatasend ;
 
 set-current set-order

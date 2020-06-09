@@ -32,6 +32,9 @@ require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 require unix/libc.fs
 require vectordraw.fs
+require squaretest.fs
+require patterns.fs
+require triangles.fs
 
 :noname ; is bootmessage
 
