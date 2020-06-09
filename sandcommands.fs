@@ -421,7 +421,7 @@ commands-slow set-current
   then
   s" s0" (variable-pair-value@)
   true = if
-    s" s0 is " temp$ $+! d>s dto$ temp$ $+! lineending temp$ $+!
+    s" s0 is " temp$ $+! s>d dto$ temp$ $+! lineending temp$ $+!
   else
     s" s0 is null!" temp$ $+! lineending temp$ $+!
   then
