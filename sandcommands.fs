@@ -419,6 +419,12 @@ commands-slow set-current
     s" thecmd not found" temp$ $! lineending temp$ $+!
     drop drop
   then
+  s" s0" (variable-pair-value@)
+  false = if
+    s" s0 is " temp$ $+! d>s dto$ temp$ $+! lineending temp$ $+!
+  else 
+    s" s0 is null!" temp$ $+! lineending temp$ $+!
+  then
 
   temp$ $@ lastresultdatasend ;
 
