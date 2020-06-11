@@ -417,12 +417,26 @@ s" nrotsquare" othercmds$ bind strings !$x
 s" nsquare" othercmds$ bind strings !$x
 s" rndsquares" othercmds$ bind strings !$x
 s" rndsquares2" othercmds$ bind strings !$x
-s" " othercmds$ bind strings !$x
-s" " othercmds$ bind strings !$x
-s" " othercmds$ bind strings !$x
-s" " othercmds$ bind strings !$x
+\ these commands are from triangles.fs
+s" triangle" othercmds$ bind strings !$x
+s" triangle2" othercmds$ bind strings !$x
+s" trianglecenter" othercmds$ bind strings !$x
+s" ntrianglecenter" othercmds$ bind strings !$x
+s" equaltrianglecenter" othercmds$ bind strings !$x
+s" nequaltrianglecenter" othercmds$ bind strings !$x
+\ these commands are from patterns.fs
+s" rndstar" othercmds$ bind strings !$x
+s" rndstar2" othercmds$ bind strings !$x
+s" linestar" othercmds$ bind strings !$x
+s" circle" othercmds$ bind strings !$x
+s" arc" othercmds$ bind strings !$x
+s" circle2" othercmds$ bind strings !$x
+s" concentric-circles" othercmds$ bind strings !$x
+s" circle-circles" othercmds$ bind strings !$x
+s" circle-spin" othercmds$ bind strings !$x
+s" ncircle-spin" othercmds$ bind strings !$x
+\ place other commands here!
 
-\
 : othercmds ( -- ) \ this will parse thecmd for a sub command to execute.  s0 to s11 are passed with this command for stack values that this sub command needs
   (find-variable-pair$)
   s" thecmd" (variable-pair-string@)
@@ -447,12 +461,7 @@ s" " othercmds$ bind strings !$x
     s" s0 not found as string " temp$ $+! lineending temp$ $+!
     2drop
   then
-  s" s5" (variable-pair-value@)
-  true = if
-    s" s5 is " temp$ $+! s>d dto$ temp$ $+! lineending temp$ $+!
-  else
-    drop s" s5 is null!" temp$ $+! lineending temp$ $+!
-  then
+
 
   temp$ $@ lastresultdatasend ;
 
