@@ -412,12 +412,15 @@ commands-slow set-current
   temp$ $@ lastresultdatasend ;
 
 \ these commands are from squaretest.fs
-s" n>square" othercmds$ [bind] strings !$x
-s" nrotsquare" othercmds$ [bind] strings !$x
-s" nsquare" othercmds$ [bind] strings !$x
-s" rndsquares" othercmds$ [bind] strings !$x
-s" rndsquares2" othercmds$ [bind] strings !$x
-
+s" n>square" othercmds$ bind strings !$x
+s" nrotsquare" othercmds$ bind strings !$x
+s" nsquare" othercmds$ bind strings !$x
+s" rndsquares" othercmds$ bind strings !$x
+s" rndsquares2" othercmds$ bind strings !$x
+s" " othercmds$ bind strings !$x
+s" " othercmds$ bind strings !$x
+s" " othercmds$ bind strings !$x
+s" " othercmds$ bind strings !$x
 
 \
 : othercmds ( -- ) \ this will parse thecmd for a sub command to execute.  s0 to s11 are passed with this command for stack values that this sub command needs
