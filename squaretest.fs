@@ -1,6 +1,6 @@
 \ squaretest.fs
 
-: n>square ( usize ux uy uangle -- ) \ uangle is degrees
+: nsquare ( usize ux uy uangle -- ) \ uangle is degrees
   0 0 0 0 { usize ux uy uangle ua ub ux1 uy1 }
   uangle 360 mod to uangle
   uangle 0 <> if
@@ -26,13 +26,13 @@
 : nrotsquare { usize ux uy uangle usteps -- }
   usteps 0 ?do usize ux uy uangle 360 usteps / i * + n>square loop ;
 
-: n*nrotsquare { udeltasize ux uy ucirclesteps uoutsidesteps }
+: nnrotsquare { udeltasize ux uy ucirclesteps uoutsidesteps }
   uoutsidesteps 0 ?do
     udeltasize i * udeltasize + ux uy 0 ucirclesteps nrotsquare
   loop
 ;
 
-: nsquare ( usize ux uy -- ) \ draw usize square using drawline starting at ux uy location
+: nsquare2 ( usize ux uy -- ) \ draw usize square using drawline starting at ux uy location
   { usize ux uy }
   ux uy ux usize + uy drawline .
   ux usize + uy ux usize + uy usize + drawline .

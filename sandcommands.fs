@@ -412,9 +412,10 @@ commands-slow set-current
   temp$ $@ lastresultdatasend ;
 
 \ these commands are from squaretest.fs
-s" n>square" othercmds$ bind strings !$x
-s" nrotsquare" othercmds$ bind strings !$x
 s" nsquare" othercmds$ bind strings !$x
+s" nrotsquare" othercmds$ bind strings !$x
+s" nnrotsquare" othercmds$ bind strings !$x
+s" nsquare2" othercmds$ bind strings !$x
 s" rndsquares" othercmds$ bind strings !$x
 s" rndsquares2" othercmds$ bind strings !$x
 \ these commands are from triangles.fs
