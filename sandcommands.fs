@@ -27,6 +27,7 @@ strings heap-new constant submessages$
 strings heap-new constant get-variable-pairs$
 strings heap-new constant junk-buffer$
 strings heap-new constant othercmds$
+string heap-new constant atemp$
 
 : remove\r\n ( caddr u -- ) \ remove carrage return and linefeed from caddr u string
 \ the output is in junk-buffer$ and is a strings object
@@ -453,6 +454,22 @@ s" ncircle-spin" othercmds$ bind strings !$x
     loop
     nflag if
       caddr u temp$ $+! s"  is a valid command and will be executed!" temp$ $+! lineending temp$ $+!
+      temp$ $@ lastresultdatasend
+      try
+        -1 11 ?do
+          s" s" atemp$ [bind] string !$
+          i s>d dto$ atemp$ [bind] string !+$
+          atemp$ [bind] string @$ (variable-pair-value@) false = if drop then
+        1 -loop
+        caddr u find-name name>interpret execute
+        false
+      restore
+        dup false = if
+          drop caddr u temp$ $+! s"  command was executed and finished with no errors!" temp$ $+! lineending temp$ $+!
+        else
+          caddr u temp$ $+! s"  command had the following error: " temp$ $+! s>d dto$ temp$ $+! lineending temp$ $+!  
+        then
+      endtry
     else
       caddr u temp$ $+! s"  is not a valid command nothing will be executed!" temp$ $+! lineending temp$ $+!
     then
