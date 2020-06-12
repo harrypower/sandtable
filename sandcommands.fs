@@ -407,7 +407,7 @@ commands-slow set-current
       lineending temp$ $+!
     then
   else
-    s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $+!
+    s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $!
     lineending temp$ $+!
   then
   temp$ $@ lastresultdatasend ;
@@ -442,56 +442,60 @@ s" ncircle-spin" othercmds$ bind strings !$x
 : othercmds ( -- ) \ this will parse thecmd for a sub command to execute.  s0 to s11 are passed with this command for stack values that this sub command needs
   0 0 false { caddr u nflag }
   (find-variable-pair$)
-  s" thecmd" (variable-pair-string@) swap to u swap to caddr
-  true = if
-    s" Command is " temp$ $!
-    caddr u temp$ $+! lineending temp$ $+!
-    othercmds$ [bind] strings $qty 0 ?do
-      i othercmds$ [bind] strings []@$ drop caddr u compare false = if
-        true to nflag
-        leave
-      then
-    loop
-    nflag if
-      caddr u temp$ $+! s"  is a valid command and will be executed!" temp$ $+! lineending temp$ $+!
-      temp$ $@ lastresultdatasend
-      try
-        -1 11 ?do
-          s" s" atemp$ [bind] string !$
-          i s>d dto$ atemp$ [bind] string !+$
-          atemp$ [bind] string @$ (variable-pair-value@) false = if drop then
-        1 -loop
-        caddr u find-name name>interpret execute
-        false
-      restore
-        dup false = if
-          drop caddr u temp$ $+! s"  command was executed and finished with no errors!" temp$ $+! lineending temp$ $+!
-        else
-          caddr u temp$ $+! s"  command had the following error: " temp$ $+! s>d dto$ temp$ $+! lineending temp$ $+!  
+  sandtableready? true = if
+    s" thecmd" (variable-pair-string@) swap to u swap to caddr
+    true = if
+      s" Command is " temp$ $!
+      caddr u temp$ $+! lineending temp$ $+!
+      othercmds$ [bind] strings $qty 0 ?do
+        i othercmds$ [bind] strings []@$ drop caddr u compare false = if
+          true to nflag
+          leave
         then
-      endtry
+      loop
+      nflag if
+        caddr u temp$ $+! s"  is a valid command and will be executed!" temp$ $+! lineending temp$ $+!
+        temp$ $@ lastresultdatasend
+        try
+          -1 11 ?do
+            s" s" atemp$ [bind] string !$
+            i s>d dto$ atemp$ [bind] string !+$
+            atemp$ [bind] string @$ (variable-pair-value@) false = if drop then
+          1 -loop
+          caddr u find-name name>interpret execute
+          false
+        restore
+          dup false = if
+            drop caddr u temp$ $+! s"  command was executed and finished with no errors!" temp$ $+! lineending temp$ $+!
+          else
+            caddr u temp$ $+! s"  command had the following error: " temp$ $+! s>d dto$ temp$ $+! lineending temp$ $+!
+          then
+        endtry
+      else
+        caddr u temp$ $+! s"  is not a valid command nothing will be executed!" temp$ $+! lineending temp$ $+!
+      then
     else
-      caddr u temp$ $+! s"  is not a valid command nothing will be executed!" temp$ $+! lineending temp$ $+!
+      s" thecmd variable not found so nothing is executed!" temp$ $! lineending temp$ $+!
+    then
+
+    s" s0" (variable-pair-value@)
+    true = if
+      s" s0 is " temp$ $+! s>d dto$ temp$ $+! lineending temp$ $+!
+    else
+      drop s" s0 is null!" temp$ $+! lineending temp$ $+!
+    then
+    s" s0" (variable-pair-string@)
+    true = if
+      s" s0 as string is " temp$ $+!
+      temp$ $+! lineending temp$ $+!
+    else
+      s" s0 not found as string " temp$ $+! lineending temp$ $+!
+      2drop
     then
   else
-    s" thecmd variable not found so nothing is executed!" temp$ $! lineending temp$ $+!
+    s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $!
+    lineending temp$ $+!
   then
-
-  s" s0" (variable-pair-value@)
-  true = if
-    s" s0 is " temp$ $+! s>d dto$ temp$ $+! lineending temp$ $+!
-  else
-    drop s" s0 is null!" temp$ $+! lineending temp$ $+!
-  then
-  s" s0" (variable-pair-string@)
-  true = if
-    s" s0 as string is " temp$ $+!
-    temp$ $+! lineending temp$ $+!
-  else
-    s" s0 not found as string " temp$ $+! lineending temp$ $+!
-    2drop
-  then
-
 
   temp$ $@ lastresultdatasend ;
 
