@@ -444,7 +444,7 @@ s" ncircle-spin" othercmds$ bind strings !$x
   true = if
     s" Command is " temp$ $!
     caddr u temp$ $+! lineending temp$ $+!
-    ohtercmds$ [bind] strings $qty 0 ?do
+    othercmds$ [bind] strings $qty 0 ?do
       othercmds$ [bind] strings []@$ caddr u compare false = if
         true to nflag
         leave
@@ -454,7 +454,7 @@ s" ncircle-spin" othercmds$ bind strings !$x
       caddr u temp$ $+! s"  is a valid command and will be executed!" temp$ $+! lineending temp$ $+!
     else
       caddr u temp$ $+! s"  is not a valid command nothing will be executed!" temp$ $+! lineending temp$ $+!
-    then 
+    then
   else
     s" thecmd variable not found so nothing is executed!" temp$ $! lineending temp$ $+!
   then
