@@ -24,7 +24,7 @@
   ;
 
 : nrotsquare { usize ux uy uangle usteps -- }
-  usteps 0 ?do usize ux uy uangle 360 usteps / i * + n>square loop ;
+  usteps 0 ?do usize ux uy uangle 360 usteps / i * + nsquare loop ;
 
 : nnrotsquare { udeltasize ux uy ucirclesteps uoutsidesteps }
   uoutsidesteps 0 ?do
