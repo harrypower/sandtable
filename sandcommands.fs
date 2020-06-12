@@ -438,15 +438,23 @@ s" ncircle-spin" othercmds$ bind strings !$x
 \ place other commands here!
 
 : othercmds ( -- ) \ this will parse thecmd for a sub command to execute.  s0 to s11 are passed with this command for stack values that this sub command needs
-  0 0 { caddr u }
+  0 0 false { caddr u nflag }
   (find-variable-pair$)
   s" thecmd" (variable-pair-string@) swap to u swap to caddr
   true = if
     s" Command is " temp$ $!
     caddr u temp$ $+! lineending temp$ $+!
-  \  ohtercmds$ [bind] strings $qty 0 ?do
-  \    othercmds$ [bind] strings []@$ caddr u compare drop
-  \  loop
+    ohtercmds$ [bind] strings $qty 0 ?do
+      othercmds$ [bind] strings []@$ caddr u compare false = if
+        true to nflag
+        leave
+      then
+    loop
+    nflag if
+      caddr u temp$ $+! s"  is a valid command and will be executed!" temp$ $+! lineending temp$ $+!
+    else
+      caddr u temp$ $+! s"  is not a valid command nothing will be executed!" temp$ $+! lineending temp$ $+!
+    then 
   else
     s" thecmd variable not found so nothing is executed!" temp$ $! lineending temp$ $+!
   then
