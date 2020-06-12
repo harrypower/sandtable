@@ -51,11 +51,25 @@
 
   <li>rndstar ( uamount -- ) \ will start at a random board location and draw random length lines from that start point radiating out </li>
   <li>rndstar2 ( uamount nx ny -- )</li>
-  <li> </li>
-  <li> </li>
-  <li> </li>
-  <li> </li>
-  <li> </li>
+  <li>linestar ( nx ny nangle usize uquant -- ) \ move to nx ny and draw nquant lines of usize from nx ny location with rotation of nangle </li>
+  <li>circle ( nx ny nangle usize -- ) \ nx ny is circle center nangle is start of drawing on circle usize is radius of circle </li>
+  <li>arc ( nx ny nstartangle ntotalangles usize -- ) \ draw an arc with nx ny as center usize is radius nstartangle is arc start with ntotalangles as travel angles </li>
+  <li>circle2 ( nx ny nangle usize -- ) \ nx ny start point on circle nangle is angle pointing at center of circle usize is the radius of circle </li>
+  <li>concentric-circles ( nx ny nangle usize ustep uqnt -- ) \ makes concentric cirles with nx ny as center, nangle as starting location<br>
+    ustep is how many absolute location steps between circles with uqnt being how many circles to make <br></li>
+  <li>circle-circles ( nx ny nangle usize uqnt usize2 -- )<br>
+    imagine a circle then on that circle are circles drawn around it<br>
+    nx ny are the location for first circle to draw nangle from to its center with usize as the radius<br>
+    uqnt is how many of these circles are drawn around the main circle that is not drawn<br>
+    usize2 is the radius of the distance of the next circle that is to start but it will be drawn with usize<br> </li>
+  <li>circle-spin ( nx ny nangle usize uqnt -- )<br>
+    nx ny is the center of where the circles spin around so it is an edge of all the circles<br>
+    uangle is start angle for the circles of usize being the radius<br>
+    uqnt is the amount of circles that are rotated around <br></li>
+  <li>ncircle-spin ( nx ny nangle usize uqnt uchange ulayers -- )<br>
+    this will use circle-spin to draw circles around the point nx ny<br>
+    then the next layer will be change with uchange added to usize for radius of next layer of circles<br>
+    ulayers is the total layers that this process is done too <br></li>
 
   <li>triangle ( nxstart nystart udist1 uangle1 udist2 uangle2 -- ) \ draw triangle starting at nxstart nystart<br>
   note uangle1 and uangle2 are angles relative to drawing coordinates not triangle angles<br></li>
@@ -65,12 +79,9 @@
   udist1 uangle1 define first leg from nx ny<br>
   udist2 uangle2 define second leg from nx ny<br>
   udist3 uangle3 define third leg from nx ny<br></li>
-
-  <li> </li>
-  <li> </li>
-  <li> </li>
-  <li> </li>
-
+  <li>ntrianglecenter ( uqnt ndincrease naincrease nx ny udist1 uangle1 udist2 uangle2 udist3 uangle3 -- ) \ draw uqnt amounts of trianglecenter triangles </li>
+  <li>equaltrianglecenter ( nx ny udist uangle -- ) \ make a equalateral triangle where nx ny is reference point and first leg is udist and uangle from reference </li>
+  <li>nequaltrianglecenter ( nqnt udistchange uanglechange nx ny udist uangle -- ) </li>
 </ul>
 
 </body>
