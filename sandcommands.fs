@@ -457,11 +457,11 @@ s" ncircle-spin" othercmds$ bind strings !$x
         caddr u temp$ $+! s"  is a valid command and will be executed!" temp$ $+! lineending temp$ $+!
         temp$ $@ lastresultdatasend
         try
-          -1 11 ?do
+          12 0 ?do
             s" s" atemp$ [bind] string !$
             i s>d dto$ atemp$ [bind] string !+$
             atemp$ [bind] string @$ (variable-pair-value@) false = if drop then
-          1 -loop
+          loop
           caddr u find-name name>interpret execute
           false
         restore
