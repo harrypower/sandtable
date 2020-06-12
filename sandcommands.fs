@@ -445,7 +445,7 @@ s" ncircle-spin" othercmds$ bind strings !$x
     s" Command is " temp$ $!
     caddr u temp$ $+! lineending temp$ $+!
     othercmds$ [bind] strings $qty 0 ?do
-      i othercmds$ [bind] strings []@$ caddr u compare false = if
+      i othercmds$ [bind] strings []@$ drop caddr u compare false = if
         true to nflag
         leave
       then
