@@ -163,7 +163,16 @@ commands-instant set-current
   then
   temp$ $@ lastresultdatasend ;
 
-: stopsandserver ( -- ) \ this will simply stop this sand command processing service
+: poweroffsandtable ( -- ) \ this will save current x and y positions and power down sandtable
+  xposition yposition stcalibrationout
+  s" the sandtable will now be powered off!" temp$ $! lineending temp$ $+!
+  temp$ $@ lastresultdatasend
+  5000 ms
+  cmddatasenddelete
+  s" shutdown now" system ;
+
+: stopsandserver ( -- ) \ this will save current x and y positions and stop this sand command processing service
+  xposition yposition stcalibrationout
   s" the sandtable command processor will now be terminated!"  temp$ $! lineending temp$ $+!
   temp$ $@ lastresultdatasend
   5000 ms \ pause to allow cgi to get the info
@@ -204,6 +213,25 @@ commands-slow set-current
       then
   else
     s" xquick or yquick values missing!" temp$ $!
+    lineending temp$ $+!
+    s" fastcalibration not completed!" temp$ $+!
+    lineending temp$ $+!
+  then
+  temp$ $@ lastresultdatasend ;
+
+: retrieve-fastcalibration ( -- ) \ perform the quickstart function from sandtableapi.fs
+  (find-variable-pair$)
+  stcalibrationin ( xposition yposition nflag )
+  true = if
+    s" Got x and y postions from storage for fastcalibration" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+    2dup quickstart false = if ( xposition yposition )
+        stcalibrationout ( )
+        s" Fastcalibration done... x & y calibartion data saved" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+      else
+        s" Fastcalibration failed at quickstart for some reason!" temp$ $! lineending temp$ $+! temp$ $@ testdataout
+      then
+  else
+    s" xposition and yposition not retrieved from storage!" temp$ $!
     lineending temp$ $+!
     s" fastcalibration not completed!" temp$ $+!
     lineending temp$ $+!
