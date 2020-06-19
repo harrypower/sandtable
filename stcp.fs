@@ -35,6 +35,7 @@ require vectordraw.fs
 require squaretest.fs
 require patterns.fs
 require triangles.fs
+require spirograph.fs
 
 :noname ; is bootmessage
 
