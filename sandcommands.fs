@@ -167,9 +167,10 @@ commands-instant set-current
   xposition yposition stcalibrationout
   s" the sandtable will now be powered off!" temp$ $! lineending temp$ $+!
   temp$ $@ lastresultdatasend
+  s" shutdown +1" system \ shutdown in 1 min.
   5000 ms
   cmddatasenddelete
-  s" shutdown now" system ;
+  bye ;
 
 : stopsandserver ( -- ) \ this will save current x and y positions and stop this sand command processing service
   xposition yposition stcalibrationout
