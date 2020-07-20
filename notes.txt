@@ -18,4 +18,9 @@ Notes
         - sandtable command procesor will return a message saying that it is starting the command it recieved.
         - when sandtable command processor is done with command it recieved then it will save the current x and y data and will also save the result of this last command
       - if sandtable command processor is the only one running and its last know x and y data is  not valid it will return a message saying that calibration is needed to process further commands
-  - so that is the plan now to test some of the parts to confirm this will work! 
+  - so that is the plan now to test some of the parts to confirm this will work!
+07/20/2020
+  - adding branch stopsand
+    - this will have command added stopsandtable that will simply stop any drawing happening on the sand table .
+    - this will work by getcgi.fs detecting if sandtable is busy.  If it is busy then it will leave a message file.  This message file will be looked for during any sandtable drawing loops.  If message found then loop will be stoped.
+      

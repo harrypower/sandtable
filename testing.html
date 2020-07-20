@@ -24,6 +24,7 @@
       <option value="stopsandserver">stopsandserver</option>
       <option value="poweroffsandtable">poweroffsandtable</option>
       <option value="retrieve-fastcalibration">retrieve-fastcalibration</option>
+      <option value="stopsand">stopsandtable</option>
     </select>
     <input type="submit" value="Send Command"><br>
 </form>
@@ -66,8 +67,8 @@
 </form>
 
 <form action="/cgi-bin/directtesting.cgi" method="get" id="roundformA">
-  <input type="hidden" name="command" value="stopsandserver" readonly>
-  <input type="submit" value="Turn off sandtable server now!">
+  <input type="hidden" name="command" value="stopsandtable" readonly>
+  <input type="submit" value="Stop sandtable from drawing if it is currently drawing!">
 </form>
 
 </body>
