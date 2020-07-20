@@ -169,6 +169,7 @@ commands-instant set-current
   temp$ $@ lastresultdatasend
   s" shutdown +1" system \ shutdown in 1 min.
   5000 ms
+  cmdstatusdelete
   cmddatasenddelete
   bye ;
 
@@ -182,6 +183,7 @@ commands-instant set-current
   s" the sandtable command processor will now be terminated!"  temp$ $! lineending temp$ $+!
   temp$ $@ lastresultdatasend
   5000 ms \ pause to allow cgi to get the info
+  cmdstatusdelete
   cmddatasenddelete
   bye ;
 

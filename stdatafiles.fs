@@ -129,3 +129,6 @@ variable tmpname$
   ststatusfile$@ opendata
   shrink-write-file
   statuschgowner ;
+: cmdstatusdelete ( -- ) \ delete ststatusfile
+  ststatusfile$@ file-status swap drop false =
+  if ststatusfile$@ delete-file throw then ; \ delete ststatusfile if it is present.
