@@ -24,7 +24,8 @@
   ;
 
 : nrotsquare { usize ux uy uangle usteps -- }
-  usteps 0 ?do usize ux uy uangle 360 usteps / i * + nsquare loop ;
+  usteps 0 ?do ststopcmd?-message false = if unloop exit then
+    usize ux uy uangle 360 usteps / i * + nsquare loop ;
 
 : nnrotsquare { udeltasize ux uy ucirclesteps uoutsidesteps }
   uoutsidesteps 0 ?do
