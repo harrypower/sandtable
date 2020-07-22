@@ -30,12 +30,15 @@ warnings off
 
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
+require stringconvert.fs
 require unix/libc.fs
 require vectordraw.fs
 require squaretest.fs
 require patterns.fs
 require triangles.fs
 require spirograph.fs
+require stdatafiles.fs
+require sandcommands.fs
 
 :noname ; is bootmessage
 
@@ -43,16 +46,14 @@ variable command$
 \ error constants
 s" no terminator found in stdin!" exception constant noterm
 
-variable convert$
-: udto$ ( ud -- caddr u )  \ convert unsigned double to a string
-    <<# #s  #> #>> convert$ $! convert$ $@ ;
-: dto$ ( d -- caddr u )  \ convert double signed to a string
-    swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
-: lineending ( -- caddr u ) \ return a string to produce a line end in html
-  s\" <br>\n" ;
+\ variable convert$
+\ : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
+\    <<# #s  #> #>> convert$ $! convert$ $@ ;
+\ : dto$ ( d -- caddr u )  \ convert double signed to a string
+\    swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
+\ : lineending ( -- caddr u ) \ return a string to produce a line end in html
+\  s\" <br>\n" ;
 
-require stdatafiles.fs
-require sandcommands.fs
 
 variable messagebuffer$
 

@@ -20,6 +20,7 @@
 
 \ Requires:
 \ stdatafiles.fs
+\ stringconvert.fs
 
 \ Revisions:
 \ 03/15/2020 started coding
@@ -30,14 +31,16 @@ warnings off
 s" no terminator found in stdin!" exception constant noterm
 
 5000000 value cmdtimeout \ this is about 5 seconds to wait for message to show up
-variable convert$
-: udto$ ( ud -- caddr u )  \ convert unsigned double to a string
-    <<# #s  #> #>> convert$ $! convert$ $@ ;
-: dto$ ( d -- caddr u )  \ convert double signed to a string
-    swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
-: lineending ( -- caddr u ) \ return a string to produce a line end in html
-  s\" <br>\n" ;
 
+\ variable convert$
+\ : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
+\    <<# #s  #> #>> convert$ $! convert$ $@ ;
+\ : dto$ ( d -- caddr u )  \ convert double signed to a string
+\    swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
+\ : lineending ( -- caddr u ) \ return a string to produce a line end in html
+\  s\" <br>\n" ;
+
+require stringconvert.fs
 require stdatafiles.fs
 
 : (getstdin)  ( -- caddr u nflag ) \ will return caddr u containing one charcater if nflag is true and caddr u will be empty if stdin can be read from
@@ -94,7 +97,7 @@ variable messagebuff$
         s" Sandtable is currently busy with other commands!" type lineending type
         messagebuff$ $@ s" command=stopstand" search >r 2drop r> true = if
           ststopcmd!
-          s" Stop sandtable command issued!" type lineending type  
+          s" Stop sandtable command issued!" type lineending type
         then
       then
     else
