@@ -28,6 +28,9 @@
 
 warnings off
 
+variable command$
+variable messagebuffer$
+
 require sandmotorapi.fs
 require Gforth-Objects/stringobj.fs
 require stringconvert.fs
@@ -42,20 +45,8 @@ require sandcommands.fs
 
 :noname ; is bootmessage
 
-variable command$
 \ error constants
 s" no terminator found in stdin!" exception constant noterm
-
-\ variable convert$
-\ : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
-\    <<# #s  #> #>> convert$ $! convert$ $@ ;
-\ : dto$ ( d -- caddr u )  \ convert double signed to a string
-\    swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
-\ : lineending ( -- caddr u ) \ return a string to produce a line end in html
-\  s\" <br>\n" ;
-
-
-variable messagebuffer$
 
 : processcmd ( -- ) \ caddr u is the string containing the command and possible variables to be processed
 \ The command is parsed and other variables parsed then executed if it is a valid command

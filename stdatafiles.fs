@@ -1,5 +1,7 @@
 \ stdatafiles.fs
 
+require stringconvert.fs
+
 \ error constants
 s" bbbdatapath or pcdatapath do not exist cannot proceed!" exception constant nopath
 

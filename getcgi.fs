@@ -32,14 +32,6 @@ s" no terminator found in stdin!" exception constant noterm
 
 5000000 value cmdtimeout \ this is about 5 seconds to wait for message to show up
 
-\ variable convert$
-\ : udto$ ( ud -- caddr u )  \ convert unsigned double to a string
-\    <<# #s  #> #>> convert$ $! convert$ $@ ;
-\ : dto$ ( d -- caddr u )  \ convert double signed to a string
-\    swap over dabs <<# #s rot sign #> #>> convert$ $! convert$ $@ ;
-\ : lineending ( -- caddr u ) \ return a string to produce a line end in html
-\  s\" <br>\n" ;
-
 require stringconvert.fs
 require stdatafiles.fs
 
