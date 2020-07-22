@@ -1,5 +1,7 @@
 \ squaretest.fs
 
+require  stdatafiles.fs
+
 : nsquare ( usize ux uy uangle -- ) \ uangle is degrees
   0 0 0 0 { usize ux uy uangle ua ub ux1 uy1 }
   uangle 360 mod to uangle
