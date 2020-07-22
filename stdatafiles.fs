@@ -39,6 +39,8 @@ variable temppath$
   s" stcmdin.data" path+name ;
 : stcmdoutfile$@ ( -- caddr u ) \ sandtable result of command received via stcmdin
   s" stcmdout.data" path+name ;
+: ststop$@ ( -- caddr u ) \ sandtable stop indicator file name
+  s" ststop.data" path+name ;
 : opendata ( caddr u -- ufid ) \ caddr u is a string for path of file to be opened for writing to .. if it is not present then create that file
   2dup file-status swap drop false = if
     r/w open-file throw
@@ -132,3 +134,10 @@ variable tmpname$
 : cmdstatusdelete ( -- ) \ delete ststatusfile
   ststatusfile$@ file-status swap drop false =
   if ststatusfile$@ delete-file throw then ; \ delete ststatusfile if it is present.
+: ststopcmd? ( -- nflag ) \ nflag is false if stop command is present
+  ststop$@ file-status swap drop ;
+: ststopcmd! ( -- ) \ issue stop commmand
+  ststop$@ opendata close-file throw ;
+: ststopcmd-remove ( -- ) \ remove stop command
+  ststopcmd? false =
+  if ststop$@ delete-file throw then ;
