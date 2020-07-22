@@ -23,4 +23,4 @@ Notes
   - adding branch stopsand
     - this will have command added stopsandtable that will simply stop any drawing happening on the sand table .
     - this will work by getcgi.fs detecting if sandtable is busy.  If it is busy then it will leave a message file.  This message file will be looked for during any sandtable drawing loops.  If message found then loop will be stoped.
-      
+    - just need to add the messaging mechanism to the stdatafiles.fs commands then test it.
