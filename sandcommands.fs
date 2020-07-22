@@ -167,7 +167,9 @@ commands-instant set-current
   temp$ $@ lastresultdatasend ;
 
 : poweroffsandtable ( -- ) \ this will save current x and y positions and power down sandtable
-  xposition yposition stcalibrationout
+  sandtableready? true = if
+    xposition yposition stcalibrationout
+  then
   s" the sandtable will now be powered off!" temp$ $! lineending temp$ $+!
   temp$ $@ lastresultdatasend
   s" shutdown +1" system \ shutdown in 1 min.
@@ -183,7 +185,9 @@ commands-instant set-current
   temp$ $@ lastresultdatasend ;
 
 : stopsandserver ( -- ) \ this will save current x and y positions and stop this sand command processing service
-  xposition yposition stcalibrationout
+  sandtableready? true = if
+    xposition yposition stcalibrationout
+  then 
   s" the sandtable command processor will now be terminated!"  temp$ $! lineending temp$ $+!
   temp$ $@ lastresultdatasend
   5000 ms \ pause to allow cgi to get the info
