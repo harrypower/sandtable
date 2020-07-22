@@ -92,6 +92,10 @@ variable messagebuff$
         then
       else
         s" Sandtable is currently busy with other commands!" type lineending type
+        messagebuff$ $@ s" command=stopstand" search >r 2drop r> true = if
+          ststopcmd!
+          s" Stop sandtable command issued!" type lineending type  
+        then
       then
     else
       2drop

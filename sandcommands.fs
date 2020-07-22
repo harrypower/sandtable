@@ -176,6 +176,7 @@ commands-instant set-current
 : stopsand ( -- ) \ this simply returns a message saying the sandtable is stoped
 \ the reason this only returns a message is because if this command runs that means the sandtable is already stopped and not drawing
   s" The sandtable is not drawing now and waiting for commands!" temp$ $! lineending temp$ $+!
+  ststopcmd-remove \ remove the stop command incase it is present in system 
   temp$ $@ lastresultdatasend ;
 
 : stopsandserver ( -- ) \ this will save current x and y positions and stop this sand command processing service
