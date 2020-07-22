@@ -137,7 +137,8 @@ variable tmpname$
 : ststopcmd? ( -- nflag ) \ nflag is false if stop command is present
   ststop$@ file-status swap drop ;
 : ststopcmd! ( -- ) \ issue stop commmand
-  ststop$@ opendata close-file throw ;
+  ststop$@ opendata
+  ststop$@ shrink-write-file ;
 : ststopcmd-remove ( -- ) \ remove stop command
   ststopcmd? false =
   if ststop$@ delete-file throw then ;
