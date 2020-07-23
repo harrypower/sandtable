@@ -55,6 +55,7 @@ require random.fs
     ym-max 2 / random \ uy
     dup movetoy .
     .s cr
+    360 random 
     nsquare
   loop ;
 
@@ -66,5 +67,6 @@ require random.fs
     xm-max random - \ usize
     xposition
     yposition
+    360 random
     nsquare
   loop ;
