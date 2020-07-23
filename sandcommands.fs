@@ -187,7 +187,7 @@ commands-instant set-current
 : stopsandserver ( -- ) \ this will save current x and y positions and stop this sand command processing service
   sandtableready? true = if
     xposition yposition stcalibrationout
-  then 
+  then
   s" the sandtable command processor will now be terminated!"  temp$ $! lineending temp$ $+!
   temp$ $@ lastresultdatasend
   5000 ms \ pause to allow cgi to get the info
@@ -542,7 +542,8 @@ s" threeleggedspiral" othercmds$ bind strings !$x
     s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $!
     lineending temp$ $+!
   then
-
+  ststopcmd? false = if s" Stop sandtable command recieved and pattern exited!" temp$ $+! lineending temp$ $+! then 
+  ststopcmd-remove
   temp$ $@ lastresultdatasend ;
 
 set-current set-order

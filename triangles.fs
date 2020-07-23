@@ -73,7 +73,7 @@ gforthtest true = [if]
 : ntrianglecenter ( uqnt ndincrease naincrease nx ny udist1 uangle1 udist2 uangle2 udist3 uangle3 -- ) \ draw uqnt amounts of trianglecenter triangles
   { uqnt udincrease naincrease nx ny udist1 uangle1 udist2 uangle2 udist3 uangle3 }
   uqnt 0 ?do
-    ststopcmd?-message false = if ststopcmd-remove unloop exit then
+    ststopcmd? false = if unloop exit then
     nx ny udist1 i udincrease * + uangle1 i naincrease * +
     udist2 i udincrease * + uangle2 i naincrease * +
     udist3 i udincrease * + uangle3 i naincrease * +
@@ -90,6 +90,6 @@ gforthtest true = [if]
 : nequaltrianglecenter ( nqnt udistchange uanglechange nx ny udist uangle -- )
   { nqnt udistchange uanglechange nx ny udist uangle }
   nqnt 0 ?do
-    ststopcmd?-message false = if ststopcmd-remove unloop exit then
+    ststopcmd? false = if unloop exit then
     nx ny udist udistchange i * + uangle uanglechange i * + equaltrianglecenter
   loop ;
