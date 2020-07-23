@@ -40,6 +40,7 @@ gforthtest true = [if]
 : rndstar ( uamount -- ) \ will start at a random board location and draw random length lines from that start point radiating out
   xm-max random ym-max random 0 0 { nx ny nx1 ny1 }
   0 ?do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     xm-max random to nx1
     ym-max random to ny1
     nx ny nx1 ny1 drawline .
@@ -49,6 +50,7 @@ gforthtest true = [if]
 : rndstar2 ( uamount nx ny -- )
   0 0 { uamount nx ny nx1 ny1 }
   uamount 0 ?do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     xm-max random to nx1
     ym-max random to ny1
     nx ny nx1 ny1 drawline .
@@ -68,6 +70,7 @@ gforthtest true = [if]
   xposition yposition nx ny drawline .
   360e uquant s>f f/ f>s to uintangle
   uquant 0 ?do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     nx ny
     uintangle s>f i s>f f* nangle s>f f+ rdeg>rrad fcos usize s>f f* f>s nx +
     uintangle s>f i s>f f* nangle s>f f+ rdeg>rrad fsin usize s>f f* f>s ny +
@@ -84,6 +87,7 @@ gforthtest true = [if]
   nangle s>f rdeg>rrad fsin usize s>f f* ny s>f f+ to rcy
   rcx f>s rcy f>s movetoxy .
   365 0 do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     rcx f>s rcy f>s
     nangle i + s>f rdeg>rrad fcos usize s>f f* nx s>f f+ to rcx
     nangle i + s>f rdeg>rrad fsin usize s>f f* ny s>f f+ to rcy
@@ -96,6 +100,7 @@ gforthtest true = [if]
   nstartangle s>f rdeg>rrad fsin usize s>f f* ny s>f f+ to rcy
   rcx f>s rcy f>s movetoxy .
   ntotalangles 0 do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     rcx f>s rcy f>s
     nstartangle i + s>f rdeg>rrad fcos usize s>f f* nx s>f f+ to rcx
     nstartangle i + s>f rdeg>rrad fsin usize s>f f* ny s>f f+ to rcy
@@ -109,6 +114,7 @@ gforthtest true = [if]
   nangle 180 + to nangle
   nx ny movetoxy .
   365 0 do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     nx ny
     nangle i + s>f rdeg>rrad fcos usize s>f f* rcx f+ f>s to nx
     nangle i + s>f rdeg>rrad fsin usize s>f f* rcy f+ f>s to ny
@@ -119,6 +125,7 @@ gforthtest true = [if]
 \ ustep is how many absolute location steps between circles with uqnt being how many circles to make
   { nx ny nangle usize ustep uqnt }
   uqnt 0 ?do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     nx ny nangle usize i ustep * + circle
   loop  ;
 
@@ -131,6 +138,7 @@ gforthtest true = [if]
   nx s>f to rcx
   ny s>f to rcy
   uqnt 0 ?do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     rcx f>s to nx
     rcy f>s to ny
     nx ny nangle usize circle2
@@ -145,6 +153,7 @@ gforthtest true = [if]
 \ uqnt is the amount of circles that are rotated around
   { nx ny nangle usize uqnt }
   uqnt 0 ?do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     nx ny nangle usize circle2
     nangle 360 uqnt / + to nangle
   loop ;
@@ -155,6 +164,7 @@ gforthtest true = [if]
 \ ulayers is the total layers that this process is done too
   { nx ny nangle usize uqnt uchange ulayers }
   ulayers 0 ?do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     nx ny nangle usize uqnt circle-spin
     usize uchange + to usize
   loop ;

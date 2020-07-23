@@ -78,6 +78,7 @@ gforthtest true = [if]
   180 distance2 polar>rect y2 + to y1 x2 + to x1
   180 distance1 polar>rect y1 + to ycenter x1 + to xcenter \ now i have the center coordinates
   nsteps 0 ?do
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     aangle1 bangle1 + dup to bangle1 distance1 polar>rect ycenter + to y1 xcenter + to x1
     aangle2 bangle2 + dup to bangle2 distance2 polar>rect y1 + to y2 x1 + to x2
     aangle3 bangle3 + dup to bangle3 distance3 polar>rect y2 + to y3 x2 + to x3 \ now i have new x an y coordinates to move to

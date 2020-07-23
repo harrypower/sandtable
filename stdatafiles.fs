@@ -145,7 +145,7 @@ variable tmpname$
 : ststopcmd-remove ( -- ) \ remove stop command
   ststopcmd? false =
   if ststop$@ delete-file throw then ;
-: ststopcmd?-message ( -- nflag ) \ if stop command is present then issue message and return nflag as false .. nflag is true is stop command not present 
+: ststopcmd?-message ( -- nflag ) \ if stop command is present then issue message and return nflag as false .. nflag is true if stop command not present
   ststopcmd? false = if
     s" Stop sandtable motors command recieved and executed!" stlastresultout
     false

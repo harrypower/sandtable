@@ -27,12 +27,12 @@ require  stdatafiles.fs
 
 : nrotsquare { usize ux uy uangle usteps -- }
   usteps 0 ?do
-    ststopcmd?-message false = if unloop exit then  \ this line is needed to exit if stop command is issued
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then  \ this line is needed to exit if stop command is issued
     usize ux uy uangle 360 usteps / i * + nsquare loop ;
 
 : nnrotsquare { udeltasize ux uy ucirclesteps uoutsidesteps }
   uoutsidesteps 0 ?do
-    ststopcmd?-message false = if unloop exit then
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     udeltasize i * udeltasize + ux uy 0 ucirclesteps nrotsquare
   loop
 ;
@@ -48,21 +48,21 @@ require random.fs
 : rndsquares ( namount -- )
   seed-init
   0 ?do
-    ststopcmd?-message false = if unloop exit then
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     xm-max random \ usize
     xm-max 2 / random \ ux
     dup movetox .
     ym-max 2 / random \ uy
     dup movetoy .
     .s cr
-    360 random 
+    360 random
     nsquare
   loop ;
 
 : rndsquares2 ( namount -- )
   seed-init
   0 ?do
-    ststopcmd?-message false = if unloop exit then
+    ststopcmd?-message false = if ststopcmd-remove unloop exit then
     xm-max random
     xm-max random - \ usize
     xposition
