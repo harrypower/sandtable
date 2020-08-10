@@ -269,6 +269,8 @@ commands-slow set-current
   else
     s" Configuration failed for some reason during fullcalibration!" temp$ $!
   then
+  ststopcmd? false = if s" Stop sandtable command recieved and pattern exited!" temp$ $+! lineending temp$ $+! then
+  ststopcmd-remove
   temp$ $@ lastresultdatasend ;
 
 : drawaline ( -- ) \ perform the drawline word on sandtable
@@ -316,6 +318,8 @@ commands-slow set-current
   else
     s" Sandtable not calibrated yet so manylines will not execute!" temp$ $! lineending temp$ $+!
   then
+  ststopcmd? false = if s" Stop sandtable command recieved and pattern exited!" temp$ $+! lineending temp$ $+! then
+  ststopcmd-remove
   temp$ $@ lastresultdatasend ;
 
 : zigzag ( -- ) \ perform zigzag-line
@@ -354,6 +358,8 @@ commands-slow set-current
   else
     s" Sandtable not calibrated yet so zigzag will not execute!" temp$ $! lineending temp$ $+!
   then
+  ststopcmd? false = if s" Stop sandtable command recieved and pattern exited!" temp$ $+! lineending temp$ $+! then
+  ststopcmd-remove
   temp$ $@ lastresultdatasend ;
 
 : gotoxy ( -- ) \ perform the movetoxy word on sandtable
@@ -542,7 +548,7 @@ s" threeleggedspiral" othercmds$ bind strings !$x
     s" Sandtable not configures or calibrated yet!  Sandtable did nothing as a result!" temp$ $!
     lineending temp$ $+!
   then
-  ststopcmd? false = if s" Stop sandtable command recieved and pattern exited!" temp$ $+! lineending temp$ $+! then 
+  ststopcmd? false = if s" Stop sandtable command recieved and pattern exited!" temp$ $+! lineending temp$ $+! then
   ststopcmd-remove
   temp$ $@ lastresultdatasend ;
 
