@@ -23,6 +23,7 @@
 \ objects.fs
 \ mdca-obj.fs
 \ double-linked-list.fs
+\ stdataflies.fs
 
 \ Revisions:
 \ 11/09/2018 started coding
@@ -550,6 +551,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
     uxy case
       xm of
         begin
+          ststopcmd? false = if 12 throw then
           xcalreg forward xcalspeed xcalsteps calstep-amounts 2 * xm ndosteps 2drop
           calwait ms
           xcalreg backward xcalspeed xcalsteps calstep-amounts xm ndosteps 2drop
@@ -593,6 +595,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       endof
       ym of
         begin
+          ststopcmd? false = if 12 throw then
           ycalreg forward ycalspeed ycalsteps calstep-amounts 2 * ym ndosteps 2drop
           calwait ms
           ycalreg backward ycalspeed ycalsteps calstep-amounts ym ndosteps 2drop
@@ -786,6 +789,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       nbasex1 nbasey1 nbasex2 nbasey2 na 0 swap - nb 0 swap - offset-line order-line
       to nyj2 to nxj2 to nyj1 to nxj1
       uqnt 0 ?do
+          ststopcmd? false = if unloop exit then
           0 to na
           i fdpl f>s * to nb
           nxj1 nyj1 nxj2 nyj2 na nb offset-line order-line .s drawline . cr
@@ -800,6 +804,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       nbasex1 nbasey1 nbasex2 nbasey2 na 0 swap - nb 0 swap - offset-line order-line
       to nyj2 to nxj2 to nyj1 to nxj1
       uqnt 0 ?do
+          ststopcmd? false = if unloop exit then
           i fdpl f>s * to na
           0 to nb
           nxj1 nyj1 nxj2 nyj2 na nb offset-line order-line .s drawline . cr
@@ -828,6 +833,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       nbasex1 nbasey1 nbasex2 nbasey2 na 0 swap - nb 0 swap - offset-line order-line
       to nyj2 to nxj2 to nyj1 to nxj1
       uqnt 0 ?do
+          ststopcmd? false = if unloop exit then
           i fdpl f>s * dup
           uangle (calc-na) to na
           uangle (calc-nb) to nb
@@ -847,6 +853,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
       nbasex1 nbasey1 nbasex2 nbasey2 na 0 swap - nb  offset-line order-line
       to nyj2 to nxj2 to nyj1 to nxj1
       uqnt 0 ?do
+          ststopcmd? false = if unloop exit then
           i fdpl f>s * dup
           uangle (calc-na) to na
           uangle (calc-nb) to nb
@@ -866,6 +873,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         xm-max xm-min - nsteps / to nxyamount
         xm-min ym-min movetoxy 200 <> if 300 throw then
         nxyamount nsteps * xm-min do
+          ststopcmd? false = if 300 throw then
           i nxyamount 2 / + ym-max movetoxy 200 <> if 301 throw then
           i nxyamount + ym-min movetoxy 200 <> if 302 throw then
         nxyamount +loop
@@ -876,6 +884,7 @@ true value yposition  \ is the real location of y motor .. note if value is true
         ym-max ym-min - nsteps / to nxyamount
         xm-min ym-min movetoxy 200 <> if 300 throw then
         nxyamount nsteps * ym-min do
+          ststopcmd? false = if 300 throw then
           i nxyamount 2 / + xm-max swap movetoxy 200 <> if 301 throw then
           i nxyamount + xm-min swap movetoxy 200 <> if 302 throw then
         nxyamount +loop

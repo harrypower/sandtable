@@ -21,6 +21,7 @@
 \ on Gforth
 \ sandmotorapi.fs
 \ random.fs
+\ stdatafiles.fs
 \ on win32forth
 \ sandmotorapi.f
 
