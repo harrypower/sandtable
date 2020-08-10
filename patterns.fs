@@ -33,6 +33,7 @@
 gforthtest true = [if]
   require random.fs
   require sandmotorapi.fs
+  require stdatafiles.fs
 [else]
   needs sandmotorapi.f
 [then]
