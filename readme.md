@@ -196,26 +196,7 @@ wget localhost
 
 Each of the above lines will give different information but they should all show the system working!
 
-## 8. Adjust visudo
-* Ensure this step is done properly!
-* Issue the following Command:
-```
-sudo visudo
-```
-* Now add the following to the bottom of the document
-```
-debian ALL=(ALL:ALL) NOPASSWD:ALL
-www-data ALL=(ALL) NOPASSWD:ALL
-```
-* Now check after saving the above with this Command:
-```
-sudo visudo -c
-```
-* There should be no errors at this stage ... fix them if this last step says there are errors.
-* Note this adds two things to the sudoers list and adds some security issues so be aware this is not secure in any definition but it works for the intended purpose here!
-* Also note these changes just done do not take affect untill the system is rebooted again so do that now!
-
-## 9. Set up a cron job for sandtable server starting
+## 8. Set up a cron job for sandtable server starting
 * Use the root crontab -e command as follows
 ```
 sudo su
@@ -232,9 +213,9 @@ crontab -l
 * This should list the file you just edited and have the line you added at the bottom ... If it is there then all good. Now you can reboot the machine and see the standtable process running!
 
 
-## 10. Install and setup inetd and netcat
+## 9. Install and setup inetd and netcat
   ```
-    sudo apt-get install openbsd-inetd netcat 
+    sudo apt-get install openbsd-inetd netcat
   ```
   Configure inetd service and start the webserver as follows:
   ```

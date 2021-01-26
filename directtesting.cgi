@@ -19,12 +19,13 @@
 
 \ Requires:
 \ script.fs
-\ curl to be installed on BBB
+\ netcat to be installed on BBB
 
 \ Revisions:
 \ 1/26/2019 changes from fifo to socket coding started
 \ 2/1/2019 using curl to send message to server
 \ 3/22/2020 passing data to gforth code via stdout and getting stdin for return message
+\ 1/26/2021 changed code to use netcat to send message to a port setup via inetd ( port 4446 )
 
 warnings off
 :noname ; is bootmessage
