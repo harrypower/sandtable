@@ -47,9 +47,9 @@ variable cmd$
   { caddr u } \ command to be transfered to sandtable
   s\" echo \"" cmd$ $!
   caddr u cmd$ $+!
-  \ s\" \" | sudo --user=debian --group=debian /home/debian/sandtable/getcgi.fs -e \"processcmdline \"" cmd$ $+!
   s\" \" | nc " cmd$ $+!
-  s\" 192.168.0.59 4446" cmd$ $+!
+  s" HTTP_HOST" getenv cmd$ $+!
+  s" 4446" cmd$ $+!
   cmd$ $@  sh-get ;
 
 : lineending ( -- caddr u )
@@ -61,7 +61,6 @@ variable cmd$
   s\" <html>\n" type
   s\" <head><title>CGI return</title></head>\n" type
   s\" <body>\n" type
-\  s" printenv" sh-get type lineending type
   query$ $@ type
   apache$s $@ type
   s" CGI got this message: " type thequery$ $@ type lineending type
