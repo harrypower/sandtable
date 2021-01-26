@@ -15,7 +15,7 @@
 \    You should have received a copy of the GNU General Public License
 \    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-\ inet sends message to this code
+\ inetd sends message to this code
 
 \ Requires:
 \ stdatafiles.fs
