@@ -48,8 +48,8 @@ variable cmd$
   s\" echo \"" cmd$ $!
   caddr u cmd$ $+!
   s\" \" | nc " cmd$ $+!
-  \ s" HTTP_HOST" getenv cmd$ $+!
-  s" 192.168.0.59 4446" cmd$ $+!
+  s" HTTP_HOST" getenv cmd$ $+!
+  s"  4446" cmd$ $+!
   cmd$ $@  sh-get ;
 
 : lineending ( -- caddr u )
