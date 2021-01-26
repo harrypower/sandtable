@@ -47,7 +47,9 @@ variable cmd$
   { caddr u } \ command to be transfered to sandtable
   s\" echo \"" cmd$ $!
   caddr u cmd$ $+!
-  s\" \" | sudo --user=debian --group=debian /home/debian/sandtable/getcgi.fs -e \"processcmdline \"" cmd$ $+!
+  \ s\" \" | sudo --user=debian --group=debian /home/debian/sandtable/getcgi.fs -e \"processcmdline \"" cmd$ $+!
+  s\" \" | nc " cmd$ $+!
+  s\" 192.168.0.59 4446" cmd$ $+!
   cmd$ $@  sh-get ;
 
 : lineending ( -- caddr u )

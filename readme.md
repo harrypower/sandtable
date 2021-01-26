@@ -230,3 +230,40 @@ crontab -e
 crontab -l
 ```
 * This should list the file you just edited and have the line you added at the bottom ... If it is there then all good. Now you can reboot the machine and see the standtable process running!
+
+
+## 10. Install and setup inetd and netcat
+  ```
+    sudo apt-get install openbsd-inetd netcat 
+  ```
+  Configure inetd service and start the webserver as follows:
+  ```
+    sudo nano /etc/inetd.conf
+  ```
+  Move the curser to the end of the document and enter the following text:
+  ```
+    gforth stream tcp nowait.100 root /home/debian/sandtable/getinet.fs
+  ```
+  Note the path in the above line is the path for where you installed this repository. Save the file with control x y enter
+
+  Configure services to include gforth at port 4446
+  ```
+    sudo nano /etc/services
+  ```
+  Go to the end of the document and add the following line:
+  ```
+    gforth 4446/tcp # my gforth sandtable server at port 4446
+  ```
+  Note you can set this port number to what ever you want but note BBB already uses port 80 and port 8080.
+
+  Now restart the openbsd-inetd service as follows:
+  ```
+    sudo /etc/init.d/openbsd-inetd restart
+    sudo /etc/init.d/openbsd-inetd status
+  ```
+  Now you should see that the service is started and running also look at processes with ps ( ps aux ) should show a process called /usr/sbin/inetd in the list.
+
+  You can stop the service at any time as follows:
+  ```
+    sudo /etc/init.d/openbsd-inetd stop
+  ```
