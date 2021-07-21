@@ -24,3 +24,11 @@ Notes
     - this will have command added stopsandtable that will simply stop any drawing happening on the sand table .
     - this will work by getcgi.fs detecting if sandtable is busy.  If it is busy then it will leave a message file.  This message file will be looked for during any sandtable drawing loops.  If message found then loop will be stoped.
     - just need to add the messaging mechanism to the stdatafiles.fs commands then test it.
+07/21/2021
+  - adding vector drawing patterns
+    - basically the data is stored as vector data as in angle distance pairs
+    - this data then can be rotated and scaled
+    - each pattern will be stored in a file maybe stored in a directory
+    - i use inkscape to draw the pattern as a path with Continuous lines then i export the data as gcode.
+    - then i edit the gcode to simple x y point data.  Then i have a conversion tool program in vectortools.f i use in the sandsim-win32forth to convert xy data to angle distance data that i finally use in in Gforth to draw the pattern
+    
