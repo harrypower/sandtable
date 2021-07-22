@@ -43,9 +43,15 @@ debugging [if]
      selector destruct ( -- ) \ to free allocated memory in objects that use this
   end-interface destruction
 [endif]
+[ifundef] thesize
+  interface
+    selector qnt:
+  end-interface thesize
+[endif]
 
 double-linked-list class
   destruction implementation
+  thesize implementation
   struct
     dfloat% field fangle
     dfloat% field fdistance
@@ -93,7 +99,7 @@ double-linked-list class
   ;m method fad@:
   m: ( rawad -- usize ) \ return current size of lists
     this ll-size@
-  ;m method qnt:
+  ;m overrides qnt:
   m: ( caddr u rawad -- ) \ opens and reads file with name caddr u and puts the xy data into a rawda linked list
     r/o open-file throw fid !
     this destruct
@@ -106,6 +112,30 @@ double-linked-list class
 end-class rawad
 
 rawad dict-new constant arawadlist
+
+double-linked-list class
+  thesize implementation
+  struct
+    dfloat% field fx
+    dfloat% field fy
+  end-struct pointdata%
+  public
+  m: ( deltaxy -- fs: fangle fdistance -- ) \ store fangle and fdistance in list
+    pointdata% %size allocate throw
+    dup dup  fy f! fx f!
+    pointdata% %size this ll!
+  ;m method fxy!:
+  m: ( deltaxy -- fs: -- fangle fdistance ) \ retrieve nx ny from list at current link
+    this ll@ drop dup
+    fx f@
+    fy f@
+  ;m method fxy@:
+  m: ( deltaxy -- usize ) \ return current size of lists
+    this ll-size@
+  ;m overrides qnt:
+end-class deltaxy
+
+deltaxy dict-new constant adeltaxy
 
 \\\ testing above code
 
