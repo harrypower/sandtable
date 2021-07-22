@@ -39,8 +39,8 @@ debugging [if]
 0 value adsize
 buffersize chars buffer: adpair$
 
-: openvectorfile ( -- )  \ **** this word will change after testing
-  s" c:\Users\Philip\Documents\inkscape-stuff\vector.data" r/o open-file throw to fid ;
+\ : openvectorfile ( -- )  \ **** this word will change after testing
+\  s" c:\Users\Philip\Documents\inkscape-stuff\vector.data" r/o open-file throw to fid ;
 
 : getaf ( naddr u -- nflag  fs: -- fa ) \ string naddr u if it contains the angle string turn it in floating stack and true
     2dup s"  " search if swap drop - >float if true else false 0.0e then else 2drop 2drop false 0.0e then ;
@@ -68,8 +68,8 @@ double-linked-list class
     dfloat% field fangle
     dfloat% field fdistance
   end-struct vectordata%
-  public
 
+  public
   m: ( rawad -- fs: fangle fdistance -- ) \ store fangle and fdistance in list
     vectordata% %size allocate throw
     dup dup  fdistance f! fangle f!
@@ -84,6 +84,17 @@ double-linked-list class
     this ll-size@
   ;m method qnt:
 end-class rawad
+
+rawad dict-new constant arawadlist
+
+: readrawad ( caddr u -- ) \ opens and reads file with name caddr u and puts the xy data into a rawda linked list
+  r/o open-file throw to fid
+  arawadlist destruct
+  begin
+    getadpair
+    if arawadlist fad!: false else fdrop fdrop true then
+  until
+  fid close-file throw ;
 
 \\\ testing above code
 
