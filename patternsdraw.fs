@@ -24,8 +24,14 @@
 
 \ Revisions:
 \ 07/21/2021 started coding
-require double-linked-list.fs
-require sandmotorapi.f
+true constant debugging \ true is for testing on pc false is for normal use on BBB sandtable device
+debugging [if]
+  require c:\users\philip\documents\github\gforth-objects\double-linked-list.fs
+\  require c:\users\philip\documents\github\sandtable\sandmotorapi.fs
+[else]
+  require Gforth-Objects/double-linked-list.fs \ *** this is the final form but for testing use below
+  require sandmotorapi.f
+[then]
 
 10 set-precision
 0 value fid
@@ -57,47 +63,29 @@ buffersize chars buffer: adpair$
     drop false 0.0e 0.0e
   then ;
 
-\\\ testing above code 
-:struct vectordata
-  b/float fangle
-  b/float fdistance
-;struct
+double-linked-list class
+  struct
+    dfloat% field fangle
+    dfloat% field fdistance
+  end-struct vectordata%
+  public
 
-:OBJECT rawad <SUPER Linked-List \ object to contain fangle and fdistance linked list
+  m: ( rawad -- fs: fangle fdistance -- ) \ store fangle and fdistance in list
+    vectordata% %size allocate throw
+    dup dup  fdistance f! fangle f!
+    vectordata% %size this ll!
+  ;m method fad!:
+  m: ( rawad -- fs: -- fangle fdistance ) \ retrieve nx ny from list at current link
+    this ll@ drop dup
+    fangle f@
+    fdistance f@
+  ;m method fad@:
+  m: ( rawad -- usize ) \ return current size of lists
+    this ll-size@
+  ;m method qnt:
+end-class rawad
 
-:M ClassInit:  ( -- ) \ constructor
-  ClassInit: super
-  ;M
-
-:M ~: ( -- ) \ destructor
-\ first remove all the allocated floating data in the list here
-  >firstlink: self
-  #links: self 1 - 0 ?do
-    data@: self >nextlink: self
-    dup 0 = if drop else free throw then
-  loop
-  ~: super
-  ;M
-
-:M fad!: ( -- f: fangle fdistance -- ) \ store fangle and fdistance in list
-  sizeof vectordata allocate throw
-  [ vectordata ]
-  dup dup fdistance f! fangle f!
-  data!: self addlink: self
-  [ previous ]
-  ;M
-
-:M fad@: ( -- f: -- fangle fdistance ) \ retrieve nx ny from list at current link
-  data@: self
-  [ vectordata ]
-  dup fangle f@ fdistance f@
-  [ previous ]
-  ;M
-
-:M qnt: ( -- nline-qnt ) \ return how many data pairs
-  #Links: self 1 - ;M
-
-;OBJECT
+\\\ testing above code
 
 : readrawad ( -- ) \ opens and reads vector.data file and puts the xy data in rawad linked list
   openvectorfile
