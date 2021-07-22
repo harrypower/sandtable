@@ -34,42 +34,53 @@ debugging [if]
 [then]
 
 10 set-precision
-0 value fid
-256 value buffersize
-0 value adsize
-buffersize chars buffer: adpair$
 
 \ : openvectorfile ( -- )  \ **** this word will change after testing
 \  s" c:\Users\Philip\Documents\inkscape-stuff\vector.data" r/o open-file throw to fid ;
 
-: getaf ( naddr u -- nflag  fs: -- fa ) \ string naddr u if it contains the angle string turn it in floating stack and true
-    2dup s"  " search if swap drop - >float if true else false 0.0e then else 2drop 2drop false 0.0e then ;
-
-: getdf ( naddr u -- nflag  fs: -- fd ) \ string naddr u if it contains the distance string turn it in floating stack and true
-\ if string is not understandable as a floating number then return false and the floating stack contains 0.0e
-  s"  " search if 1 /string  -trailing >float if true else false 0.0e then else 2drop false 0.0e then ;
-
-: getadf ( naddr u -- nflag fs: -- fa fd )
-  2dup getaf rot rot getdf and ;
-
-: getadpair ( -- nflag fs: -- fx fy )
-\ nflag is true if an xy pair was read in from file
-\ nflag is false if the file has no more lines to read or if the raw.data file is not readable
-\ the floating value of xy pair are returned on floating stack and is only valid if nflag is true
-  adpair$ buffersize fid read-line throw
-  if
-    adpair$ swap getadf
-  else
-    drop false 0.0e 0.0e
-  then ;
+[ifundef] destruction
+  interface
+     selector destruct ( -- ) \ to free allocated memory in objects that use this
+  end-interface destruction
+[endif]
 
 double-linked-list class
+  destruction implementation
   struct
     dfloat% field fangle
     dfloat% field fdistance
   end-struct vectordata%
+  cell% inst-var fid
+  cell% inst-var buffersize
+  cell% inst-var adpair$
 
+  m: ( naddr u rawad -- nflag  fs: -- fa ) \ string naddr u if it contains the angle string turn it in floating stack and true
+      2dup s"  " search if swap drop - >float if true else false 0.0e then else 2drop 2drop false 0.0e then ;m method getaf
+  m: ( naddr u rawad -- nflag  fs: -- fd ) \ string naddr u if it contains the distance string turn it in floating stack and true
+  \ if string is not understandable as a floating number then return false and the floating stack contains 0.0e
+    s"  " search if 1 /string  -trailing >float if true else false 0.0e then else 2drop false 0.0e then ;m method getdf
+  m: ( naddr u rawad -- nflag fs: -- fa fd )
+    2dup this getaf rot rot this getdf and ;m method getadf
+  m: ( rawad -- nflag fs: -- fx fy )
+  \ nflag is true if an xy pair was read in from file
+  \ nflag is false if the file has no more lines to read or if the raw.data file is not readable
+  \ the floating value of xy pair are returned on floating stack and is only valid if nflag is true
+    adpair$ @ buffersize @ fid @ read-line throw
+    if
+      adpair$ @ swap this getadf
+    else
+      drop false 0.0e 0.0e
+    then ;m method getadpair
   public
+  m: ( rawad -- )
+    this [parent] construct
+    256 buffersize !
+    buffersize @ chars allocate throw adpair$ !
+  ;m overrides construct
+  m: ( rawad -- )
+    this [parent] destruct
+    adpair$ @ free throw
+  ;m overrides destruct
   m: ( rawad -- fs: fangle fdistance -- ) \ store fangle and fdistance in list
     vectordata% %size allocate throw
     dup dup  fdistance f! fangle f!
@@ -83,29 +94,20 @@ double-linked-list class
   m: ( rawad -- usize ) \ return current size of lists
     this ll-size@
   ;m method qnt:
+  m: ( caddr u rawad -- ) \ opens and reads file with name caddr u and puts the xy data into a rawda linked list
+    r/o open-file throw fid !
+    this destruct
+    this construct
+    begin
+      this getadpair
+      if this fad!: false else fdrop fdrop true then
+    until
+    fid @ close-file throw ;m method readrawad
 end-class rawad
 
 rawad dict-new constant arawadlist
 
-: readrawad ( caddr u -- ) \ opens and reads file with name caddr u and puts the xy data into a rawda linked list
-  r/o open-file throw to fid
-  arawadlist destruct
-  begin
-    getadpair
-    if arawadlist fad!: false else fdrop fdrop true then
-  until
-  fid close-file throw ;
-
 \\\ testing above code
-
-: readrawad ( -- ) \ opens and reads vector.data file and puts the xy data in rawad linked list
-  openvectorfile
-  qnt: rawad 0 <> if ~: rawad then
-  begin
-    getadpair
-    if fad!: rawad false else fdrop fdrop true then
-  until
-  fid close-file throw ;
 
 :struct deltpoint
   b/float fx
