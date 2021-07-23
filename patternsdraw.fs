@@ -24,19 +24,17 @@
 
 \ Revisions:
 \ 07/21/2021 started coding
-true constant debugging \ true is for testing on pc false is for normal use on BBB sandtable device
+false constant debugging \ true is for testing on pc false is for normal use on BBB sandtable device
 debugging [if]
   require c:\users\philip\documents\github\gforth-objects\double-linked-list.fs
+\ note in windows the pathing system is not the same as linux
 \  require c:\users\philip\documents\github\sandtable\sandmotorapi.fs
 [else]
-  require Gforth-Objects/double-linked-list.fs \ *** this is the final form but for testing use below
+  require Gforth-Objects/double-linked-list.fs
   require sandmotorapi.f
 [then]
 
 10 set-precision
-
-\ : openvectorfile ( -- )  \ **** this word will change after testing
-\  s" c:\Users\Philip\Documents\inkscape-stuff\vector.data" r/o open-file throw to fid ;
 
 [ifundef] destruction
   interface
@@ -100,7 +98,7 @@ double-linked-list class
   m: ( rawad -- usize ) \ return current size of lists
     this ll-size@
   ;m overrides qnt:
-  m: ( caddr u rawad -- ) \ opens and reads file with name caddr u and puts the xy data into a rawda linked list
+  m: ( caddr u rawad -- ) \ opens and reads file with name caddr u and puts the ad data into a rawda linked list
     r/o open-file throw fid !
     this destruct
     this construct
@@ -121,12 +119,16 @@ double-linked-list class
     dfloat% field fx
     dfloat% field fy
   end-struct pointdata%
+  dfloat% inst-var fx1
+  dfloat% inst-var fy1
+  dfloat% inst-var fx2
+  dfloat% inst-var fy2
   m:  ( deltaxy -- f: fangle -- fangle1 ) \ convert degrees to radians
     ( fpi 180e f/ ) 0.01745329251e f* ;m method degrees>radians
   m: ( nxscale nyscale nangle deltaxy -- f: fangle fdistance -- fx fy )
   \ given the nangle change and the nxscale and nyscale change calculate the fx and fy of the input fangle and fdistance data
   \ fx and fy is the change assuming the fangle fdistance started at x 0 and y 0
-    fswap degrees>radians s>f degrees>radians f+ ( nxscale nyscale f: fdistance fangle1 )
+    fswap this degrees>radians s>f this degrees>radians f+ ( nxscale nyscale f: fdistance fangle1 )
     fswap fdup frot fdup frot fswap ( nxscale nyscale fs: fdistance fangle1 fdistance fangle1 )
     fcos f* ( nxscale nyscale f: fdistance fangle1 fx )
     frot frot fsin f* ( nxscale nyscale f: fx fy )
@@ -145,6 +147,13 @@ double-linked-list class
     loop ;m method calcdeltaxy
 
   public
+  m: ( nxscale nyscale nangle caddr u deltaxy -- ) \ caddr u is the string for the vector file data name.  This file is read in and fangle fdistance data retrieved then fx fy data is calculated and stored in deltaxy list
+  \ nxscale nyscale are the scaling factor to change the vector data for final drawing ... 100 is a scale of 1 ,  1000 is a scale of 10 etc.
+  \ nangle is how the final drawing will be rotated from the original pattern
+  \ note this will read the source vector file and close that file after reading it also the raw vector data is in the rawad list and the raw deltaxy data is in this deltaxy list
+    arawadlist readrawad
+    this calcdeltaxy
+  ;m method read&calc-deltaxy
   m: ( deltaxy -- fs: fangle fdistance -- ) \ store fangle and fdistance in list
     pointdata% %size allocate throw
     dup dup  fy f! fx f!
@@ -158,25 +167,22 @@ double-linked-list class
   m: ( deltaxy -- usize ) \ return current size of lists
     this ll-size@
   ;m overrides qnt:
+  m:  ( nx ny  -- ) \ draw the pattern starting at nx ny
+    \ the data for drawing comes from this deltaxy list so read&calc-deltaxy must be called first to load the data into this deltaxy list
+    s>f fy1 f! s>f fx1 f!
+    this ll-set-start
+    this qnt: 0 ?do
+      this fxy@: fy1 f@ f+ fy2 f! fx1 f@ f+ fx2 f!
+      this ll> drop
+      fx1 f@ f>s fy1 f@ f>s fx2 f@ f>s fy2 f@ f>s drawline .
+      fx2 f@ fx1 f! fy2 f@ fy1 f!
+    loop
+  ;m method drawpattern
 end-class deltaxy
 
 deltaxy dict-new constant adeltaxy
 
-\\\ testing above code
-
-0.0e fvalue fx1
-0.0e fvalue fy1
-0.0e fvalue fx2
-0.0e fvalue fy2
-
-: drawpattern ( nx ny nxscale nyscale nangle -- ) \ draw the pattern starting at nx ny with nxscale and nyscale with rotation of nangle
-  calcdeltaxy
-  s>f to fy1 s>f to fx1
-  >firstlink: deltaxy
-  qnt: deltaxy  0 ?do
-    fxy@: deltaxy fy1 f+ to fy2 fx1 f+ to fx2
-    >nextlink: deltaxy
-    fx1 f>s fy1 f>s fx2 f>s fy2 f>s drawline drop
-    fx2 to fx1 fy2 to fy1
-  loop
+: frogtest \ this is to test drawing on real sandtable
+  40000 40000 0 s" patterns\frog1.data" adeltaxy read&calc-deltaxy \ now the data is present
+  40000 40000 adeltaxy drawpattern
 ;
