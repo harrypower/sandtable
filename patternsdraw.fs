@@ -132,8 +132,8 @@ double-linked-list class
     fswap fdup frot fdup frot fswap ( nxscale nyscale fs: fdistance fangle1 fdistance fangle1 )
     fcos f* ( nxscale nyscale f: fdistance fangle1 fx )
     frot frot fsin f* ( nxscale nyscale f: fx fy )
-    s>f 100.0e f/ f* ( nxscale f: fx fy1 )
-    fswap s>f 100.0e f/ f* fswap ( f: fx1 fy1 )
+    s>f 10.0e f/ f* ( nxscale f: fx fy1 )
+    fswap s>f 10.0e f/ f* fswap ( f: fx1 fy1 )
   ;m method calcpolar>rect
   m: ( nxscale nyscale nangle deltaxy -- )
     { nxscale nyscale nangle -- } \ read the rawad data and calculate the offsetpoint data given the nxscale nyscale and nangle data then store in deltaxy
