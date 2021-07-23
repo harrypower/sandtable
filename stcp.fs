@@ -40,6 +40,7 @@ require squaretest.fs
 require patterns.fs
 require triangles.fs
 require spirograph.fs
+require patternsdraw.f
 require stdatafiles.fs
 require sandcommands.fs
 

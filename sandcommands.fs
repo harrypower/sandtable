@@ -487,8 +487,10 @@ s" concentric-circles" othercmds$ bind strings !$x
 s" circle-circles" othercmds$ bind strings !$x
 s" circle-spin" othercmds$ bind strings !$x
 s" ncircle-spin" othercmds$ bind strings !$x
-\ these commands from pirograph.fs
+\ these commands from spirograph.fs
 s" threeleggedspiral" othercmds$ bind strings !$x
+\ this is from patternsdraw.f
+s" frogtest" othercmds$ bind strings !$x
 \ place other commands here!
 
 : othercmds ( -- ) \ this will parse thecmd for a sub command to execute.  s0 to s11 are passed with this command for stack values that this sub command needs
