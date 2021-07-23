@@ -183,6 +183,6 @@ end-class deltaxy
 deltaxy dict-new constant adeltaxy
 
 : frogtest \ this is to test drawing on real sandtable
-  40000 40000 0 s" patterns\frog1.data" adeltaxy read&calc-deltaxy \ now the data is present
+  40000 40000 0 s" patterns\frog1.vd" adeltaxy read&calc-deltaxy \ now the data is present
   40000 40000 adeltaxy drawpattern
 ;
