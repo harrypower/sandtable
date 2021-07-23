@@ -115,21 +115,46 @@ rawad dict-new constant arawadlist
 
 double-linked-list class
   thesize implementation
+  selector fxy!:
+  selector fxy@:
   struct
     dfloat% field fx
     dfloat% field fy
   end-struct pointdata%
+  m:  ( deltaxy -- f: fangle -- fangle1 ) \ convert degrees to radians
+    ( fpi 180e f/ ) 0.01745329251e f* ;m method degrees>radians
+  m: ( nxscale nyscale nangle deltaxy -- f: fangle fdistance -- fx fy )
+  \ given the nangle change and the nxscale and nyscale change calculate the fx and fy of the input fangle and fdistance data
+  \ fx and fy is the change assuming the fangle fdistance started at x 0 and y 0
+    fswap degrees>radians s>f degrees>radians f+ ( nxscale nyscale f: fdistance fangle1 )
+    fswap fdup frot fdup frot fswap ( nxscale nyscale fs: fdistance fangle1 fdistance fangle1 )
+    fcos f* ( nxscale nyscale f: fdistance fangle1 fx )
+    frot frot fsin f* ( nxscale nyscale f: fx fy )
+    s>f 100.0e f/ f* ( nxscale f: fx fy1 )
+    fswap s>f 100.0e f/ f* fswap ( f: fx1 fy1 )
+  ;m method calcpolar>rect
+  m: ( nxscale nyscale nangle deltaxy -- )
+    { nxscale nyscale nangle -- } \ read the rawad data and calculate the offsetpoint data given the nxscale nyscale and nangle data then store in deltaxy
+    this destruct
+    this construct
+    arawadlist ll-set-start
+    arawadlist qnt: 0 ?do
+      arawadlist fad@: nxscale nyscale nangle this calcpolar>rect
+      this fxy!:
+      arawadlist ll> drop
+    loop ;m method calcdeltaxy
+
   public
   m: ( deltaxy -- fs: fangle fdistance -- ) \ store fangle and fdistance in list
     pointdata% %size allocate throw
     dup dup  fy f! fx f!
     pointdata% %size this ll!
-  ;m method fxy!:
+  ;m overrides fxy!:
   m: ( deltaxy -- fs: -- fangle fdistance ) \ retrieve nx ny from list at current link
     this ll@ drop dup
     fx f@
     fy f@
-  ;m method fxy@:
+  ;m overrides fxy@:
   m: ( deltaxy -- usize ) \ return current size of lists
     this ll-size@
   ;m overrides qnt:
@@ -138,69 +163,6 @@ end-class deltaxy
 deltaxy dict-new constant adeltaxy
 
 \\\ testing above code
-
-:struct deltpoint
-  b/float fx
-  b/float fy
-;struct
-
-:OBJECT deltaxy <SUPER Linked-List \ object to contain delta x and delta y data calculated from rawad data
-
-:M ClassInit:  ( -- ) \ constructor
-  ClassInit: super
-  ;M
-
-:M ~: ( -- ) \ destructor
-  \ first remove all the allocated floating data in the list here
-  >firstlink: self
-  #links: self 1 - 0 ?do
-    data@: self >nextlink: self
-    dup 0 = if drop else free throw then
-  loop
-  ~: super
-  ;M
-
-:M fxy!: ( -- f: fx fy -- ) \ store fx and fy in list at current link list location
-  sizeof deltpoint allocate throw
-  [ deltpoint ]
-  dup dup fy f! fx f!
-  data!: self addlink: self
-  [ previous ]
-  ;M
-
-:M fxy@: ( -- f: -- fx fy ) \ retrieve next nx ny from list ... note this does not step to the next list node
-  data@: self
-  [ deltpoint ]
-  dup fx f@ fy f@
-  [ previous ]
-  ;M
-
-:M qnt: ( -- nline-qnt ) \ return how many data pairs
-  #Links: self 1 - ;M
-
-;OBJECT
-
-: degrees>radians ( -- f: fangle -- fangle1 ) \ convert degrees to radians
-  fpi 180e f/ f* ;
-
-: calcpolar>rect  ( nxscale nyscale nangle -- f: fangle fdistance -- fx fy )
-\ given the nangle change and the nxscale and nyscale change calculate the fx and fy of the input fangle and fdistance data
-\ fx and fy is the change assuming the fangle fdistance started at x 0 and y 0
-  fswap degrees>radians s>f degrees>radians f+ ( nxscale nyscale f: fdistance fangle1 )
-  f2dup fcos f* ( nxscale nyscale f: fdistance fangle1 fx )
-  frot frot fsin f* ( nxscale nyscale f: fx fy )
-  s>f 100.0e f/ f* ( nxscale f: fx fy1 )
-  fswap s>f 100.0e f/ f* fswap ( f: fx1 fy1 )
-;
-
-: calcdeltaxy { nxscale nyscale nangle -- } \ read the rawad data and calculate the offsetpoint data given the nxscale nyscale and nangle data then store in deltaxy
-  qnt: deltaxy 0 <> if ~: deltaxy then
-  >firstlink: rawad
-  qnt: rawad 0 ?do
-    fad@: rawad nxscale nyscale nangle calcpolar>rect
-    fxy!: deltaxy
-    >nextlink: rawad
-  loop ;
 
 0.0e fvalue fx1
 0.0e fvalue fy1
