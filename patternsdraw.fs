@@ -31,7 +31,7 @@ debugging [if]
 \  require c:\users\philip\documents\github\sandtable\sandmotorapi.fs
 [else]
   require Gforth-Objects/double-linked-list.fs
-  require sandmotorapi.f
+  require sandmotorapi.fs
 [then]
 
 10 set-precision
