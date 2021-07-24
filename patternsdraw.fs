@@ -135,6 +135,8 @@ double-linked-list class
     s>f 10.0e f/ f* ( nxscale f: fx fy1 )
     fswap s>f 10.0e f/ f* fswap ( f: fx1 fy1 )
   ;m method calcpolar>rect
+
+  public
   m: ( nxscale nyscale nangle deltaxy -- )
     { nxscale nyscale nangle -- } \ read the rawad data and calculate the offsetpoint data given the nxscale nyscale and nangle data then store in deltaxy
     this destruct
@@ -145,8 +147,6 @@ double-linked-list class
       this fxy!:
       arawadlist ll> drop
     loop ;m method calcdeltaxy
-
-  public
   m: ( nxscale nyscale nangle caddr u deltaxy -- ) \ caddr u is the string for the vector file data name.  This file is read in and fangle fdistance data retrieved then fx fy data is calculated and stored in deltaxy list
   \ nxscale nyscale are the scaling factor to change the vector data for final drawing ... 100 is a scale of 1 ,  1000 is a scale of 10 etc.
   \ nangle is how the final drawing will be rotated from the original pattern
@@ -183,7 +183,7 @@ end-class deltaxy
 deltaxy dict-new constant adeltaxy
 
 : frogtest ( nxpos nypos nxscale nyscale nangle ) \ this is to test drawing on real sandtable
-  \ note drawing with 80000 as nxpos and nypos and 17000 as nxscale and nyscale with 0 for nangle produces ok frog  
+  \ note drawing with 80000 as nxpos and nypos and 17000 as nxscale and nyscale with 0 for nangle produces ok frog
   s" patterns/frog1.vd" adeltaxy read&calc-deltaxy \ now the data is present
   adeltaxy drawpattern
 ;
