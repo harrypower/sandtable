@@ -183,7 +183,7 @@ end-class deltaxy
 deltaxy dict-new constant adeltaxy
 
 : frogtest ( nxpos nypos nxscale nyscale nangle ) \ this is to test drawing on real sandtable
-  \ note drawing with 40000 as nxpos and nypos and 20000 as nxscale and nyscale with 0 for nangle produces ok frog  
+  \ note drawing with 80000 as nxpos and nypos and 17000 as nxscale and nyscale with 0 for nangle produces ok frog  
   s" patterns/frog1.vd" adeltaxy read&calc-deltaxy \ now the data is present
   adeltaxy drawpattern
 ;
