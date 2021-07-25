@@ -31,4 +31,10 @@ Notes
     - each pattern will be stored in a file maybe stored in a directory
     - i use inkscape to draw the pattern as a path with Continuous lines then i export the data as gcode.
     - then i edit the gcode to simple x y point data.  Then i have a conversion tool program in vectortools.f i use in the sandsim-win32forth to convert xy data to angle distance data that i finally use in in Gforth to draw the pattern
-    
+
+07/25/2021
+  - vector drawing patterns working
+  - add ability to draw pattern backward
+    - note the pattern is stored in deltaxy as a pair of x y change from a location going forward
+    - so to draw backward i know the place the drawing is at so start there and go through the data in reverse order
+    - the angle data will need to be inverted also with newangle = 180 - dataangle because i am drawing in along the path to get to the spot i start at in reverse
