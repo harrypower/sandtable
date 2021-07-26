@@ -38,3 +38,7 @@ Notes
     - note the pattern is stored in deltaxy as a pair of x y change from a location going forward
     - so to draw backward i know the place the drawing is at so start there and go through the data in reverse order
     - the angle data will need to be inverted also with newangle = 180 - dataangle because i am drawing in along the path to get to the spot i start at in reverse
+  - another possible type of drawing is to draw from middle of arawadlist data
+    - how this would be mechanised at this moment not sure.
+    - this would allow rotation and scaling of data from the middle of the vector data with two directions for drawing ... this may not be of use however so more thought about it is needed
+    

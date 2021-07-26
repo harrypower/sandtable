@@ -185,5 +185,7 @@ deltaxy dict-new constant adeltaxylist
 : frogtest ( nxpos nypos nxscale nyscale nangle ) \ this is to test drawing on real sandtable
   \ note drawing with 80000 as nxpos and nypos and 17000 as nxscale and nyscale with 0 for nangle produces ok frog
   s" patterns/frog1.vd" adeltaxy read&calc-deltaxy \ now the data is present
-  adeltaxylist drawpattern
-;
+  adeltaxylist drawpattern ;
+
+: baknot ( nxpos nypos nxscale nyscale nangle ) \ draw Bailey & Aaron the knot ... note it is drawn backwards for effect
+  \ note drawing with 200000 as nxpos 100000 as nypos and 20000 as nxscale and nyscale with 0 for nangle 

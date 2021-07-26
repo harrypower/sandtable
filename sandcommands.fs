@@ -491,6 +491,7 @@ s" ncircle-spin" othercmds$ bind strings !$x
 s" threeleggedspiral" othercmds$ bind strings !$x
 \ this is from patternsdraw.f
 s" frogtest" othercmds$ bind strings !$x
+s" baknot" othercmds$ bind strings !$x
 \ place other commands here!
 
 : othercmds ( -- ) \ this will parse thecmd for a sub command to execute.  s0 to s11 are passed with this command for stack values that this sub command needs
