@@ -178,7 +178,7 @@ double-linked-list class
     s>f fy1 f! s>f fx1 f!
     this ll-set-end
     this qnt: 0 ?do
-      this fxy@: fy1 f@ f- fy2 f! fx1 f@ f- fx2 f!
+      this fxy@: fy1 f@ fswap f- fy2 f! fx1 f@ fswap f+ fx2 f! 
       this ll< drop
       fx1 f@ f>s fy1 f@ f>s fx2 f@ f>s fy2 f@ f>s drawline .
       fx2 f@ fx1 f! fy2 f@ fy1 f!
