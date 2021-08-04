@@ -24,7 +24,7 @@
 
 \ Revisions:
 \ 07/21/2021 started coding
-true constant debugging \ true is for testing on pc false is for normal use on BBB sandtable device
+false constant debugging \ true is for testing on pc false is for normal use on BBB sandtable device
 debugging [if]
   \ note in windows the pathing system is not the same as linux
   require c:\users\philip\documents\github\gforth-objects\double-linked-list.fs
