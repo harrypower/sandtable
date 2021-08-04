@@ -196,7 +196,7 @@ deltaxy dict-new constant adeltaxylist
   adeltaxylist destruct
   adeltaxylist construct
   arawadlist adeltaxylist calcdeltaxy
-  adeltaxylist forwarddraw ;
+  adeltaxylist reversedraw ;
 
 : baknot ( nxpos nypos nxscale nyscale nangle ) \ draw Bailey & Aaron the knot ... note it is drawn backwards for effect
   \ note drawing with 270000 as nxpos 100000 as nypos and 20000 as nxscale and nyscale with 0 for nangle
