@@ -171,7 +171,7 @@ double-linked-list class
   m: ( deltaxy -- usize ) \ return current size of lists
     this ll-size@
   ;m overrides qnt:
-  m:  ( nx ny  -- ) \ draw the pattern starting at nx ny
+  m:  ( nx ny  -- ) \ draw the pattern starting at nx ny forward through the data
     \ the data for drawing comes from this deltaxy list so read&calc-deltaxy must be called first to load the data into this deltaxy list
     s>f fy1 f! s>f fx1 f!
     this ll-set-start
@@ -181,7 +181,18 @@ double-linked-list class
       fx1 f@ f>s fy1 f@ f>s fx2 f@ f>s fy2 f@ f>s drawline .
       fx2 f@ fx1 f! fy2 f@ fy1 f!
     loop
-  ;m method drawpattern
+  ;m method forwarddraw
+  m:  ( nx ny  -- ) \ draw the pattern starting at nx ny forward through the data
+    \ the data for drawing comes from this deltaxy list so read&calc-deltaxy must be called first to load the data into this deltaxy list
+    s>f fy1 f! s>f fx1 f!
+    this ll-set-end
+    this qnt: 0 ?do
+      this fxy@: fy1 f@ f+ fy2 f! fx1 f@ f+ fx2 f!
+      this ll< drop
+      fx1 f@ f>s fy1 f@ f>s fx2 f@ f>s fy2 f@ f>s drawline .
+      fx2 f@ fx1 f! fy2 f@ fy1 f!
+    loop
+  ;m method reversedraw
 end-class deltaxy
 
 deltaxy dict-new constant adeltaxylist
@@ -194,12 +205,12 @@ deltaxy dict-new constant adeltaxylist
   adeltaxylist destruct
   adeltaxylist construct
   arawadlist adeltaxylist calcdeltaxy
-  adeltaxylist drawpattern ;
+  adeltaxylist forwarddraw ;
 
 \ : frogtest ( nxpos nypos nxscale nyscale nangle ) \ this is to test drawing on real sandtable
 \    \ note drawing with 80000 as nxpos and nypos and 17000 as nxscale and nyscale with 0 for nangle produces ok frog
 \    s" patterns/frog1.vd" adeltaxylist read&calc-deltaxy \ now the data is present
-\    adeltaxylist drawpattern ;
+\    adeltaxylist forwarddraw ;
 
 : baknot ( nxpos nypos nxscale nyscale nangle ) \ draw Bailey & Aaron the knot ... note it is drawn backwards for effect
   \ note drawing with 200000 as nxpos 100000 as nypos and 20000 as nxscale and nyscale with 0 for nangle
@@ -209,9 +220,9 @@ deltaxy dict-new constant adeltaxylist
   adeltaxylist destruct
   adeltaxylist construct
   arawadlist adeltaxylist calcdeltaxy
-  adeltaxylist drawpattern ;
+  adeltaxylist forwarddraw ;
 
 \ : baknot ( nxpos nypos nxscale nyscale nangle ) \ draw Bailey & Aaron the knot ... note it is drawn backwards for effect
 \ \ note drawing with 200000 as nxpos 100000 as nypos and 20000 as nxscale and nyscale with 0 for nangle
 \  s" patterns/theknot.vd" adeltaxylist read&calc-deltaxy
-\  adeltaxylist drawpattern ;
+\  adeltaxylist forwarddraw ;
