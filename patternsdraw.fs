@@ -101,7 +101,7 @@ double-linked-list class
     this ll-size@
   ;m overrides qnt:
   m: ( caddr u rawad -- ) \ opens and reads file with name caddr u and puts the ad data into a rawda linked list
-  \ note this put the read data into the existing linked list and will not overwrite or delete the current list when called
+  \ note this will put the data into the existing linked list and will not overwrite or delete the current list when called
     r/o open-file throw fid !
     this destruct
     this construct
@@ -142,22 +142,13 @@ double-linked-list class
   public
   m: ( nxscale nyscale nangle nadlist deltaxy -- )
     { nxscale nyscale nangle nadlist -- } \ read the rawad data and calculate the offsetpoint data given the nxscale nyscale and nangle data then store in deltaxy
-    \ note this code should  not delete current data... ***** fix this
-\    this destruct
-\    this construct
+    \ note this will put the data into the existing list and not overwrite or delete the existing data
     nadlist ll-set-start
     nadlist qnt: 0 ?do
       nadlist fad@: nxscale nyscale nangle this calcpolar>rect
       this fxy!:
       nadlist ll> drop
     loop ;m method calcdeltaxy
-\  m: ( nxscale nyscale nangle caddr u deltaxy -- ) \ caddr u is the string for the vector file data name.  This file is read in and fangle fdistance data retrieved then fx fy data is calculated and stored in deltaxy list
-  \ nxscale nyscale are the scaling factor to change the vector data for final drawing ... 100 is a scale of 1 ,  1000 is a scale of 10 etc.
-  \ nangle is how the final drawing will be rotated from the original pattern
-  \ note this will read the source vector file and close that file after reading it also the raw vector data is in the rawad list and the raw deltaxy data is in this deltaxy list
-\    arawadlist readrawad
-\    this calcdeltaxy
-\  ;m method read&calc-deltaxy
   m: ( deltaxy -- fs: fangle fdistance -- ) \ store fangle and fdistance in list
     pointdata% %size allocate throw
     dup dup  fy f! fx f!
@@ -207,13 +198,8 @@ deltaxy dict-new constant adeltaxylist
   arawadlist adeltaxylist calcdeltaxy
   adeltaxylist forwarddraw ;
 
-\ : frogtest ( nxpos nypos nxscale nyscale nangle ) \ this is to test drawing on real sandtable
-\    \ note drawing with 80000 as nxpos and nypos and 17000 as nxscale and nyscale with 0 for nangle produces ok frog
-\    s" patterns/frog1.vd" adeltaxylist read&calc-deltaxy \ now the data is present
-\    adeltaxylist forwarddraw ;
-
 : baknot ( nxpos nypos nxscale nyscale nangle ) \ draw Bailey & Aaron the knot ... note it is drawn backwards for effect
-  \ note drawing with 200000 as nxpos 100000 as nypos and 20000 as nxscale and nyscale with 0 for nangle
+  \ note drawing with 270000 as nxpos 100000 as nypos and 20000 as nxscale and nyscale with 0 for nangle
   arawadlist destruct
   arawadlist construct
   s" patterns/theknot.vd" arawadlist readrawad
@@ -221,8 +207,3 @@ deltaxy dict-new constant adeltaxylist
   adeltaxylist construct
   arawadlist adeltaxylist calcdeltaxy
   adeltaxylist forwarddraw ;
-
-\ : baknot ( nxpos nypos nxscale nyscale nangle ) \ draw Bailey & Aaron the knot ... note it is drawn backwards for effect
-\ \ note drawing with 200000 as nxpos 100000 as nypos and 20000 as nxscale and nyscale with 0 for nangle
-\  s" patterns/theknot.vd" adeltaxylist read&calc-deltaxy
-\  adeltaxylist forwarddraw ;
