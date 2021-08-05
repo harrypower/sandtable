@@ -205,3 +205,14 @@ deltaxy dict-new constant adeltaxylist
   adeltaxylist construct
   arawadlist adeltaxylist calcdeltaxy
   adeltaxylist forwarddraw ;
+
+: dithertest ( nxpos nypos nxscale nyscale nangle )
+  arawadlist destruct
+  arawadlist construct
+  s" patterns/dithergosper.vd" arawadlist readrawad
+  adeltaxylist destruct
+  adeltaxylist construct
+  arawadlist adeltaxylist calcdeltaxy
+  adeltaxylist forwarddraw ;
+
+;
