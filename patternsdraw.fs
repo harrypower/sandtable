@@ -60,9 +60,9 @@ double-linked-list class
   cell% inst-var buffersize
   cell% inst-var adpair$
 
-  m: ( naddr u rawad -- nflag  fs: -- fa ) \ string naddr u if it contains the angle string turn it in floating stack and true
+  m: ( naddr u rawad -- nflag  fs: -- fa ) \ string naddr u if it contains the angle string return it in floating stack and true
       2dup s"  " search if swap drop - >float if true else false 0.0e then else 2drop 2drop false 0.0e then ;m method getaf
-  m: ( naddr u rawad -- nflag  fs: -- fd ) \ string naddr u if it contains the distance string turn it in floating stack and true
+  m: ( naddr u rawad -- nflag  fs: -- fd ) \ string naddr u if it contains the distance string return it in floating stack and true
   \ if string is not understandable as a floating number then return false and the floating stack contains 0.0e
     s"  " search if 1 /string  -trailing >float if true else false 0.0e then else 2drop false 0.0e then ;m method getdf
   m: ( naddr u rawad -- nflag fs: -- fa fd )
@@ -161,7 +161,7 @@ double-linked-list class
     this ll-size@
   ;m overrides qnt:
   m:  ( nx ny  -- ) \ draw the pattern starting at nx ny forward through the data
-    \ the data for drawing comes from this deltaxy list so read&calc-deltaxy must be called first to load the data into this deltaxy list
+    \ the data for drawing comes from this deltaxy list so this list needs to be populated first
     s>f fy1 f! s>f fx1 f!
     this ll-set-start
     this qnt: 0 ?do
@@ -172,11 +172,11 @@ double-linked-list class
     loop
   ;m method forwarddraw
   m:  ( nx ny  -- ) \ draw the pattern starting at nx ny forward through the data
-    \ the data for drawing comes from this deltaxy list so read&calc-deltaxy must be called first to load the data into this deltaxy list
+    \ the data for drawing comes from this deltaxy list so this list needs to be populated first
     s>f fy1 f! s>f fx1 f!
     this ll-set-end
     this qnt: 0 ?do
-      this fxy@: fy1 f@ fswap f- fy2 f! fx1 f@ fswap f+ fx2 f!
+      this fxy@: fy1 f@ fswap f- fy2 f! fx1 f@ fswap f- fx2 f!
       this ll< drop
       fx1 f@ f>s fy1 f@ f>s fx2 f@ f>s fy2 f@ f>s drawline .
       fx2 f@ fx1 f! fy2 f@ fy1 f!
