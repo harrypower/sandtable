@@ -103,8 +103,6 @@ double-linked-list class
   m: ( caddr u rawad -- ) \ opens and reads file with name caddr u and puts the ad data into a rawda linked list
   \ note this will put the data into the existing linked list and will not overwrite or delete the current list when called
     r/o open-file throw fid !
-    this destruct
-    this construct
     begin
       this getadpair
       if this fad!: false else fdrop fdrop true then
@@ -178,7 +176,7 @@ double-linked-list class
     s>f fy1 f! s>f fx1 f!
     this ll-set-end
     this qnt: 0 ?do
-      this fxy@: fy1 f@ fswap f- fy2 f! fx1 f@ fswap f+ fx2 f! 
+      this fxy@: fy1 f@ fswap f- fy2 f! fx1 f@ fswap f+ fx2 f!
       this ll< drop
       fx1 f@ f>s fy1 f@ f>s fx2 f@ f>s fy2 f@ f>s drawline .
       fx2 f@ fx1 f! fy2 f@ fy1 f!
