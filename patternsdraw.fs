@@ -214,5 +214,3 @@ deltaxy dict-new constant adeltaxylist
   adeltaxylist construct
   arawadlist adeltaxylist calcdeltaxy
   adeltaxylist forwarddraw ;
-
-;
